@@ -1,4 +1,4 @@
-**Git Guideline**
+# Git Guideline
 
 When you first open this repository, click **“**Code**”**
 
