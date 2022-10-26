@@ -2,9 +2,9 @@
 
 ## Local Repository
 
-When you first open this repository, click **“**Code**”**
+When you first open this repository, click **“Code”**
 
-And then copy the HTTPS URL
+And then copy the **HTTPS URL**
 
 Open terminal
 
