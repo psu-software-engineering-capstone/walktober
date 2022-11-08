@@ -1,0 +1,7 @@
+{
+  "name": "Walktober",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
