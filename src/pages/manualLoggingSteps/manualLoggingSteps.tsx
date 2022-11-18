@@ -54,7 +54,6 @@ const ManualSteps: React.FC = () => {
         date = newDate;
         /*  
             Could implement error checking to ensure date is not beyonde today, and give time limit to how far in past
-
         */
     }
 
