@@ -53,7 +53,7 @@ const ManualSteps: React.FC = () => {
         const newDate = new Date((ev.target as HTMLInputElement).value);
         date = newDate;
         /*     
-        Could implement error checking to ensure date is not beyonde today, and give time limit to how far in past
+            Could implement error checking to ensure date is not beyonde today, and give time limit to how far in past
         */
     }
 
