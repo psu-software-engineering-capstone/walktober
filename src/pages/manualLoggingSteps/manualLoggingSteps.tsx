@@ -71,7 +71,9 @@ const ManualSteps: React.FC = () => {
     }
 
     function DisplayRecords() {
+
         getRecords();
+
         if (pastRecords) {
             return (
                 <>
