@@ -132,7 +132,7 @@ const ManualSteps: React.FC = () => {
                             }
                         }
                     }></IonInput>
-                    <IonRouterLink slot="helper" href="#">Need help calculating steps?</IonRouterLink>
+                    <IonRouterLink slot="helper" href="./stepsCalculator">Need help calculating steps?</IonRouterLink>
                 </IonItem>
                 <IonItem>
                     <IonLabel position="floating"></IonLabel>

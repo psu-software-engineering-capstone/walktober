@@ -15,57 +15,63 @@ import {
     IonRow,
 } from '@ionic/react';
 //import ExploreContainer from '../../components/ExploreContainer';
-import './stepsCalc.css';
+import './stepsCalculator.css';
 
-const stepsCalc: React.FC = () => {
+const StepsCalculator: React.FC = () => {
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
     const [isTouched, setIsTouched] = useState(false);
     const [isValid, setIsValid] = useState<boolean>();
-    var steps: number;
+    var steps: number = 0;
     var time: number;
+    var stepsPerMile: number = 2250;
+    var miles: number;
 
-    function calculate() {
-        return;
+    function calculate(ev: Event) {
+        miles = Number((ev.target as HTMLInputElement).value);
+        if (miles <= 0) {
+            return 0;
+        }
+
+        steps = miles * stepsPerMile;
     }
 
+    function placeHolder() {
+        // return steps.toString();
+        const updateSteps = document.querySelector('#result');
+        if (updateSteps != null)
+            updateSteps.innerHTML = steps.toString();
+        return;
+    }
 
     return (
         <>
             <IonHeader>
                 <IonToolbar>
                     <IonTitle>
-                        Steps log
+                        Steps Calculator
                     </IonTitle>
                 </IonToolbar>
             </IonHeader>
 
             <IonContent className="ion-padding">
                 <IonItem>
-                    <IonLabel position="floating">Number of steps</IonLabel>
+                    <IonLabel position="floating">Number of miles walked</IonLabel>
                     <IonInput type="number" onInput={
                         (event: any) => {
-
+                            calculate(event);
                         }
                     }></IonInput>
-                    <IonRouterLink slot="helper" href="#">Need help calculating steps?</IonRouterLink>
-                </IonItem>
-                <IonItem>
-                    <IonLabel position="floating"></IonLabel>
-                    <IonInput type="date" onInput={
-                        (event: any) => {
-
-                        }
-                    }></IonInput>
+                    <IonRouterLink slot="helper" href="./manualLoggingSteps">Return to steps logging</IonRouterLink>
                 </IonItem>
                 <IonCol>
-                    <IonButton onClick={calculate}>Submit</IonButton>
+                    <IonButton onClick={placeHolder}>Submit</IonButton>
                 </IonCol>
-                <IonItem>{ }</IonItem>
+                <IonItem id="result">{steps.toString()}</IonItem>
 
             </IonContent>
         </>
     );
 }
 
-export default stepsCalc;
+export default StepsCalculator;

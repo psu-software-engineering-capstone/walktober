@@ -15,7 +15,7 @@ import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
 import ManualSteps from './pages/manualLoggingSteps/manualLoggingSteps';
-import stepsCalc from './pages/stepsCalculator/stepsCalc';
+import StepsCalculator from './pages/stepsCalculator/stepsCalculator'
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -35,6 +35,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import { CallTracker } from 'assert';
 
 setupIonicReact();
 
@@ -46,8 +47,8 @@ const App: React.FC = () => (
           <Route path="/manualLoggingSteps">
             <ManualSteps />
           </Route>
-          <Route path="/stepsCalc">
-            <ManualSteps />
+          <Route path="/stepsCalculator">
+            <StepsCalculator />
           </Route>
           <Route exact path="/tab1">
             <Tab1 />
@@ -66,10 +67,6 @@ const App: React.FC = () => (
           <IonTabButton tab="Steps logging" href="../manualLoggingSteps">
             <IonIcon icon={checkmarkCircle} />
             <IonLabel>Log Steps</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="Steps Calc" href="../stepsCalc">
-            <IonIcon icon={checkmarkCircle} />
-            <IonLabel>stepsCalc</IonLabel>
           </IonTabButton>
           <IonTabButton tab="tab1" href="/tab1">
             <IonIcon icon={triangle} />
