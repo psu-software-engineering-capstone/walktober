@@ -66,7 +66,7 @@ const StepsCalculator: React.FC = () => {
         // return steps.toString();
         const updateSteps = document.querySelector('#result');
         if (updateSteps != null) {
-            if (metric == false && heightFt > 0) {
+            if (metric == false && heightFt > 0 && heightIn > 0) {
                 // imperial calculations
                 // height in IN * convert = inches per stride
                 // IN per stride / 12 = feet per stride
@@ -130,7 +130,16 @@ const StepsCalculator: React.FC = () => {
                     <IonButton onClick={placeHolder}>Submit</IonButton>
                 </IonCol>
                 <IonItem id="result">{steps.toString()}</IonItem>
-
+                <IonGrid>
+                    <IonRow>
+                        <IonCol size="auto"><IonItem>20 min/mi = Slow walk</IonItem></IonCol>
+                        <IonCol size="auto"><IonItem>15 min/mi = Brisk walk</IonItem></IonCol>
+                        <IonCol size="auto"><IonItem>12 min/mi = Jog</IonItem></IonCol>
+                        <IonCol size="auto"><IonItem>9 min/mi = Run</IonItem></IonCol>
+                        <IonCol size="auto"><IonItem>7 min/mi = Fast run</IonItem></IonCol>
+                        <IonCol size="auto"><IonItem>5 min/mi = Very fast run</IonItem></IonCol>
+                    </IonRow>
+                </IonGrid>
             </IonContent>
         </>
     );
