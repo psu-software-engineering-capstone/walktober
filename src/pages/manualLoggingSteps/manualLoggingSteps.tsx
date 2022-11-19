@@ -18,10 +18,6 @@ import {
 import './manualLoggingSteps.css';
 
 const ManualSteps: React.FC = () => {
-    const [username, setUsername] = useState();
-    const [password, setPassword] = useState();
-    const [isTouched, setIsTouched] = useState(false);
-    const [isValid, setIsValid] = useState<boolean>();
     var stepsToLog: number;
     var date: Date;
     // var pastRecordDates: Array: Date;

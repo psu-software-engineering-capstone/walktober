@@ -14,14 +14,9 @@ import {
     IonGrid,
     IonRow,
 } from '@ionic/react';
-//import ExploreContainer from '../../components/ExploreContainer';
 import './stepsCalculator.css';
 
 const StepsCalculator: React.FC = () => {
-    const [username, setUsername] = useState();
-    const [password, setPassword] = useState();
-    const [isTouched, setIsTouched] = useState(false);
-    const [isValid, setIsValid] = useState<boolean>();
     var steps: number = 0;
     var heightIn: number = 0; // height inches param
     var heightFt: number = 0; // height feet param
