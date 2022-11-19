@@ -94,7 +94,7 @@ const StepsCalculator: React.FC = () => {
 
             <IonContent className="ion-padding">
                 <IonItem>
-                    <IonLabel position="floating">Number of miles walked</IonLabel>
+                    <IonLabel position="floating">Number of miles</IonLabel>
                     <IonInput type="number" onInput={
                         (event: any) => {
                             calculate(event);
