@@ -104,7 +104,7 @@ const StepsCalculator: React.FC = () => {
                 </IonItem>
                 <IonGrid>
                     <IonRow>
-                        <IonCol>
+                        <IonCol size="auto">
                             <IonItem>
                                 <IonLabel position="floating">Optional: Height ft</IonLabel>
                                 <IonInput type="number" onInput={
@@ -114,7 +114,7 @@ const StepsCalculator: React.FC = () => {
                                 }></IonInput>
                             </IonItem>
                         </IonCol>
-                        <IonCol>
+                        <IonCol size="auto">
                             <IonItem>
                                 <IonLabel position="floating">Optional: Height In</IonLabel>
                                 <IonInput type="number" onInput={
