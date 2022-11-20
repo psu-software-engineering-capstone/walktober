@@ -1,0 +1,31 @@
+$img-margin: 10px;
+$img-size: 36px + ($img-margin * 2);
+
+.chat-message-container {
+    display: grid;
+    grid-template-columns: $img-size 1fr;
+}
+
+.chat-message {
+    width: 75%;
+    grid-column: 2;
+
+    ion-card-title {
+        font-size: 0.9em;
+    }
+}
+
+.chat-message-sent {
+    margin-left: calc(25% - 10px);
+}
+
+ion-img {
+    align-self: end;
+    margin: $img-margin 0px ($img-margin * 2) $img-margin;
+    max-height: $img-size;
+    max-width: $img-size;
+
+    &::part(image) {
+        border-radius: 50%;
+    }
+}
