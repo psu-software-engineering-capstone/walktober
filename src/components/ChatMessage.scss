@@ -10,6 +10,10 @@ $img-size: 36px + ($img-margin * 2);
     width: 75%;
     grid-column: 2;
 
+    &:not(.chat-message-sent) {
+        background-color: var(--ion-color-light-tint);
+    }
+
     ion-card-title {
         font-size: 0.9em;
     }
