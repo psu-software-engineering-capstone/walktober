@@ -4,7 +4,7 @@ $input-margin: 5px;
 .chat-input {
     background-color: var(--ion-color-light-shade);
     margin: $input-margin 0px $input-margin 0px;
-    border-radius: $input-margin;
+    border-radius: var(--ion-border-radius);
 
     form {
         display: flex;
