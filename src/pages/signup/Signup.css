@@ -1,0 +1,17 @@
+ion-item {
+  --padding-start: 0;
+}
+
+ion-card {
+  margin: 100px auto;
+  width: 40%;
+}
+
+.test {
+  margin: auto;
+}
+/* iOS places the subtitle above the title */
+ion-card-header.ios {
+  display: flex;
+  flex-flow: column-reverse;
+}
