@@ -1,5 +1,5 @@
-$img-margin: 10px;
-$img-size: 36px + ($img-margin * 2);
+$elem-margin: 10px;
+$img-size: 36px + ($elem-margin * 2);
 
 .chat-message-container {
     display: grid;
@@ -25,7 +25,7 @@ $img-size: 36px + ($img-margin * 2);
 
 ion-img {
     align-self: end;
-    margin: $img-margin 0px ($img-margin * 2) $img-margin;
+    margin: $elem-margin 0px ($elem-margin * 2) $elem-margin;
     max-height: $img-size;
     max-width: $img-size;
 
