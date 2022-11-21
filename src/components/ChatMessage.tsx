@@ -8,10 +8,10 @@ import {
 import "./ChatMessage.scss";
 
 interface ChatMessageProps {
-    sent?: boolean,
-    src?: string,
-    text: string,
-    username?: string
+    sent?: boolean,   // if message was sent from this device
+    src?: string,     // profile photo src url
+    text: string,     // text of the message
+    username?: string // username of sender
 };
 
 const ChatMessage: React.FC<ChatMessageProps> = ({ sent, src="", text, username="" }) => {

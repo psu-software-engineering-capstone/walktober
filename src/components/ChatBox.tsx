@@ -3,7 +3,7 @@ import "./ChatBox.scss";
 import ChatInput from "./ChatInput";
 
 interface ChatBoxProps {
-    children: React.ReactNode
+    children: React.ReactNode // all child nodes (should usually be ChatMessage)
 };
 
 const ChatBox: React.FC<ChatBoxProps> = ({ children }) => {
