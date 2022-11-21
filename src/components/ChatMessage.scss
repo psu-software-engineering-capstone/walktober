@@ -14,8 +14,20 @@ $img-size: 36px + ($elem-margin * 2);
         background-color: var(--ion-color-light-tint);
     }
 
+    ion-card-header {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: flex-start;
+        align-items: baseline;
+    }
+
     ion-card-title {
         font-size: 0.9em;
+        margin-right: $elem-margin;
+    }
+
+    ion-card-subtitle {
+        font-size: 0.8em;
     }
 }
 
