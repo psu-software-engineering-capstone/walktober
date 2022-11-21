@@ -23,12 +23,12 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ sent, src="", text, username=
                 <IonImg src={src} />
             }
             <IonCard className={sent ? "chat-message chat-message-sent" : "chat-message"} color={sent ? "primary" : "light"}>
-                {username &&
-                    <IonCardHeader>
+                <IonCardHeader>
+                    {username &&
                         <IonCardTitle>{username}</IonCardTitle>
-                        <IonCardSubtitle>{datetime}</IonCardSubtitle>
-                    </IonCardHeader>
-                }
+                    }
+                    <IonCardSubtitle>{datetime}</IonCardSubtitle>
+                </IonCardHeader>
                 <IonCardContent>{text}</IonCardContent>
             </IonCard>
         </div>
