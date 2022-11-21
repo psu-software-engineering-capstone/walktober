@@ -43,16 +43,14 @@ const App: React.FC = () => (
       <IonTabs>
         <IonRouterOutlet>
           <Route exact path="/tab1">
-            <Tab1 />
+            {/* Testing purpose */}
+            <HealthApp />
           </Route>
           <Route exact path="/tab2">
             <Tab2 />
           </Route>
           <Route path="/tab3">
             <Tab3 />
-          </Route>
-          <Route path="/healthapp">
-            <HealthApp />
           </Route>
           <Route exact path="/">
             <Redirect to="/tab1" />
