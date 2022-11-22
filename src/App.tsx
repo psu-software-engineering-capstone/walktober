@@ -10,7 +10,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, square, triangle } from 'ionicons/icons';
+import { ellipse, square, triangle, footsteps } from 'ionicons/icons';
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
@@ -72,7 +72,7 @@ const App: React.FC = () => (
             <IonLabel>Tab 3</IonLabel>
           </IonTabButton>
           <IonTabButton tab="signup" href="/signup">
-            <IonIcon icon={square} />
+            <IonIcon icon={footsteps} />
             <IonLabel>Signup</IonLabel>
           </IonTabButton>
         </IonTabBar>
