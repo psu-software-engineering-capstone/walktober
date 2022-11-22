@@ -3,15 +3,18 @@ import {
     IonButton, 
     IonCol,
     IonContent,
-    IonHeader,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardTitle,
+    IonIcon,
     IonInput, 
     IonItem, 
     IonLabel, 
     IonNote,
     IonRouterLink,
-    IonTitle,
-    IonToolbar
 } from '@ionic/react';
+import { logoGoogle } from "ionicons/icons";
 //import ExploreContainer from '../../components/ExploreContainer';
 import './login.css';
 
@@ -49,44 +52,45 @@ const Login: React.FC = () => {
     }
   
     return (
-        <>
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle>
-                        Login
-                    </IonTitle>
-                </IonToolbar>
-            </IonHeader>
-
-            <IonContent className="ion-padding">
-                <IonItem 
-                    fill="solid" 
-                    className={`${isValid && 'ion-valid'} ${isValid === false && 'ion-invalid'} ${isTouched && 'ion-touched'}`}>
-                    <IonLabel position="floating">Email</IonLabel>
-                    <IonInput type="email" 
-                        onIonInput={ (event: any) => { 
-                            validate(event); 
-                            setUsername(event.target.value);
+        <IonContent>
+            <IonCard>
+                <IonCardHeader>
+                        <IonCardTitle>Login</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                    <IonItem
+                        fill="solid" 
+                        className={`${isValid && 'ion-valid'} ${isValid === false && 'ion-invalid'} ${isTouched && 'ion-touched'}`}>
+                        <IonLabel position="floating">Email</IonLabel>
+                        <IonInput type="email" 
+                            onIonInput={ (event: any) => { 
+                                validate(event); 
+                                setUsername(event.target.value);
+                                }
                             }
-                        }
-                        onIonBlur={() => markTouched()}>
-                    </IonInput>
-                    <IonNote slot="helper">Enter a valid email</IonNote>
-                    <IonNote slot="error">Invalid email</IonNote>
-                </IonItem>
+                            onIonBlur={() => markTouched()}>
+                        </IonInput>
+                        <IonNote slot="helper">Enter a valid email</IonNote>
+                        <IonNote slot="error">Invalid email</IonNote>
+                    </IonItem>
 
-                <IonItem>
-                    <IonLabel position="floating">Password input</IonLabel>
-                    <IonInput type="password" onIonInput={(event:any) => setPassword(event.target.value)}></IonInput>
-                    <IonRouterLink slot="helper" href="#">Forgot Password?</IonRouterLink>
-                </IonItem>
+                    <IonItem fill="solid">
+                        <IonLabel position="floating">Password input</IonLabel>
+                        <IonInput type="password" onIonInput={(event:any) => setPassword(event.target.value)}></IonInput>
+                        <IonRouterLink slot="helper" href="#">Forgot Password?</IonRouterLink>
+                    </IonItem>
 
-                <IonCol>
-                    <IonButton onClick={loginUser}>Login</IonButton>
-                </IonCol>
-            </IonContent>
-        </>
+                    <IonCol>
+                        <IonButton onClick={loginUser}>Login</IonButton>
+                        <IonButton color="tertiary">
+                            <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign in with Google
+                        </IonButton>
+                    </IonCol>
+                </IonCardContent>
+            </IonCard>
+        </IonContent>
     );
   }
+
 
   export default Login;
