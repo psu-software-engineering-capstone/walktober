@@ -42,14 +42,18 @@ const HealthApp: React.FC = () => {
   };
 
   const readSteps = async () => {
+    const date = new Date();
     var stepOptions = {
-      startDate: new Date(new Date().getTime() - 24 * 60 * 60 * 1000),
+      startDate: new Date(date.getFullYear(), date.getMonth(), 1),
       endDate: new Date(),
       unit: "count",
-      sampleType: "HKQuantityTypeIdentifierStepCount"
-    }
+      sampleType: "HKQuantityTypeIdentifierStepCount",
+    };
     await HealthKit.querySampleType(stepOptions)
-      .then((data: any) => alert(JSON.stringify(data)))
+      .then((data: any) => {
+        let totalStep = data.reduce((a: any, b: { quantity: any }) => a + b.quantity, 0);
+        alert(JSON.stringify(totalStep));
+      })
       .catch((error: any) => alert(JSON.stringify(error)));
   };
 
