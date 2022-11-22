@@ -60,13 +60,13 @@ const HealthApp: React.FC = () => {
           <IonTitle>Health App Integration</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent fullscreen={true} className="ion-padding">
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">Health App Integration</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonTitle>Apple Health</IonTitle>
+        <h2>Apple Health</h2>
         <IonButton expand="block" onClick={available}>
           Health Available?
         </IonButton>
@@ -79,15 +79,15 @@ const HealthApp: React.FC = () => {
         <IonButton expand="block" onClick={readSteps}>
           Read Step Count
         </IonButton>
-        <IonTitle>Fitbit</IonTitle>
-        <IonTitle>Garmin</IonTitle>
-        <IonTitle>Google Fit</IonTitle>
-        <IonTitle>Misfit</IonTitle>
-        <IonTitle>Omron</IonTitle>
-        <IonTitle>Polar</IonTitle>
-        <IonTitle>Samsung Health</IonTitle>
-        <IonTitle>Withings (Nokia)</IonTitle>
-        <IonTitle>Strava</IonTitle>
+        <h2>Fitbit</h2>
+        <h2>Garmin</h2>
+        <h2>Google Fit</h2>
+        <h2>Misfit</h2>
+        <h2>Omron</h2>
+        <h2>Polar</h2>
+        <h2>Samsung Health</h2>
+        <h2>Withings (Nokia)</h2>
+        <h2>Strava</h2>
       </IonContent>
     </IonPage>
   );
