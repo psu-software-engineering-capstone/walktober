@@ -57,15 +57,16 @@ const HealthApp: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Health App</IonTitle>
+          <IonTitle>Health App Integration</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Health App</IonTitle>
+            <IonTitle size="large">Health App Integration</IonTitle>
           </IonToolbar>
         </IonHeader>
+        <IonTitle>Apple Health</IonTitle>
         <IonButton expand="block" onClick={available}>
           Health Available?
         </IonButton>
@@ -78,6 +79,15 @@ const HealthApp: React.FC = () => {
         <IonButton expand="block" onClick={readSteps}>
           Read Step Count
         </IonButton>
+        <IonTitle>Fitbit</IonTitle>
+        <IonTitle>Garmin</IonTitle>
+        <IonTitle>Google Fit</IonTitle>
+        <IonTitle>Misfit</IonTitle>
+        <IonTitle>Omron</IonTitle>
+        <IonTitle>Polar</IonTitle>
+        <IonTitle>Samsung Health</IonTitle>
+        <IonTitle>Withings (Nokia)</IonTitle>
+        <IonTitle>Strava</IonTitle>
       </IonContent>
     </IonPage>
   );

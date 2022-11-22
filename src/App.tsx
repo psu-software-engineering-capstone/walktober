@@ -43,14 +43,16 @@ const App: React.FC = () => (
       <IonTabs>
         <IonRouterOutlet>
           <Route exact path="/tab1">
-            {/* Testing purpose */}
-            <HealthApp />
+            <Tab1 />
           </Route>
           <Route exact path="/tab2">
             <Tab2 />
           </Route>
           <Route path="/tab3">
             <Tab3 />
+          </Route>
+          <Route exact path="/healthapp" >
+            <HealthApp />
           </Route>
           <Route exact path="/">
             <Redirect to="/tab1" />
@@ -68,6 +70,10 @@ const App: React.FC = () => (
           <IonTabButton tab="tab3" href="/tab3">
             <IonIcon icon={square} />
             <IonLabel>Tab 3</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="healthapp" href="/healthapp">
+            <IonIcon icon={square} />
+            <IonLabel>Health App Integration</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>
