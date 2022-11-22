@@ -62,6 +62,11 @@ const Signup: React.FC = () => {
                   Forgot Password?
                 </a>
               </IonCardContent>
+              <IonItem lines="none">
+                <IonButton fill="solid" color="success" class="gbutton">
+                  Google Alternate Sign In
+                </IonButton>
+              </IonItem>
             </IonList>
           </IonCardContent>
         </IonCard>
