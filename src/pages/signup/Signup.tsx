@@ -2,8 +2,6 @@ import {
   IonContent,
   IonHeader,
   IonPage,
-  IonTitle,
-  IonToolbar,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -13,7 +11,6 @@ import {
   IonList,
   IonInput,
   IonButton,
-  IonCardSubtitle,
 } from "@ionic/react";
 //import ExploreContainer from '../../components/ExploreContainer';
 import "./Signup.css";
@@ -21,55 +18,50 @@ import "./Signup.css";
 const Signup: React.FC = () => {
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Signup</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <IonHeader></IonHeader>
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Signup</IonTitle>
-          </IonToolbar>
-        </IonHeader>
         <IonCard>
           <IonCardHeader>
-            <IonCardTitle>SignUp</IonCardTitle>
+            <IonCardTitle class="ion-text-center">SignUp</IonCardTitle>
           </IonCardHeader>
           <IonCardContent>
             <IonList>
               <IonItem>
                 <IonLabel>Email</IonLabel>
-                <IonInput></IonInput>
+                <IonInput type="email" name="email"></IonInput>
               </IonItem>
 
               <IonItem>
                 <IonLabel>First Name</IonLabel>
-                <IonInput></IonInput>
+                <IonInput type="text" name="fname"></IonInput>
               </IonItem>
 
               <IonItem>
                 <IonLabel>Last Name</IonLabel>
-                <IonInput></IonInput>
+                <IonInput type="text" name="lname"></IonInput>
               </IonItem>
 
               <IonItem>
                 <IonLabel>Password</IonLabel>
-                <IonInput></IonInput>
+                <IonInput type="password" name="password"></IonInput>
               </IonItem>
 
-              <IonItem lines="none">
+              <IonItem>
                 <IonLabel>Confirm Password</IonLabel>
-                <IonInput></IonInput>
+                <IonInput type="password" name="cpassword"></IonInput>
               </IonItem>
 
               <IonItem lines="none">
-                <IonButton fill="solid" color="primary" class="test">Confirm</IonButton>
+                <IonButton fill="solid" color="tertiary" class="cbutton">
+                  Confirm
+                </IonButton>
               </IonItem>
-
-              <IonCardSubtitle>
-                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley">Forgot Password?</a>
-              </IonCardSubtitle>
+              {/*Need hyperlink for the forgot password once implemented*/}
+              <IonCardContent class="fpass" color="primary">
+                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley">
+                  Forgot Password?
+                </a>
+              </IonCardContent>
             </IonList>
           </IonCardContent>
         </IonCard>
