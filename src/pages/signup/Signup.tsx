@@ -18,14 +18,11 @@ import { logoGoogle } from "ionicons/icons";
 import "./Signup.css";
 
 import { useState, useEffect } from "react";
-import { db } from "../../firebase";
-import { set, ref } from "firebase/database";
-import { uid } from "uid";
-import { getAuth, signInWithPopup, GoogleAuthProvider, OAuthCredential, UserCredential } from "firebase/auth";
+import { db, auth } from "../../firebase";
+import { set, ref, child, get } from "firebase/database";
+import { signInWithPopup, GoogleAuthProvider, OAuthCredential, UserCredential } from "firebase/auth";
 
 const Signup: React.FC = () => {
-
-  const [users, setUsers] = useState([{}]);
   
   const [newEmail, setNewEmail] = useState("");
   const [newFirstName, setNewFirstName] = useState("");
@@ -33,9 +30,10 @@ const Signup: React.FC = () => {
   const [newPassword, setNewPassword] = useState("");
   const [newConfirmPassword, setNewConfirmPassword] = useState("");
   
+  const provider = new GoogleAuthProvider();
+
   const createUser = async () => {
-    const uuid = uid();
-    await set(ref(db, `/${uuid}`), {
+    await set(ref(db, 'users/' + auth.currentUser?.uid), {
       email: newEmail,
       name: newFirstName + " " + newLastName,
       password: newPassword,
@@ -48,13 +46,8 @@ const Signup: React.FC = () => {
     });
   };
 
-  const provider = new GoogleAuthProvider();
-
-  const auth = getAuth();
-
   const createUserWithGoogleAuth = async (result: UserCredential) => {
-    const uuid = uid();
-    await set(ref(db, `/${uuid}`), {
+    await set(ref(db, 'users/' + auth.currentUser?.uid), {
       email: result.user.email,
       name: result.user.displayName,
       password: "",
@@ -73,7 +66,16 @@ const Signup: React.FC = () => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = (credential as OAuthCredential).accessToken;
         const user = result.user;
-        createUserWithGoogleAuth(result);
+        const dbRef = ref(db);
+        // duplicate email check
+        get(child(dbRef, "users/" + auth.currentUser?.uid)).then((snapshot) => {
+          if (snapshot.exists()) {
+            alert(JSON.stringify("There is already an existing account under this email"));
+          } else {
+            alert(JSON.stringify("Sign-up successful"))
+            createUserWithGoogleAuth(result);
+          }
+        })
       })
       .catch((error) => {
         const errorCode = error.code;
