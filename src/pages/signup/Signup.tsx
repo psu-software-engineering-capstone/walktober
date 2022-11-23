@@ -18,15 +18,14 @@ import { logoGoogle } from "ionicons/icons";
 import "./Signup.css";
 
 import { useState, useEffect } from "react";
-import { db } from "../../firebase"
-import { collection, getDocs, addDoc } from "firebase/firestore"
+import { db } from "../../firebase";
+import { set, ref } from "firebase/database";
+import { uid } from "uid";
 import { getAuth, signInWithPopup, GoogleAuthProvider, OAuthCredential, UserCredential } from "firebase/auth";
 
 const Signup: React.FC = () => {
 
   const [users, setUsers] = useState([{}]);
-
-  const usersCollectionRef = collection(db, "users");
   
   const [newEmail, setNewEmail] = useState("");
   const [newFirstName, setNewFirstName] = useState("");
@@ -35,7 +34,8 @@ const Signup: React.FC = () => {
   const [newConfirmPassword, setNewConfirmPassword] = useState("");
   
   const createUser = async () => {
-    await addDoc(usersCollectionRef, {
+    const uuid = uid();
+    await set(ref(db, `/${uuid}`), {
       email: newEmail,
       name: newFirstName + " " + newLastName,
       password: newPassword,
@@ -53,7 +53,8 @@ const Signup: React.FC = () => {
   const auth = getAuth();
 
   const createUserWithGoogleAuth = async (result: UserCredential) => {
-    await addDoc(usersCollectionRef, {
+    const uuid = uid();
+    await set(ref(db, `/${uuid}`), {
       email: result.user.email,
       name: result.user.displayName,
       password: "",
@@ -82,11 +83,6 @@ const Signup: React.FC = () => {
         alert(JSON.stringify(error));
       });
   };
-
-  const getUsers = async () => {
-    const data = await getDocs(usersCollectionRef);
-    setUsers(data.docs.map((doc) => ({...doc.data(), id: doc.id })));
-  }
 
   const [presentAlert] = useIonAlert();
 
