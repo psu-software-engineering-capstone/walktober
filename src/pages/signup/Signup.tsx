@@ -20,11 +20,12 @@ import "./Signup.css";
 import { useState, useEffect } from "react";
 import { db } from "../../firebase"
 import { collection, getDocs, addDoc } from "firebase/firestore"
-import { getAuth, signInWithPopup, GoogleAuthProvider, OAuthCredential } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, OAuthCredential, UserCredential } from "firebase/auth";
 
 const Signup: React.FC = () => {
 
   const [users, setUsers] = useState([{}]);
+  
   const usersCollectionRef = collection(db, "users");
   
   const [newEmail, setNewEmail] = useState("");
@@ -53,26 +54,35 @@ const Signup: React.FC = () => {
 
   const auth = getAuth();
 
+  const createUserWithGoogleAuth = async (result: UserCredential) => {
+    await addDoc(usersCollectionRef, {
+      email: result.user.email,
+      first_name: result.user.displayName,
+      last_name: result.user.displayName,
+      password: "",
+      badges: [],
+      device: "",
+      num_steps: 0,
+      profile_pic: result.user.photoURL,
+      team: "",
+      team_leader: false,
+      username: ""
+    });
+  }
+
   const googleAuth = async () => {
     await signInWithPopup(auth, provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = (credential as OAuthCredential).accessToken;
-        // The signed-in user info.
         const user = result.user;
-        // ...
-        alert(JSON.stringify(result));
+        createUserWithGoogleAuth(result);
       })
       .catch((error) => {
-        // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
-        // The email of the user's account used.
         const email = error.customData.email;
-        // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
         alert(JSON.stringify(error));
       });
   };
