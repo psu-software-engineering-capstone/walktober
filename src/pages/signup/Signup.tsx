@@ -25,7 +25,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, OAuthCredential, UserCred
 const Signup: React.FC = () => {
 
   const [users, setUsers] = useState([{}]);
-  
+
   const usersCollectionRef = collection(db, "users");
   
   const [newEmail, setNewEmail] = useState("");
@@ -87,14 +87,10 @@ const Signup: React.FC = () => {
       });
   };
 
-  useEffect(() => {
-    const getUsers = async () => {
-      const data = await getDocs(usersCollectionRef);
-      setUsers(data.docs.map((doc) => ({...doc.data(), id: doc.id })));
-    }
-    getUsers();
-  }, [usersCollectionRef]);
-
+  const getUsers = async () => {
+    const data = await getDocs(usersCollectionRef);
+    setUsers(data.docs.map((doc) => ({...doc.data(), id: doc.id })));
+  }
 
   const [presentAlert] = useIonAlert();
 
