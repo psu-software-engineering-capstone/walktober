@@ -33,6 +33,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import HealthApp from './pages/HealthApp';
 
 setupIonicReact();
 
@@ -50,6 +51,9 @@ const App: React.FC = () => (
           <Route path="/tab3">
             <Tab3 />
           </Route>
+          <Route exact path="/healthapp" >
+            <HealthApp />
+          </Route>
           <Route exact path="/">
             <Redirect to="/tab1" />
           </Route>
@@ -66,6 +70,10 @@ const App: React.FC = () => (
           <IonTabButton tab="tab3" href="/tab3">
             <IonIcon icon={square} />
             <IonLabel>Tab 3</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="healthapp" href="/healthapp">
+            <IonIcon icon={square} />
+            <IonLabel>Health App Integration</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>
