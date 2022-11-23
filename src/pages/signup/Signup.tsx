@@ -37,8 +37,7 @@ const Signup: React.FC = () => {
   const createUser = async () => {
     await addDoc(usersCollectionRef, {
       email: newEmail,
-      first_name: newFirstName,
-      last_name: newLastName,
+      name: newFirstName + " " + newLastName,
       password: newPassword,
       badges: [],
       device: "",
@@ -46,7 +45,6 @@ const Signup: React.FC = () => {
       profile_pic: "",
       team: "",
       team_leader: false,
-      username: ""
     });
   };
 
@@ -57,8 +55,7 @@ const Signup: React.FC = () => {
   const createUserWithGoogleAuth = async (result: UserCredential) => {
     await addDoc(usersCollectionRef, {
       email: result.user.email,
-      first_name: result.user.displayName,
-      last_name: result.user.displayName,
+      name: result.user.displayName,
       password: "",
       badges: [],
       device: "",
@@ -66,7 +63,6 @@ const Signup: React.FC = () => {
       profile_pic: result.user.photoURL,
       team: "",
       team_leader: false,
-      username: ""
     });
   }
 
