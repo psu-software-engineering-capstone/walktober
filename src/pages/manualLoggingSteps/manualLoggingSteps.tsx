@@ -14,7 +14,6 @@ import {
     IonGrid,
     IonRow,
 } from '@ionic/react';
-//import ExploreContainer from '../../components/ExploreContainer';
 import './manualLoggingSteps.css';
 
 const ManualSteps: React.FC = () => {
@@ -22,18 +21,25 @@ const ManualSteps: React.FC = () => {
     const [password, setPassword] = useState();
     const [isTouched, setIsTouched] = useState(false);
     const [isValid, setIsValid] = useState<boolean>();
-    var stepsToLog: number;
-    var date: Date;
-    // var pastRecordDates: Array: Date;
-    var pastRecordDates: Array<Date>;
-    var pastRecordSteps: Array<number>;
+    let stepsToLog: number;
+    let date: Date;
+    let pastRecordDates: Array<Date>;
+    let pastRecordSteps: Array<number>;
+    let minimumDateStart: Date;  // the minimum date in the callendar for an entry
+    let maximumDateEnd: Date;  // the maximum date for the entry
     interface Record {
         time: Date;
         stepsWaled: number;
     }
-    var pastRecords: Array<Record>;
+    let pastRecords: Array<Record>;
 
     function writeToDatabase() {
+        /**
+     @todo: right your todo comment here
+     We should make this actualy write data to the database
+     Make sure it has consistent typing
+
+  **/
         if (stepsToLog > 0) {
             console.log(stepsToLog);
             console.log(date);
@@ -61,7 +67,7 @@ const ManualSteps: React.FC = () => {
         // datesFromDB = callToDB();
         // stepsFromDB = callToDB();
         /* for number of dates in datesFromDB{
-            var newReccord: Record;
+            let  newReccord: Record;
             newRecord.time = dates.at(index);
             newRecord.stepsWaled = stepds.at(index);
             pastRecords.append(newReccord);
