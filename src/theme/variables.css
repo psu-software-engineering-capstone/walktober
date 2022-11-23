@@ -1,6 +1,14 @@
 /* Ionic Variables and Theming. For more info, please see:
 http://ionicframework.com/docs/theming/ */
 
+/** Font faces **/
+@font-face {
+  font-family: 'Oswald';
+  font-style: normal;
+  font-weight: normal;
+  src: url('../../public/assets/fonts/Oswald.ttf');
+}
+
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
