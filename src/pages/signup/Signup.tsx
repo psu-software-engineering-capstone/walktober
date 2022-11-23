@@ -70,9 +70,9 @@ const Signup: React.FC = () => {
         // duplicate email check
         get(child(dbRef, "users/" + auth.currentUser?.uid)).then((snapshot) => {
           if (snapshot.exists()) {
-            alert(JSON.stringify("There is already an existing account under this email"));
+            alert("There is already an existing account under this email");
           } else {
-            alert(JSON.stringify("Sign-up successful"))
+            alert("Sign-up successful")
             createUserWithGoogleAuth(result);
           }
         })
