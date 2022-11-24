@@ -1,9 +1,7 @@
 import {
     IonIcon, IonPopover
 } from "@ionic/react";
-import {
-    chevronDown
-} from "ionicons/icons";
+import { chevronDown } from "ionicons/icons";
 import React, { MouseEvent } from "react";
 import "./NavLink.scss";
 
@@ -15,10 +13,6 @@ interface NavLinkProps {
 }
 
 const NavLink: React.FC<NavLinkProps> = ({ id, text, href="", children=null }) => {
-    const onClick = (e: MouseEvent): void => {
-        e.preventDefault();
-    }
-
     const dismissPopover = (e: MouseEvent): void => {
         let elem = document.body.querySelector("#" + id + "-popover");
         (elem as HTMLIonPopoverElement)?.dismiss();
@@ -27,7 +21,7 @@ const NavLink: React.FC<NavLinkProps> = ({ id, text, href="", children=null }) =
     if(children) {
         return (
             <div className="nav-link-container">
-                <span className="nav-link-text" id={id} onClick={onClick}>
+                <span className="nav-link-text" id={id}>
                     {href ? <a href={href}>{text}</a> : <span>{text}</span>}
                     <IonIcon icon={chevronDown} />
                 </span>

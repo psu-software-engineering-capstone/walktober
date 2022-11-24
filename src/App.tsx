@@ -66,8 +66,8 @@ const App: React.FC = () => {
           <IonToolbar className="right-align">
             <NavLink id="home" text="Home" href="/tab1" />
             <NavLink id="team" text="Team">
-                <NavLink id="team-test-1" text="Tab 2"/>
-                <NavLink id="team-test-2" text="Team dropdown page 2" href="/tab2"/>
+                <NavLink id="team-test-1" text="Tab 2" href="/tab2"/>
+                <NavLink id="team-test-2" text="Team dropdown page 2" href="#"/>
                 <NavLink id="team-test-3" text="Team dropdown page 3 (long)" href="#"/>
                 <NavLink id="team-test-4" text="Team dropdown page 4 (extra long)" href="#"/>
             </NavLink>
