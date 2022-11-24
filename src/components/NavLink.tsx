@@ -31,15 +31,13 @@ const NavLink: React.FC<NavLinkProps> = ({ id, text, href="", children=null }) =
                     <a href={href}>{text}</a>
                     <IonIcon icon={chevronDown} />
                 </span>
-                <div className="nav-link-dropdown">
+                <div className="nav-link-dropdown" onMouseLeave={dismissPopover}>
                     <IonPopover id={`${id}-popover`} trigger={id}
                         triggerAction="hover" side="bottom" alignment="start"
                         animated={false} arrow={false} showBackdrop={false}
                         dismissOnSelect={true} backdropDismiss={true}
                         size="auto">
-                        <div onMouseLeave={dismissPopover}>
-                            {children}
-                        </div>
+                        {children}
                     </IonPopover>
                 </div>
             </div>
@@ -48,7 +46,7 @@ const NavLink: React.FC<NavLinkProps> = ({ id, text, href="", children=null }) =
     else {
         return (
             <div className="nav-link-container">
-                <span className="nav-link-text">
+                <span className="nav-link-text" id={id}>
                     <a href={href}>{text}</a>
                 </span>
             </div>
