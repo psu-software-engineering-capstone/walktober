@@ -11,10 +11,11 @@ $dropdown-padding: 10px;
         align-items: center;
         text-transform: uppercase;
 
-        a {
+        a, span {
             color: var(--ion-color-dark);
             text-decoration: none;
             margin-right: 3px;
+            cursor: pointer;
 
             &:hover {
                 text-decoration: underline;

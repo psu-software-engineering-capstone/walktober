@@ -65,15 +65,18 @@ const App: React.FC = () => {
           </IonRouterOutlet>
           <IonToolbar className="right-align">
             <NavLink id="home" text="Home" href="/tab1" />
-            <NavLink id="team" text="Team" href="#">
-                <NavLink id="team-test" text="Test" href="#"/>
+            <NavLink id="team" text="Team">
+                <NavLink id="team-test-1" text="Tab 2"/>
+                <NavLink id="team-test-2" text="Team dropdown page 2" href="/tab2"/>
+                <NavLink id="team-test-3" text="Team dropdown page 3 (long)" href="#"/>
+                <NavLink id="team-test-4" text="Team dropdown page 4 (extra long)" href="#"/>
             </NavLink>
-            <NavLink id="tab-3" text="Tab 3" href="/tab3">
-                <NavLink id="tab-3-test" text="test 3" href="#"/>
+            <NavLink id="tab-3" text="Tab 3">
+                <NavLink id="tab-3-test-1" text="Tab 3 dropdown" href="/tab3"/>
+                <NavLink id="tab-3-test-2" text="Tab 3 dropdown page 2" href="#"/>
+                <NavLink id="tab-3-test-3" text="Tab 3 dropdown page 3 (long)" href="#"/>
             </NavLink>
-            <NavLink id="health-app" text="Health App" href="/healthapp">
-                <NavLink id="health-app-test" text="test health" href="#"/>
-            </NavLink>
+            <NavLink id="health-app" text="Health App" href="/healthapp"/>
           </IonToolbar>
         </IonReactRouter>
       </IonApp>
