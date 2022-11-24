@@ -1,3 +1,4 @@
+
 module.exports = {
   env: {
     browser: true,
@@ -10,22 +11,25 @@ module.exports = {
   ],
   overrides: [
     {
-      files: ['*.tsx'],
+      files: ['*.tsx', '*.ts'],
       rules: {
-        semi: ['off', 'always'],
-        '@typescript-eslint/semi': 'off'
+        semi: ['error', 'always'],
+        '@typescript-eslint/semi': ['error', 'always'],
+        'react/react-in-jsx-scope': 'off',
+        'react/jsx-uses-react': 'off'
       }
     }
   ],
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
-    project: ['./tsconfig.json']
+    project: ['./tsconfig.json', '*', '*.*.*']
   },
   plugins: [
     'react'
   ],
   rules: {
-    semi: ['error', 'always']
+    semi: ['error', 'always'],
+    '@typescript-eslint/semi': ['error', 'always']
   }
 };
