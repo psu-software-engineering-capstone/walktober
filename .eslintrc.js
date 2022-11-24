@@ -9,14 +9,23 @@ module.exports = {
     'standard-with-typescript'
   ],
   overrides: [
+    {
+      files: ['*.tsx'],
+      rules: {
+        semi: ['off', 'always'],
+        '@typescript-eslint/semi': 'off'
+      }
+    }
   ],
   parserOptions: {
     ecmaVersion: 'latest',
-    sourceType: 'module'
+    sourceType: 'module',
+    project: ['./tsconfig.json']
   },
   plugins: [
     'react'
   ],
   rules: {
+    semi: ['error', 'always']
   }
-}
+};
