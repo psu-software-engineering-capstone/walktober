@@ -17,7 +17,6 @@
     "@testing-library/user-event": "^12.6.3",
     "@types/jest": "^26.0.20",
     "@types/node": "^12.19.15",
-    "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
@@ -70,6 +69,7 @@
   "devDependencies": {
     "@capacitor/cli": "4.4.0",
     "@ionic/cli": "6.20.3",
+    "@types/react": "^18.0.25",
     "sass": "^1.56.1"
   },
   "description": "An Ionic project"
