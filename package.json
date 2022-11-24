@@ -33,7 +33,6 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^5.0.0",
-    "typescript": "^4.1.3",
     "web-vitals": "^0.2.4",
     "workbox-background-sync": "^5.1.4",
     "workbox-broadcast-update": "^5.1.4",
@@ -75,7 +74,15 @@
   "devDependencies": {
     "@capacitor/cli": "4.4.0",
     "@ionic/cli": "6.20.3",
-    "sass": "^1.56.1"
+    "@typescript-eslint/eslint-plugin": "^5.44.0",
+    "eslint": "^8.28.0",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.5.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.31.11",
+    "sass": "^1.56.1",
+    "typescript": "^4.9.3"
   },
   "description": "An Ionic project"
 }
