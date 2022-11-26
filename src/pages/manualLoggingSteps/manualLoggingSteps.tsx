@@ -22,6 +22,8 @@ const ManualSteps: React.FC = () => {
     // let pastRecordDates: Array: Date;
     let pastRecordDates: Array<Date>;
     let pastRecordSteps: Array<number>;
+    let minDate: Date;
+    let maxDate: Date;
     interface Record {
         time: Date;
         stepsWaled: number;
@@ -48,7 +50,13 @@ const ManualSteps: React.FC = () => {
         const newDate = new Date((ev.target as HTMLInputElement).value);
         date = newDate;
         /*     
-            Could implement error checking to ensure date is not beyonde today, and give time limit to how far in past
+            if (date >= minDate && date <= maxDate){
+                date = newDate;
+            }
+            else{
+                callErrorMessage();
+            }
+            Would need a min date and maxDate to pull from othertwise this is pointless. But this is effective error checking
         */
     }
 
