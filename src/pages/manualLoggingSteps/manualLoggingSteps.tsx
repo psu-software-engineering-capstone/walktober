@@ -17,16 +17,11 @@ import {
 import './manualLoggingSteps.css';
 
 const ManualSteps: React.FC = () => {
-    const [username, setUsername] = useState();
-    const [password, setPassword] = useState();
-    const [isTouched, setIsTouched] = useState(false);
-    const [isValid, setIsValid] = useState<boolean>();
     let stepsToLog: number;
     let date: Date;
+    // let pastRecordDates: Array: Date;
     let pastRecordDates: Array<Date>;
     let pastRecordSteps: Array<number>;
-    let minimumDateStart: Date;  // the minimum date in the callendar for an entry
-    let maximumDateEnd: Date;  // the maximum date for the entry
     interface Record {
         time: Date;
         stepsWaled: number;
@@ -34,12 +29,6 @@ const ManualSteps: React.FC = () => {
     let pastRecords: Array<Record>;
 
     function writeToDatabase() {
-        /**
-     @todo: right your todo comment here
-     We should make this actualy write data to the database
-     Make sure it has consistent typing
-
-  **/
         if (stepsToLog > 0) {
             console.log(stepsToLog);
             console.log(date);
@@ -67,7 +56,7 @@ const ManualSteps: React.FC = () => {
         // datesFromDB = callToDB();
         // stepsFromDB = callToDB();
         /* for number of dates in datesFromDB{
-            let  newReccord: Record;
+            let newReccord: Record;
             newRecord.time = dates.at(index);
             newRecord.stepsWaled = stepds.at(index);
             pastRecords.append(newReccord);
@@ -93,7 +82,7 @@ const ManualSteps: React.FC = () => {
                         {
                             pastRecords.map(item => (
                                 <IonRow>
-                                    <IonCol>{item.time.toDateString()}</IonCol>
+                                    <IonCol>{item.time.toLocaleDateString('en-US')}</IonCol>
                                     <IonCol>{item.stepsWaled}</IonCol>
                                 </IonRow>
                             ))

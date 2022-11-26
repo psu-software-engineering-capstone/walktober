@@ -7,7 +7,6 @@ import {
     IonInput,
     IonItem,
     IonLabel,
-    IonNote,
     IonRouterLink,
     IonTitle,
     IonToolbar,
@@ -128,7 +127,7 @@ const StepsCalculator: React.FC = () => {
                 <IonCol>
                     <IonButton onClick={placeHolder}>Submit</IonButton>
                 </IonCol>
-                <IonItem id="result">{steps.toString()}</IonItem>
+                <IonItem id="result">{steps.toLocaleString('en-US')}</IonItem>
                 <IonGrid>
                     <IonRow>
                         <IonCol size="auto"><IonItem>20 min/mi = Slow walk</IonItem></IonCol>
