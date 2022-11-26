@@ -17,15 +17,20 @@ import {
 import './stepsCalculator.css';
 
 const StepsCalculator: React.FC = () => {
-    var steps: number = 0;
-    var heightIn: number = 0; // height inches param
-    var heightFt: number = 0; // height feet param
-    var strideConverter: number = 0.413; // conversion factor for height in inches to average stride in inches
-    var heightCm: number = 0.0; // for our metric friends
-    var time: number;
-    var stepsPerMile: number = 2250;
-    var miles: number;
-    var metric: boolean = false;
+    const [username, setUsername] = useState();
+    const [password, setPassword] = useState();
+    const [isTouched, setIsTouched] = useState(false);
+    const [isValid, setIsValid] = useState<boolean>();
+    let steps: number = 0;
+    let heightIn: number = 0; // height inches param
+    let heightFt: number = 0; // height feet param
+    let strideConverter: number = 0.413; // conversion factor for height in inches to average stride in inches
+    let heightCm: number = 0.0; // for our metric friends
+    let time: number;
+    let stepsPerMile: number = 2250;
+    let miles: number;
+    let metric: boolean = false;
+
 
     function calculate(ev: Event) {
         miles = Number((ev.target as HTMLInputElement).value);
@@ -58,7 +63,6 @@ const StepsCalculator: React.FC = () => {
     }
 
     function placeHolder() {
-        // return steps.toString();
         const updateSteps = document.querySelector('#result');
         if (updateSteps != null) {
             if (metric == false && heightFt > 0 && heightIn > 0) {
