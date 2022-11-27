@@ -17,21 +17,24 @@ import {
 import { logoGoogle } from "ionicons/icons";
 import "./Signup.css";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { db, auth } from "../../firebase";
 import { set, ref, child, get } from "firebase/database";
-import { signInWithPopup, GoogleAuthProvider, OAuthCredential, UserCredential } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider, OAuthCredential, UserCredential, createUserWithEmailAndPassword } from "firebase/auth";
 
 const Signup: React.FC = () => {
   
+  // sign-up input variables //
   const [newEmail, setNewEmail] = useState("");
   const [newFirstName, setNewFirstName] = useState("");
   const [newLastName, setNewLastName] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newConfirmPassword, setNewConfirmPassword] = useState("");
   
+  // google auth provider //
   const provider = new GoogleAuthProvider();
 
+  // user creation begins //
   const createUser = async () => {
     await set(ref(db, 'users/' + auth.currentUser?.uid), {
       email: newEmail,
@@ -59,7 +62,9 @@ const Signup: React.FC = () => {
       team_leader: false,
     });
   }
+  // user creation ends //
 
+  // google sign-up begins //
   const googleAuth = async () => {
     await signInWithPopup(auth, provider)
       .then((result) => {
@@ -85,32 +90,48 @@ const Signup: React.FC = () => {
         alert(JSON.stringify(error));
       });
   };
+  // google sign-up ends //
 
-  const [presentAlert] = useIonAlert();
-
-  function validateEmail() {
-    presentAlert({
-      header: "Alert",
-      cssClass: "center-alert",
-      subHeader: "There is already an existing account under this email",
-      message: "Would you like to reset password?",
-      buttons: [
-        {
-          text: "No",
-          cssClass: 'alert-button-no',
-        },
-        {
-          text: "Yes",
-          cssClass: 'alert-button-yes',
-          handler: () => {
-            window.open(
-              "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"
-            );
-          },
-        },
-      ],
-    });
+  //email sign-un begins (email verification needs to be implemented later)//
+  const signUpEmailPassword = async () => {
+    await createUserWithEmailAndPassword(auth, newEmail, newPassword)
+      .then(() => {
+        createUser();
+        alert(JSON.stringify("Sign-up successful"));
+    })
+      .catch ((error) => {
+        alert(JSON.stringify(error));
+    })
   }
+  //email sign-up ends //
+
+  
+
+  // const [presentAlert] = useIonAlert();
+
+  // function validateEmail() {
+  //   presentAlert({
+  //     header: "Alert",
+  //     cssClass: "center-alert",
+  //     subHeader: "There is already an existing account under this email",
+  //     message: "Would you like to reset password?",
+  //     buttons: [
+  //       {
+  //         text: "No",
+  //         cssClass: 'alert-button-no',
+  //       },
+  //       {
+  //         text: "Yes",
+  //         cssClass: 'alert-button-yes',
+  //         handler: () => {
+  //           window.open(
+  //             "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"
+  //           );
+  //         },
+  //       },
+  //     ],
+  //   });
+  // }
 
   return (
     <IonPage>
@@ -159,7 +180,7 @@ const Signup: React.FC = () => {
 
               <IonItem lines="none" color="light">
                 <IonButton
-                  onClick={createUser}
+                  onClick={signUpEmailPassword}
                   fill="solid"
                   color="tertiary"
                   size="default"
