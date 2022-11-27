@@ -94,18 +94,20 @@ const Signup: React.FC = () => {
 
   //email sign-un begins (email verification needs to be implemented later)//
   const signUpEmailPassword = async () => {
-    await createUserWithEmailAndPassword(auth, newEmail, newPassword)
-      .then(() => {
-        createUser();
-        alert(JSON.stringify("Sign-up successful"));
-    })
-      .catch ((error) => {
-        alert(JSON.stringify(error));
-    })
+    if (newPassword === newConfirmPassword) {
+      await createUserWithEmailAndPassword(auth, newEmail, newPassword)
+        .then(() => {
+          createUser();
+          alert("Sign-up successful");
+        })
+        .catch((error) => {
+          alert(JSON.stringify(error));
+        });
+    } else {
+      alert("Passwords are not matching");
+    }
   }
   //email sign-up ends //
-
-  
 
   // const [presentAlert] = useIonAlert();
 
