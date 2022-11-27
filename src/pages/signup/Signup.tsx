@@ -12,7 +12,6 @@ import {
   IonInput,
   IonButton,
   IonIcon,
-  useIonAlert,
 } from "@ionic/react";
 import { logoGoogle } from "ionicons/icons";
 import "./Signup.css";
@@ -39,8 +38,7 @@ const Signup: React.FC = () => {
     await set(ref(db, 'users/' + auth.currentUser?.uid), {
       email: newEmail,
       name: newFirstName + " " + newLastName,
-      password: newPassword,
-      badges: [],
+      badges: {'0': 'starter'},
       device: "",
       num_steps: 0,
       profile_pic: "",
@@ -53,8 +51,7 @@ const Signup: React.FC = () => {
     await set(ref(db, 'users/' + auth.currentUser?.uid), {
       email: result.user.email,
       name: result.user.displayName,
-      password: "",
-      badges: [],
+      badges: {'0': 'starter'},
       device: "",
       num_steps: 0,
       profile_pic: result.user.photoURL,
