@@ -26,7 +26,7 @@ const Signup: React.FC = () => {
       header: "Alert",
       cssClass: "center-alert",
       subHeader: "There is already an existing account under this email",
-      message: "Would you like to reset password?",
+      message: "Would you like to login?",
       buttons: [
         {
           text: "No",
@@ -37,7 +37,7 @@ const Signup: React.FC = () => {
           cssClass: 'alert-button-yes',
           handler: () => {
             window.open(
-              "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"
+              "/login"
             );
           },
         },
