@@ -6,10 +6,10 @@ import React, { MouseEvent } from "react";
 import "./NavLink.scss";
 
 interface NavLinkProps {
-    id: string,
-    text: string,
-    href?: string,
-    children?: React.ReactNode
+    id: string,                 // id for dropdown trigger
+    text: string,               // text to display for link
+    href?: string,              // link location (omit for just text)
+    children?: React.ReactNode  // links present in dropdown
 }
 
 const NavLink: React.FC<NavLinkProps> = ({ id, text, href="", children=null }) => {
