@@ -67,18 +67,13 @@ const App: React.FC = () => {
             <img id="psu-logo" src="assets/logo.svg" slot="start" />
             <div slot="end">
               <NavLink id="home" text="Home" href="/tab1" />
-              <NavLink id="team" text="Team">
-                  <NavLink id="team-test-1" text="Tab 2" href="/tab2"/>
-                  <NavLink id="team-test-2" text="Team dropdown page 2" href="#"/>
-                  <NavLink id="team-test-3" text="Team dropdown page 3 (long)" href="#"/>
-                  <NavLink id="team-test-4" text="Team dropdown page 4 (extra long)" href="#"/>
+              <NavLink id="team" text="Team" href="/tab2" />
+              <NavLink id="profile" text="Profile" href="/profile">
+                <NavLink id="logs" text="Logs" href="/tab3" />
               </NavLink>
-              <NavLink id="tab-3" text="idk">
-                  <NavLink id="tab-3-test-1" text="Tab 3" href="/tab3"/>
-                  <NavLink id="tab-3-test-2" text="Tab 3 dropdown page 2" href="#"/>
-                  <NavLink id="tab-3-test-3" text="Tab 3 dropdown page 3 (long)" href="#"/>
+              <NavLink id="admin" text="Admin" href="/admin">
+                <NavLink id="admin-announcements" text="Announcements" href="/admin/announcements" />
               </NavLink>
-              <NavLink id="health-app" text="Health App" href="/healthapp"/>
             </div>
           </IonToolbar>
         </IonReactRouter>
