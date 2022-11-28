@@ -57,7 +57,7 @@ const Signup: React.FC = () => {
             <IonList class="ion-no-padding">
               <IonItem color="light">
                 <IonLabel position="floating" color="primary">Email</IonLabel>
-                <IonInput type="email" name="email" color="medium"></IonInput>
+                <IonInput type="email" name="email"></IonInput>
               </IonItem>
 
               <IonItem color="light">
