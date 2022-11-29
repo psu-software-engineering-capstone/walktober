@@ -15,12 +15,15 @@ import {
 } from "@ionic/react";
 import { logoGoogle } from "ionicons/icons";
 import { useState } from "react";
+import { useHistory } from 'react-router-dom';
 import { db, auth } from "../../firebase";
 import { set, ref, child, get } from "firebase/database";
 import { signInWithPopup, GoogleAuthProvider, OAuthCredential, UserCredential, createUserWithEmailAndPassword } from "firebase/auth";
 import "./Signup.css";
 
 const Signup: React.FC = () => {
+
+  const history = useHistory();
   
   // sign-up input variables //
   const [newEmail, setNewEmail] = useState("");
@@ -75,6 +78,7 @@ const Signup: React.FC = () => {
           } else {
             alert("Sign-up successful")
             createUserWithGoogleAuth(result);
+            history.push("/login");
           }
         })
       })
@@ -95,6 +99,7 @@ const Signup: React.FC = () => {
         .then(() => {
           createUser();
           alert("Sign-up successful");
+          history.push("/login");
         })
         .catch((error) => {
           alert(JSON.stringify(error));
@@ -171,7 +176,7 @@ const Signup: React.FC = () => {
                   class="gbutton"
                 >
                   <IonIcon icon={logoGoogle}></IonIcon>
-                  Google Alternate Sign In
+                  Sign Up With Google
                 </IonButton>
               </IonItem>
               {/*Need hyperlink for the forgot password once implemented*/}
