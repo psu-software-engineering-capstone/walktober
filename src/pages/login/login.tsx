@@ -68,7 +68,7 @@ const Login: React.FC = () => {
               } else {
                 //If the user doesn't exist in the database yet, prompt user to sign-up and create an account.
                 auth.signOut();
-                alert("This email is not a Walktober account. Please sign-up first.");
+                alert("This email is not Walktober account. Please sign-up first.");
               }
             });
         })
@@ -81,7 +81,7 @@ const Login: React.FC = () => {
     const signInEmailPassword = async () => {
       await signInWithEmailAndPassword(auth, email, password)
         .then(() => {
-          alert("Sign-up successful");
+          alert("Sign-in successful");
           history.push("/homepage");
         })
         .catch((error) => {
