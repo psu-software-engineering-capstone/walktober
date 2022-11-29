@@ -44,23 +44,23 @@ const App: React.FC = () => (
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
-          <Route path="/login">
-            <Login />
-          </Route>
           <Route exact path="/tab1">
             <Tab1 />
           </Route>
           <Route exact path="/tab2">
             <Tab2 />
           </Route>
-          <Route path="/tab3">
+          <Route exact path="/tab3">
             <Tab3 />
           </Route>
           <Route exact path="/healthapp" >
             <HealthApp />
           </Route>
-          <Route path="/signup">
+          <Route exact path="/signup">
             <Signup />
+          </Route>
+          <Route exact path="/login">
+            <Login />
           </Route>
           <Route exact path="/">
             <Redirect to="/tab1" />
@@ -87,7 +87,7 @@ const App: React.FC = () => (
             <IonIcon icon={footsteps} />
             <IonLabel>Signup</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="login" href="../login">
+          <IonTabButton tab="login" href="/login">
             <IonIcon icon={checkmarkCircle} />
             <IonLabel>Login</IonLabel>
           </IonTabButton>
