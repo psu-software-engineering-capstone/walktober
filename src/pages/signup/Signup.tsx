@@ -116,35 +116,35 @@ const Signup: React.FC = () => {
           <IonCardContent>
             <IonList class="ion-no-padding">
               <IonItem color="light">
-                <IonLabel>Email</IonLabel>
+                <IonLabel position="floating" color="primary">Email</IonLabel>
                 <IonInput type="email" name="email" onIonChange={(e) =>
                   setNewEmail(e.target.value as string)
                 }></IonInput>
               </IonItem>
 
               <IonItem color="light">
-                <IonLabel>First Name</IonLabel>
+                <IonLabel position="floating" color="primary">First Name</IonLabel>
                 <IonInput type="text" name="fname" onIonChange={(e) =>
                   setNewFirstName(e.target.value as string)
                 }></IonInput>
               </IonItem>
 
               <IonItem color="light">
-                <IonLabel>Last Name</IonLabel>
+                <IonLabel position="floating" color="primary">Last Name</IonLabel>
                 <IonInput type="text" name="lname" onIonChange={(e) =>
                   setNewLastName(e.target.value as string)
                 }></IonInput>
               </IonItem>
 
               <IonItem color="light">
-                <IonLabel>Password</IonLabel>
+                <IonLabel position="floating" color="primary">Password</IonLabel>
                 <IonInput type="password" name="password" onIonChange={(e) =>
                   setNewPassword(e.target.value as string)
                 }></IonInput>
               </IonItem>
 
               <IonItem color="light">
-                <IonLabel>Confirm Password</IonLabel>
+                <IonLabel position="floating" color="primary">Confirm Password</IonLabel>
                 <IonInput type="password" name="cpassword" onIonChange={(e) =>
                   setNewConfirmPassword(e.target.value as string)
                 }></IonInput>
@@ -158,7 +158,7 @@ const Signup: React.FC = () => {
                   size="default"
                   class="cbutton"
                 >
-                  Confirm
+                  Sign Up
                 </IonButton>
               </IonItem>
 
@@ -175,7 +175,7 @@ const Signup: React.FC = () => {
                 </IonButton>
               </IonItem>
               {/*Need hyperlink for the forgot password once implemented*/}
-              <IonCardContent class="fpass">
+              <IonCardContent class="fpass" color="light">
                 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley">
                   Forgot Password?
                 </a>
