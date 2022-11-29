@@ -14,12 +14,11 @@ import {
   IonIcon,
 } from "@ionic/react";
 import { logoGoogle } from "ionicons/icons";
-import "./Signup.css";
-
 import { useState } from "react";
 import { db, auth } from "../../firebase";
 import { set, ref, child, get } from "firebase/database";
 import { signInWithPopup, GoogleAuthProvider, OAuthCredential, UserCredential, createUserWithEmailAndPassword } from "firebase/auth";
+import "./Signup.css";
 
 const Signup: React.FC = () => {
   
