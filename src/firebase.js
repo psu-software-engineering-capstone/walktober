@@ -1,10 +1,11 @@
 import { initializeApp } from "firebase/app";
+import { getDatabase } from "firebase/database";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "@firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCoKmeyLCWdjWgu5gXLFJjyLi1JsveYanQ",
   authDomain: "psuwalktober.firebaseapp.com",
+  databaseURL: "https://psuwalktober-default-rtdb.firebaseio.com/",
   projectId: "psuwalktober",
   storageBucket: "psuwalktober.appspot.com",
   messagingSenderId: "949612719811",
@@ -13,5 +14,5 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+export const db = getDatabase(app);
 export const auth = getAuth(app);
