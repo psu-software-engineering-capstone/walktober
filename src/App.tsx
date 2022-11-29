@@ -14,7 +14,8 @@ import { checkmarkCircle, ellipse, square, triangle, footsteps } from 'ionicons/
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
-import Login from './pages/login/login';
+import HealthApp from './pages/healthapp/HealthApp';
+import Login from './pages/login/Login';
 import Signup from './pages/signup/Signup';
 
 /* Core CSS required for Ionic components to work properly */
@@ -35,7 +36,6 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import HealthApp from './pages/HealthApp';
 
 setupIonicReact();
 

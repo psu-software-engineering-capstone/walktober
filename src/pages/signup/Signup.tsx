@@ -106,32 +106,6 @@ const Signup: React.FC = () => {
   }
   //email sign-up ends //
 
-  // const [presentAlert] = useIonAlert();
-
-  // function validateEmail() {
-  //   presentAlert({
-  //     header: "Alert",
-  //     cssClass: "center-alert",
-  //     subHeader: "There is already an existing account under this email",
-  //     message: "Would you like to reset password?",
-  //     buttons: [
-  //       {
-  //         text: "No",
-  //         cssClass: 'alert-button-no',
-  //       },
-  //       {
-  //         text: "Yes",
-  //         cssClass: 'alert-button-yes',
-  //         handler: () => {
-  //           window.open(
-  //             "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"
-  //           );
-  //         },
-  //       },
-  //     ],
-  //   });
-  // }
-
   return (
     <IonPage>
       <IonHeader></IonHeader>

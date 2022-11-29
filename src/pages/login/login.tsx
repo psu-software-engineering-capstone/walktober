@@ -15,12 +15,21 @@ import {
     IonRouterLink,
 } from '@ionic/react';
 import { logoGoogle } from "ionicons/icons";
-//import ExploreContainer from '../../components/ExploreContainer';
-import './login.css';
+import { useHistory } from 'react-router-dom';
+import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
+import { db, auth } from "../../firebase"
+import { ref, child, get } from "firebase/database";
+import './Login.css';
 
 const Login: React.FC = () => {
-    const [username, setUsername] = useState();
-    const [password, setPassword] = useState();
+
+    const history = useHistory();
+    const dbRef = ref(db);
+
+    const provider = new GoogleAuthProvider();
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [isTouched, setIsTouched] = useState(false);
     const [isValid, setIsValid] = useState<boolean>();
  
@@ -45,11 +54,40 @@ const Login: React.FC = () => {
       setIsTouched(true);
     };
 
-    // Firebase Login Functionality (to be implemented)
-    function loginUser() {
-        // to be implemented
-        console.log(username, password);
-    }
+    // sign in with google //
+    const signInWithGoogle = async () => {
+      await signInWithPopup(auth, provider)
+        .then(() => {
+          //Check if the account exists.
+          get(child(dbRef, "users/" + auth.currentUser?.uid))
+            .then((snapshot) => {
+              if (snapshot.exists()) {
+                //If the user exists in the database, then sign-in successfully.
+                alert("Sign-in successful");
+                history.push("/homepage");
+              } else {
+                //If the user doesn't exist in the database yet, prompt user to sign-up and create an account.
+                auth.signOut();
+                alert("This email is not a Walktober account. Please sign-up first.");
+              }
+            });
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    };
+
+    // sign in with email and password
+    const signInEmailPassword = async () => {
+      await signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          alert("Sign-up successful");
+          history.push("/homepage");
+        })
+        .catch((error) => {
+          alert("Wrong email or password");
+        });
+    };
   
     return (
         <IonContent>
@@ -65,7 +103,7 @@ const Login: React.FC = () => {
                         <IonInput type="email" 
                             onIonInput={ (event: any) => { 
                                 validate(event); 
-                                setUsername(event.target.value);
+                                setEmail(event.target.value);
                                 }
                             }
                             onIonBlur={() => markTouched()}>
@@ -81,8 +119,8 @@ const Login: React.FC = () => {
                     </IonItem>
 
                     <IonCol>
-                        <IonButton onClick={loginUser}>Login</IonButton>
-                        <IonButton color="tertiary">
+                        <IonButton onClick={signInEmailPassword}>Login</IonButton>
+                        <IonButton onClick={signInWithGoogle} color="tertiary">
                             <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign in with Google
                         </IonButton>
                     </IonCol>
