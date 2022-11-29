@@ -75,6 +75,9 @@ const Profile: React.FC = () => {
           <IonRow>
             <IonButton>Change Health App Preferences</IonButton>
           </IonRow>
+          {/* <IonRow>
+            <IonButton>Party time</IonButton>
+          </IonRow> */}
         </IonGrid>
       )
     }
