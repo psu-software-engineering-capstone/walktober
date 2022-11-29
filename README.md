@@ -31,13 +31,6 @@ And then move to the project repository and install all the required packages
 $ cd walktober
 $ npm install
 ```
-## Firebase CLI installation
-
-To download and install the Firebase CLI run the following command:
-
-```bash
-npm install -g firebase-tools
-```
 
 ## Run the app
 The majority of Ionic app development can be spent right in the browser using the ionic serve command:
@@ -45,3 +38,6 @@ The majority of Ionic app development can be spent right in the browser using th
 ```bash
 $ ionic serve
 ```
+
+## Troubleshooting
+If you are running into permission issues, try following the instructions here: https://ionicframework.com/docs/developing/tips#resolving-permission-errors 

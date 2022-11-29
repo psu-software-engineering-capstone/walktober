@@ -10,7 +10,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { checkmarkCircle, ellipse, square, triangle } from 'ionicons/icons';
+import { checkmarkCircle, ellipse, square, triangle, footsteps } from 'ionicons/icons';
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
@@ -34,6 +34,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import HealthApp from './pages/HealthApp';
 
 setupIonicReact();
 
@@ -54,15 +55,23 @@ const App: React.FC = () => (
           <Route path="/tab3">
             <Tab3 />
           </Route>
+          <Route exact path="/healthapp" >
+            <HealthApp />
+          </Route>
+          <Route path="/signup">
+            <Signup />
+          </Route>
           <Route exact path="/">
             <Redirect to="/tab1" />
           </Route>
         </IonRouterOutlet>
-        <IonTabBar slot="bottom">
+        
+        <IonTabBar slot="top">
           <IonTabButton tab="login" href="../login">
             <IonIcon icon={checkmarkCircle} />
             <IonLabel>Login</IonLabel>
           </IonTabButton>
+
           <IonTabButton tab="tab1" href="/tab1">
             <IonIcon icon={triangle} />
             <IonLabel>Tab 1</IonLabel>
@@ -74,6 +83,14 @@ const App: React.FC = () => (
           <IonTabButton tab="tab3" href="/tab3">
             <IonIcon icon={square} />
             <IonLabel>Tab 3</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="healthapp" href="/healthapp">
+            <IonIcon icon={square} />
+            <IonLabel>Health App Integration</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="signup" href="/signup">
+            <IonIcon icon={footsteps} />
+            <IonLabel>Signup</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>
