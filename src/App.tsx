@@ -18,6 +18,7 @@ import HealthApp from './pages/healthapp/HealthApp';
 import Login from './pages/login/Login';
 import Signup from './pages/signup/Signup';
 
+
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -44,6 +45,9 @@ const App: React.FC = () => (
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
+          <Route path="/login">
+            <Login />
+          </Route>
           <Route exact path="/tab1">
             <Tab1 />
           </Route>
