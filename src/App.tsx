@@ -15,7 +15,7 @@ import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
 import HealthApp from './pages/healthapp/HealthApp';
-import Login from './pages/login/Login';
+import Login from './pages/login/login';
 import Signup from './pages/signup/Signup';
 
 
