@@ -21,7 +21,7 @@ import { useHistory } from 'react-router-dom';
 import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import { db, auth } from "../../firebase"
 import { ref, child, get } from "firebase/database";
-import './Login.css';
+import './login.css';
 
 const Login: React.FC = () => {
   const history = useHistory();
