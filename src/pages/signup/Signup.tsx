@@ -14,14 +14,16 @@ import {
   IonIcon,
 } from "@ionic/react";
 import { logoGoogle } from "ionicons/icons";
-import "./Signup.css";
-
 import { useState } from "react";
+import { useHistory } from 'react-router-dom';
 import { db, auth } from "../../firebase";
 import { set, ref, child, get } from "firebase/database";
 import { signInWithPopup, GoogleAuthProvider, OAuthCredential, UserCredential, createUserWithEmailAndPassword } from "firebase/auth";
+import "./Signup.css";
 
 const Signup: React.FC = () => {
+
+  const history = useHistory();
   
   // sign-up input variables //
   const [newEmail, setNewEmail] = useState("");
@@ -76,6 +78,7 @@ const Signup: React.FC = () => {
           } else {
             alert("Sign-up successful")
             createUserWithGoogleAuth(result);
+            history.push("/login");
           }
         })
       })
@@ -96,6 +99,7 @@ const Signup: React.FC = () => {
         .then(() => {
           createUser();
           alert("Sign-up successful");
+          history.push("/login");
         })
         .catch((error) => {
           alert(JSON.stringify(error));
@@ -105,32 +109,6 @@ const Signup: React.FC = () => {
     }
   }
   //email sign-up ends //
-
-  // const [presentAlert] = useIonAlert();
-
-  // function validateEmail() {
-  //   presentAlert({
-  //     header: "Alert",
-  //     cssClass: "center-alert",
-  //     subHeader: "There is already an existing account under this email",
-  //     message: "Would you like to reset password?",
-  //     buttons: [
-  //       {
-  //         text: "No",
-  //         cssClass: 'alert-button-no',
-  //       },
-  //       {
-  //         text: "Yes",
-  //         cssClass: 'alert-button-yes',
-  //         handler: () => {
-  //           window.open(
-  //             "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"
-  //           );
-  //         },
-  //       },
-  //     ],
-  //   });
-  // }
 
   return (
     <IonPage>
@@ -143,35 +121,35 @@ const Signup: React.FC = () => {
           <IonCardContent>
             <IonList class="ion-no-padding">
               <IonItem color="light">
-                <IonLabel>Email</IonLabel>
+                <IonLabel position="floating" color="primary">Email</IonLabel>
                 <IonInput type="email" name="email" onIonChange={(e) =>
                   setNewEmail(e.target.value as string)
                 }></IonInput>
               </IonItem>
 
               <IonItem color="light">
-                <IonLabel>First Name</IonLabel>
+                <IonLabel position="floating" color="primary">First Name</IonLabel>
                 <IonInput type="text" name="fname" onIonChange={(e) =>
                   setNewFirstName(e.target.value as string)
                 }></IonInput>
               </IonItem>
 
               <IonItem color="light">
-                <IonLabel>Last Name</IonLabel>
+                <IonLabel position="floating" color="primary">Last Name</IonLabel>
                 <IonInput type="text" name="lname" onIonChange={(e) =>
                   setNewLastName(e.target.value as string)
                 }></IonInput>
               </IonItem>
 
               <IonItem color="light">
-                <IonLabel>Password</IonLabel>
+                <IonLabel position="floating" color="primary">Password</IonLabel>
                 <IonInput type="password" name="password" onIonChange={(e) =>
                   setNewPassword(e.target.value as string)
                 }></IonInput>
               </IonItem>
 
               <IonItem color="light">
-                <IonLabel>Confirm Password</IonLabel>
+                <IonLabel position="floating" color="primary">Confirm Password</IonLabel>
                 <IonInput type="password" name="cpassword" onIonChange={(e) =>
                   setNewConfirmPassword(e.target.value as string)
                 }></IonInput>
@@ -185,7 +163,7 @@ const Signup: React.FC = () => {
                   size="default"
                   class="cbutton"
                 >
-                  Confirm
+                  Sign Up
                 </IonButton>
               </IonItem>
 
@@ -198,11 +176,11 @@ const Signup: React.FC = () => {
                   class="gbutton"
                 >
                   <IonIcon icon={logoGoogle}></IonIcon>
-                  Google Alternate Sign In
+                  Sign Up With Google
                 </IonButton>
               </IonItem>
               {/*Need hyperlink for the forgot password once implemented*/}
-              <IonCardContent class="fpass">
+              <IonCardContent class="fpass" color="light">
                 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley">
                   Forgot Password?
                 </a>

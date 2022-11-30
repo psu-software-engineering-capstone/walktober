@@ -14,7 +14,10 @@ import { checkmarkCircle, ellipse, square, triangle, footsteps } from 'ionicons/
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
-import Login from './pages/login/login';
+import HealthApp from './pages/healthapp/HealthApp';
+import Login from './pages/login/Login';
+import Signup from './pages/signup/Signup';
+
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -34,7 +37,6 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import HealthApp from './pages/HealthApp';
 
 setupIonicReact();
 
@@ -52,26 +54,23 @@ const App: React.FC = () => (
           <Route exact path="/tab2">
             <Tab2 />
           </Route>
-          <Route path="/tab3">
+          <Route exact path="/tab3">
             <Tab3 />
           </Route>
           <Route exact path="/healthapp" >
             <HealthApp />
           </Route>
-          <Route path="/signup">
+          <Route exact path="/signup">
             <Signup />
+          </Route>
+          <Route exact path="/login">
+            <Login />
           </Route>
           <Route exact path="/">
             <Redirect to="/tab1" />
           </Route>
         </IonRouterOutlet>
-        
-        <IonTabBar slot="top">
-          <IonTabButton tab="login" href="../login">
-            <IonIcon icon={checkmarkCircle} />
-            <IonLabel>Login</IonLabel>
-          </IonTabButton>
-
+        <IonTabBar slot="bottom">
           <IonTabButton tab="tab1" href="/tab1">
             <IonIcon icon={triangle} />
             <IonLabel>Tab 1</IonLabel>
@@ -91,6 +90,10 @@ const App: React.FC = () => (
           <IonTabButton tab="signup" href="/signup">
             <IonIcon icon={footsteps} />
             <IonLabel>Signup</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="login" href="/login">
+            <IonIcon icon={checkmarkCircle} />
+            <IonLabel>Login</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>
