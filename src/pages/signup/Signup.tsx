@@ -16,32 +16,37 @@ import {
 } from "@ionic/react";
 import { logoGoogle } from "ionicons/icons";
 import { useState } from "react";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import { db, auth } from "../../firebase";
 import { set, ref, child, get } from "firebase/database";
-import { signInWithPopup, GoogleAuthProvider, OAuthCredential, UserCredential, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  OAuthCredential,
+  UserCredential,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 import "./Signup.css";
 
 const Signup: React.FC = () => {
-
   const history = useHistory();
-  
+
   // sign-up input variables //
   const [newEmail, setNewEmail] = useState("");
   const [newFirstName, setNewFirstName] = useState("");
   const [newLastName, setNewLastName] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newConfirmPassword, setNewConfirmPassword] = useState("");
-  
+
   // google auth provider //
   const provider = new GoogleAuthProvider();
 
   // user creation begins //
   const createUser = async () => {
-    await set(ref(db, 'users/' + auth.currentUser?.uid), {
+    await set(ref(db, "users/" + auth.currentUser?.uid), {
       email: newEmail,
       name: newFirstName + " " + newLastName,
-      badges: {'0': 'starter'},
+      badges: { "0": "starter" },
       device: "",
       num_steps: 0,
       profile_pic: "",
@@ -51,17 +56,17 @@ const Signup: React.FC = () => {
   };
 
   const createUserWithGoogleAuth = async (result: UserCredential) => {
-    await set(ref(db, 'users/' + auth.currentUser?.uid), {
+    await set(ref(db, "users/" + auth.currentUser?.uid), {
       email: result.user.email,
       name: result.user.displayName,
-      badges: {'0': 'starter'},
+      badges: { "0": "starter" },
       device: "",
       num_steps: 0,
       profile_pic: result.user.photoURL,
       team: "",
       team_leader: false,
     });
-  }
+  };
   // user creation ends //
 
   // google sign-up begins //
@@ -116,7 +121,7 @@ const Signup: React.FC = () => {
     } else {
       alert("Passwords are not matching");
     }
-  }
+  };
   //email sign-up ends //
 
   // back to login button

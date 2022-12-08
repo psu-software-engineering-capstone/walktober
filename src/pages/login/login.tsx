@@ -1,28 +1,32 @@
-import { 
-    IonButton, 
-    IonCol,
-    IonContent,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardTitle,
-    IonIcon,
-    IonInput, 
-    IonItem, 
-    IonLabel, 
-    IonNote,
-    IonRouterLink,
-    IonPage,
-    IonHeader,
-    isPlatform,
-} from '@ionic/react';
+import {
+  IonButton,
+  IonCol,
+  IonContent,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonNote,
+  IonRouterLink,
+  IonPage,
+  IonHeader,
+  isPlatform,
+} from "@ionic/react";
 import { logoGoogle } from "ionicons/icons";
 import { useState } from "react";
-import { useHistory } from 'react-router-dom';
-import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
-import { db, auth } from "../../firebase"
+import { useHistory } from "react-router-dom";
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { db, auth } from "../../firebase";
 import { ref, child, get } from "firebase/database";
-import './login.css';
+import "./login.css";
 
 const Login: React.FC = () => {
   const history = useHistory();
