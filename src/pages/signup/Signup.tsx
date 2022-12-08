@@ -100,6 +100,8 @@ const Signup: React.FC = () => {
           console.log(error);
           alert(error.message);
         });
+    } else {
+      // implement mobile version here
     }
   };
   // google sign-up ends //
@@ -107,19 +109,24 @@ const Signup: React.FC = () => {
   //email sign-un begins (email verification needs to be implemented later)//
   const signUpEmailPassword = async () => {
     if (newPassword === newConfirmPassword) {
-      await createUserWithEmailAndPassword(auth, newEmail, newPassword)
-        .then((data) => {
-          createUser();
-          console.log(data);
-          alert("Sign-up successful");
-          history.push("/login");
-        })
-        .catch((error) => {
-          console.log(error);
-          alert(error.message);
-        });
+      // only for web, ios and android need different approach
+      if (!isPlatform("capacitor")) {
+        await createUserWithEmailAndPassword(auth, newEmail, newPassword)
+          .then((data) => {
+            createUser();
+            console.log(data);
+            alert("Sign-up successful");
+            history.push("/login");
+          })
+          .catch((error) => {
+            console.log(error);
+            alert(error.message);
+          });
+      } else {
+        alert("Passwords are not matching");
+      }
     } else {
-      alert("Passwords are not matching");
+      // implement mobile version here
     }
   };
   //email sign-up ends //
