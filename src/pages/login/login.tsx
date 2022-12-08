@@ -23,12 +23,10 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signInWithEmailAndPassword,
-  signInWithCredential,
-  signInWithRedirect,
-  getRedirectResult,
 } from "firebase/auth";
 import { db, auth } from "../../firebase";
 import { ref, child, get } from "firebase/database";
+import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
 import "./login.css";
 
 const Login: React.FC = () => {
@@ -95,9 +93,9 @@ const Login: React.FC = () => {
     }
   };
 
-  // sign in with email and password
+  // sign in with email and password //
   const signInEmailPassword = async () => {
-    // only for web, ios and android need different approach
+    // web //
     if (!isPlatform("capacitor")) {
       await signInWithEmailAndPassword(auth, email, password)
         .then((data) => {
@@ -109,8 +107,18 @@ const Login: React.FC = () => {
           console.log(error);
           alert(error.message);
         });
+    // iOS & Android //
     } else {
-      // implement mobile version here
+      FirebaseAuthentication.signInWithEmailAndPassword(email, password)
+      .then((data) => {
+        console.log(data);
+        alert("Sign-in successful");
+        history.push("/app");
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(error.message);
+      })
     }
   };
 

@@ -13,7 +13,8 @@ dependencies {
     implementation project(':capacitor-haptics')
     implementation project(':capacitor-keyboard')
     implementation project(':capacitor-status-bar')
-
+    implementation platform('com.google.firebase:firebase-bom:30.3.1')
+    implementation "com.google.firebase:firebase-auth"
 }
 
 

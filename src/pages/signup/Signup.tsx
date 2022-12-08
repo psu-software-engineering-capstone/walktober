@@ -26,7 +26,9 @@ import {
   UserCredential,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
+import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
 import "./Signup.css";
+
 
 const Signup: React.FC = () => {
   const history = useHistory();
@@ -41,7 +43,7 @@ const Signup: React.FC = () => {
   // google auth provider //
   const provider = new GoogleAuthProvider();
 
-  // user creation begins //
+  // user creation //
   const createUser = async () => {
     await set(ref(db, "users/" + auth.currentUser?.uid), {
       email: newEmail,
@@ -55,6 +57,7 @@ const Signup: React.FC = () => {
     });
   };
 
+  // user creation with google auth //
   const createUserWithGoogleAuth = async (result: UserCredential) => {
     await set(ref(db, "users/" + auth.currentUser?.uid), {
       email: result.user.email,
@@ -67,9 +70,8 @@ const Signup: React.FC = () => {
       team_leader: false,
     });
   };
-  // user creation ends //
 
-  // google sign-up begins //
+  // google sign-up //
   const googleAuth = async () => {
     // only for web , ios and android need different approach
     if (!isPlatform("capacitor")) {
@@ -104,13 +106,12 @@ const Signup: React.FC = () => {
       // implement mobile version here
     }
   };
-  // google sign-up ends //
 
-  //email sign-un begins (email verification needs to be implemented later)//
+  //email sign-up (email verification needs to be implemented later)//
   const signUpEmailPassword = async () => {
-    if (newPassword === newConfirmPassword) {
-      // only for web, ios and android need different approach
-      if (!isPlatform("capacitor")) {
+    // web //
+    if (!isPlatform("capacitor")) {
+      if (newPassword === newConfirmPassword) {
         await createUserWithEmailAndPassword(auth, newEmail, newPassword)
           .then((data) => {
             createUser();
@@ -125,11 +126,28 @@ const Signup: React.FC = () => {
       } else {
         alert("Passwords are not matching");
       }
+      // iOS & Android //
     } else {
-      // implement mobile version here
+      if (newPassword === newConfirmPassword) {
+        FirebaseAuthentication.createUserWithEmailAndPassword(
+          newEmail,
+          newPassword
+        )
+          .then((data) => {
+            createUser();
+            console.log(data);
+            alert("Sign-up successful");
+            history.push("/login");
+          })
+          .catch((error) => {
+            console.log(error);
+            alert(error.message);
+          });
+      } else {
+        alert("Passwords are not matching");
+      }
     }
   };
-  //email sign-up ends //
 
   // back to login button
   const moveToLogin = () => {
