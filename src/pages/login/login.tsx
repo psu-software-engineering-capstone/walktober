@@ -81,7 +81,8 @@ const Login: React.FC = () => {
   // sign in with email and password
   const signInEmailPassword = async () => {
     await signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
+      .then((data) => {
+        console.log(data);
         alert("Sign-in successful");
         history.push("/app");
       })

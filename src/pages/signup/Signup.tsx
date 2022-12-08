@@ -97,13 +97,15 @@ const Signup: React.FC = () => {
   const signUpEmailPassword = async () => {
     if (newPassword === newConfirmPassword) {
       await createUserWithEmailAndPassword(auth, newEmail, newPassword)
-        .then(() => {
+        .then((data) => {
           createUser();
+          console.log(data);
           alert("Sign-up successful");
           history.push("/login");
         })
         .catch((error) => {
-          alert(JSON.stringify(error));
+          console.log(error);
+          alert("There was an error. Please try again.");
         });
     } else {
       alert("Passwords are not matching");
