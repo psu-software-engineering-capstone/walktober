@@ -64,7 +64,7 @@ const Login: React.FC = () => {
           if (snapshot.exists()) {
             //If the user exists in the database, then sign-in successfully.
             alert("Sign-in successful");
-            history.push("/homepage");
+            history.push("/app");
           } else {
             //If the user doesn't exist in the database yet, prompt user to sign-up and create an account.
             auth.signOut();
@@ -73,7 +73,8 @@ const Login: React.FC = () => {
         });
       })
       .catch((error) => {
-        alert(error);
+        console.log(error);
+        alert("There was an error. Please try again.");
       });
   };
 
@@ -82,11 +83,17 @@ const Login: React.FC = () => {
     await signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         alert("Sign-in successful");
-        history.push("/homepage");
+        history.push("/app");
       })
       .catch((error) => {
+        console.log(error);
         alert("Wrong email or password");
       });
+  };
+
+  // signup button
+  const moveToSignup = () => {
+    history.push("/signup");
   };
 
   return (
@@ -133,6 +140,7 @@ const Login: React.FC = () => {
               <IonButton onClick={signInWithGoogle} color="tertiary">
                 <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign in with Google
               </IonButton>
+              <IonButton onClick={moveToSignup}>New User?</IonButton>
             </IonCol>
           </IonCardContent>
         </IonCard>

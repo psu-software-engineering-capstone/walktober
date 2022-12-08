@@ -87,7 +87,8 @@ const Signup: React.FC = () => {
         const errorMessage = error.message;
         const email = error.customData.email;
         const credential = GoogleAuthProvider.credentialFromError(error);
-        alert(JSON.stringify(error));
+        console.log(error);
+        alert("There was an error. Please try again.");
       });
   };
   // google sign-up ends //
@@ -110,6 +111,11 @@ const Signup: React.FC = () => {
   }
   //email sign-up ends //
 
+  // back to login button
+  const moveToLogin = () => {
+    history.push("/login");
+  };
+
   return (
     <IonPage>
       <IonHeader></IonHeader>
@@ -121,38 +127,60 @@ const Signup: React.FC = () => {
           <IonCardContent>
             <IonList class="ion-no-padding">
               <IonItem color="light">
-                <IonLabel position="floating" color="primary">Email</IonLabel>
-                <IonInput type="email" name="email" onIonChange={(e) =>
-                  setNewEmail(e.target.value as string)
-                }></IonInput>
+                <IonLabel position="floating" color="primary">
+                  Email
+                </IonLabel>
+                <IonInput
+                  type="email"
+                  name="email"
+                  onIonChange={(e) => setNewEmail(e.target.value as string)}
+                ></IonInput>
               </IonItem>
 
               <IonItem color="light">
-                <IonLabel position="floating" color="primary">First Name</IonLabel>
-                <IonInput type="text" name="fname" onIonChange={(e) =>
-                  setNewFirstName(e.target.value as string)
-                }></IonInput>
+                <IonLabel position="floating" color="primary">
+                  First Name
+                </IonLabel>
+                <IonInput
+                  type="text"
+                  name="fname"
+                  onIonChange={(e) => setNewFirstName(e.target.value as string)}
+                ></IonInput>
               </IonItem>
 
               <IonItem color="light">
-                <IonLabel position="floating" color="primary">Last Name</IonLabel>
-                <IonInput type="text" name="lname" onIonChange={(e) =>
-                  setNewLastName(e.target.value as string)
-                }></IonInput>
+                <IonLabel position="floating" color="primary">
+                  Last Name
+                </IonLabel>
+                <IonInput
+                  type="text"
+                  name="lname"
+                  onIonChange={(e) => setNewLastName(e.target.value as string)}
+                ></IonInput>
               </IonItem>
 
               <IonItem color="light">
-                <IonLabel position="floating" color="primary">Password</IonLabel>
-                <IonInput type="password" name="password" onIonChange={(e) =>
-                  setNewPassword(e.target.value as string)
-                }></IonInput>
+                <IonLabel position="floating" color="primary">
+                  Password
+                </IonLabel>
+                <IonInput
+                  type="password"
+                  name="password"
+                  onIonChange={(e) => setNewPassword(e.target.value as string)}
+                ></IonInput>
               </IonItem>
 
               <IonItem color="light">
-                <IonLabel position="floating" color="primary">Confirm Password</IonLabel>
-                <IonInput type="password" name="cpassword" onIonChange={(e) =>
-                  setNewConfirmPassword(e.target.value as string)
-                }></IonInput>
+                <IonLabel position="floating" color="primary">
+                  Confirm Password
+                </IonLabel>
+                <IonInput
+                  type="password"
+                  name="cpassword"
+                  onIonChange={(e) =>
+                    setNewConfirmPassword(e.target.value as string)
+                  }
+                ></IonInput>
               </IonItem>
 
               <IonItem lines="none" color="light">
@@ -179,6 +207,19 @@ const Signup: React.FC = () => {
                   Sign Up With Google
                 </IonButton>
               </IonItem>
+
+              <IonItem lines="none" color="light">
+                <IonButton
+                  onClick={moveToLogin}
+                  fill="solid"
+                  color="tertiary"
+                  size="default"
+                  class="cbutton"
+                >
+                  Back to Log In
+                </IonButton>
+              </IonItem>
+
               {/*Need hyperlink for the forgot password once implemented*/}
               <IonCardContent class="fpass" color="light">
                 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley">

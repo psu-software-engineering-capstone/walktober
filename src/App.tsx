@@ -1,22 +1,13 @@
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
-  IonIcon,
-  IonLabel,
   IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { checkmarkCircle, ellipse, square, triangle, footsteps } from 'ionicons/icons';
-import Tab1 from './pages/Tab1';
-import Tab2 from './pages/Tab2';
-import Tab3 from './pages/Tab3';
-import HealthApp from './pages/healthapp/HealthApp';
 import Login from './pages/login/login';
 import Signup from './pages/signup/Signup';
+import Dashboard from './Dashboard';
 
 
 /* Core CSS required for Ionic components to work properly */
@@ -43,60 +34,13 @@ setupIonicReact();
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route exact path="/tab1">
-            <Tab1 />
-          </Route>
-          <Route exact path="/tab2">
-            <Tab2 />
-          </Route>
-          <Route exact path="/tab3">
-            <Tab3 />
-          </Route>
-          <Route exact path="/healthapp" >
-            <HealthApp />
-          </Route>
-          <Route exact path="/signup">
-            <Signup />
-          </Route>
-          <Route exact path="/login">
-            <Login />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/tab1" />
-          </Route>
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="tab1" href="/tab1">
-            <IonIcon icon={triangle} />
-            <IonLabel>Tab 1</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="tab2" href="/tab2">
-            <IonIcon icon={ellipse} />
-            <IonLabel>Tab 2</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="tab3" href="/tab3">
-            <IonIcon icon={square} />
-            <IonLabel>Tab 3</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="healthapp" href="/healthapp">
-            <IonIcon icon={square} />
-            <IonLabel>Health App Integration</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="signup" href="/signup">
-            <IonIcon icon={footsteps} />
-            <IonLabel>Signup</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="login" href="/login">
-            <IonIcon icon={checkmarkCircle} />
-            <IonLabel>Login</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
+      <IonRouterOutlet>
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/signup" component={Signup} />
+        {/* cannot have exact here */}
+        <Route path="/app" component={Dashboard} />
+        <Route exact path="/"><Redirect to="/login" /></Route>
+      </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
 );
