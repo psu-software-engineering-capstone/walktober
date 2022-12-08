@@ -64,7 +64,7 @@ const Login: React.FC = () => {
           if (snapshot.exists()) {
             //If the user exists in the database, then sign-in successfully.
             alert("Sign-in successful");
-            history.push("/");
+            history.push("/app");
           } else {
             //If the user doesn't exist in the database yet, prompt user to sign-up and create an account.
             auth.signOut();
@@ -83,7 +83,7 @@ const Login: React.FC = () => {
     await signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         alert("Sign-in successful");
-        history.push("/");
+        history.push("/app");
       })
       .catch((error) => {
         console.log(error);
