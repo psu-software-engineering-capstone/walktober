@@ -12,6 +12,7 @@ import {
   IonInput,
   IonButton,
   IonIcon,
+  isPlatform,
 } from "@ionic/react";
 import { logoGoogle } from "ionicons/icons";
 import { useState } from "react";
@@ -65,31 +66,36 @@ const Signup: React.FC = () => {
 
   // google sign-up begins //
   const googleAuth = async () => {
-    await signInWithPopup(auth, provider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = (credential as OAuthCredential).accessToken;
-        const user = result.user;
-        const dbRef = ref(db);
-        // duplicate email check
-        get(child(dbRef, "users/" + auth.currentUser?.uid)).then((snapshot) => {
-          if (snapshot.exists()) {
-            alert("There is already an existing account under this email");
-          } else {
-            alert("Sign-up successful")
-            createUserWithGoogleAuth(result);
-            history.push("/login");
-          }
+    // only for web , ios and android need different approach
+    if (!isPlatform("capacitor")) {
+      await signInWithPopup(auth, provider)
+        .then((result) => {
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = (credential as OAuthCredential).accessToken;
+          const user = result.user;
+          const dbRef = ref(db);
+          // duplicate email check
+          get(child(dbRef, "users/" + auth.currentUser?.uid)).then(
+            (snapshot) => {
+              if (snapshot.exists()) {
+                alert("There is already an existing account under this email");
+              } else {
+                alert("Sign-up successful");
+                createUserWithGoogleAuth(result);
+                history.push("/login");
+              }
+            }
+          );
         })
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log(error);
-        alert("There was an error. Please try again.");
-      });
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          const email = error.customData.email;
+          const credential = GoogleAuthProvider.credentialFromError(error);
+          console.log(error);
+          alert(error.message);
+        });
+    }
   };
   // google sign-up ends //
 
@@ -105,7 +111,7 @@ const Signup: React.FC = () => {
         })
         .catch((error) => {
           console.log(error);
-          alert("There was an error. Please try again.");
+          alert(error.message);
         });
     } else {
       alert("Passwords are not matching");

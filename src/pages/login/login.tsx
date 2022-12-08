@@ -14,6 +14,7 @@ import {
     IonRouterLink,
     IonPage,
     IonHeader,
+    isPlatform,
 } from '@ionic/react';
 import { logoGoogle } from "ionicons/icons";
 import { useState } from "react";
@@ -57,25 +58,32 @@ const Login: React.FC = () => {
 
   // sign in with google //
   const signInWithGoogle = async () => {
-    await signInWithPopup(auth, provider)
-      .then(() => {
-        //Check if the account exists.
-        get(child(dbRef, "users/" + auth.currentUser?.uid)).then((snapshot) => {
-          if (snapshot.exists()) {
-            //If the user exists in the database, then sign-in successfully.
-            alert("Sign-in successful");
-            history.push("/app");
-          } else {
-            //If the user doesn't exist in the database yet, prompt user to sign-up and create an account.
-            auth.signOut();
-            alert("This email is not Walktober account. Please sign-up first.");
-          }
+    // only for web , ios and android need different approach
+    if (!isPlatform("capacitor")) {
+      await signInWithPopup(auth, provider)
+        .then(() => {
+          //Check if the account exists.
+          get(child(dbRef, "users/" + auth.currentUser?.uid)).then(
+            (snapshot) => {
+              if (snapshot.exists()) {
+                //If the user exists in the database, then sign-in successfully.
+                alert("Sign-in successful");
+                history.push("/app");
+              } else {
+                //If the user doesn't exist in the database yet, prompt user to sign-up and create an account.
+                auth.signOut();
+                alert(
+                  "This email is not a Walktober account. Please sign-up first."
+                );
+              }
+            }
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+          alert(error.message);
         });
-      })
-      .catch((error) => {
-        console.log(error);
-        alert("There was an error. Please try again.");
-      });
+    }
   };
 
   // sign in with email and password
@@ -88,7 +96,7 @@ const Login: React.FC = () => {
       })
       .catch((error) => {
         console.log(error);
-        alert("Wrong email or password");
+        alert(error.message);
       });
   };
 
