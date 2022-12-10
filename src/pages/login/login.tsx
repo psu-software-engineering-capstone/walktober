@@ -24,14 +24,15 @@ import {
   signInWithPopup,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { db, auth } from "../../firebase";
-import { ref, child, get } from "firebase/database";
+import { FirestoreDB, auth } from "../../firebase";
 import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
+import { doc, getDoc } from "firebase/firestore";
 import "./login.css";
+
+
 
 const Login: React.FC = () => {
   const history = useHistory();
-  const dbRef = ref(db);
 
   const provider = new GoogleAuthProvider();
 
@@ -66,23 +67,16 @@ const Login: React.FC = () => {
     // only for web , ios and android need different approach
     if (!isPlatform("capacitor")) {
       await signInWithPopup(auth, provider)
-        .then(() => {
-          //Check if the account exists.
-          get(child(dbRef, "users/" + auth.currentUser?.uid)).then(
-            (snapshot) => {
-              if (snapshot.exists()) {
-                //If the user exists in the database, then sign-in successfully.
-                alert("Sign-in successful");
-                history.push("/app");
-              } else {
-                //If the user doesn't exist in the database yet, prompt user to sign-up and create an account.
-                auth.signOut();
-                alert(
-                  "This email is not a Walktober account. Please sign-up first."
-                );
-              }
-            }
-          );
+        .then(async (result) => {
+          const dbRef = doc(FirestoreDB, "users", result.user.email as string);
+          const dbSnap = await getDoc(dbRef);
+          if (dbSnap.exists()) {
+            alert("Sign-in successful");
+            history.push("/app");
+          } else {
+            auth.signOut();
+            alert("This email is not a Walktober account. Please sign-up first.");
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -107,7 +101,7 @@ const Login: React.FC = () => {
           console.log(error);
           alert(error.message);
         });
-    // iOS & Android //
+    // ios & android //
     } else {
       FirebaseAuthentication.signInWithEmailAndPassword(email, password)
       .then((data) => {
@@ -122,7 +116,7 @@ const Login: React.FC = () => {
     }
   };
 
-  // signup button
+  // move to signup button
   const moveToSignup = () => {
     history.push("/signup");
   };

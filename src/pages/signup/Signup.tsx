@@ -17,17 +17,18 @@ import {
 import { logoGoogle } from "ionicons/icons";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { db, auth } from "../../firebase";
-import { set, ref, child, get } from "firebase/database";
+import { FirestoreDB, auth } from "../../firebase";
 import {
   signInWithPopup,
   GoogleAuthProvider,
-  OAuthCredential,
   UserCredential,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import "./Signup.css";
+
 
 
 const Signup: React.FC = () => {
@@ -45,10 +46,10 @@ const Signup: React.FC = () => {
 
   // user creation //
   const createUser = async () => {
-    await set(ref(db, "users/" + auth.currentUser?.uid), {
+    await setDoc(doc(FirestoreDB, "users", newEmail), {
       email: newEmail,
       name: newFirstName + " " + newLastName,
-      badges: { "0": "starter" },
+      badges: [],
       device: "",
       num_steps: 0,
       profile_pic: "",
@@ -59,10 +60,10 @@ const Signup: React.FC = () => {
 
   // user creation with google auth //
   const createUserWithGoogleAuth = async (result: UserCredential) => {
-    await set(ref(db, "users/" + auth.currentUser?.uid), {
+    await setDoc(doc(FirestoreDB, "users", result.user.email as string), {
       email: result.user.email,
       name: result.user.displayName,
-      badges: { "0": "starter" },
+      badges: [],
       device: "",
       num_steps: 0,
       profile_pic: result.user.photoURL,
@@ -71,39 +72,57 @@ const Signup: React.FC = () => {
     });
   };
 
+  // const createUserWithGoogleAuthMobile = async (result: any) => {
+  //   await setDoc(doc(FirestoreDB, "users", result.email as string), {
+  //     email: result.email,
+  //     name: result.name,
+  //     badges: [],
+  //     device: "",
+  //     num_steps: 0,
+  //     profile_pic: result.imageUrl,
+  //     team: "",
+  //     team_leader: false,
+  //   });
+  // };
+
   // google sign-up //
   const googleAuth = async () => {
-    // only for web , ios and android need different approach
+    // web //
     if (!isPlatform("capacitor")) {
       await signInWithPopup(auth, provider)
-        .then((result) => {
-          const credential = GoogleAuthProvider.credentialFromResult(result);
-          const token = (credential as OAuthCredential).accessToken;
-          const user = result.user;
-          const dbRef = ref(db);
-          // duplicate email check
-          get(child(dbRef, "users/" + auth.currentUser?.uid)).then(
-            (snapshot) => {
-              if (snapshot.exists()) {
-                alert("There is already an existing account under this email");
-              } else {
-                alert("Sign-up successful");
-                createUserWithGoogleAuth(result);
-                history.push("/login");
-              }
-            }
-          );
+        .then(async (result) => {
+          const dbRef = doc(FirestoreDB, "users", result.user.email as string);
+          const dbSnap = await getDoc(dbRef);
+          if (dbSnap.exists()) {
+            alert("There is already an existing account under this email");
+          } else {
+            alert("Sign-up successful");
+            createUserWithGoogleAuth(result);
+            history.push("/login");
+          }
         })
         .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          const email = error.customData.email;
-          const credential = GoogleAuthProvider.credentialFromError(error);
           console.log(error);
           alert(error.message);
         });
+    // ios & android //
     } else {
-      // implement mobile version here
+      await GoogleAuth.signOut();
+      await FirebaseAuthentication.signOut();
+      await GoogleAuth.signIn()
+        .then(async (result) => {
+          await FirebaseAuthentication.signInWithGoogle(
+            result.authentication.idToken,
+            result.authentication.accessToken
+          );
+          // check duplicate account
+          // needs to be implemented
+          history.push("/login");
+        })
+        .catch((error) => {
+          console.log(error);
+          alert(error.message);
+        });
     }
   };
 
@@ -126,7 +145,7 @@ const Signup: React.FC = () => {
       } else {
         alert("Passwords are not matching");
       }
-      // iOS & Android //
+    // ios & android //
     } else {
       if (newPassword === newConfirmPassword) {
         FirebaseAuthentication.createUserWithEmailAndPassword(
