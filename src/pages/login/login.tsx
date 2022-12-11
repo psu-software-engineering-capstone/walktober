@@ -28,26 +28,31 @@ import { FirestoreDB, auth } from "../../firebase";
 import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
 import { doc, getDoc } from "firebase/firestore";
 import "./login.css";
+import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
 
 
 
 const Login: React.FC = () => {
+  // for routing //
   const history = useHistory();
 
+  // google auth provider //
   const provider = new GoogleAuthProvider();
 
+  // sign-in variables //
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isTouched, setIsTouched] = useState(false);
   const [isValid, setIsValid] = useState<boolean>();
 
-  // Email Validation Functionality
+  // email validation functionality //
   const validateEmail = (email: string) => {
     return email.match(
       /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
     );
   };
 
+  // front end //
   const validate = (ev: Event) => {
     const value = (ev.target as HTMLInputElement).value;
 
@@ -58,13 +63,14 @@ const Login: React.FC = () => {
     validateEmail(value) !== null ? setIsValid(true) : setIsValid(false);
   };
 
+  // front end //
   const markTouched = () => {
     setIsTouched(true);
   };
 
   // sign in with google //
   const signInWithGoogle = async () => {
-    // only for web , ios and android need different approach
+    // web //
     if (!isPlatform("capacitor")) {
       await signInWithPopup(auth, provider)
         .then(async (result) => {
@@ -80,30 +86,39 @@ const Login: React.FC = () => {
         })
         .catch((error) => {
           console.log(error);
-          alert(error.message);
-        });
-    } else {
-      // implement mobile version here
-    }
-  };
-
-  // sign in with email and password //
-  const signInEmailPassword = async () => {
-    // web //
-    if (!isPlatform("capacitor")) {
-      await signInWithEmailAndPassword(auth, email, password)
-        .then((data) => {
-          console.log(data);
-          alert("Sign-in successful");
-          history.push("/app");
-        })
-        .catch((error) => {
-          console.log(error);
-          alert(error.message);
+          alert(error);
         });
     // ios & android //
     } else {
-      FirebaseAuthentication.signInWithEmailAndPassword(email, password)
+      await GoogleAuth.signOut();
+      await FirebaseAuthentication.signOut();
+      await GoogleAuth.signIn()
+        .then(async (result) => {
+          await FirebaseAuthentication.signInWithGoogle(
+            result.authentication.idToken,
+            result.authentication.accessToken
+          );
+          const dbRef = doc(FirestoreDB, "users", result.email as string);
+          const dbSnap = await getDoc(dbRef);
+          if (dbSnap.exists()) {
+            alert("Sign-in successful");
+            history.push("/app");          
+          } else {
+            await GoogleAuth.signOut();
+            await FirebaseAuthentication.signOut();
+            alert("This email is not a Walktober account. Please sign-up first.");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          alert(error);
+        });
+    }
+  };
+
+  // sign in with email and password (web & ios & android) //
+  const signInEmailPassword = async () => {
+    await signInWithEmailAndPassword(auth, email, password)
       .then((data) => {
         console.log(data);
         alert("Sign-in successful");
@@ -111,9 +126,8 @@ const Login: React.FC = () => {
       })
       .catch((error) => {
         console.log(error);
-        alert(error.message);
-      })
-    }
+        alert(error);
+      });
   };
 
   // move to signup button
