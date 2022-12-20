@@ -29,12 +29,23 @@ const StepsCalculator: React.FC = () => {
     let time: number;
     const stepsPerMile = 2250;
     let miles: number;
+    const kmtom = 0.621371;
 
     function calculate(ev: Event): number {
         miles = Number((ev.target as HTMLInputElement).value);
         if (miles <= 0) {
             return 0;
         }
+        steps = miles * stepsPerMile;
+        return steps;
+    }
+
+    function calculateKm(ev: Event): number {
+        miles = Number((ev.target as HTMLInputElement).value);
+        if (miles <= 0) {
+            return 0;
+        }
+        miles *= kmtom;
         steps = miles * stepsPerMile;
         return steps;
     }
@@ -116,28 +127,19 @@ const StepsCalculator: React.FC = () => {
                     <IonToggle slot="end" onClick={changeMetricImperial}></IonToggle>
                 </IonItem>
                 <form onSubmit={(event: any) => placeHolder(event)} id="stepsForm">
-                    <IonItem>
-                        <IonLabel id="miles" position="floating" >Number of miles</IonLabel>
-                        <IonInput type="number" onInput={
-                            (event: any) => {
-                                calculate(event);
-                            }
-                        }></IonInput>
-                        <IonRouterLink slot="helper" href="./manualLoggingSteps">Return to steps logging</IonRouterLink>
-                    </IonItem>
                     <IonGrid>
-                        <IonRow>
-                            {<Metric HeightFt={getHeightFt} HeightIn={getHeightIn} HeightCm={getHeightcm} metric={Boolean(metric)} />}
-                            <IonCol size="auto" id="MetricOrImperial">
-                            </IonCol>
-                        </IonRow>
+                        {<Metric HeightFt={getHeightFt} HeightIn={getHeightIn} HeightCm={getHeightcm} metric={Boolean(metric)} updateSteps={calculate} updateStepsKm={calculateKm} />}
+                        <IonCol size="auto" id="MetricOrImperial">
+                        </IonCol>
                         <IonRow>
                             <IonCol>
-                                <IonButton type="submit" >Submit</IonButton>
+                                <IonButton type="submit" >Submit </IonButton>
                             </IonCol>
                         </IonRow>
+                        <IonRow><a><IonRouterLink slot="helper" href="./manualLoggingSteps">Return to steps logging</IonRouterLink></a></IonRow>
                     </IonGrid>
                 </form>
+
                 <IonItem id="result">{steps.toLocaleString('en-US')}</IonItem>
                 <IonGrid>
                     <IonRow>
