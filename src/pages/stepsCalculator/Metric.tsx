@@ -44,7 +44,7 @@ const Metric = (props: any) => {
                 <IonLabel position="floating">Optional: Height cm</IonLabel>
                 <IonInput type="number" onInput={
                     (event: any) => {
-                        props.HeightIn(event);
+                        props.HeightCm(event);
                     }
                 }></IonInput>
             </IonItem>

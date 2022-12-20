@@ -24,6 +24,7 @@ const StepsCalculator: React.FC = () => {
     let heightIn = 0; // height inches param
     let heightFt = 0; // height feet param
     const strideConverter = 0.413; // conversion factor for height in inches to average stride in inches
+    const cmToIn = 0.393701;
     let heightCm = 0.0; // for our metric friends
     let time: number;
     const stepsPerMile = 2250;
@@ -75,6 +76,7 @@ const StepsCalculator: React.FC = () => {
                 steps = miles * (5280 / ((((heightFt * 12) + heightIn) * strideConverter) / 12));
             }
             else if (metric) {
+                steps = miles * (5280 / (((heightCm * cmToIn) * strideConverter) / 12));
                 console.log('placeholder')
             }
             updateSteps.innerHTML = Math.round(steps).toString();
@@ -110,7 +112,7 @@ const StepsCalculator: React.FC = () => {
                 </IonItem>
                 <IonGrid>
                     <IonRow>
-                        {<Metric HeightFt={getHeightFt} HeightIn={getHeightIn} metric={Boolean(metric)} />}
+                        {<Metric HeightFt={getHeightFt} HeightIn={getHeightIn} HeightCm={getHeightcm} metric={Boolean(metric)} />}
                         <IonCol size="auto" id="MetricOrImperial">
                             <IonItem>
                                 <IonLabel >Default Toggle</IonLabel>
