@@ -12,56 +12,58 @@ import {
     IonToolbar,
     IonGrid,
     IonRow,
+    IonToggle
 } from '@ionic/react';
 import './stepsCalculator.css';
+import { Toggle } from '@ionic/core/dist/types/components/toggle/toggle';
 
 const StepsCalculator: React.FC = () => {
-    const [username, setUsername] = useState();
-    const [password, setPassword] = useState();
-    const [isTouched, setIsTouched] = useState(false);
-    const [isValid, setIsValid] = useState<boolean>();
-    let steps: number = 0;
-    let heightIn: number = 0; // height inches param
-    let heightFt: number = 0; // height feet param
-    let strideConverter: number = 0.413; // conversion factor for height in inches to average stride in inches
-    let heightCm: number = 0.0; // for our metric friends
+    const [metric, setMetric] = useState(false);
+    let steps = 0;
+    let heightIn = 0; // height inches param
+    let heightFt = 0; // height feet param
+    const strideConverter = 0.413; // conversion factor for height in inches to average stride in inches
+    let heightCm = 0.0; // for our metric friends
     let time: number;
-    let stepsPerMile: number = 2250;
+    const stepsPerMile = 2250;
     let miles: number;
-    let metric: boolean = false;
 
-
-    function calculate(ev: Event) {
+    function calculate(ev: Event): number {
         miles = Number((ev.target as HTMLInputElement).value);
         if (miles <= 0) {
             return 0;
         }
-
         steps = miles * stepsPerMile;
+        return steps;
     }
 
-    function getHeightFt(ev: Event) {
+    function getHeightFt(ev: Event): number {
         heightFt = Number((ev.target as HTMLInputElement).value);
         if (heightFt <= 0) {
             return 0;
         }
+        return heightFt;
     }
 
-    function getHeightIn(ev: Event) {
+    function getHeightIn(ev: Event): number {
         heightIn = Number((ev.target as HTMLInputElement).value);
         if (heightIn <= 0) {
             return 0;
         }
+        return heightIn;
     }
 
-    function getHeightcm(ev: Event) {
+    function getHeightcm(ev: Event): number {
         heightCm = Number((ev.target as HTMLInputElement).value);
         if (heightCm <= 0) {
             return 0;
         }
+        return heightCm;
     }
 
     function placeHolder() {
+        if (metric)
+            console.log("ASDASDSADASDSADASDQWDQWDQWEAQWEASDAWEAWEASEWAQEDWQDQAW")
         const updateSteps = document.querySelector('#result');
         if (updateSteps != null) {
             if (metric == false && heightFt > 0 && heightIn > 0) {
@@ -71,13 +73,18 @@ const StepsCalculator: React.FC = () => {
                 // 5280 / feet per stride = steps per mile
                 steps = miles * (5280 / ((((heightFt * 12) + heightIn) * strideConverter) / 12));
             }
-            else if (metric == true) {
-                // metric calculations
+            else if (metric) {
+                console.log('placeholder')
             }
             updateSteps.innerHTML = Math.round(steps).toString();
         }
         // updateSteps.innerHTML = steps.toString();
         return;
+    }
+
+    const changeMetricImperial = () => {
+        setMetric((prev) => { return !prev });
+        console.log(metric);
     }
 
     return (
@@ -120,6 +127,12 @@ const StepsCalculator: React.FC = () => {
                                         getHeightIn(event);
                                     }
                                 }></IonInput>
+                            </IonItem>
+                        </IonCol>
+                        <IonCol size="auto" id="MetricOrImperial">
+                            <IonItem>
+                                <IonLabel >Default Toggle</IonLabel>
+                                <IonToggle slot="end" onClick={changeMetricImperial}></IonToggle>
                             </IonItem>
                         </IonCol>
                     </IonRow>

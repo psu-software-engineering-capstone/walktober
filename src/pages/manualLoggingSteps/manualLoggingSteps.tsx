@@ -38,7 +38,7 @@ const ManualSteps: React.FC = () => {
     }
 
     function storeSteps(ev: Event) {
-        const steps: number = Number((ev.target as HTMLInputElement).value);
+        const steps = Number((ev.target as HTMLInputElement).value);
         if (steps <= 0) {
             stepsToLog = 0;
             return false;
