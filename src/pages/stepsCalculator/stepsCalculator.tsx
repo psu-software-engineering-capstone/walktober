@@ -16,6 +16,7 @@ import {
 } from '@ionic/react';
 import './stepsCalculator.css';
 import { Toggle } from '@ionic/core/dist/types/components/toggle/toggle';
+import Metric from './Metric';
 
 const StepsCalculator: React.FC = () => {
     const [metric, setMetric] = useState(false);
@@ -109,26 +110,7 @@ const StepsCalculator: React.FC = () => {
                 </IonItem>
                 <IonGrid>
                     <IonRow>
-                        <IonCol size="auto">
-                            <IonItem>
-                                <IonLabel position="floating">Optional: Height ft</IonLabel>
-                                <IonInput type="number" onInput={
-                                    (event: any) => {
-                                        getHeightFt(event);
-                                    }
-                                }></IonInput>
-                            </IonItem>
-                        </IonCol>
-                        <IonCol size="auto">
-                            <IonItem>
-                                <IonLabel position="floating">Optional: Height In</IonLabel>
-                                <IonInput type="number" onInput={
-                                    (event: any) => {
-                                        getHeightIn(event);
-                                    }
-                                }></IonInput>
-                            </IonItem>
-                        </IonCol>
+                        {<Metric HeightFt={getHeightFt} HeightIn={getHeightIn} metric={Boolean(metric)} />}
                         <IonCol size="auto" id="MetricOrImperial">
                             <IonItem>
                                 <IonLabel >Default Toggle</IonLabel>
