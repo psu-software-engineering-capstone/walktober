@@ -19,7 +19,7 @@ const Metric = (props: any) => {
     const imperial = (<>
         <IonCol size="auto">
             <IonItem>
-                <IonLabel position="floating">Optional: Height ft</IonLabel>
+                <IonLabel id='height-ft' position="floating">Optional: Height ft</IonLabel>
                 <IonInput type="number" onInput={
                     (event: any) => {
                         props.HeightFt(event);
@@ -29,7 +29,7 @@ const Metric = (props: any) => {
         </IonCol>
         <IonCol size="auto">
             <IonItem>
-                <IonLabel position="floating">Optional: Height In</IonLabel>
+                <IonLabel id='height-in' position="floating">Optional: Height In</IonLabel>
                 <IonInput type="number" onInput={
                     (event: any) => {
                         props.HeightIn(event);
@@ -41,7 +41,7 @@ const Metric = (props: any) => {
     const metricVal = (<>
         <IonCol size="auto">
             <IonItem>
-                <IonLabel position="floating">Optional: Height cm</IonLabel>
+                <IonLabel id='height-cm' position="floating">Optional: Height cm</IonLabel>
                 <IonInput type="number" onInput={
                     (event: any) => {
                         props.HeightCm(event);

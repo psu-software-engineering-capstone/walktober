@@ -63,12 +63,13 @@ const StepsCalculator: React.FC = () => {
         return heightCm;
     }
 
-    function placeHolder() {
+    function placeHolder(ev: Event) {
+        ev.preventDefault();
         if (metric)
             console.log("ASDASDSADASDSADASDQWDQWDQWEAQWEASDAWEAWEASEWAQEDWQDQAW")
         const updateSteps = document.querySelector('#result');
         if (updateSteps != null) {
-            if (metric == false && heightFt > 0 && heightIn > 0) {
+            if (metric == false && heightFt > 0) {
                 // imperial calculations
                 // height in IN * convert = inches per stride
                 // IN per stride / 12 = feet per stride
@@ -79,13 +80,22 @@ const StepsCalculator: React.FC = () => {
                 steps = miles * (5280 / (((heightCm * cmToIn) * strideConverter) / 12));
                 console.log('placeholder')
             }
-            updateSteps.innerHTML = Math.round(steps).toString();
+            if (steps.toString() != 'NaN' && steps != 0)
+                updateSteps.innerHTML = Math.round(steps).toString();
+            else
+                updateSteps.innerHTML = '0';
         }
+
         // updateSteps.innerHTML = steps.toString();
         return;
     }
 
     const changeMetricImperial = () => {
+        const testing = document.getElementById("stepsForm")
+        if (testing) {
+            (testing as HTMLFormElement).reset();
+        }
+        console.log(testing)
         setMetric((prev) => { return !prev });
         console.log(metric);
     }
@@ -102,28 +112,32 @@ const StepsCalculator: React.FC = () => {
 
             <IonContent className="ion-padding">
                 <IonItem>
-                    <IonLabel position="floating">Number of miles</IonLabel>
-                    <IonInput type="number" onInput={
-                        (event: any) => {
-                            calculate(event);
-                        }
-                    }></IonInput>
-                    <IonRouterLink slot="helper" href="./manualLoggingSteps">Return to steps logging</IonRouterLink>
+                    <IonLabel >Metric</IonLabel>
+                    <IonToggle slot="end" onClick={changeMetricImperial}></IonToggle>
                 </IonItem>
-                <IonGrid>
-                    <IonRow>
-                        {<Metric HeightFt={getHeightFt} HeightIn={getHeightIn} HeightCm={getHeightcm} metric={Boolean(metric)} />}
-                        <IonCol size="auto" id="MetricOrImperial">
-                            <IonItem>
-                                <IonLabel >Default Toggle</IonLabel>
-                                <IonToggle slot="end" onClick={changeMetricImperial}></IonToggle>
-                            </IonItem>
-                        </IonCol>
-                    </IonRow>
-                </IonGrid>
-                <IonCol>
-                    <IonButton onClick={placeHolder}>Submit</IonButton>
-                </IonCol>
+                <form onSubmit={(event: any) => placeHolder(event)} id="stepsForm">
+                    <IonItem>
+                        <IonLabel id="miles" position="floating" >Number of miles</IonLabel>
+                        <IonInput type="number" onInput={
+                            (event: any) => {
+                                calculate(event);
+                            }
+                        }></IonInput>
+                        <IonRouterLink slot="helper" href="./manualLoggingSteps">Return to steps logging</IonRouterLink>
+                    </IonItem>
+                    <IonGrid>
+                        <IonRow>
+                            {<Metric HeightFt={getHeightFt} HeightIn={getHeightIn} HeightCm={getHeightcm} metric={Boolean(metric)} />}
+                            <IonCol size="auto" id="MetricOrImperial">
+                            </IonCol>
+                        </IonRow>
+                        <IonRow>
+                            <IonCol>
+                                <IonButton type="submit" >Submit</IonButton>
+                            </IonCol>
+                        </IonRow>
+                    </IonGrid>
+                </form>
                 <IonItem id="result">{steps.toLocaleString('en-US')}</IonItem>
                 <IonGrid>
                     <IonRow>
