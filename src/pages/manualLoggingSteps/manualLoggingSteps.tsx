@@ -57,6 +57,23 @@ const ManualSteps: React.FC = () => {
         }
         // here we would add the data to databasse etc
     }, []);
+
+    const sendNewLog = useCallback(async (newLog: any) => {
+        try {
+            const response = await fetch('https://some_firebase_address',
+                {
+                    method: 'POST'
+                }
+            );
+            if (!response.ok) {
+                throw new Error('could not update DB with new log')
+            }
+        }
+        catch (error: any) {
+            console.log(error)
+        }
+
+    }, [])
     // use effect called to load in the data for the logs
     useEffect(
         () => { getRecordsFromDB }
