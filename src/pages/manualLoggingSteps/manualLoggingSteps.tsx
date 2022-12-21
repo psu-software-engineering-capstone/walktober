@@ -2,7 +2,7 @@
 // useEffect will conditinaly run a passed in function, so it will not run with every state change. 
 // maybe use isloading useState and render if the user has steps recorded or not with &&&
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
     IonButton,
     IonCol,
@@ -20,23 +20,46 @@ import {
 } from '@ionic/react';
 import './manualLoggingSteps.css';
 
-function getRecords() {
-    // datesFromDB = callToDB();
-    // stepsFromDB = callToDB();
-    /* for number of dates in datesFromDB{
-        let newReccord: Record;
-        newRecord.time = dates.at(index);
-        newRecord.stepsWaled = stepds.at(index);
-        pastRecords.append(newReccord);
-    }
-    */
-}
+
+
 
 
 const ManualSteps: React.FC = () => {
+
+    const getRecordsFromDB = useCallback(async () => {
+        // datesFromDB = callToDB();
+        // stepsFromDB = callToDB();
+        /* for number of dates in datesFromDB{
+            let newReccord: Record;
+            newRecord.time = dates.at(index);
+            newRecord.stepsWaled = stepds.at(index);
+            pastRecords.append(newReccord);
+        }
+        */
+        try {
+            const response = await fetch('https://some_firebase_address');
+            if (!response.ok) {
+                throw new Error('couldnt get data');
+            }
+
+            const data = await response.json();
+
+            const transformedData = data.results.map((item: any) => {
+                return {
+                    logDate: item.logedDate,
+                    steps: item.logedSteps
+                }
+            })
+        }
+        catch (error: any) {
+            console.log(error);
+            return;
+        }
+        // here we would add the data to databasse etc
+    }, []);
     // use effect called to load in the data for the logs
     useEffect(
-        () => { getRecords }
+        () => { getRecordsFromDB }
         , []);
     let stepsToLog: number;
     let date: Date;
@@ -82,21 +105,9 @@ const ManualSteps: React.FC = () => {
         */
     }
 
-    // function getRecords() {
-    //     // datesFromDB = callToDB();
-    //     // stepsFromDB = callToDB();
-    //     /* for number of dates in datesFromDB{
-    //         let newReccord: Record;
-    //         newRecord.time = dates.at(index);
-    //         newRecord.stepsWaled = stepds.at(index);
-    //         pastRecords.append(newReccord);
-    //     }
-    //     */
-    // }
+
 
     function DisplayRecords() {
-
-        getRecords();
 
         if (pastRecords) {
             return (
