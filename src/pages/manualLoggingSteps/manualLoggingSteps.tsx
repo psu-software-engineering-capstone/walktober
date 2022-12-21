@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+// note to self, use the useEffect hook to pull in data from the server forthe steps logged etc. 
+// useEffect will conditinaly run a passed in function, so it will not run with every state change. 
+// maybe use isloading useState and render if the user has steps recorded or not with &&&
+
+import React, { useState, useEffect } from 'react';
 import {
     IonButton,
     IonCol,
@@ -16,9 +20,27 @@ import {
 } from '@ionic/react';
 import './manualLoggingSteps.css';
 
+function getRecords() {
+    // datesFromDB = callToDB();
+    // stepsFromDB = callToDB();
+    /* for number of dates in datesFromDB{
+        let newReccord: Record;
+        newRecord.time = dates.at(index);
+        newRecord.stepsWaled = stepds.at(index);
+        pastRecords.append(newReccord);
+    }
+    */
+}
+
+
 const ManualSteps: React.FC = () => {
+    // use effect called to load in the data for the logs
+    useEffect(
+        () => { getRecords }
+        , []);
     let stepsToLog: number;
     let date: Date;
+    const [stepLogs, setStepLogs] = useState([]); // state update so that we load in new step logs when steps are added.
     // let pastRecordDates: Array: Date;
     let pastRecordDates: Array<Date>;
     let pastRecordSteps: Array<number>;
@@ -60,17 +82,17 @@ const ManualSteps: React.FC = () => {
         */
     }
 
-    function getRecords() {
-        // datesFromDB = callToDB();
-        // stepsFromDB = callToDB();
-        /* for number of dates in datesFromDB{
-            let newReccord: Record;
-            newRecord.time = dates.at(index);
-            newRecord.stepsWaled = stepds.at(index);
-            pastRecords.append(newReccord);
-        }
-        */
-    }
+    // function getRecords() {
+    //     // datesFromDB = callToDB();
+    //     // stepsFromDB = callToDB();
+    //     /* for number of dates in datesFromDB{
+    //         let newReccord: Record;
+    //         newRecord.time = dates.at(index);
+    //         newRecord.stepsWaled = stepds.at(index);
+    //         pastRecords.append(newReccord);
+    //     }
+    //     */
+    // }
 
     function DisplayRecords() {
 
