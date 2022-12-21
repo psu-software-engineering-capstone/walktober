@@ -12,35 +12,45 @@ import {
   IonInput,
   IonButton,
   IonIcon,
+  isPlatform,
 } from "@ionic/react";
 import { logoGoogle } from "ionicons/icons";
 import { useState } from "react";
-import { useHistory } from 'react-router-dom';
-import { db, auth } from "../../firebase";
-import { set, ref, child, get } from "firebase/database";
-import { signInWithPopup, GoogleAuthProvider, OAuthCredential, UserCredential, createUserWithEmailAndPassword } from "firebase/auth";
+import { useHistory } from "react-router-dom";
+import { FirestoreDB, auth } from "../../firebase";
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  UserCredential,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import "./Signup.css";
 
-const Signup: React.FC = () => {
 
+
+const Signup: React.FC = () => {
+  // for routing //
   const history = useHistory();
-  
-  // sign-up input variables //
+
+  // sign-up variables //
   const [newEmail, setNewEmail] = useState("");
   const [newFirstName, setNewFirstName] = useState("");
   const [newLastName, setNewLastName] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newConfirmPassword, setNewConfirmPassword] = useState("");
-  
+
   // google auth provider //
   const provider = new GoogleAuthProvider();
 
-  // user creation begins //
-  const createUser = async () => {
-    await set(ref(db, 'users/' + auth.currentUser?.uid), {
+  // user creation with email auth (web & ios & android) //
+  const createUser = () => {
+    setDoc(doc(FirestoreDB, "users", newEmail), {
       email: newEmail,
       name: newFirstName + " " + newLastName,
-      badges: {'0': 'starter'},
+      badges: [],
       device: "",
       num_steps: 0,
       profile_pic: "",
@@ -49,69 +59,101 @@ const Signup: React.FC = () => {
     });
   };
 
-  const createUserWithGoogleAuth = async (result: UserCredential) => {
-    await set(ref(db, 'users/' + auth.currentUser?.uid), {
+  // user creation with google auth (web) //
+  const createUserWithGoogleAuth = (result: UserCredential) => {
+    setDoc(doc(FirestoreDB, "users", result.user.email as string), {
       email: result.user.email,
       name: result.user.displayName,
-      badges: {'0': 'starter'},
+      badges: [],
       device: "",
       num_steps: 0,
       profile_pic: result.user.photoURL,
       team: "",
       team_leader: false,
     });
-  }
-  // user creation ends //
+  };
 
-  // google sign-up begins //
+  // user creation with google auth (ios & android) //
+  const createUserWithGoogleAuthMobile = (result: any) => {
+    setDoc(doc(FirestoreDB, "users", result.email as string), {
+      email: result.email,
+      name: result.name,
+      badges: [],
+      device: "",
+      num_steps: 0,
+      profile_pic: result.imageUrl,
+      team: "",
+      team_leader: false,
+    });
+  }
+
+  // sign up with google //
   const googleAuth = async () => {
-    await signInWithPopup(auth, provider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = (credential as OAuthCredential).accessToken;
-        const user = result.user;
-        const dbRef = ref(db);
-        // duplicate email check
-        get(child(dbRef, "users/" + auth.currentUser?.uid)).then((snapshot) => {
-          if (snapshot.exists()) {
+    // web //
+    if (!isPlatform("capacitor")) {
+      signInWithPopup(auth, provider)
+        .then(async (result) => {
+          const dbRef = doc(FirestoreDB, "users", result.user.email as string);
+          const dbSnap = await getDoc(dbRef);
+          if (dbSnap.exists()) {
             alert("There is already an existing account under this email");
           } else {
-            alert("Sign-up successful")
+            alert("Sign-up successful");
             createUserWithGoogleAuth(result);
             history.push("/login");
           }
         })
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log(error);
-        alert("There was an error. Please try again.");
-      });
+        .catch((error) => {
+          console.log(error);
+          alert(error);
+        });
+    // ios & android //
+    } else {
+      await GoogleAuth.signOut();
+      await FirebaseAuthentication.signOut();
+      await GoogleAuth.signIn()
+        .then(async (result) => {
+          await FirebaseAuthentication.signInWithGoogle(
+            result.authentication.idToken,
+            result.authentication.accessToken
+          );
+          const dbRef = doc(FirestoreDB, "users", result.email as string);
+          const dbSnap = await getDoc(dbRef);
+          if (dbSnap.exists()) {
+            alert("There is already an existing account under this email");
+          } else {
+            alert("Sign-up successful");
+            createUserWithGoogleAuthMobile(result);
+            history.push("/login");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          alert(error);
+        });
+    }
   };
-  // google sign-up ends //
 
-  //email sign-un begins (email verification needs to be implemented later)//
+  // sign up with email and password (web & ios & android) //
   const signUpEmailPassword = async () => {
     if (newPassword === newConfirmPassword) {
       await createUserWithEmailAndPassword(auth, newEmail, newPassword)
-        .then(() => {
+        .then((data) => {
           createUser();
+          console.log(data);
           alert("Sign-up successful");
           history.push("/login");
         })
         .catch((error) => {
-          alert(JSON.stringify(error));
+          console.log(error);
+          alert(error.message);
         });
     } else {
       alert("Passwords are not matching");
     }
-  }
-  //email sign-up ends //
+  };
 
-  // back to login button
+  // move to login button //
   const moveToLogin = () => {
     history.push("/login");
   };
