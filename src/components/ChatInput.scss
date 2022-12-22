@@ -1,0 +1,27 @@
+$button-margin: 2px;
+$input-margin: 5px;
+
+.chat-input {
+    background-color: var(--ion-color-light-shade);
+    margin: $input-margin 0px $input-margin 0px;
+    border-radius: var(--ion-border-radius);
+
+    form {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        ion-input {
+            --padding-start: $button-margin;
+            --padding-end: $button-margin;
+            margin: $button-margin 0px $button-margin 0px;
+        }
+
+        ion-button {
+            margin: $button-margin;
+            --padding-start: 7px;
+            --padding-end: 7px;
+            font-size: 18px;
+        }
+    }
+}
