@@ -1,3 +1,4 @@
+
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { getFirestore } from "firebase/firestore";
@@ -18,3 +19,4 @@ const app = initializeApp(firebaseConfig);
 export const RealtimeDB = getDatabase(app);
 export const FirestoreDB = getFirestore(app);
 export const auth = getAuth(app);
+
