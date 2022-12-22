@@ -88,7 +88,10 @@ const StepsCalculator: React.FC = () => {
                 steps = miles * (5280 / ((((heightFt * 12) + heightIn) * strideConverter) / 12));
             }
             else if (metric) {
-                steps = miles * (5280 / (((heightCm * cmToIn) * strideConverter) / 12));
+                if (heightCm === 0.0)
+                    steps = miles * stepsPerMile
+                else
+                    steps = miles * (5280 / (((heightCm * cmToIn) * strideConverter) / 12));
                 console.log('placeholder')
             }
             if (steps.toString() != 'NaN' && steps != 0)
