@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   IonButton,
   IonCol,
@@ -14,23 +18,21 @@ import {
   IonRouterLink,
   IonPage,
   IonHeader,
-  isPlatform,
-} from "@ionic/react";
-import { logoGoogle } from "ionicons/icons";
-import { useState } from "react";
-import { useHistory } from "react-router-dom";
+  isPlatform
+} from '@ionic/react';
+import { logoGoogle } from 'ionicons/icons';
+import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import { FirestoreDB, auth } from "../../firebase";
+  signInWithEmailAndPassword
+} from 'firebase/auth';
+import { FirestoreDB, auth } from '../../firebase';
 import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
-import { doc, getDoc } from "firebase/firestore";
-import "./login.css";
-import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
-
-
+import { doc, getDoc } from 'firebase/firestore';
+import './login.css';
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 
 const Login: React.FC = () => {
   // for routing //
@@ -40,8 +42,8 @@ const Login: React.FC = () => {
   const provider = new GoogleAuthProvider();
 
   // sign-in variables //
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isTouched, setIsTouched] = useState(false);
   const [isValid, setIsValid] = useState<boolean>();
 
@@ -55,11 +57,8 @@ const Login: React.FC = () => {
   // front end //
   const validate = (ev: Event) => {
     const value = (ev.target as HTMLInputElement).value;
-
     setIsValid(undefined);
-
-    if (value === "") return;
-
+    if (value === '') return;
     validateEmail(value) !== null ? setIsValid(true) : setIsValid(false);
   };
 
@@ -71,17 +70,17 @@ const Login: React.FC = () => {
   // sign in with google //
   const signInWithGoogle = async () => {
     // web //
-    if (!isPlatform("capacitor")) {
+    if (!isPlatform('capacitor')) {
       await signInWithPopup(auth, provider)
         .then(async (result) => {
-          const dbRef = doc(FirestoreDB, "users", result.user.email as string);
+          const dbRef = doc(FirestoreDB, 'users', result.user.email as string);
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
-            alert("Sign-in successful");
-            history.push("/app");
+            alert('Sign-in successful');
+            history.push('/app');
           } else {
-            auth.signOut();
-            alert("This email is not a Walktober account. Please sign-up first.");
+            void auth.signOut();
+            alert('This email is not a Walktober account. Please sign-up first.');
           }
         })
         .catch((error) => {
@@ -90,23 +89,21 @@ const Login: React.FC = () => {
         });
     // ios & android //
     } else {
-      await GoogleAuth.signOut();
-      await FirebaseAuthentication.signOut();
       await GoogleAuth.signIn()
         .then(async (result) => {
           await FirebaseAuthentication.signInWithGoogle(
             result.authentication.idToken,
             result.authentication.accessToken
           );
-          const dbRef = doc(FirestoreDB, "users", result.email as string);
+          const dbRef = doc(FirestoreDB, 'users', result.email);
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
-            alert("Sign-in successful");
-            history.push("/app");          
+            alert('Sign-in successful');
+            history.push('/app');
           } else {
             await GoogleAuth.signOut();
             await FirebaseAuthentication.signOut();
-            alert("This email is not a Walktober account. Please sign-up first.");
+            alert('This email is not a Walktober account. Please sign-up first.');
           }
         })
         .catch((error) => {
@@ -121,8 +118,8 @@ const Login: React.FC = () => {
     await signInWithEmailAndPassword(auth, email, password)
       .then((data) => {
         console.log(data);
-        alert("Sign-in successful");
-        history.push("/app");
+        alert('Sign-in successful');
+        history.push('/app');
       })
       .catch((error) => {
         console.log(error);
@@ -132,7 +129,7 @@ const Login: React.FC = () => {
 
   // move to signup button
   const moveToSignup = () => {
-    history.push("/signup");
+    history.push('/signup');
   };
 
   return (
@@ -146,9 +143,9 @@ const Login: React.FC = () => {
           <IonCardContent>
             <IonItem
               fill="solid"
-              className={`${isValid && "ion-valid"} ${
-                isValid === false && "ion-invalid"
-              } ${isTouched && "ion-touched"}`}
+              className={`${(isValid ?? false) && 'ion-valid'} ${
+                isValid === false && 'ion-invalid'
+              } ${isTouched && 'ion-touched'}`}
             >
               <IonLabel position="floating">Email</IonLabel>
               <IonInput

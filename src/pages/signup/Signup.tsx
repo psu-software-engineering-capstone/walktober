@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   IonContent,
   IonHeader,
@@ -12,95 +14,93 @@ import {
   IonInput,
   IonButton,
   IonIcon,
-  isPlatform,
-} from "@ionic/react";
-import { logoGoogle } from "ionicons/icons";
-import { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { FirestoreDB, auth } from "../../firebase";
+  isPlatform
+} from '@ionic/react';
+import { logoGoogle } from 'ionicons/icons';
+import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { FirestoreDB, auth } from '../../firebase';
 import {
   signInWithPopup,
   GoogleAuthProvider,
   UserCredential,
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
+  createUserWithEmailAndPassword
+} from 'firebase/auth';
 import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
-import "./Signup.css";
-
-
+import './Signup.css';
 
 const Signup: React.FC = () => {
   // for routing //
   const history = useHistory();
 
   // sign-up variables //
-  const [newEmail, setNewEmail] = useState("");
-  const [newFirstName, setNewFirstName] = useState("");
-  const [newLastName, setNewLastName] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [newConfirmPassword, setNewConfirmPassword] = useState("");
+  const [newEmail, setNewEmail] = useState('');
+  const [newFirstName, setNewFirstName] = useState('');
+  const [newLastName, setNewLastName] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newConfirmPassword, setNewConfirmPassword] = useState('');
 
   // google auth provider //
   const provider = new GoogleAuthProvider();
 
   // user creation with email auth (web & ios & android) //
   const createUser = () => {
-    setDoc(doc(FirestoreDB, "users", newEmail), {
+    void setDoc(doc(FirestoreDB, 'users', newEmail), {
       email: newEmail,
-      name: newFirstName + " " + newLastName,
+      name: newFirstName + ' ' + newLastName,
       badges: [],
-      device: "",
+      device: '',
       num_steps: 0,
-      profile_pic: "",
-      team: "",
-      team_leader: false,
+      profile_pic: '',
+      team: '',
+      team_leader: false
     });
   };
 
   // user creation with google auth (web) //
   const createUserWithGoogleAuth = (result: UserCredential) => {
-    setDoc(doc(FirestoreDB, "users", result.user.email as string), {
+    void setDoc(doc(FirestoreDB, 'users', result.user.email as string), {
       email: result.user.email,
       name: result.user.displayName,
       badges: [],
-      device: "",
+      device: '',
       num_steps: 0,
       profile_pic: result.user.photoURL,
-      team: "",
-      team_leader: false,
+      team: '',
+      team_leader: false
     });
   };
 
   // user creation with google auth (ios & android) //
   const createUserWithGoogleAuthMobile = (result: any) => {
-    setDoc(doc(FirestoreDB, "users", result.email as string), {
+    void setDoc(doc(FirestoreDB, 'users', result.email as string), {
       email: result.email,
       name: result.name,
       badges: [],
-      device: "",
+      device: '',
       num_steps: 0,
       profile_pic: result.imageUrl,
-      team: "",
-      team_leader: false,
+      team: '',
+      team_leader: false
     });
-  }
+  };
 
   // sign up with google //
   const googleAuth = async () => {
     // web //
-    if (!isPlatform("capacitor")) {
+    if (!isPlatform('capacitor')) {
       signInWithPopup(auth, provider)
         .then(async (result) => {
-          const dbRef = doc(FirestoreDB, "users", result.user.email as string);
+          const dbRef = doc(FirestoreDB, 'users', result.user.email as string);
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
-            alert("There is already an existing account under this email");
+            alert('There is already an existing account under this email');
           } else {
-            alert("Sign-up successful");
+            alert('Sign-up successful');
             createUserWithGoogleAuth(result);
-            history.push("/login");
+            history.push('/login');
           }
         })
         .catch((error) => {
@@ -109,22 +109,22 @@ const Signup: React.FC = () => {
         });
     // ios & android //
     } else {
-      await GoogleAuth.signOut();
-      await FirebaseAuthentication.signOut();
       await GoogleAuth.signIn()
         .then(async (result) => {
           await FirebaseAuthentication.signInWithGoogle(
             result.authentication.idToken,
             result.authentication.accessToken
           );
-          const dbRef = doc(FirestoreDB, "users", result.email as string);
+          const dbRef = doc(FirestoreDB, 'users', result.email);
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
-            alert("There is already an existing account under this email");
+            alert('There is already an existing account under this email');
+            await GoogleAuth.signOut();
+            await FirebaseAuthentication.signOut();
           } else {
-            alert("Sign-up successful");
+            alert('Sign-up successful');
             createUserWithGoogleAuthMobile(result);
-            history.push("/login");
+            history.push('/login');
           }
         })
         .catch((error) => {
@@ -141,21 +141,21 @@ const Signup: React.FC = () => {
         .then((data) => {
           createUser();
           console.log(data);
-          alert("Sign-up successful");
-          history.push("/login");
+          alert('Sign-up successful');
+          history.push('/login');
         })
         .catch((error) => {
           console.log(error);
-          alert(error.message);
+          alert(error);
         });
     } else {
-      alert("Passwords are not matching");
+      alert('Passwords are not matching');
     }
   };
 
   // move to login button //
   const moveToLogin = () => {
-    history.push("/login");
+    history.push('/login');
   };
 
   return (
@@ -262,7 +262,7 @@ const Signup: React.FC = () => {
                 </IonButton>
               </IonItem>
 
-              {/*Need hyperlink for the forgot password once implemented*/}
+              {/* Need hyperlink for the forgot password once implemented */}
               <IonCardContent class="fpass" color="light">
                 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley">
                   Forgot Password?
