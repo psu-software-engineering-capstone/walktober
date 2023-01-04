@@ -1,17 +1,17 @@
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route } from 'react-router-dom';
 import {
   IonIcon,
   IonLabel,
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
-  IonTabs,
-} from "@ionic/react";
-import { ellipse, square, triangle } from "ionicons/icons";
-import Tab1 from "./pages/Tab1";
-import Tab2 from "./pages/Tab2";
-import Tab3 from "./pages/Tab3";
-import HealthApp from "./pages/healthapp/HealthApp";
+  IonTabs
+} from '@ionic/react';
+import { ellipse, square, triangle } from 'ionicons/icons';
+import Tab1 from './pages/Tab1';
+import Tab2 from './pages/Tab2';
+import Tab3 from './pages/Tab3';
+import HealthApp from './pages/healthapp/HealthApp';
 
 const Dashboard: React.FC = () => {
   return (

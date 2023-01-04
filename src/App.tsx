@@ -1,4 +1,7 @@
-import React, { Redirect, Route } from 'react-router-dom';
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
   IonRouterOutlet,
@@ -8,7 +11,6 @@ import { IonReactRouter } from '@ionic/react-router';
 import Login from './pages/login/login';
 import Signup from './pages/signup/Signup';
 import Dashboard from './Dashboard';
-
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -29,20 +31,36 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
+import { useEffect } from 'react';
+import { auth } from './firebase';
+import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/signup" component={Signup} />
-        {/* cannot have exact here */}
-        <Route path="/app" component={Dashboard} />
-        <Route exact path="/"><Redirect to="/login" /></Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+function App () {
+  // auto signout when the app is launched
+  useEffect(() => {
+    void auth.signOut();
+    void FirebaseAuthentication.signOut();
+    void GoogleAuth.signOut();
+  }, []);
+
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/signup" component={Signup} />
+          {/* cannot have exact here */}
+          <Route path="/app" component={Dashboard} />
+          <Route exact path="/">
+            <Redirect to="/login" />
+          </Route>
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
+  );
+}
 
 export default App;

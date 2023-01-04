@@ -1,3 +1,5 @@
+/* eslint-disable prefer-regex-literals */
+/* eslint-disable @typescript-eslint/triple-slash-reference */
 /// <reference lib="webworker" />
 /* eslint-disable no-restricted-globals */
 
@@ -72,8 +74,8 @@ registerRoute(
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
 self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
+  if ((Boolean(event.data)) && event.data.type === 'SKIP_WAITING') {
+    void self.skipWaiting();
   }
 });
 
