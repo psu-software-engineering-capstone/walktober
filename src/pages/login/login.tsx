@@ -54,7 +54,7 @@ const Login: React.FC = () => {
     );
   };
 
-  // front end //
+  // validate the email input //
   const validate = (ev: Event) => {
     const value = (ev.target as HTMLInputElement).value;
     setIsValid(undefined);
@@ -62,7 +62,7 @@ const Login: React.FC = () => {
     validateEmail(value) !== null ? setIsValid(true) : setIsValid(false);
   };
 
-  // front end //
+  // mark the email input as touched //
   const markTouched = () => {
     setIsTouched(true);
   };
@@ -80,7 +80,9 @@ const Login: React.FC = () => {
             history.push('/app');
           } else {
             void auth.signOut();
-            alert('This email is not a Walktober account. Please sign-up first.');
+            alert(
+              'This email is not a Walktober account. Please sign-up first.'
+            );
           }
         })
         .catch((error) => {
@@ -91,7 +93,7 @@ const Login: React.FC = () => {
     } else {
       await GoogleAuth.signIn()
         .then(async (result) => {
-          await FirebaseAuthentication.signInWithGoogle(
+          void FirebaseAuthentication.signInWithGoogle(
             result.authentication.idToken,
             result.authentication.accessToken
           );
@@ -103,7 +105,9 @@ const Login: React.FC = () => {
           } else {
             await GoogleAuth.signOut();
             await FirebaseAuthentication.signOut();
-            alert('This email is not a Walktober account. Please sign-up first.');
+            alert(
+              'This email is not a Walktober account. Please sign-up first.'
+            );
           }
         })
         .catch((error) => {
@@ -127,7 +131,7 @@ const Login: React.FC = () => {
       });
   };
 
-  // move to signup button
+  // move to signup button //
   const moveToSignup = () => {
     history.push('/signup');
   };

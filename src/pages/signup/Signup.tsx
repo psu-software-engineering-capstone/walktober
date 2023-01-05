@@ -45,7 +45,7 @@ const Signup: React.FC = () => {
   // google auth provider //
   const provider = new GoogleAuthProvider();
 
-  // user creation with email auth (web & ios & android) //
+  // user creation with email authentication (web & ios & android) //
   const createUser = () => {
     void setDoc(doc(FirestoreDB, 'users', newEmail), {
       email: newEmail,
@@ -59,7 +59,7 @@ const Signup: React.FC = () => {
     });
   };
 
-  // user creation with google auth (web) //
+  // user creation with google authentication (web) //
   const createUserWithGoogleAuth = (result: UserCredential) => {
     void setDoc(doc(FirestoreDB, 'users', result.user.email as string), {
       email: result.user.email,
@@ -73,7 +73,7 @@ const Signup: React.FC = () => {
     });
   };
 
-  // user creation with google auth (ios & android) //
+  // user creation with google authentication (ios & android) //
   const createUserWithGoogleAuthMobile = (result: any) => {
     void setDoc(doc(FirestoreDB, 'users', result.email as string), {
       email: result.email,
@@ -111,7 +111,7 @@ const Signup: React.FC = () => {
     } else {
       await GoogleAuth.signIn()
         .then(async (result) => {
-          await FirebaseAuthentication.signInWithGoogle(
+          void FirebaseAuthentication.signInWithGoogle(
             result.authentication.idToken,
             result.authentication.accessToken
           );
