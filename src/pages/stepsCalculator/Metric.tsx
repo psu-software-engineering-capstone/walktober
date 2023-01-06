@@ -13,7 +13,7 @@ const Metric = (props: any): ReactElement => {
         <IonCol size="auto">
             <IonItem >
                 <IonLabel id="miles" position="floating" >Number of miles</IonLabel>
-                <IonInput type="number" step="0.01" onInput={
+                <IonInput min="0.01" type="number" step="0.01" onInput={
                     (event: any) => {
                       props.updateSteps(event);
                     }
@@ -24,7 +24,7 @@ const Metric = (props: any): ReactElement => {
         <IonCol size="auto">
             {/* <IonItem>
                 <IonLabel id="miles" position="floating" >Number of miles</IonLabel>
-                <IonInput type="number" onInput={
+                <IonInput type="number" onChange={
                     (event: any) => {
                         props.updateSteps(event);
                     }
@@ -33,7 +33,7 @@ const Metric = (props: any): ReactElement => {
             </IonItem> */}
             <IonItem>
                 <IonLabel id='height-ft' position="floating">Optional: Height ft</IonLabel>
-                <IonInput type="number" onInput={
+                <IonInput min='1' type="number" onInput={
                     (event: any) => {
                       props.HeightFt(event);
                     }
@@ -43,7 +43,7 @@ const Metric = (props: any): ReactElement => {
         <IonCol size="auto">
             <IonItem>
                 <IonLabel id='height-in' position="floating">Optional: Height In</IonLabel>
-                <IonInput type="number" step="0.5" onInput={
+                <IonInput min='0.5' type="number" step="0.5" onInput={
                     (event: any) => {
                       props.HeightIn(event);
                     }
@@ -56,7 +56,7 @@ const Metric = (props: any): ReactElement => {
         <IonCol size="auto">
             <IonItem >
                 <IonLabel id="miles" position="floating" >Number of kilometers</IonLabel>
-                <IonInput type="number" step="0.01" onInput={
+                <IonInput min='0.01' type="number" step="0.01" onInput={
                     (event: any) => {
                       props.updateStepsKm(event);
                     }
@@ -66,7 +66,7 @@ const Metric = (props: any): ReactElement => {
         <IonCol size="auto">
             <IonItem>
                 <IonLabel id='height-cm' position="floating">Optional: Height cm</IonLabel>
-                <IonInput type="number" step="0.1" onInput={
+                <IonInput min='0.1' type="number" step="0.1" onInput={
                     (event: any) => {
                       props.HeightCm(event);
                     }

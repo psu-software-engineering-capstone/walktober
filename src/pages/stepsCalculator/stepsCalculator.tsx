@@ -86,6 +86,7 @@ const StepsCalculator: React.FC = () => {
       } else if (metric) {
         if (heightCm === 0.0) { steps = miles * stepsPerMile; } else { steps = miles * (5280 / (((heightCm * cmToIn) * strideConverter) / 12)); }
         console.log('placeholder');
+        console.log(steps);
       }
       if (steps.toString() !== 'NaN' && steps !== 0) { updateSteps.innerHTML = Math.round(steps).toString(); } else { updateSteps.innerHTML = '0'; }
     }
@@ -98,9 +99,9 @@ const StepsCalculator: React.FC = () => {
     if (testing != null) {
       (testing as HTMLFormElement).reset();
     }
-    console.log(testing);
+    /// console.log(testing);
     setMetric((prev) => { return !prev; });
-    console.log(metric);
+    /// console.log(metric);
   };
 
   return (
@@ -115,17 +116,17 @@ const StepsCalculator: React.FC = () => {
 
             <IonContent className="ion-padding">
                 <IonItem>
-                    <IonLabel >Metric</IonLabel>
+                    <IonLabel >{metric ? 'Metric' : 'Imperial'}</IonLabel>
                     <IonToggle slot="end" onClick={changeMetricImperial}></IonToggle>
                 </IonItem>
                 <form onSubmit={(event: any) => placeHolder(event)} id="stepsForm">
                     <IonGrid>
+                        <IonRow >
                         {<Metric HeightFt={getHeightFt} HeightIn={getHeightIn} HeightCm={getHeightcm} metric={Boolean(metric)} updateSteps={calculate} updateStepsKm={calculateKm} />}
-                        <IonCol size="auto" id="MetricOrImperial">
-                        </IonCol>
+                        </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonButton type="submit" >Submit </IonButton>
+                                <IonButton type="submit" >Calculate </IonButton>
                             </IonCol>
                         </IonRow>
                         <IonRow><a><IonRouterLink slot="helper" href="./manualLoggingSteps">Return to steps logging</IonRouterLink></a></IonRow>

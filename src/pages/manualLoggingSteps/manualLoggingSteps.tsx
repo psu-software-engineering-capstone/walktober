@@ -171,7 +171,7 @@ const ManualSteps: React.FC = () => {
                 <form id='stepLog' onSubmit={(event: React.FormEvent) => submitHandler(event)}>
                     <IonItem>
                         <IonLabel position="floating">Number of steps</IonLabel>
-                        <IonInput id='steps' type="number" onInput={
+                        <IonInput min='1' id='steps' type="number" onInput={
                             (event: any) => {
                               // if (storeSteps(event) == false) {
                               /* Print an error msg */
