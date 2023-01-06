@@ -1,35 +1,25 @@
-import React from "react";
+import React, { ReactElement } from 'react';
 
 import {
-    IonButton,
-    IonCol,
-    IonContent,
-    IonHeader,
-    IonInput,
-    IonItem,
-    IonLabel,
-    IonRouterLink,
-    IonTitle,
-    IonToolbar,
-    IonGrid,
-    IonRow,
-    IonToggle
+  IonCol,
+  IonInput,
+  IonItem,
+  IonLabel
 } from '@ionic/react';
 
-const Metric = (props: any) => {
-    const imperial = (<>
+const Metric = (props: any): ReactElement => {
+  const imperial = (<>
 
         <IonCol size="auto">
             <IonItem >
                 <IonLabel id="miles" position="floating" >Number of miles</IonLabel>
                 <IonInput type="number" step="0.01" onInput={
                     (event: any) => {
-                        props.updateSteps(event);
+                      props.updateSteps(event);
                     }
                 }></IonInput>
             </IonItem>
         </IonCol>
-
 
         <IonCol size="auto">
             {/* <IonItem>
@@ -45,7 +35,7 @@ const Metric = (props: any) => {
                 <IonLabel id='height-ft' position="floating">Optional: Height ft</IonLabel>
                 <IonInput type="number" onInput={
                     (event: any) => {
-                        props.HeightFt(event);
+                      props.HeightFt(event);
                     }
                 }></IonInput>
             </IonItem>
@@ -55,20 +45,20 @@ const Metric = (props: any) => {
                 <IonLabel id='height-in' position="floating">Optional: Height In</IonLabel>
                 <IonInput type="number" step="0.5" onInput={
                     (event: any) => {
-                        props.HeightIn(event);
+                      props.HeightIn(event);
                     }
                 }></IonInput>
             </IonItem>
         </IonCol>
 
     </>);
-    const metricVal = (<>
+  const metricVal = (<>
         <IonCol size="auto">
             <IonItem >
                 <IonLabel id="miles" position="floating" >Number of kilometers</IonLabel>
                 <IonInput type="number" step="0.01" onInput={
                     (event: any) => {
-                        props.updateStepsKm(event);
+                      props.updateStepsKm(event);
                     }
                 }></IonInput>
             </IonItem>
@@ -78,16 +68,16 @@ const Metric = (props: any) => {
                 <IonLabel id='height-cm' position="floating">Optional: Height cm</IonLabel>
                 <IonInput type="number" step="0.1" onInput={
                     (event: any) => {
-                        props.HeightCm(event);
+                      props.HeightCm(event);
                     }
                 }></IonInput>
             </IonItem>
         </IonCol>
 
     </>);
-    return (
-        props.metric ? metricVal : imperial
-    );
-}
+  return (
+    props.metric ? metricVal : imperial
+  );
+};
 
 export default Metric;
