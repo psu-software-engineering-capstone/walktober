@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   IonButton,
   IonCol,
@@ -78,7 +82,7 @@ const Login: React.FC = () => {
             alert('Sign-in successful');
             history.push('/app');
           } else {
-            auth.signOut();
+            await auth.signOut();
             alert('This email is not a Walktober account. Please sign-up first.');
           }
         })
