@@ -3,8 +3,8 @@ import {
   IonHeader,
   IonPage,
   IonTitle,
-  IonToolbar
-  , IonButton
+  IonToolbar,
+  IonButton
 } from '@ionic/react';
 import './HealthApp.css';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
@@ -51,7 +51,10 @@ const HealthApp: React.FC = () => {
     };
     await HealthKit.querySampleType(stepOptions)
       .then((data: any) => {
-        const totalStep = data.reduce((a: any, b: { quantity: any }) => a + b.quantity, 0);
+        const totalStep = data.reduce(
+          (a: any, b: { quantity: any }) => a + b.quantity,
+          0
+        );
         alert(JSON.stringify(totalStep));
       })
       .catch((error: any) => alert(JSON.stringify(error)));

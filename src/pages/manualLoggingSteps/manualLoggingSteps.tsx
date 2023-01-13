@@ -102,15 +102,15 @@ const ManualSteps: React.FC = () => {
                 <>
                     <IonGrid>
                         <IonRow>
-                            <IonCol >Date:</IonCol>
-                            <IonCol >Steps:</IonCol>
+                            <IonCol>Date:</IonCol>
+                            <IonCol>Steps:</IonCol>
                         </IonRow>
 
                         {
                             stepLogs.map(item => (
                                 <IonRow key={Math.random()}>
-                                    <IonCol >{item.time.toLocaleDateString('en-US')}</IonCol>
-                                    <IonCol >{item.stepsLogged}</IonCol>
+                                    <IonCol>{item.time.toLocaleDateString('en-US')}</IonCol>
+                                    <IonCol>{item.stepsLogged}</IonCol>
                                 </IonRow>
                             ))
                         }
@@ -153,9 +153,6 @@ const ManualSteps: React.FC = () => {
       (theStepsLogForm as HTMLFormElement).reset();
     }
   };
-
-  // note to sef for refs const thingRef = useRef<HTMLIonInputElement>(null);
-  // ref={thingRef}
 
   return (
         <>
