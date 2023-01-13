@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
@@ -10,10 +13,9 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, square, triangle } from 'ionicons/icons';
-import Tab1 from './pages/Tab1';
-import Tab2 from './pages/Tab2';
-import Tab3 from './pages/Tab3';
+import Login from './pages/login/login';
+import Signup from './pages/signup/Signup';
+import Dashboard from './Dashboard';
 import Profile from './pages/Profile';
 
 /* Core CSS required for Ionic components to work properly */
@@ -34,58 +36,39 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import HealthApp from './pages/HealthApp';
+
+import { useEffect } from 'react';
+import { auth } from './firebase';
+import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonTabs>
+function App () {
+  // auto signout when the app is launched
+  useEffect(() => {
+    void auth.signOut();
+    void FirebaseAuthentication.signOut();
+    void GoogleAuth.signOut();
+  }, []);
+
+  return (
+    <IonApp>
+      <IonReactRouter>
         <IonRouterOutlet>
-          <Route exact path="/tab1">
-            <Tab1 />
-          </Route>
-          <Route exact path="/tab2">
-            <Tab2 />
-          </Route>
-          <Route path="/tab3">
-            <Tab3 />
-          </Route>
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/signup" component={Signup} />
+          {/* cannot have exact here */}
           <Route path="/Profile">
             <Profile />
-          <Route exact path="/healthapp" >
-            <HealthApp />
-          </Route>
+          <Route path="/app" component={Dashboard} />
           <Route exact path="/">
-            <Redirect to="/tab1" />
+            <Redirect to="/login" />
           </Route>
         </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="tab1" href="/tab1">
-            <IonIcon icon={triangle} />
-            <IonLabel>Tab 1</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="tab2" href="/tab2">
-            <IonIcon icon={ellipse} />
-            <IonLabel>Tab 2</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="tab3" href="/tab3">
-            <IonIcon icon={square} />
-            <IonLabel>Tab 3</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="Profile" href="/Profile">
-            <IonIcon icon={square} />
-            <IonLabel>Profile</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="healthapp" href="/healthapp">
-            <IonIcon icon={square} />
-            <IonLabel>Health App Integration</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
-  </IonApp>
-);
+      </IonReactRouter>
+    </IonApp>
+  );
+}
 
 export default App;
