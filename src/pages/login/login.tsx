@@ -21,7 +21,7 @@ import {
   isPlatform
 } from '@ionic/react';
 import { logoGoogle } from 'ionicons/icons';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   GoogleAuthProvider,
@@ -33,8 +33,10 @@ import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authen
 import { doc, getDoc } from 'firebase/firestore';
 import './login.css';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import AuthContext from '../../store/auth-context';
 
 const Login: React.FC = () => {
+  const ctx = useContext(AuthContext);
   // for routing //
   const history = useHistory();
 
@@ -77,6 +79,7 @@ const Login: React.FC = () => {
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('Sign-in successful');
+            // note - change auth context here
             history.push('/app');
           } else {
             void auth.signOut();
@@ -89,7 +92,7 @@ const Login: React.FC = () => {
           console.log(error);
           alert(error);
         });
-    // ios & android //
+      // ios & android //
     } else {
       await GoogleAuth.signIn()
         .then(async (result) => {
