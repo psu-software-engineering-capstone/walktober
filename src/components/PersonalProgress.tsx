@@ -1,16 +1,17 @@
 /* eslint-disable multiline-ternary */
-import React, { ReactElement, useEffect } from 'react';
-import { IonItem, IonProgressBar } from '@ionic/react';
+import React, { ReactElement, useEffect, useState } from 'react';
+import { IonButton, IonItem, IonProgressBar } from '@ionic/react';
 
 const today = new Date();
 const daysLeft = 31 - today.getUTCDate(); // 31 days in october
+const devmode = true;
 
 const PersonalProgress: React.FC<{}> = (): ReactElement => {
   const goalSteps = 100000;
   useEffect(() => {}, []); // will be used to pull the persons goal steps
   const currentSteps = 2000;
   useEffect(() => {}, []); // will be used to get the persons current steps
-  const stepsLeft = goalSteps - currentSteps;
+  const [stepsLeft, setStepsLeft] = useState(goalSteps - currentSteps);
   return (
     <>
       <IonItem>
@@ -34,6 +35,19 @@ const PersonalProgress: React.FC<{}> = (): ReactElement => {
         )}
       </IonItem>
       <IonProgressBar value={1 - stepsLeft / goalSteps / 1}></IonProgressBar>
+      {devmode ? (
+        <IonButton
+          onClick={(event: any) => {
+            setStepsLeft((prev) => {
+              return prev - 10000;
+            });
+          }}
+        >
+          press to increase steps
+        </IonButton>
+      ) : (
+        ''
+      )}
     </>
   );
 };
