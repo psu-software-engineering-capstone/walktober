@@ -1,3 +1,4 @@
+/* eslint-disable multiline-ternary */
 import React, { ReactElement, useEffect } from 'react';
 import { IonItem, IonProgressBar } from '@ionic/react';
 
@@ -18,8 +19,19 @@ const PersonalProgress: React.FC<{}> = (): ReactElement => {
         <p>Current steps: {currentSteps}</p>
         <hr />
         <p>Steps needed to hit goal: {stepsLeft}</p>
-        <hr />
-        <p>average steps needed to hit goal: {stepsLeft / daysLeft} per day</p>
+        {stepsLeft > 0 ? (
+          <>
+            <hr />
+            <p>
+              average steps needed to hit goal: {stepsLeft / daysLeft} per day
+            </p>
+          </>
+        ) : (
+          <>
+            <hr />
+            <p>Congrats you made your goal!</p>
+          </>
+        )}
       </IonItem>
       <IonProgressBar value={1 - stepsLeft / goalSteps / 1}></IonProgressBar>
     </>
