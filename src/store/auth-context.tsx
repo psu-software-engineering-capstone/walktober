@@ -6,7 +6,9 @@ const AuthContext = React.createContext({
   onLogin: () => {}
 });
 
-export const AuthContextProvider: React.FC = (props: any) => {
+export const AuthContextProvider: React.FC<{ children: any }> = (
+  props: any
+) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const logoutHandler = (): void => {
