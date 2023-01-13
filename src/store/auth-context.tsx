@@ -29,3 +29,9 @@ export const AuthContextProvider: React.FC<{ children: any }> = (
 };
 
 export default AuthContext;
+
+// <div id="homePage">
+//   <IonButton>
+//     <IonMenuButton></IonMenuButton>
+//   </IonButton>
+// </div>;

@@ -1,5 +1,5 @@
 /* eslint-disable multiline-ternary */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   IonButton,
   IonContent,
@@ -9,48 +9,61 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  IonIcon
+  IonIcon,
+  IonMenu,
+  IonMenuButton,
+  IonButtons
 } from '@ionic/react';
-import loginOrProfileButton from '../../components/loginOrProfileButton';
+import AuthContext from '../../store/auth-context';
+import { useHistory } from 'react-router';
+import LoginOrProfileButton from '../../components/loginOrProfileButton';
+import HomePageMenuItems from '../../components/HomePageMenuItems';
+interface badgeOutline {
+  name: string;
+}
 
 const HomePage: React.FC = () => {
-  const [IsloggedIn, setLoggedIn] = useState(false);
+  const ctx = useContext(AuthContext);
   const [steps, setSteps] = useState(0);
+  const history = useHistory();
+  const [badges, setBadges] = useState(Array<badgeOutline>);
 
   return (
     <>
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>Home Page</IonTitle>
+            <IonButtons id="homePage">
+              <IonMenuButton autoHide={false}></IonMenuButton>
+            </IonButtons>
+            <IonTitle slot="secondary">Home Page</IonTitle>
+            <LoginOrProfileButton />
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen={true} className="ion-padding">
+          <IonMenu contentId="homePage">
+            <IonToolbar>
+              <IonTitle>Menue</IonTitle>
+            </IonToolbar>
+            <HomePageMenuItems />
+          </IonMenu>
           <IonItem>
             <IonLabel>Todays Steps:</IonLabel>
-            <p>{steps}</p>
+            <div>
+              <p>{steps}</p>
+            </div>
           </IonItem>
-          {IsloggedIn ? (
-            <IonButton class="loginHomeButton">
-              <IonIcon slot="start" name="person-circle-outline"></IonIcon>
-              Profile
-            </IonButton>
-          ) : (
-            <IonButton class="loginHomeButton">
-              <IonIcon slot="start" name="person-circle-outline"></IonIcon>
-              Login
-            </IonButton>
-          )}
+          <IonItem>
+            <IonLabel>
+              Badges Acquired:
+              <div>
+                {badges.map((badge) => (
+                  <IonIcon name={badge.name} key={Math.random()}></IonIcon>
+                ))}
+              </div>
+            </IonLabel>
+          </IonItem>
           {/* below is only for development testing purposes */}
-          <IonButton
-            onClick={(event: any) => {
-              setLoggedIn((prev) => {
-                return !prev;
-              });
-            }}
-          >
-            Switch
-          </IonButton>
         </IonContent>
       </IonPage>
     </>

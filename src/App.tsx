@@ -36,7 +36,7 @@ import AuthContext from './store/auth-context';
 
 setupIonicReact();
 
-function App () {
+function App() {
   const authCtx = useContext(AuthContext);
   // auto signout when the app is launched
   useEffect(() => {
@@ -54,7 +54,7 @@ function App () {
           <Route exact path="/signup" component={Signup} />
           {/* cannot have exact here */}
           <Route path="/app" component={Dashboard} />
-          <Route path="/home" component={HomePage} />
+          <Route exact path="/home" component={HomePage} />
           <Route exact path="/">
             <Redirect to="/login" />
           </Route>

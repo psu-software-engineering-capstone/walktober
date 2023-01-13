@@ -12,6 +12,7 @@ import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
 import HealthApp from './pages/healthapp/HealthApp';
+import HomePage from './pages/HomePage/HomePage';
 
 const Dashboard: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const Dashboard: React.FC = () => {
         <Route exact path="/app/tab2" component={Tab2} />
         <Route exact path="/app/tab3" component={Tab3} />
         <Route exact path="/app/healthapp" component={HealthApp} />
+        <Route exact path="/home" component={HomePage} />
         <Route exact path="/app">
           <Redirect to="/app/tab1" />
         </Route>
@@ -41,6 +43,10 @@ const Dashboard: React.FC = () => {
         <IonTabButton tab="healthapp" href="/app/healthapp">
           <IonIcon icon={square} />
           <IonLabel>Health App Integration</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="home" href="/home">
+          <IonIcon icon={triangle} />
+          <IonLabel>Home</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>

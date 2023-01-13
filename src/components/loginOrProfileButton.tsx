@@ -1,18 +1,35 @@
 /* eslint-disable multiline-ternary */
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { IonButton, IonIcon } from '@ionic/react';
+import AuthContext from '../store/auth-context';
+import { useHistory } from 'react-router';
 
-const loginOrProfileButton = (props: { loggedIn: boolean }): ReactElement => {
-  return props.loggedIn ? (
-    <IonButton class="loginHomeButton">
+const LoginOrProfileButton: React.FC<{}> = (): ReactElement => {
+  const ctx = useContext(AuthContext);
+  const history = useHistory();
+  return ctx.isLoggedIn ? (
+    <IonButton
+      class="loginHomeButton"
+      onClick={() => {
+        history.push('/app/profile');
+      }}
+      slot="end"
+    >
       <IonIcon slot="start" name="person-circle-outline"></IonIcon>
       Profile
     </IonButton>
   ) : (
-    <IonButton class="loginHomeButton">
-      <IonIcon slot="start" name="person-circle-outline"></IonIcon>Login
+    <IonButton
+      class="loginHomeButton"
+      onClick={() => {
+        history.push('/login');
+      }}
+      slot="end"
+    >
+      <IonIcon slot="start" name="person-circle-outline"></IonIcon>
+      Login
     </IonButton>
   );
 };
 
-export default loginOrProfileButton;
+export default LoginOrProfileButton;
