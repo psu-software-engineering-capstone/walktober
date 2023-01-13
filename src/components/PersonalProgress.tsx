@@ -5,10 +5,11 @@ const today = new Date();
 const daysLeft = 31 - today.getUTCDate(); // 31 days in october
 
 const PersonalProgress: React.FC<{}> = (): ReactElement => {
-  const goalSteps = 1000;
+  const goalSteps = 100000;
   useEffect(() => {}, []); // will be used to pull the persons goal steps
-  const currentSteps = 200;
+  const currentSteps = 2000;
   useEffect(() => {}, []); // will be used to get the persons current steps
+  const stepsLeft = goalSteps - currentSteps;
   return (
     <>
       <IonItem>
@@ -16,16 +17,11 @@ const PersonalProgress: React.FC<{}> = (): ReactElement => {
         <hr />
         <p>Current steps: {currentSteps}</p>
         <hr />
-        <p>Steps needed to hit goal: {goalSteps - currentSteps}</p>
+        <p>Steps needed to hit goal: {stepsLeft}</p>
         <hr />
-        <p>
-          average steps needed to hit goal:{' '}
-          {(goalSteps - currentSteps) / daysLeft}
-        </p>
+        <p>average steps needed to hit goal: {stepsLeft / daysLeft} per day</p>
       </IonItem>
-      <IonProgressBar
-        value={1 - (goalSteps - currentSteps) / goalSteps / 1}
-      ></IonProgressBar>
+      <IonProgressBar value={1 - stepsLeft / goalSteps / 1}></IonProgressBar>
     </>
   );
 };

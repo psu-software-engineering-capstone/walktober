@@ -64,9 +64,7 @@ const HomePage: React.FC = () => {
               </div>
             </IonLabel>
           </IonItem>
-          <IonItem>
-            <PersonalProgress />
-          </IonItem>
+          <PersonalProgress />
           {/* below is only for development testing purposes */}
         </IonContent>
       </IonPage>
