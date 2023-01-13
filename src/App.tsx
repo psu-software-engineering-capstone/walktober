@@ -58,9 +58,8 @@ function App () {
         <IonRouterOutlet>
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
-          {/* cannot have exact here */}
-          <Route path="/Profile">
-            <Profile />
+          <Route exact path="/profile" component={Profile} />
+          {/* cannot have exact here */}          
           <Route path="/app" component={Dashboard} />
           <Route exact path="/">
             <Redirect to="/login" />
