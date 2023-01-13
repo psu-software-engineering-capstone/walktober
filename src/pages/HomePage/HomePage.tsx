@@ -18,6 +18,7 @@ import AuthContext from '../../store/auth-context';
 import { useHistory } from 'react-router';
 import LoginOrProfileButton from '../../components/loginOrProfileButton';
 import HomePageMenuItems from '../../components/HomePageMenuItems';
+import PersonalProgress from '../../components/PersonalProgress';
 interface badgeOutline {
   name: string;
 }
@@ -62,6 +63,9 @@ const HomePage: React.FC = () => {
                 ))}
               </div>
             </IonLabel>
+          </IonItem>
+          <IonItem>
+            <PersonalProgress />
           </IonItem>
           {/* below is only for development testing purposes */}
         </IonContent>
