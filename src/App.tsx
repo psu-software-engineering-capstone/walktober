@@ -2,11 +2,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Redirect, Route } from 'react-router-dom';
-import {
-  IonApp,
-  IonRouterOutlet,
-  setupIonicReact
-} from '@ionic/react';
+import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Login from './pages/login/login';
 import Signup from './pages/signup/Signup';
@@ -31,19 +27,22 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { auth } from './firebase';
 import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import AuthContext from './store/auth-context';
 
 setupIonicReact();
 
 function App () {
+  const authCtx = useContext(AuthContext);
   // auto signout when the app is launched
   useEffect(() => {
     void auth.signOut();
     void FirebaseAuthentication.signOut();
     void GoogleAuth.signOut();
+    authCtx.onLogout();
   }, []);
 
   return (
