@@ -80,6 +80,8 @@ const Login: React.FC = () => {
           if (dbSnap.exists()) {
             alert('Sign-in successful');
             // note - change auth context here
+            ctx.isLoggedIn = true;
+            // testing stuffs
             history.push('/app');
           } else {
             void auth.signOut();
