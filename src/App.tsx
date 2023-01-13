@@ -2,11 +2,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Redirect, Route } from 'react-router-dom';
-import {
-  IonApp,
-  IonRouterOutlet,
-  setupIonicReact
-} from '@ionic/react';
+import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Login from './pages/login/login';
 import Signup from './pages/signup/Signup';
@@ -35,6 +31,7 @@ import { useEffect } from 'react';
 import { auth } from './firebase';
 import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import AuthContext from './store/auth-context';
 
 setupIonicReact();
 
@@ -47,19 +44,25 @@ function App () {
   }, []);
 
   return (
-    <IonApp>
-      <IonReactRouter>
-        <IonRouterOutlet>
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/signup" component={Signup} />
-          {/* cannot have exact here */}
-          <Route path="/app" component={Dashboard} />
-          <Route exact path="/">
-            <Redirect to="/login" />
-          </Route>
-        </IonRouterOutlet>
-      </IonReactRouter>
-    </IonApp>
+    <AuthContext.Provider
+      value={{
+        isLoggedIn: false
+      }}
+    >
+      <IonApp>
+        <IonReactRouter>
+          <IonRouterOutlet>
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={Signup} />
+            {/* cannot have exact here */}
+            <Route path="/app" component={Dashboard} />
+            <Route exact path="/">
+              <Redirect to="/login" />
+            </Route>
+          </IonRouterOutlet>
+        </IonReactRouter>
+      </IonApp>
+    </AuthContext.Provider>
   );
 }
 
