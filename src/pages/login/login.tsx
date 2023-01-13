@@ -106,6 +106,9 @@ const Login: React.FC = () => {
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('Sign-in successful');
+            // note - change auth context here
+            ctx.isLoggedIn = true;
+            // testing stuffs
             history.push('/app');
           } else {
             await GoogleAuth.signOut();
@@ -128,6 +131,9 @@ const Login: React.FC = () => {
       .then((data) => {
         console.log(data);
         alert('Sign-in successful');
+        // note - change auth context here
+        ctx.isLoggedIn = true;
+        // testing stuffs
         history.push('/app');
       })
       .catch((error) => {
