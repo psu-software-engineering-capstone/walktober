@@ -45,9 +45,12 @@ const Profile: React.FC = () => {
             <IonCol size="auto">
               <IonText>
                 <IonImg className = "profile_pic" src={profilePic} alt="Profile picture for the user signed in"></IonImg>
+              <IonButton>Change Profile Picture</IonButton>
                 <h2>{name}</h2>
-                <p>{username}</p>
+                <p>{username}<IonButton fill="clear" size="small">Change Username</IonButton></p>
                 <p>{email}</p>
+                <IonButton>Change Password</IonButton> <br></br>
+                <IonButton>Change Health App Preferences</IonButton>
               </IonText>
             </IonCol>
             <IonCol>
@@ -62,18 +65,6 @@ const Profile: React.FC = () => {
                 {/* TODO: Put badges here */}
               </IonText>
             </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonButton>Change Password</IonButton>
-          </IonRow>
-          <IonRow>
-            <IonButton>Change Profile Picture</IonButton>
-          </IonRow>
-          <IonRow>
-            <IonButton>Change Username</IonButton>
-          </IonRow>
-          <IonRow>
-            <IonButton>Change Health App Preferences</IonButton>
           </IonRow>
         </IonGrid>
       )
