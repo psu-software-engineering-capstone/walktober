@@ -1,29 +1,29 @@
-import { 
-    IonContent, 
-    IonHeader, 
-    IonTitle, 
-    IonToolbar, 
-    IonImg, 
-    IonItem, 
-    IonText, 
-    IonGrid, 
-    IonRow, 
-    IonCol, 
-    IonButton, 
-    IonPage,
-    IonLabel,
-    IonInput
+import {
+  IonButton, 
+  IonCol,   
+  IonContent, 
+  IonGrid, 
+  IonHeader, 
+  IonImg,   
+  IonInput,
+  IonItem, 
+  IonLabel,
+  IonPage,
+  IonRow, 
+  IonText, 
+  IonTitle, 
+  IonToolbar
 } from '@ionic/react';
 import './Profile.css';
 
 const Profile: React.FC = () => {
-    let profilePic: string;
-    let name: string;
-    let username: string;
-    let email: string;
+    let email: string;    
     let joinDate: Date;
     let joinDateString: string;
+    let name: string;
+    let profilePic: string;
     let totalDistance: number; // Currently in miles
+    let username: string;
     // let badges;
 
     function GetRecords (){
@@ -44,7 +44,7 @@ const Profile: React.FC = () => {
           <IonRow>
             <IonCol size="auto">
               <IonText>
-                <IonImg className = "ProfilePic" src={profilePic} alt="Our lord and savior Kristen Stewart"></IonImg>
+                <IonImg className = "profile_pic" src={profilePic} alt="Profile picture for the user signed in"></IonImg>
                 <h2>{name}</h2>
                 <p>{username}</p>
                 <p>{email}</p>
@@ -75,9 +75,6 @@ const Profile: React.FC = () => {
           <IonRow>
             <IonButton>Change Health App Preferences</IonButton>
           </IonRow>
-          {/* <IonRow>
-            <IonButton>Party time</IonButton>
-          </IonRow> */}
         </IonGrid>
       )
     }
