@@ -107,7 +107,7 @@ const Signup: React.FC = () => {
           console.log(error);
           alert(error);
         });
-    // ios & android //
+      // ios & android //
     } else {
       await GoogleAuth.signIn()
         .then(async (result) => {
