@@ -20,7 +20,7 @@ $ npm install -g @ionic/cli
 Next, clone this repository to your desktop using the following command:
 
 ```bash
-git clone https://github.com/juroc95/walktober.git
+git clone https://github.com/psu-software-engineering-capstone/walktober.git
 ```
 
 Move into the project repository and install all required packages by running the following commands:
