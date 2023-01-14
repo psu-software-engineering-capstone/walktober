@@ -4,12 +4,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   IonButton,
-  IonCol,
   IonContent,
   IonCard,
   IonCardContent,
   IonCardHeader,
-  IonCardTitle,
   IonIcon,
   IonInput,
   IonItem,
@@ -20,7 +18,7 @@ import {
   IonHeader,
   isPlatform
 } from '@ionic/react';
-import { logoGoogle } from 'ionicons/icons';
+import { eye, eyeOff, logoGoogle } from 'ionicons/icons';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
@@ -33,6 +31,7 @@ import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authen
 import { doc, getDoc } from 'firebase/firestore';
 import './login.css';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import smallLogo from '../../assets/Walktober.png';
 
 const Login: React.FC = () => {
   // for routing //
@@ -46,6 +45,7 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [isTouched, setIsTouched] = useState(false);
   const [isValid, setIsValid] = useState<boolean>();
+  const [passwordShown, setPasswordShown] = useState(false);
 
   // email validation functionality //
   const validateEmail = (email: string) => {
@@ -60,6 +60,11 @@ const Login: React.FC = () => {
     setIsValid(undefined);
     if (value === '') return;
     validateEmail(value) !== null ? setIsValid(true) : setIsValid(false);
+  };
+
+  // toggle password visibility
+  const togglePasswordVisibility = () => {
+    setPasswordShown(!passwordShown);
   };
 
   // mark the email input as touched //
@@ -139,18 +144,18 @@ const Login: React.FC = () => {
   return (
     <IonPage>
       <IonHeader></IonHeader>
-      <IonContent fullscreen>
-        <IonCard>
+      <IonContent fullscreen className="login">
+        <IonCard className="right">
           <IonCardHeader>
-            <IonCardTitle>Login</IonCardTitle>
+            <img alt="Walktober logo" src={smallLogo} />
           </IonCardHeader>
+
           <IonCardContent>
             <IonItem
               fill="solid"
               className={`${(isValid ?? false) && 'ion-valid'} ${
                 isValid === false && 'ion-invalid'
-              } ${isTouched && 'ion-touched'}`}
-            >
+              } ${isTouched && 'ion-touched'}`} >
               <IonLabel position="floating">Email</IonLabel>
               <IonInput
                 type="email"
@@ -158,32 +163,40 @@ const Login: React.FC = () => {
                   validate(event);
                   setEmail(event.target.value);
                 }}
-                onIonBlur={() => markTouched()}
-              ></IonInput>
+                onIonBlur={() => markTouched()} >
+              </IonInput>
               <IonNote slot="helper">Enter a valid email</IonNote>
               <IonNote slot="error">Invalid email</IonNote>
             </IonItem>
 
             <IonItem fill="solid">
-              <IonLabel position="floating">Password input</IonLabel>
+              <IonLabel position="floating">Password</IonLabel>
               <IonInput
-                type="password"
+                type={passwordShown ? 'text' : 'password'}
                 onIonInput={(event: any) => setPassword(event.target.value)}
               ></IonInput>
-              <IonRouterLink slot="helper" href="#">
-                Forgot Password?
-              </IonRouterLink>
+              <IonIcon icon={passwordShown ? eyeOff : eye} slot="end" onClick={togglePasswordVisibility}></IonIcon>
             </IonItem>
 
-            <IonCol>
-              <IonButton onClick={signInEmailPassword}>Login</IonButton>
-              <IonButton onClick={signInWithGoogle} color="tertiary">
-                <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign in with Google
-              </IonButton>
-              <IonButton onClick={moveToSignup}>New User?</IonButton>
-            </IonCol>
+            <IonRouterLink slot="helper" href="#">
+              <u>Forgot Password?</u>
+            </IonRouterLink>
+
+            <IonButton expand="block" onClick={signInEmailPassword}>Login</IonButton>
+            <h2 className="orDivider"><span>OR</span></h2>
+            <IonButton expand="block" onClick={signInWithGoogle} color="tertiary">
+              <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign in with Google
+            </IonButton>
+
           </IonCardContent>
         </IonCard>
+
+        <IonCard className="left">
+          <IonCardContent className="noAccount">Don&apos;t have an account?
+              <IonButton expand="block" onClick={moveToSignup} color="success">Create new account</IonButton>
+          </IonCardContent>
+        </IonCard>
+
       </IonContent>
     </IonPage>
   );
