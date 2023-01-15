@@ -1,5 +1,3 @@
-/* eslint-disable prefer-regex-literals */
-/* eslint-disable @typescript-eslint/triple-slash-reference */
 /// <reference lib="webworker" />
 /* eslint-disable no-restricted-globals */
 
@@ -32,7 +30,7 @@ precacheAndRoute(self.__WB_MANIFEST);
 const fileExtensionRegexp = new RegExp('/[^/?]+\\.[^/]+$');
 registerRoute(
   // Return false to exempt requests from being fulfilled by index.html.
-  ({ request, url }: { request: Request, url: URL }) => {
+  ({ request, url }: { request: Request; url: URL }) => {
     // If this isn't a navigation, skip.
     if (request.mode !== 'navigate') {
       return false;
@@ -45,7 +43,7 @@ registerRoute(
 
     // If this looks like a URL for a resource, because it contains
     // a file extension, skip.
-    if (url.pathname.match(fileExtensionRegexp) != null) {
+    if (url.pathname.match(fileExtensionRegexp)) {
       return false;
     }
 
@@ -66,16 +64,16 @@ registerRoute(
     plugins: [
       // Ensure that once this runtime cache reaches a maximum size the
       // least-recently used images are removed.
-      new ExpirationPlugin({ maxEntries: 50 })
-    ]
+      new ExpirationPlugin({ maxEntries: 50 }),
+    ],
   })
 );
 
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
 self.addEventListener('message', (event) => {
-  if ((Boolean(event.data)) && event.data.type === 'SKIP_WAITING') {
-    void self.skipWaiting();
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
   }
 });
 

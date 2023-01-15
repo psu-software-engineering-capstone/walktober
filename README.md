@@ -1,41 +1,43 @@
 # Walktober
-Welcome to the Walktober project! Walktober is a yearly fitness challenge at PSU, and this project aims to design and implement a new software platform to support the event. The new platform should have a modern look and feel, be responsive and accessible on different devices, and have improved design, graphics, and branding. It should also have better controls, analytics, and be more fun for participants. Additionally, it should have a simpler configuration for PSU administrators, with a focus on how PSU runs the Walktober event, and provide backend reports.
+Walktober is a yearly fitness challenge at PSU. And PSU is currently using software called ChallengeRunner for the Walktober event. This Capstone project will design and implement a new, better software platform for Walktober. The system should support all of the basic features of the current platform but also have a more modern look and feel, a single responsive web app that can be used on a desktop, laptop, or mobile device, streamlined and focused on the Walktober event, improved design, graphics, and branding, better controls, analytics, and generally more fun for the participant, simpler admin configuration that is more focused on how PSU runs the Walktober event, and backend reports.
 
 ## Getting started
-To get started with this project, you will need to have Node.js installed on your system. If you don't have it already, you can download and install the latest version from the [Node.js website](https://nodejs.org/ko/).
+First, download and install the latest Node.js
 
-Once you have Node.js installed, you can install the Ionic CLI with npm by running the following command:
+[Node.js](https://nodejs.org/ko/)
+
+And then install the Ionic CLI with npm:
 
 ```bash
 npm install -g @ionic/cli
 ```
 
-If you previously had the Ionic CLI installed, you may need to uninstall it and then install the updated version due to a change in package name. To do this, run the following commands:
+If there was a previous installation of the Ionic CLI, it will need to be uninstalled due to a change in package name.
 
 ```bash
 $ npm uninstall -g ionic
 $ npm install -g @ionic/cli
 ```
 
-Next, clone this repository to your desktop using the following command:
+And then clone this repository to your desktop
 
 ```bash
 git clone https://github.com/juroc95/walktober.git
 ```
 
-Move into the project repository and install all required packages by running the following commands:
+And then move to the project repository and install all the required packages
 
 ```bash
 $ cd walktober
 $ npm install
 ```
 
-## Running the app
-Most of the development work for this app can be done right in the browser using the ionic serve command:
+## Run the app
+The majority of Ionic app development can be spent right in the browser using the ionic serve command:
 
 ```bash
 $ ionic serve
 ```
 
 ## Troubleshooting
-If you encounter any permission issues while working with this project, try following the instructions on resolving permission errors in the [Ionic documentation](https://ionicframework.com/docs/developing/tips#resolving-permission-errors).
+If you are running into permission issues, try following the instructions here: https://ionicframework.com/docs/developing/tips#resolving-permission-errors 

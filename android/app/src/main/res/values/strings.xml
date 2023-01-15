@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">Walktober</string>
     <string name="title_activity_main">Walktober</string>
-    <string name="package_name">com.psu.walktober</string>
-    <string name="custom_url_scheme">com.psu.walktober</string>
-    <string name="server_client_id">949612719811-m9ptfp5jos5edh8hc2ce5c7fo1ae99qq.apps.googleusercontent.com</string>
+    <string name="package_name">io.ionic.starter</string>
+    <string name="custom_url_scheme">io.ionic.starter</string>
 </resources>
