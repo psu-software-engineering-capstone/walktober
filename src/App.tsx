@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Login from './pages/login/login';
 import Signup from './pages/signup/Signup';
+import ForgotPassword from './pages/forgotpassword/forgotpassword';
 import Dashboard from './Dashboard';
 
 /* Core CSS required for Ionic components to work properly */
@@ -51,6 +51,7 @@ function App () {
         <IonRouterOutlet>
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
+          <Route exact path="/password/reset" component={ForgotPassword} />
           {/* cannot have exact here */}
           <Route path="/app" component={Dashboard} />
           <Route exact path="/">
