@@ -2,17 +2,17 @@
     --background: url(../../assets/Walktober-graphic.png) center top;
 }
 
-.orDivider{
+.or-divider{
     overflow: hidden;
     text-align: center;
     color: white;
     padding: 10px;
 }
-.orDivider > span{
+.or-divider > span{
    position: relative;
    display: inline-block;
 }
-.orDivider > span:before, .orDivider > span:after{
+.or-divider > span:before, .or-divider > span:after{
    content: '';
    position: absolute;
    top: 50%;
@@ -20,14 +20,14 @@
    width: calc(100% + 175px);
    margin: 0 20px;
 }
-.orDivider > span:before{
+.or-divider > span:before{
    right: 100%;
 }
-.orDivider > span:after{
+.or-divider > span:after{
    left: 100%;
 }
 
-.noAccount {
+.no-account {
    text-align: center;
    color: white;
 }

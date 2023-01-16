@@ -95,14 +95,14 @@ const ForgotPassword: React.FC = () => {
               </IonItem>
 
               <IonButton expand="block" onClick={sendResetPassword}>Reset Password</IonButton>
-              <h2 className="orDivider"><span>OR</span></h2>
+              <h2 className="or-divider"><span>OR</span></h2>
               <IonButton expand="block" onClick={moveToLogin} color="tertiary">Return to Login</IonButton>
 
             </IonCardContent>
           </IonCard>
 
           <IonCard className="left">
-            <IonCardContent className="noAccount">Don&apos;t have an account?
+            <IonCardContent className="no-account">Don&apos;t have an account?
                 <IonButton expand="block" onClick={moveToSignup} color="success">Create new account</IonButton>
             </IonCardContent>
           </IonCard>

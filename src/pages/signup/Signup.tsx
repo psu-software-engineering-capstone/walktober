@@ -235,7 +235,7 @@ const Signup: React.FC = () => {
               </IonItem>
 
               <IonButton expand="block" onClick={signUpEmailPassword}>Sign up</IonButton>
-              <h2 className="orDivider"><span>OR</span></h2>
+              <h2 className="or-divider"><span>OR</span></h2>
               <IonButton expand="block" onClick={googleAuth} color="tertiary">
                 <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign up with Google
               </IonButton>
