@@ -141,6 +141,11 @@ const Login: React.FC = () => {
     history.push('/signup');
   };
 
+  // move to forgot password page //
+  const moveToForgotPassword = () => {
+    history.push('/password/reset');
+  };
+
   return (
     <IonPage>
       <IonHeader></IonHeader>
@@ -178,7 +183,7 @@ const Login: React.FC = () => {
               <IonIcon icon={passwordShown ? eyeOff : eye} slot="end" onClick={togglePasswordVisibility}></IonIcon>
             </IonItem>
 
-            <IonRouterLink slot="helper" href="#">
+            <IonRouterLink slot="helper" href='/password/reset' onClick={moveToForgotPassword}>
               <u>Forgot Password?</u>
             </IonRouterLink>
 
