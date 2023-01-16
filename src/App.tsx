@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
+import { IonApp, IonRouterOutlet, isPlatform, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Login from './pages/login/login';
 import Signup from './pages/signup/Signup';
@@ -37,12 +37,29 @@ setupIonicReact();
 
 function App () {
   const authCtx = useContext(AuthContext);
-  // auto signout when the app is launched
+
+  // auto signout (ios & android)
   useEffect(() => {
-    void auth.signOut();
-    void FirebaseAuthentication.signOut();
-    void GoogleAuth.signOut();
-    authCtx.onLogout();
+    if (isPlatform('capacitor')) {
+      void FirebaseAuthentication.signOut();
+      void GoogleAuth.signOut();
+      authCtx.onLogout();
+    }
+  }, []);
+
+  // auto signout (web)
+  useEffect(() => {
+    window.addEventListener('beforeunload', () => {
+      void auth.signOut();
+      authCtx.onLogout();
+      console.log('User signed out');
+    });
+    return () => {
+      window.removeEventListener('beforeunload', () => {
+        void auth.signOut();
+        authCtx.onLogout();
+      });
+    };
   }, []);
 
   return (
