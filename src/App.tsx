@@ -54,7 +54,11 @@ function App() {
           <Route exact path="/signup" component={Signup} />
           {/* cannot have exact here */}
           <Route path="/app" component={Dashboard} />
-          <Route exact path="/home" component={HomePage} />
+          <Route
+            exact
+            path="/home"
+            component={authCtx.isLoggedIn ? HomePage : Dashboard}
+          />
           <Route exact path="/">
             <Redirect to="/login" />
           </Route>
