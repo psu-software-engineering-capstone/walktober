@@ -14,7 +14,8 @@ import {
   IonButtons,
   IonGrid,
   IonRow,
-  IonCol
+  IonCol,
+  IonInput
 } from '@ionic/react';
 import AuthContext from '../../store/auth-context';
 import { useHistory } from 'react-router';
@@ -30,6 +31,16 @@ const HomePage: React.FC = () => {
   const [steps, setSteps] = useState(0);
   const history = useHistory();
   const [badges, setBadges] = useState(Array<badgeOutline>);
+
+  const stepUpdateHandler = (event: any): void => {
+    const newValue = document.querySelector('#stepsUpdate') as HTMLInputElement;
+    const newSteps = Number(newValue.value);
+    if (newSteps > 0) {
+      // console.log(newSteps);
+      setSteps(newSteps);
+    }
+    // console.log(newValue.value);
+  };
 
   return (
     <IonPage>
@@ -51,9 +62,22 @@ const HomePage: React.FC = () => {
         </IonMenu>
         <IonItem>
           <IonLabel>Todays Steps:</IonLabel>
-          <div>
-            <p>{steps}</p>
-          </div>
+          <IonGrid>
+            <IonRow>
+              <IonCol>
+                <IonInput
+                  id="stepsUpdate"
+                  type="number"
+                  placeholder={steps.toString()}
+                  onInput={(event: any) => {
+                    stepUpdateHandler(event);
+                  }}
+                  min="1"
+                  step="1"
+                ></IonInput>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
         </IonItem>
         <IonItem>
           <IonLabel>
