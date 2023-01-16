@@ -1,6 +1,19 @@
 MIT License
 
-Copyright (c) [2023] [fullname]
+Copyright (c) 2022-present Walktober Team
+- Kevin Carroll ([@keca2](https://github.com/keca2))
+- Richard Clift ([@RClift](https://github.com/RClift))
+- Bailee Crandley ([@bailee-crandley](https://github.com/bailee-crandley))
+- Alissa Friel ([@xuvea](https://github.com/xuvea))
+- Alana Gilston ([@abluescarab](https://github.com/abluescarab))
+- Juhwan Lee ([@juroc95](https://github.com/juroc95))
+- Matthew Marcellinus ([@marcellinusm](https://github.com/marcellinusm))
+- Nathan Moes ([@NathanMoes](https://github.com/NathanMoes))
+- Melissa Nguyen ([@melis29](https://github.com/melis29))
+- Anthony Pham ([@aphamdd](https://github.com/aphamdd))
+- Michael Robertson ([@marobertson11](https://github.com/marobertson11))
+- Yifan Zhao ([@FmYifan](https://github.com/FmYifan))
+- All the amazing contributors (https://github.com/psu-software-engineering-capstone/walktober/graphs/contributors)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
