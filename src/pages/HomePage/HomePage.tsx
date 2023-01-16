@@ -1,7 +1,6 @@
 /* eslint-disable multiline-ternary */
 import React, { useState, useContext } from 'react';
 import {
-  IonButton,
   IonContent,
   IonHeader,
   IonItem,
@@ -12,7 +11,10 @@ import {
   IonIcon,
   IonMenu,
   IonMenuButton,
-  IonButtons
+  IonButtons,
+  IonGrid,
+  IonRow,
+  IonCol
 } from '@ionic/react';
 import AuthContext from '../../store/auth-context';
 import { useHistory } from 'react-router';
@@ -30,45 +32,57 @@ const HomePage: React.FC = () => {
   const [badges, setBadges] = useState(Array<badgeOutline>);
 
   return (
-    <>
-      <IonPage>
-        <IonHeader>
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonButtons id="homePage">
+            <IonMenuButton autoHide={false}></IonMenuButton>
+          </IonButtons>
+          <IonTitle slot="secondary">Home Page</IonTitle>
+          <LoginOrProfileButton />
+        </IonToolbar>
+      </IonHeader>
+      <IonContent fullscreen={true} className="ion-padding">
+        <IonMenu contentId="homePage">
           <IonToolbar>
-            <IonButtons id="homePage">
-              <IonMenuButton autoHide={false}></IonMenuButton>
-            </IonButtons>
-            <IonTitle slot="secondary">Home Page</IonTitle>
-            <LoginOrProfileButton />
+            <IonTitle>Menue</IonTitle>
           </IonToolbar>
-        </IonHeader>
-        <IonContent fullscreen={true} className="ion-padding">
-          <IonMenu contentId="homePage">
-            <IonToolbar>
-              <IonTitle>Menue</IonTitle>
-            </IonToolbar>
-            <HomePageMenuItems />
-          </IonMenu>
-          <IonItem>
-            <IonLabel>Todays Steps:</IonLabel>
+          <HomePageMenuItems />
+        </IonMenu>
+        <IonItem>
+          <IonLabel>Todays Steps:</IonLabel>
+          <div>
+            <p>{steps}</p>
+          </div>
+        </IonItem>
+        <IonItem>
+          <IonLabel>
+            Badges Acquired:
             <div>
-              <p>{steps}</p>
+              {badges.map((badge) => (
+                <IonIcon name={badge.name} key={Math.random()}></IonIcon>
+              ))}
             </div>
-          </IonItem>
-          <IonItem>
-            <IonLabel>
-              Badges Acquired:
-              <div>
-                {badges.map((badge) => (
-                  <IonIcon name={badge.name} key={Math.random()}></IonIcon>
-                ))}
-              </div>
-            </IonLabel>
-          </IonItem>
-          <PersonalProgress />
-          {/* below is only for development testing purposes */}
-        </IonContent>
-      </IonPage>
-    </>
+          </IonLabel>
+        </IonItem>
+        <PersonalProgress />
+        {/* below is only for development testing purposes */}
+        <IonGrid>
+          <IonRow>
+            <IonCol>Location for leaderboards</IonCol>
+            <IonCol>Loaction for chat</IonCol>
+            <IonCol>
+              <IonRow>
+                <IonCol>Location for anouncments</IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>Location for personal Progress</IonCol>
+              </IonRow>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+      </IonContent>
+    </IonPage>
   );
 };
 
