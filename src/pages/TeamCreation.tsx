@@ -13,7 +13,7 @@ import {
 import './TeamCreation.css';
 import { useState } from 'react';
 import { auth, FirestoreDB } from '../firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, updateDoc } from 'firebase/firestore';
 
 const TeamCreation: React.FC = () => {
   const [newTeamName, setNewTeamName] = useState('');
@@ -26,6 +26,10 @@ const TeamCreation: React.FC = () => {
   const createTeam = () => {
     if (auth.currentUser == null) {
       alert('You are not signed-in!');
+      return;
+    }
+    if (newTeamName === '') {
+      alert('Team name cannot be an empty string');
       return;
     }
     setDoc(doc(FirestoreDB, 'teams', newTeamName), {
@@ -41,12 +45,24 @@ const TeamCreation: React.FC = () => {
       ]
     })
       .then(() => {
+        void updateCurrentUser();
         console.log('Document written successfully');
         alert('You team has been created!');
       })
       .catch((error) => {
         console.error('Error writing document: ', error);
       });
+  };
+
+  const updateCurrentUser = async () => {
+    if (auth.currentUser == null) {
+      return;
+    }
+    const currentUserRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
+    await updateDoc(currentUserRef, {
+      team: newTeamName,
+      team_leader: true
+    });
   };
 
   const createNewTeam = () => {
