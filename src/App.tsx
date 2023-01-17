@@ -8,6 +8,7 @@ import Login from './pages/login/login';
 import Signup from './pages/signup/Signup';
 import Dashboard from './Dashboard';
 import HomePage from './pages/HomePage/HomePage';
+import ManualSteps from './pages/manualLoggingSteps/manualLoggingSteps';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -59,6 +60,7 @@ function App() {
             path="/home"
             component={authCtx.isLoggedIn ? HomePage : Dashboard}
           />
+          <Route exact path={'/manualStepsLogging'} component={ManualSteps} />
           <Route exact path="/">
             <Redirect to="/login" />
           </Route>

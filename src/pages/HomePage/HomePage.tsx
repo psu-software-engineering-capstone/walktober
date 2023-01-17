@@ -42,7 +42,7 @@ const HomePage: React.FC = () => {
     // console.log(newValue.value);
   };
 
-  return (
+  return ctx.isLoggedIn ? (
     <IonPage>
       <IonHeader>
         <IonToolbar>
@@ -61,21 +61,30 @@ const HomePage: React.FC = () => {
           <HomePageMenuItems />
         </IonMenu>
         <IonItem>
-          <IonLabel>Todays Steps:</IonLabel>
           <IonGrid>
             <IonRow>
-              <IonCol>
-                <IonInput
-                  id="stepsUpdate"
-                  type="number"
-                  placeholder={steps.toString()}
-                  onInput={(event: any) => {
-                    stepUpdateHandler(event);
-                  }}
-                  min="1"
-                  step="1"
-                ></IonInput>
+              <IonCol size="auto">
+                <IonItem>
+                  <IonLabel>
+                    Todays Steps:
+                    <IonInput
+                      id="stepsUpdate"
+                      type="number"
+                      placeholder={steps.toString()}
+                      onInput={(event: any) => {
+                        stepUpdateHandler(event);
+                      }}
+                      min="1"
+                      step="1"
+                    ></IonInput>
+                  </IonLabel>
+                </IonItem>
               </IonCol>
+            </IonRow>
+            <IonRow>
+              click
+              <a href="/manualStepsLogging">here</a>
+              to see previous logs
             </IonRow>
           </IonGrid>
         </IonItem>
@@ -89,7 +98,7 @@ const HomePage: React.FC = () => {
             </div>
           </IonLabel>
         </IonItem>
-        <PersonalProgress />
+
         {/* below is only for development testing purposes */}
         <IonGrid>
           <IonRow>
@@ -100,13 +109,17 @@ const HomePage: React.FC = () => {
                 <IonCol>Location for anouncments</IonCol>
               </IonRow>
               <IonRow>
-                <IonCol>Location for personal Progress</IonCol>
+                <IonCol>
+                  Location for personal Progress: <PersonalProgress />
+                </IonCol>
               </IonRow>
             </IonCol>
           </IonRow>
         </IonGrid>
       </IonContent>
     </IonPage>
+  ) : (
+    history.push('/login')
   );
 };
 
