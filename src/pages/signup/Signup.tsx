@@ -16,13 +16,8 @@ import {
   IonIcon,
   isPlatform
 } from '@ionic/react';
-<<<<<<< HEAD
-import { logoGoogle } from 'ionicons/icons';
-import { useState } from 'react';
-=======
 import { eye, eyeOff, logoGoogle } from 'ionicons/icons';
-import { useState, useContext } from 'react';
->>>>>>> b2ce543bd5c9111d3b8bb2c16e56ba267a9f0594
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FirestoreDB, auth } from '../../firebase';
 import {

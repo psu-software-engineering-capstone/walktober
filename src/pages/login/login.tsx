@@ -34,7 +34,6 @@ import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import smallLogo from '../../assets/Walktober.png';
 import AuthContext from '../../store/auth-context';
 
-
 const Login: React.FC = () => {
   const ctx = useContext(AuthContext);
   // for routing //
