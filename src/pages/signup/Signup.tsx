@@ -16,8 +16,13 @@ import {
   IonIcon,
   isPlatform
 } from '@ionic/react';
+<<<<<<< HEAD
 import { logoGoogle } from 'ionicons/icons';
 import { useState } from 'react';
+=======
+import { eye, eyeOff, logoGoogle } from 'ionicons/icons';
+import { useState, useContext } from 'react';
+>>>>>>> b2ce543bd5c9111d3b8bb2c16e56ba267a9f0594
 import { useHistory } from 'react-router-dom';
 import { FirestoreDB, auth } from '../../firebase';
 import {
@@ -30,6 +35,7 @@ import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authen
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import './Signup.css';
+import logo from '../../assets/Walktober.png';
 
 const Signup: React.FC = () => {
   // for routing //
@@ -41,9 +47,15 @@ const Signup: React.FC = () => {
   const [newLastName, setNewLastName] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newConfirmPassword, setNewConfirmPassword] = useState('');
+  const [passwordShown, setPasswordShown] = useState(false);
 
   // google auth provider //
   const provider = new GoogleAuthProvider();
+
+  // toggle password visibility
+  const togglePasswordVisibility = () => {
+    setPasswordShown(!passwordShown);
+  };
 
   // user creation with email authentication (web & ios & android) //
   const createUser = () => {
@@ -161,14 +173,16 @@ const Signup: React.FC = () => {
   return (
     <IonPage>
       <IonHeader></IonHeader>
-      <IonContent fullscreen>
-        <IonCard color="light">
+      <IonContent fullscreen className="signup">
+        <IonCard>
           <IonCardHeader>
-            <IonCardTitle class="ion-text-center">SignUp</IonCardTitle>
+            <img alt="Walktober logo" src={logo} />
+            <IonCardTitle class="ion-text-center">Sign up for the free 31-day walking challenge! Open to the entire PSU community.</IonCardTitle>
           </IonCardHeader>
+
           <IonCardContent>
             <IonList class="ion-no-padding">
-              <IonItem color="light">
+              <IonItem>
                 <IonLabel position="floating" color="primary">
                   Email
                 </IonLabel>
@@ -179,7 +193,7 @@ const Signup: React.FC = () => {
                 ></IonInput>
               </IonItem>
 
-              <IonItem color="light">
+              <IonItem>
                 <IonLabel position="floating" color="primary">
                   First Name
                 </IonLabel>
@@ -190,7 +204,7 @@ const Signup: React.FC = () => {
                 ></IonInput>
               </IonItem>
 
-              <IonItem color="light">
+              <IonItem>
                 <IonLabel position="floating" color="primary">
                   Last Name
                 </IonLabel>
@@ -201,74 +215,43 @@ const Signup: React.FC = () => {
                 ></IonInput>
               </IonItem>
 
-              <IonItem color="light">
+              <IonItem>
                 <IonLabel position="floating" color="primary">
                   Password
                 </IonLabel>
                 <IonInput
-                  type="password"
+                  type={passwordShown ? 'text' : 'password'}
                   name="password"
                   onIonChange={(e) => setNewPassword(e.target.value as string)}
                 ></IonInput>
+                <IonIcon icon={passwordShown ? eyeOff : eye} slot="end" onClick={togglePasswordVisibility}></IonIcon>
               </IonItem>
 
-              <IonItem color="light">
+              <IonItem>
                 <IonLabel position="floating" color="primary">
                   Confirm Password
                 </IonLabel>
                 <IonInput
-                  type="password"
+                  type={passwordShown ? 'text' : 'password'}
                   name="cpassword"
-                  onIonChange={(e) =>
-                    setNewConfirmPassword(e.target.value as string)
-                  }
+                  onIonChange={(e) => setNewConfirmPassword(e.target.value as string)}
                 ></IonInput>
+                <IonIcon icon={passwordShown ? eyeOff : eye} slot="end" onClick={togglePasswordVisibility}></IonIcon>
               </IonItem>
 
-              <IonItem lines="none" color="light">
-                <IonButton
-                  onClick={signUpEmailPassword}
-                  fill="solid"
-                  color="tertiary"
-                  size="default"
-                  class="cbutton"
-                >
-                  Sign Up
-                </IonButton>
-              </IonItem>
+              <IonButton expand="block" onClick={signUpEmailPassword}>Sign up</IonButton>
+              <h2 className="or-divider"><span>OR</span></h2>
+              <IonButton expand="block" onClick={googleAuth} color="tertiary">
+                <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign up with Google
+              </IonButton>
 
-              <IonItem lines="none" color="light">
-                <IonButton
-                  onClick={googleAuth}
-                  fill="solid"
-                  color="success"
-                  size="default"
-                  class="gbutton"
-                >
-                  <IonIcon icon={logoGoogle}></IonIcon>
-                  Sign Up With Google
-                </IonButton>
-              </IonItem>
-
-              <IonItem lines="none" color="light">
-                <IonButton
-                  onClick={moveToLogin}
-                  fill="solid"
-                  color="tertiary"
-                  size="default"
-                  class="cbutton"
-                >
-                  Back to Log In
-                </IonButton>
-              </IonItem>
-
-              {/* Need hyperlink for the forgot password once implemented */}
-              <IonCardContent class="fpass" color="light">
-                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley">
-                  Forgot Password?
-                </a>
-              </IonCardContent>
             </IonList>
+          </IonCardContent>
+        </IonCard>
+
+        <IonCard className="left">
+          <IonCardContent>
+              <IonButton expand="block" onClick={moveToLogin} color="success">Return to Login</IonButton>
           </IonCardContent>
         </IonCard>
       </IonContent>
