@@ -115,10 +115,10 @@ const Signup: React.FC = () => {
           console.log(error);
           alert(error);
         });
-      // ios & android //
+    // ios & android //
     } else {
-      await GoogleAuth.signOut();
-      await FirebaseAuthentication.signOut();
+      void GoogleAuth.signOut();
+      void FirebaseAuthentication.signOut();
       await GoogleAuth.signIn()
         .then(async (result) => {
           void FirebaseAuthentication.signInWithGoogle(
@@ -129,8 +129,8 @@ const Signup: React.FC = () => {
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('There is already an existing account under this email');
-            await GoogleAuth.signOut();
-            await FirebaseAuthentication.signOut();
+            void GoogleAuth.signOut();
+            void FirebaseAuthentication.signOut();
           } else {
             alert('Sign-up successful');
             createUserWithGoogleAuthMobile(result);
@@ -145,9 +145,9 @@ const Signup: React.FC = () => {
   };
 
   // sign up with email and password (web & ios & android) //
-  const signUpEmailPassword = async () => {
+  const signUpEmailPassword = () => {
     if (newPassword === newConfirmPassword) {
-      await createUserWithEmailAndPassword(auth, newEmail, newPassword)
+      createUserWithEmailAndPassword(auth, newEmail, newPassword)
         .then((data) => {
           createUser();
           console.log(data);
