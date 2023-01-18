@@ -3,11 +3,9 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   IonContent,
-  IonHeader,
   IonPage,
   IonTitle,
-  IonToolbar
-  , IonButton
+  IonButton
 } from '@ionic/react';
 import './HealthApp.css';
 import NavBar from '../../components/NavBar';

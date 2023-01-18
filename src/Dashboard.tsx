@@ -6,7 +6,7 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
-  isPlatform,
+  isPlatform
 } from '@ionic/react';
 import { ellipse, square, triangle } from 'ionicons/icons';
 
@@ -20,7 +20,7 @@ import HealthApp from './pages/healthapp/HealthApp';
 import './theme/app.scss';
 
 const Dashboard: React.FC = () => {
-  if(!isPlatform("android") && !isPlatform("ios")) {
+  if (!isPlatform('android') && !isPlatform('ios')) {
     // if on desktop, only include the navigation router, which is then accessed
     // using NavBar elements on individual tabs
     return (
@@ -67,6 +67,6 @@ const Dashboard: React.FC = () => {
       </IonTabs>
     );
   }
-}
+};
 
 export default Dashboard;

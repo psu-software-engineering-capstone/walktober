@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   IonToolbar,
   IonHeader
@@ -10,12 +11,12 @@ import NavLink from './NavLink';
 import { isPlatform } from '@ionic/core';
 
 interface NavBarProps {
-  collapse?: "condense" | "fade"  // carryover from ion-header
-  children?: React.ReactNode      // child elements like titles
+  collapse?: 'condense' | 'fade' // carryover from ion-header
+  children?: React.ReactNode // child elements like titles
 }
 
-const NavBar: React.FC<NavBarProps> = ({ collapse=undefined, children=null }) => {
-  if(isPlatform("android") || isPlatform("ios")) {
+const NavBar: React.FC<NavBarProps> = ({ collapse = undefined, children = null }) => {
+  if (isPlatform('android') || isPlatform('ios')) {
     return (
       <IonHeader collapse={collapse}>
         <IonToolbar>
@@ -48,6 +49,6 @@ const NavBar: React.FC<NavBarProps> = ({ collapse=undefined, children=null }) =>
       </IonHeader>
     );
   }
-}
+};
 
 export default NavBar;
