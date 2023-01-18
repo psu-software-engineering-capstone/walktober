@@ -3,13 +3,12 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   IonContent,
-  IonHeader,
   IonPage,
   IonTitle,
-  IonToolbar
-  , IonButton
+  IonButton
 } from '@ionic/react';
 import './HealthApp.css';
+import NavBar from '../../components/NavBar';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
 
 const HealthApp: React.FC = () => {
@@ -62,17 +61,13 @@ const HealthApp: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Health App Integration</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <NavBar>
+        <IonTitle>Health App Integration</IonTitle>
+      </NavBar>
       <IonContent fullscreen={true} className="ion-padding">
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Health App Integration</IonTitle>
-          </IonToolbar>
-        </IonHeader>
+        <NavBar collapse='condense'>
+          <IonTitle size="large">Health App Integration</IonTitle>
+        </NavBar>
         <h2>Apple Health</h2>
         <IonButton expand="block" onClick={available}>
           Health Available?
