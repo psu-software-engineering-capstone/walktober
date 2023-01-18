@@ -1,60 +1,38 @@
 import { Redirect, Route } from 'react-router-dom';
 import {
-  IonApp,
   IonIcon,
   IonLabel,
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
   IonTabs,
-  IonToolbar,
   isPlatform,
 } from '@ionic/react';
 import { ellipse, square, triangle } from 'ionicons/icons';
-import NavLink from './components/NavLink';
+
+/* Pages */
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
 import HealthApp from './pages/healthapp/HealthApp';
 
+/* Theming */
+import './theme/app.scss';
+
 const Dashboard: React.FC = () => {
-  if (!isPlatform('android') && !isPlatform('ios')) {
+  if(!isPlatform("android") && !isPlatform("ios")) {
+    // if on desktop, only include the navigation router, which is then accessed
+    // using NavBar elements on individual tabs
     return (
-      <IonToolbar>
-        <IonRouterOutlet>
-          <Route exact path="/app/tab1">
-            <Tab1 />
-          </Route>
-          <Route exact path="/app/tab2">
-            <Tab2 />
-          </Route>
-          <Route path="/app/tab3">
-            <Tab3 />
-          </Route>
-          <Route exact path="/app/healthapp">
-            <HealthApp />
-          </Route>
-          <Route exact path="/app">
-            <Redirect to="/app/tab1" />
-          </Route>
-        </IonRouterOutlet>
-        <img id="psu-logo"
-             src="assets/logo.svg"
-             slot="start"
-             alt="PSU logo" />
-        <div slot="end">
-          <NavLink id="home" text="Home" href="/app/tab1" />
-          <NavLink id="team" text="Team" href="/app/tab2" />
-          <NavLink id="profile" text="Profile" href="/app/profile">
-            <NavLink id="logs" text="Logs" href="/app/tab3" />
-          </NavLink>
-          <NavLink id="admin" text="Admin" href="/app/admin">
-            <NavLink id="admin-announcements"
-                     text="Announcements"
-                     href="/app/admin/announcements" />
-          </NavLink>
-        </div>
-      </IonToolbar>
+      <IonRouterOutlet>
+        <Route exact path="/app/tab1" component={Tab1} />
+        <Route exact path="/app/tab2" component={Tab2} />
+        <Route exact path="/app/tab3" component={Tab3} />
+        <Route exact path="/app/healthapp" component={HealthApp} />
+        <Route exact path="/app">
+          <Redirect to="/app/tab1" />
+        </Route>
+      </IonRouterOutlet>
     );
   } else {
     return (
@@ -89,6 +67,6 @@ const Dashboard: React.FC = () => {
       </IonTabs>
     );
   }
-};
+}
 
 export default Dashboard;

@@ -19,7 +19,7 @@ import {
 import { eye, eyeOff, logoGoogle } from 'ionicons/icons';
 import { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import { FirestoreDB, auth } from '../../firebase';
+import { db, auth } from '../../firebase';
 import {
   signInWithPopup,
   GoogleAuthProvider,
@@ -56,7 +56,7 @@ const Signup: React.FC = () => {
 
   // user creation with email authentication (web & ios & android) //
   const createUser = () => {
-    void setDoc(doc(FirestoreDB, 'users', newEmail), {
+    void setDoc(doc(db, 'users', newEmail), {
       email: newEmail,
       name: newFirstName + ' ' + newLastName,
       badges: [],
@@ -70,7 +70,7 @@ const Signup: React.FC = () => {
 
   // user creation with google authentication (web) //
   const createUserWithGoogleAuth = (result: UserCredential) => {
-    void setDoc(doc(FirestoreDB, 'users', result.user.email as string), {
+    void setDoc(doc(db, 'users', result.user.email as string), {
       email: result.user.email,
       name: result.user.displayName,
       badges: [],
@@ -84,7 +84,7 @@ const Signup: React.FC = () => {
 
   // user creation with google authentication (ios & android) //
   const createUserWithGoogleAuthMobile = (result: any) => {
-    void setDoc(doc(FirestoreDB, 'users', result.email as string), {
+    void setDoc(doc(db, 'users', result.email as string), {
       email: result.email,
       name: result.name,
       badges: [],
@@ -102,7 +102,7 @@ const Signup: React.FC = () => {
     if (!isPlatform('capacitor')) {
       signInWithPopup(auth, provider)
         .then(async (result) => {
-          const dbRef = doc(FirestoreDB, 'users', result.user.email as string);
+          const dbRef = doc(db, 'users', result.user.email as string);
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('There is already an existing account under this email');
@@ -124,7 +124,7 @@ const Signup: React.FC = () => {
             result.authentication.idToken,
             result.authentication.accessToken
           );
-          const dbRef = doc(FirestoreDB, 'users', result.email);
+          const dbRef = doc(db, 'users', result.email);
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('There is already an existing account under this email');
