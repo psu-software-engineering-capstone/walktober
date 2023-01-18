@@ -25,9 +25,9 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   UserCredential,
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
+  signInWithCredential
 } from 'firebase/auth';
-import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import './Signup.css';
@@ -118,19 +118,19 @@ const Signup: React.FC = () => {
     // ios & android //
     } else {
       void GoogleAuth.signOut();
-      void FirebaseAuthentication.signOut();
       await GoogleAuth.signIn()
         .then(async (result) => {
-          void FirebaseAuthentication.signInWithGoogle(
-            result.authentication.idToken,
-            result.authentication.accessToken
-          );
+          const idToken = result.authentication.idToken;
+          const credential = GoogleAuthProvider.credential(idToken);
+          signInWithCredential(auth, credential).catch((error) => {
+            console.log(error);
+            alert(error);
+          });
           const dbRef = doc(FirestoreDB, 'users', result.email);
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('There is already an existing account under this email');
             void GoogleAuth.signOut();
-            void FirebaseAuthentication.signOut();
           } else {
             alert('Sign-up successful');
             createUserWithGoogleAuthMobile(result);

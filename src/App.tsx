@@ -29,7 +29,6 @@ import './theme/variables.css';
 
 import { useContext, useEffect } from 'react';
 import { auth } from './firebase';
-import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import AuthContext from './store/auth-context';
 
@@ -38,28 +37,25 @@ setupIonicReact();
 function App () {
   const authCtx = useContext(AuthContext);
 
-  // auto signout (ios & android)
+  // auto signout //
   useEffect(() => {
     if (isPlatform('capacitor')) {
-      void FirebaseAuthentication.signOut();
       void GoogleAuth.signOut();
-      authCtx.onLogout();
-    }
-  }, []);
-
-  // auto signout (web)
-  useEffect(() => {
-    window.addEventListener('beforeunload', () => {
       void auth.signOut();
       authCtx.onLogout();
-      console.log('User signed out');
-    });
-    return () => {
-      window.removeEventListener('beforeunload', () => {
+    } else {
+      window.addEventListener('beforeunload', () => {
         void auth.signOut();
         authCtx.onLogout();
+        console.log('User signed out');
       });
-    };
+      return () => {
+        window.removeEventListener('beforeunload', () => {
+          void auth.signOut();
+          authCtx.onLogout();
+        });
+      };
+    }
   }, []);
 
   return (

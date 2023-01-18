@@ -24,10 +24,10 @@ import { useHistory } from 'react-router-dom';
 import {
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signInWithCredential
 } from 'firebase/auth';
 import { FirestoreDB, auth } from '../../firebase';
-import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
 import { doc, getDoc } from 'firebase/firestore';
 import './login.css';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
@@ -101,13 +101,14 @@ const Login: React.FC = () => {
     // ios & android //
     } else {
       void GoogleAuth.signOut();
-      void FirebaseAuthentication.signOut();
       await GoogleAuth.signIn()
         .then(async (result) => {
-          void FirebaseAuthentication.signInWithGoogle(
-            result.authentication.idToken,
-            result.authentication.accessToken
-          );
+          const idToken = result.authentication.idToken;
+          const credential = GoogleAuthProvider.credential(idToken);
+          signInWithCredential(auth, credential).catch((error) => {
+            console.log(error);
+            alert(error);
+          });
           const dbRef = doc(FirestoreDB, 'users', result.email);
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
@@ -117,7 +118,6 @@ const Login: React.FC = () => {
             history.push('/app');
           } else {
             void GoogleAuth.signOut();
-            void FirebaseAuthentication.signOut();
             alert('This email is not a Walktober account. Please sign-up first.');
           }
         })
