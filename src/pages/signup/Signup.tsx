@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
@@ -84,7 +85,7 @@ const Signup: React.FC = () => {
   const createUserWithGoogleAuthMobile = (result: any) => {
     void setDoc(doc(FirestoreDB, 'users', result.email as string), {
       email: result.email,
-      name: result.name,
+      name: result.givenName + ' ' + result.familyName,
       badges: [],
       device: '',
       num_steps: 0,
@@ -116,6 +117,8 @@ const Signup: React.FC = () => {
         });
       // ios & android //
     } else {
+      await GoogleAuth.signOut();
+      await FirebaseAuthentication.signOut();
       await GoogleAuth.signIn()
         .then(async (result) => {
           void FirebaseAuthentication.signInWithGoogle(

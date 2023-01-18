@@ -106,7 +106,7 @@ const Login: React.FC = () => {
       await FirebaseAuthentication.signOut();
       await GoogleAuth.signIn()
         .then(async (result) => {
-          await FirebaseAuthentication.signInWithGoogle(
+          void FirebaseAuthentication.signInWithGoogle(
             result.authentication.idToken,
             result.authentication.accessToken
           );
