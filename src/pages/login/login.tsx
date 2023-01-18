@@ -26,7 +26,7 @@ import {
   signInWithPopup,
   signInWithEmailAndPassword
 } from 'firebase/auth';
-import { db, auth } from '../../firebase';
+import { FirestoreDB, auth } from '../../firebase';
 import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
 import { doc, getDoc } from 'firebase/firestore';
 import './login.css';
@@ -84,7 +84,7 @@ const Login: React.FC = () => {
     if (!isPlatform('capacitor')) {
       await signInWithPopup(auth, provider)
         .then(async (result) => {
-          const dbRef = doc(db, 'users', result.user.email as string);
+          const dbRef = doc(FirestoreDB, 'users', result.user.email as string);
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('Sign-in successful');
@@ -111,7 +111,7 @@ const Login: React.FC = () => {
             result.authentication.idToken,
             result.authentication.accessToken
           );
-          const dbRef = doc(db, 'users', result.email);
+          const dbRef = doc(FirestoreDB, 'users', result.email);
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('Sign-in successful');
