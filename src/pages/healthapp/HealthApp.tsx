@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   IonContent,
-  IonHeader,
   IonPage,
   IonTitle,
-  IonToolbar,
-} from "@ionic/react";
-import "./HealthApp.css";
-import { HealthKit } from "@awesome-cordova-plugins/health-kit";
-import { IonButton } from "@ionic/react";
+  IonButton
+} from '@ionic/react';
+import './HealthApp.css';
+import NavBar from '../../components/NavBar';
+import { HealthKit } from '@awesome-cordova-plugins/health-kit';
 
 const HealthApp: React.FC = () => {
   const available = async () => {
@@ -17,17 +19,17 @@ const HealthApp: React.FC = () => {
   };
 
   const requestAuthorization = async () => {
-    var supportedTypes = [
-      "HKQuantityTypeIdentifierHeight",
-      "HKQuantityTypeIdentifierStepCount",
-      "HKQuantityTypeIdentifierDistanceWalkingRunning",
-      "HKCategoryTypeIdentifierSleepAnalysis",
-      "HKQuantityTypeIdentifierDietaryEnergyConsumed",
-      "HKQuantityTypeIdentifierDietaryFatTotal",
+    const supportedTypes = [
+      'HKQuantityTypeIdentifierHeight',
+      'HKQuantityTypeIdentifierStepCount',
+      'HKQuantityTypeIdentifierDistanceWalkingRunning',
+      'HKCategoryTypeIdentifierSleepAnalysis',
+      'HKQuantityTypeIdentifierDietaryEnergyConsumed',
+      'HKQuantityTypeIdentifierDietaryFatTotal'
     ];
     await HealthKit.requestAuthorization({
       readTypes: supportedTypes,
-      writeTypes: supportedTypes,
+      writeTypes: supportedTypes
     })
       .then((data: any) => alert(JSON.stringify(data)))
       .catch((error: any) => alert(JSON.stringify(error)));
@@ -35,7 +37,7 @@ const HealthApp: React.FC = () => {
 
   const checkAuthStatus = async () => {
     HealthKit.checkAuthStatus({
-      type: "HKQuantityTypeIdentifierHeight",
+      type: 'HKQuantityTypeIdentifierHeight'
     })
       .then((data: any) => alert(JSON.stringify(data)))
       .catch((error: any) => alert(JSON.stringify(error)));
@@ -43,15 +45,15 @@ const HealthApp: React.FC = () => {
 
   const readSteps = async () => {
     const date = new Date();
-    var stepOptions = {
+    const stepOptions = {
       startDate: new Date(date.getFullYear(), date.getMonth(), 1),
       endDate: new Date(),
-      unit: "count",
-      sampleType: "HKQuantityTypeIdentifierStepCount",
+      unit: 'count',
+      sampleType: 'HKQuantityTypeIdentifierStepCount'
     };
     await HealthKit.querySampleType(stepOptions)
       .then((data: any) => {
-        let totalStep = data.reduce((a: any, b: { quantity: any }) => a + b.quantity, 0);
+        const totalStep = data.reduce((a: any, b: { quantity: any }) => a + b.quantity, 0);
         alert(JSON.stringify(totalStep));
       })
       .catch((error: any) => alert(JSON.stringify(error)));
@@ -59,17 +61,13 @@ const HealthApp: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Health App Integration</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <NavBar>
+        <IonTitle>Health App Integration</IonTitle>
+      </NavBar>
       <IonContent fullscreen={true} className="ion-padding">
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Health App Integration</IonTitle>
-          </IonToolbar>
-        </IonHeader>
+        <NavBar collapse='condense'>
+          <IonTitle size="large">Health App Integration</IonTitle>
+        </NavBar>
         <h2>Apple Health</h2>
         <IonButton expand="block" onClick={available}>
           Health Available?
