@@ -1,0 +1,73 @@
+.signup {
+    --background: url(../../assets/Walktober-graphic.png) center top;
+}
+
+ion-item {
+    --padding-start: 0;
+  }
+  
+  ion-content {
+    --padding-end: 10px;
+    --padding-start: 10px;
+    --justify-content: center;
+  }
+  
+  ion-card {
+    margin: 100px auto 0;
+    max-width: 500px;
+  }
+  
+  ion-icon {
+    margin-right: 10px;
+  }
+
+  :host {
+    background-color: red;
+  }
+
+  .cbutton {
+    margin: auto;
+  }
+  
+  .gbutton {
+    margin: 0 auto;
+  }
+  .fpass {
+    text-align: center;
+    padding: 0 16px 0 0;
+    background-color: var(--ion-color-light);
+  }
+  
+  ion-alert.center-alert {
+    --backdrop-opacity: 0.7;
+  }
+  
+  ion-alert .alert-button-group {
+    background-color: var(--ion-color-light);
+  }
+  .center-alert .alert-head {
+    text-align: center;
+    background-color: var(--ion-color-light);
+  }
+  
+  .center-alert .alert-message {
+    text-align: center;
+    background-color: var(--ion-color-light);
+  }
+  
+  button.alert-button.alert-button-yes {
+    background-color: var(--ion-color-tertiary);
+    color: var(--ion-color-tertiary-contrast);
+  }
+  
+  button.alert-button.alert-button-no {
+    background-color: var(--ion-color-tertiary);
+    color: var(--ion-color-tertiary-contrast);
+  }
+  
+  /* iOS places the subtitle above the title */
+  ion-card-header.ios {
+    display: flex;
+    flex-flow: column-reverse;
+  }
+  
