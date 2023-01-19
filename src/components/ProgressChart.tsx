@@ -44,8 +44,8 @@ const ProgressChart: React.FC<{ data: dataProps[] }> = ({ data }) => {
           datasets: [
             {
               label: 'Number of steps',
-              backgroundColor: '#00ff00',
-              borderColor: '#00ff00',
+              backgroundColor: 'rgba(225, 126, 38)',
+              borderColor: 'rgba(142, 65, 46)',
               borderWidth: 2,
               data: data.map((item) => item.steps)
             }
