@@ -19,7 +19,8 @@ module.exports = {
         '@typescript-eslint/semi': ['error', 'always'],
         'react/react-in-jsx-scope': 'off',
         'react/jsx-uses-react': 'off',
-        '@typescript-eslint/no-empty-function': 'off'
+        '@typescript-eslint/no-empty-function': 'off',
+        "@typescript-eslint/consistent-type-imports": "off"
       }
     }
   ],
