@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   IonButton,
@@ -13,7 +15,7 @@ import {
 import './TeamCreation.css';
 import { useState } from 'react';
 import { auth, FirestoreDB } from '../firebase';
-import { doc, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 
 const TeamCreation: React.FC = () => {
   const [newTeamName, setNewTeamName] = useState('');
@@ -44,10 +46,11 @@ const TeamCreation: React.FC = () => {
         newTeamMember5
       ]
     })
-      .then(() => {
-        void updateCurrentUser();
+      .then(async () => {
         console.log('Document written successfully');
-        alert('You team has been created!');
+        alert('Your team has been created!');
+        void updateCurrentUser();
+        await setAvgSteps();
       })
       .catch((error) => {
         console.error('Error writing document: ', error);
@@ -65,7 +68,26 @@ const TeamCreation: React.FC = () => {
     });
   };
 
-  const createNewTeam = () => {
+  const setAvgSteps = async () => {
+    let sum = 0;
+    let count = 0;
+    const q = query(collection(FirestoreDB, 'users'), where('team', '==', newTeamName));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      if (data.num_steps) {
+        sum += data.num_steps as number;
+        count++;
+      }
+    });
+    const average = sum / count;
+    const teamRef = doc(FirestoreDB, 'teams', newTeamName);
+    await updateDoc(teamRef, {
+      avg_steps: average
+    });
+  };
+
+  const createNewTeam = async () => {
     createTeam();
   };
 
