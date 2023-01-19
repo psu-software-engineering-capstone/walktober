@@ -5,31 +5,31 @@ import NavBar from '../components/NavBar';
 import ProgressChart from '../components/ProgressChart';
 const data = [
   {
-    day: 'monday',
+    day: 'M',
     steps: 20
   },
   {
-    day: 'tuesday',
+    day: 'Tu',
     steps: 30
   },
   {
-    day: 'wednesday',
+    day: 'W',
     steps: 10
   },
   {
-    day: 'thursday',
+    day: 'Th',
     steps: 50
   },
   {
-    day: 'friday',
+    day: 'F',
     steps: 24
   },
   {
-    day: 'saturday',
+    day: 'Sa',
     steps: 100
   },
   {
-    day: 'sunday',
+    day: 'Su',
     steps: 21
   }
 ];
