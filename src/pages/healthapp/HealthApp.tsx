@@ -1,12 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import {
-  IonContent,
-  IonPage,
-  IonTitle,
-  IonButton
-} from '@ionic/react';
+import { IonContent, IonPage, IonTitle, IonButton } from '@ionic/react';
 import './HealthApp.css';
 import NavBar from '../../components/NavBar';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
@@ -53,7 +48,10 @@ const HealthApp: React.FC = () => {
     };
     await HealthKit.querySampleType(stepOptions)
       .then((data: any) => {
-        const totalStep = data.reduce((a: any, b: { quantity: any }) => a + b.quantity, 0);
+        const totalStep = data.reduce(
+          (a: any, b: { quantity: any }) => a + b.quantity,
+          0
+        );
         alert(JSON.stringify(totalStep));
       })
       .catch((error: any) => alert(JSON.stringify(error)));
@@ -65,7 +63,7 @@ const HealthApp: React.FC = () => {
         <IonTitle>Health App Integration</IonTitle>
       </NavBar>
       <IonContent fullscreen={true} className="ion-padding">
-        <NavBar collapse='condense'>
+        <NavBar collapse="condense">
           <IonTitle size="large">Health App Integration</IonTitle>
         </NavBar>
         <h2>Apple Health</h2>

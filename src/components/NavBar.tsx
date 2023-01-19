@@ -1,8 +1,5 @@
 /* eslint-disable react/prop-types */
-import {
-  IonToolbar,
-  IonHeader
-} from '@ionic/react';
+import { IonToolbar, IonHeader } from '@ionic/react';
 
 /* Components */
 import NavLink from './NavLink';
@@ -15,13 +12,21 @@ interface NavBarProps {
   children?: React.ReactNode // child elements like titles
 }
 
-const NavBar: React.FC<NavBarProps> = ({ collapse = undefined, children = null }) => {
+const NavBar: React.FC<NavBarProps> = ({
+  collapse = undefined,
+  children = null
+}) => {
   if (isPlatform('android') || isPlatform('ios')) {
     return (
       <IonHeader collapse={collapse}>
         <IonToolbar>
-          <img id="psu-logo" src="assets/logo.svg" slot="start" alt="PSU logo"
-            draggable="false" />
+          <img
+            id="psu-logo"
+            src="assets/logo.svg"
+            slot="start"
+            alt="PSU logo"
+            draggable="false"
+          />
           {children}
         </IonToolbar>
       </IonHeader>
@@ -30,8 +35,13 @@ const NavBar: React.FC<NavBarProps> = ({ collapse = undefined, children = null }
     return (
       <IonHeader collapse={collapse}>
         <IonToolbar>
-          <img id="psu-logo" src="assets/logo.svg" slot="start" alt="PSU logo"
-            draggable="false" />
+          <img
+            id="psu-logo"
+            src="assets/logo.svg"
+            slot="start"
+            alt="PSU logo"
+            draggable="false"
+          />
           {children}
           <div slot="end">
             <NavLink id="home" text="Home" href="/app/tab1" />
@@ -40,9 +50,11 @@ const NavBar: React.FC<NavBarProps> = ({ collapse = undefined, children = null }
               <NavLink id="logs" text="Logs" href="/app/tab3" />
             </NavLink>
             <NavLink id="admin" text="Admin" href="/app/admin">
-              <NavLink id="admin-announcements"
-                  text="Announcements"
-                  href="/app/admin/announcements" />
+              <NavLink
+                id="admin-announcements"
+                text="Announcements"
+                href="/app/admin/announcements"
+              />
             </NavLink>
           </div>
         </IonToolbar>

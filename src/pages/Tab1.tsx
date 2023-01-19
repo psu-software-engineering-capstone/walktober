@@ -1,8 +1,4 @@
-import {
-  IonContent,
-  IonPage,
-  IonTitle
-} from '@ionic/react';
+import { IonContent, IonPage, IonTitle } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Tab1.css';
 import NavBar from '../components/NavBar';

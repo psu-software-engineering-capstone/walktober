@@ -174,7 +174,10 @@ const Signup: React.FC = () => {
         <IonCard>
           <IonCardHeader>
             <img alt="Walktober logo" src={logo} />
-            <IonCardTitle class="ion-text-center">Sign up for the free 31-day walking challenge! Open to the entire PSU community.</IonCardTitle>
+            <IonCardTitle class="ion-text-center">
+              Sign up for the free 31-day walking challenge! Open to the entire
+              PSU community.
+            </IonCardTitle>
           </IonCardHeader>
 
           <IonCardContent>
@@ -221,7 +224,11 @@ const Signup: React.FC = () => {
                   name="password"
                   onIonChange={(e) => setNewPassword(e.target.value as string)}
                 ></IonInput>
-                <IonIcon icon={passwordShown ? eyeOff : eye} slot="end" onClick={togglePasswordVisibility}></IonIcon>
+                <IonIcon
+                  icon={passwordShown ? eyeOff : eye}
+                  slot="end"
+                  onClick={togglePasswordVisibility}
+                ></IonIcon>
               </IonItem>
 
               <IonItem>
@@ -231,24 +238,35 @@ const Signup: React.FC = () => {
                 <IonInput
                   type={passwordShown ? 'text' : 'password'}
                   name="cpassword"
-                  onIonChange={(e) => setNewConfirmPassword(e.target.value as string)}
+                  onIonChange={(e) =>
+                    setNewConfirmPassword(e.target.value as string)
+                  }
                 ></IonInput>
-                <IonIcon icon={passwordShown ? eyeOff : eye} slot="end" onClick={togglePasswordVisibility}></IonIcon>
+                <IonIcon
+                  icon={passwordShown ? eyeOff : eye}
+                  slot="end"
+                  onClick={togglePasswordVisibility}
+                ></IonIcon>
               </IonItem>
 
-              <IonButton expand="block" onClick={signUpEmailPassword}>Sign up</IonButton>
-              <h2 className="or-divider"><span>OR</span></h2>
+              <IonButton expand="block" onClick={signUpEmailPassword}>
+                Sign up
+              </IonButton>
+              <h2 className="or-divider">
+                <span>OR</span>
+              </h2>
               <IonButton expand="block" onClick={googleAuth} color="tertiary">
                 <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign up with Google
               </IonButton>
-
             </IonList>
           </IonCardContent>
         </IonCard>
 
         <IonCard className="left">
           <IonCardContent>
-              <IonButton expand="block" onClick={moveToLogin} color="success">Return to Login</IonButton>
+            <IonButton expand="block" onClick={moveToLogin} color="success">
+              Return to Login
+            </IonButton>
           </IonCardContent>
         </IonCard>
       </IonContent>

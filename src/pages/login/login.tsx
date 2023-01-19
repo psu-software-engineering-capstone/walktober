@@ -93,7 +93,9 @@ const Login: React.FC = () => {
             history.push('/app');
           } else {
             await auth.signOut();
-            alert('This email is not a Walktober account. Please sign-up first.');
+            alert(
+              'This email is not a Walktober account. Please sign-up first.'
+            );
           }
         })
         .catch((error) => {
@@ -121,7 +123,9 @@ const Login: React.FC = () => {
           } else {
             await GoogleAuth.signOut();
             await FirebaseAuthentication.signOut();
-            alert('This email is not a Walktober account. Please sign-up first.');
+            alert(
+              'This email is not a Walktober account. Please sign-up first.'
+            );
           }
         })
         .catch((error) => {
@@ -172,7 +176,8 @@ const Login: React.FC = () => {
               fill="solid"
               className={`${(isValid ?? false) && 'ion-valid'} ${
                 isValid === false && 'ion-invalid'
-              } ${isTouched && 'ion-touched'}`} >
+              } ${isTouched && 'ion-touched'}`}
+            >
               <IonLabel position="floating">Email</IonLabel>
               <IonInput
                 type="email"
@@ -180,8 +185,8 @@ const Login: React.FC = () => {
                   validate(event);
                   setEmail(event.target.value);
                 }}
-                onIonBlur={() => markTouched()} >
-              </IonInput>
+                onIonBlur={() => markTouched()}
+              ></IonInput>
               <IonNote slot="helper">Enter a valid email</IonNote>
               <IonNote slot="error">Invalid email</IonNote>
             </IonItem>
@@ -192,28 +197,45 @@ const Login: React.FC = () => {
                 type={passwordShown ? 'text' : 'password'}
                 onIonInput={(event: any) => setPassword(event.target.value)}
               ></IonInput>
-              <IonIcon icon={passwordShown ? eyeOff : eye} slot="end" onClick={togglePasswordVisibility}></IonIcon>
+              <IonIcon
+                icon={passwordShown ? eyeOff : eye}
+                slot="end"
+                onClick={togglePasswordVisibility}
+              ></IonIcon>
             </IonItem>
 
-            <IonRouterLink slot="helper" href='/password/reset' onClick={moveToForgotPassword}>
+            <IonRouterLink
+              slot="helper"
+              href="/password/reset"
+              onClick={moveToForgotPassword}
+            >
               <u>Forgot Password?</u>
             </IonRouterLink>
 
-            <IonButton expand="block" onClick={signInEmailPassword}>Login</IonButton>
-            <h2 className="or-divider"><span>OR</span></h2>
-            <IonButton expand="block" onClick={signInWithGoogle} color="tertiary">
+            <IonButton expand="block" onClick={signInEmailPassword}>
+              Login
+            </IonButton>
+            <h2 className="or-divider">
+              <span>OR</span>
+            </h2>
+            <IonButton
+              expand="block"
+              onClick={signInWithGoogle}
+              color="tertiary"
+            >
               <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign in with Google
             </IonButton>
-
           </IonCardContent>
         </IonCard>
 
         <IonCard className="left">
-          <IonCardContent className="no-account">Don&apos;t have an account?
-              <IonButton expand="block" onClick={moveToSignup} color="success">Create new account</IonButton>
+          <IonCardContent className="no-account">
+            Don&apos;t have an account?
+            <IonButton expand="block" onClick={moveToSignup} color="success">
+              Create new account
+            </IonButton>
           </IonCardContent>
         </IonCard>
-
       </IonContent>
     </IonPage>
   );
