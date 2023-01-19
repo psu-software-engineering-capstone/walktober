@@ -48,8 +48,15 @@ const TeamCreation: React.FC = () => {
       return;
     }
     if (newTeamName === '') {
-      alert('Team name cannot be an empty string');
+      alert('Team name cannot be an empty string!');
       return;
+    } else {
+      const dbRef = doc(FirestoreDB, 'teams', newTeamName);
+      const dbSnap = await getDoc(dbRef);
+      if (dbSnap.exists()) {
+        alert(`${newTeamName} already exists!`);
+        return;
+      }
     }
     for (let i = 0; i < members.length; i++) {
       const member = members[i];
@@ -116,19 +123,31 @@ const TeamCreation: React.FC = () => {
   const setAvgSteps = async () => {
     let sum = 0;
     let count = 0;
+    let average = 0;
     const q = query(
       collection(FirestoreDB, 'users'),
       where('team', '==', newTeamName)
     );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
+    const querySnap = await getDocs(q);
+    querySnap.forEach((doc) => {
       const data = doc.data();
       if (data.num_steps) {
         sum += data.num_steps as number;
         count++;
       }
     });
-    const average = sum / count;
+    const dbRef = doc(FirestoreDB, 'users', auth.currentUser?.email as string);
+    const dbSnap = await getDoc(dbRef);
+    if (dbSnap.exists()) {
+      const data = dbSnap.data();
+      sum += data.num_steps as number;
+      count++;
+    }
+    if (sum === 0) {
+      average = 0;
+    } else {
+      average = sum / count;
+    }
     const teamRef = doc(FirestoreDB, 'teams', newTeamName);
     await updateDoc(teamRef, {
       avg_steps: average
