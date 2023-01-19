@@ -16,8 +16,9 @@ interface NavLinkProps {
 
 const NavLink: React.FC<NavLinkProps> = ({ id, text, href = '', children = null }) => {
   const dismissPopover = (e: MouseEvent): void => {
-    const elem = document.body.querySelector('#' + id + '-popover');
-    void (elem as HTMLIonPopoverElement).dismiss();
+    const target = e.target as Element;
+    const popover = target.parentElement?.parentElement as HTMLIonPopoverElement;
+    void popover.dismiss();
   };
 
   if (children) {

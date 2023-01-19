@@ -9,7 +9,6 @@ $dropdown-padding: 10px;
         --background-hover: none;
         --background-focused: none;
         --border-style: none;
-        --color-hover: var(--ion-color-primary);
         --inner-padding-bottom: 0;
         --inner-padding-end: 0;
         --inner-padding-start: 0;
@@ -18,18 +17,32 @@ $dropdown-padding: 10px;
 
         &:hover {
             text-decoration: underline;
+
+            // using lines 22-30 instead of --color-hover to fix bug where
+            // hovering wouldn't change color, but moving mouse out and back in
+            // would
+            text-decoration-color: var(--ion-color-primary);
+            color: var(--ion-color-primary);
+
+            ion-icon {
+                color: var(--ion-color-primary);
+            }
+
+            span {
+                color: var(--ion-color-primary);
+            }
         }
 
         ion-icon {
             font-size: 1.1em;
             margin: 0;
-            padding: 0;
         }
 
         span {
             font-size: 1.1em;
             font-family: "Oswald", sans-serif;
             text-transform: uppercase;
+            margin-right: 3px;
         }
     }
 }
