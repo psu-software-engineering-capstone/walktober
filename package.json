@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@awesome-cordova-plugins/core": "6.2.0",
-    "@awesome-cordova-plugins/firebase-authentication": "^6.2.0",
     "@awesome-cordova-plugins/health-kit": "^6.2.0",
     "@capacitor/android": "4.4.0",
     "@capacitor/app": "^4.1.0",
@@ -27,7 +26,6 @@
     "@types/react-router-dom": "^5.1.7",
     "com.telerik.plugins.healthkit": "^0.7.0",
     "cordova": "^11.0.0",
-    "cordova-plugin-firebase-authentication": "^7.0.1",
     "cordova-support-android-plugin": "2.0.4",
     "firebase": "^9.14.0",
     "firebase-tools": "^11.16.1",

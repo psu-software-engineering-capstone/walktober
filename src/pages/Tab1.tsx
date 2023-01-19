@@ -1,11 +1,10 @@
 import {
   IonContent,
-  IonHeader,
   IonPage,
-  IonTitle,
-  IonToolbar
+  IonTitle
 } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
+import NavBar from '../components/NavBar';
 import './Tab1.css';
 // sample data for team leaderboard & individual leaderboard (uncomment when using) //
 // import { TeamData, IndividualData } from './SampleData';
@@ -13,17 +12,13 @@ import './Tab1.css';
 const Tab1: React.FC = () => {
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Tab 1</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <NavBar>
+        <IonTitle>Tab 1</IonTitle>
+      </NavBar>
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Tab 1</IonTitle>
-          </IonToolbar>
-        </IonHeader>
+        <NavBar collapse="condense">
+          <IonTitle size="large">Tab 1</IonTitle>
+        </NavBar>
         <ExploreContainer name="Tab 1 page" />
       </IonContent>
     </IonPage>
