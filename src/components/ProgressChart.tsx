@@ -52,17 +52,6 @@ const ProgressChart: React.FC<{ data: dataProps[] }> = ({ data }) => {
           ]
         }}
       ></Bar>
-      <Line
-        data={{
-          labels: data.map((item) => item.day),
-          datasets: [
-            {
-              label: 'Number of steps',
-              data: data.map((item) => item.steps)
-            }
-          ]
-        }}
-      ></Line>
     </>
   );
 };
