@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
+import { IonApp, IonRouterOutlet, isPlatform, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Login from './pages/login/login';
 import Signup from './pages/signup/Signup';
@@ -29,7 +29,6 @@ import './theme/variables.css';
 
 import { useContext, useEffect } from 'react';
 import { auth } from './firebase';
-import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import AuthContext from './store/auth-context';
 
@@ -37,12 +36,26 @@ setupIonicReact();
 
 function App () {
   const authCtx = useContext(AuthContext);
-  // auto signout when the app is launched
+
+  // auto signout //
   useEffect(() => {
-    void auth.signOut();
-    void FirebaseAuthentication.signOut();
-    void GoogleAuth.signOut();
-    authCtx.onLogout();
+    if (isPlatform('capacitor')) {
+      void GoogleAuth.signOut();
+      void auth.signOut();
+      authCtx.onLogout();
+    } else {
+      window.addEventListener('beforeunload', () => {
+        void auth.signOut();
+        authCtx.onLogout();
+        console.log('User signed out');
+      });
+      return () => {
+        window.removeEventListener('beforeunload', () => {
+          void auth.signOut();
+          authCtx.onLogout();
+        });
+      };
+    }
   }, []);
 
   return (

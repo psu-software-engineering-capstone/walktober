@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
@@ -17,24 +18,22 @@ import {
   isPlatform
 } from '@ionic/react';
 import { eye, eyeOff, logoGoogle } from 'ionicons/icons';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FirestoreDB, auth } from '../../firebase';
 import {
   signInWithPopup,
   GoogleAuthProvider,
   UserCredential,
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
+  signInWithCredential
 } from 'firebase/auth';
-import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
-import AuthContext from '../../store/auth-context';
 import './Signup.css';
 import logo from '../../assets/Walktober.png';
 
 const Signup: React.FC = () => {
-  const ctx = useContext(AuthContext);
   // for routing //
   const history = useHistory();
 
@@ -86,7 +85,7 @@ const Signup: React.FC = () => {
   const createUserWithGoogleAuthMobile = (result: any) => {
     void setDoc(doc(FirestoreDB, 'users', result.email as string), {
       email: result.email,
-      name: result.name,
+      name: result.givenName + ' ' + result.familyName,
       badges: [],
       device: '',
       num_steps: 0,
@@ -116,20 +115,22 @@ const Signup: React.FC = () => {
           console.log(error);
           alert(error);
         });
-      // ios & android //
+    // ios & android //
     } else {
+      void GoogleAuth.signOut();
       await GoogleAuth.signIn()
         .then(async (result) => {
-          void FirebaseAuthentication.signInWithGoogle(
-            result.authentication.idToken,
-            result.authentication.accessToken
-          );
+          const idToken = result.authentication.idToken;
+          const credential = GoogleAuthProvider.credential(idToken);
+          signInWithCredential(auth, credential).catch((error) => {
+            console.log(error);
+            alert(error);
+          });
           const dbRef = doc(FirestoreDB, 'users', result.email);
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('There is already an existing account under this email');
-            await GoogleAuth.signOut();
-            await FirebaseAuthentication.signOut();
+            void GoogleAuth.signOut();
           } else {
             alert('Sign-up successful');
             createUserWithGoogleAuthMobile(result);
@@ -144,9 +145,9 @@ const Signup: React.FC = () => {
   };
 
   // sign up with email and password (web & ios & android) //
-  const signUpEmailPassword = async () => {
+  const signUpEmailPassword = () => {
     if (newPassword === newConfirmPassword) {
-      await createUserWithEmailAndPassword(auth, newEmail, newPassword)
+      createUserWithEmailAndPassword(auth, newEmail, newPassword)
         .then((data) => {
           createUser();
           console.log(data);

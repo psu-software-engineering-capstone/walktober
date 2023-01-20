@@ -24,19 +24,20 @@ import { useHistory } from 'react-router-dom';
 import {
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signInWithCredential
 } from 'firebase/auth';
 import { FirestoreDB, auth } from '../../firebase';
-import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
 import { doc, getDoc } from 'firebase/firestore';
 import './login.css';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import smallLogo from '../../assets/Walktober.png';
 import AuthContext from '../../store/auth-context';
 
-
 const Login: React.FC = () => {
+  // auth context //
   const ctx = useContext(AuthContext);
+
   // for routing //
   const history = useHistory();
 
@@ -57,14 +58,11 @@ const Login: React.FC = () => {
     );
   };
 
-  // front end //
+  // validates input as non-empty email address //
   const validate = (ev: Event) => {
     const value = (ev.target as HTMLInputElement).value;
-
     setIsValid(undefined);
-
     if (value === '') return;
-
     validateEmail(value) !== null ? setIsValid(true) : setIsValid(false);
   };
 
@@ -82,18 +80,17 @@ const Login: React.FC = () => {
   const signInWithGoogle = async () => {
     // web //
     if (!isPlatform('capacitor')) {
-      await signInWithPopup(auth, provider)
+      signInWithPopup(auth, provider)
         .then(async (result) => {
           const dbRef = doc(FirestoreDB, 'users', result.user.email as string);
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('Sign-in successful');
-            // note - change auth context here
+            // auth context //
             ctx.onLogin();
-            // testing stuffs
             history.push('/app');
           } else {
-            await auth.signOut();
+            void auth.signOut();
             alert('This email is not a Walktober account. Please sign-up first.');
           }
         })
@@ -101,27 +98,26 @@ const Login: React.FC = () => {
           console.log(error);
           alert(error);
         });
-      // ios & android //
+    // ios & android //
     } else {
-      await GoogleAuth.signOut();
-      await FirebaseAuthentication.signOut();
+      void GoogleAuth.signOut();
       await GoogleAuth.signIn()
         .then(async (result) => {
-          await FirebaseAuthentication.signInWithGoogle(
-            result.authentication.idToken,
-            result.authentication.accessToken
-          );
+          const idToken = result.authentication.idToken;
+          const credential = GoogleAuthProvider.credential(idToken);
+          signInWithCredential(auth, credential).catch((error) => {
+            console.log(error);
+            alert(error);
+          });
           const dbRef = doc(FirestoreDB, 'users', result.email);
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('Sign-in successful');
-            // note - change auth context here
+            // auth context //
             ctx.onLogin();
-            // testing stuffs
             history.push('/app');
           } else {
-            await GoogleAuth.signOut();
-            await FirebaseAuthentication.signOut();
+            void GoogleAuth.signOut();
             alert('This email is not a Walktober account. Please sign-up first.');
           }
         })
@@ -133,14 +129,13 @@ const Login: React.FC = () => {
   };
 
   // sign in with email and password (web & ios & android) //
-  const signInEmailPassword = async () => {
-    await signInWithEmailAndPassword(auth, email, password)
+  const signInEmailPassword = () => {
+    signInWithEmailAndPassword(auth, email, password)
       .then((data) => {
         console.log(data);
         alert('Sign-in successful');
-        // note - change auth context here
+        // auth context //
         ctx.onLogin();
-        // testing stuffs
         history.push('/app');
       })
       .catch((error) => {
