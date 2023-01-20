@@ -1,37 +1,48 @@
 $dropdown-padding: 10px;
 
 .nav-link-container {
-    font-family: "Oswald", sans-serif;
-    font-size: 1.1em;
     margin-right: 15px;
     display: inline-block;
 
-    .nav-link-text {
-        display: flex;
-        align-items: center;
-        text-transform: uppercase;
-        cursor: pointer;
+    ion-item {
+        --background: none;
+        --background-hover: none;
+        --background-focused: none;
+        --border-style: none;
+        --inner-padding-bottom: 0;
+        --inner-padding-end: 0;
+        --inner-padding-start: 0;
+        --inner-padding-top: 0;
+        --min-height: 0;
 
         &:hover {
             text-decoration: underline;
+
+            // using lines 22-30 instead of --color-hover to fix bug where
+            // hovering wouldn't change color, but moving mouse out and back in
+            // would
+            text-decoration-color: var(--ion-color-primary);
             color: var(--ion-color-primary);
 
-            a {
+            ion-icon {
+                color: var(--ion-color-primary);
+            }
+
+            span {
                 color: var(--ion-color-primary);
             }
         }
 
-        a, span {
-            color: var(--ion-color-dark);
-            text-decoration: none;
-            width: 100%;
-            text-align: left;
-        }
-
         ion-icon {
             font-size: 1.1em;
-            padding: 0;
             margin: 0;
+        }
+
+        span {
+            font-size: 1.1em;
+            font-family: "Oswald", sans-serif;
+            text-transform: uppercase;
+            margin-right: 3px;
         }
     }
 }
@@ -42,7 +53,6 @@ ion-popover {
 
     .nav-link-container {
         padding: $dropdown-padding $dropdown-padding 0px $dropdown-padding;
-        margin: 0;
 
         &:last-child {
             padding-bottom: $dropdown-padding;
