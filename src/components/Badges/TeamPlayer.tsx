@@ -6,24 +6,24 @@ import {
   IonRow,
   IonCol
 } from '@ionic/react';
-import { watchOutline } from 'ionicons/icons';
+import { bodyOutline } from 'ionicons/icons';
 import React from 'react';
 import './BadgeStyles.css';
 
-const ConnectFitnessTracker: React.FC<{}> = () => {
+const TeamPlayer: React.FC<{}> = () => {
   return (
     <IonItem>
       <IonGrid>
         <IonRow>
           <IonCol>
             <IonLabel>
-              <IonIcon icon={watchOutline} size="large"></IonIcon>
+              <IonIcon icon={bodyOutline} size="large"></IonIcon>
             </IonLabel>
           </IonCol>
           <IonCol>
-            Connected!
+            Team Player
             <IonItem class="p">
-              Connect a fitness tracker to track steps
+              Joined a team. Walking is more fun together!
             </IonItem>
           </IonCol>
         </IonRow>
@@ -32,4 +32,4 @@ const ConnectFitnessTracker: React.FC<{}> = () => {
   );
 };
 
-export default ConnectFitnessTracker;
+export default TeamPlayer;
