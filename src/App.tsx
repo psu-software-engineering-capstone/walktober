@@ -5,6 +5,7 @@ import { IonApp, IonRouterOutlet, isPlatform, setupIonicReact } from '@ionic/rea
 import { IonReactRouter } from '@ionic/react-router';
 import Login from './pages/login/login';
 import Signup from './pages/signup/Signup';
+import SignupForm from './pages/signup/signupForm';
 import ForgotPassword from './pages/forgotpassword/forgotpassword';
 import Dashboard from './Dashboard';
 
@@ -64,6 +65,7 @@ function App () {
         <IonRouterOutlet>
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
+          <Route exact path="/register" component={SignupForm} />
           <Route exact path="/password/reset" component={ForgotPassword} />
           {/* cannot have exact here */}
           <Route path="/app" component={Dashboard} />

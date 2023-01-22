@@ -2,6 +2,10 @@
     --background: url(../../assets/Walktober-graphic.png) center top;
 }
 
+.signupForm {
+    --background: url(../../assets/Walktober-graphic.png) center top;
+}
+
 ion-item {
     --padding-start: 0;
   }
@@ -70,4 +74,3 @@ ion-item {
     display: flex;
     flex-flow: column-reverse;
   }
-  
