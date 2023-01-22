@@ -8,9 +8,6 @@ import { People } from '../../utils';
 ChartJS.register(...registerables);
 
 const BarGraph: React.FC = () => {
-  /**
-   *
-   */
   const [chartData, setChartData] = useState({
     labels: People.sort((a: any, b: any) => (a.steps > b.steps ? -1 : 1)).map(
       (row) => row.name
