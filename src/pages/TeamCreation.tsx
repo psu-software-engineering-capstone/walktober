@@ -88,7 +88,7 @@ const TeamCreation: React.FC = () => {
         await updateTeamMembers();
         await setAvgSteps();
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         console.error('Error writing document: ', error);
       });
   };
@@ -129,7 +129,7 @@ const TeamCreation: React.FC = () => {
       where('team', '==', newTeamName)
     );
     const querySnap = await getDocs(q);
-    querySnap.forEach((doc) => {
+    querySnap.forEach((doc: { data: () => any }) => {
       const data = doc.data();
       if (data.num_steps) {
         sum += data.num_steps as number;
