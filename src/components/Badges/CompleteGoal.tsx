@@ -32,8 +32,8 @@ const GoalComplete: React.FC<{}> = () => {
 
 const Attribute: React.FC<{}> = () => {
   return (
-    <a href="https://www.flaticon.com/free-icons/diamond" title="diamond icons">
-      Diamond icons created by Freepik - Flaticon
+    <a href="https://www.flaticon.com/free-icons/goal" title="goal icons">
+      Goal icons created by Freepik - Flaticon
     </a>
   );
 };
