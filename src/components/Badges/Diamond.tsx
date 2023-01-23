@@ -9,7 +9,12 @@ const Diamond: React.FC<{}> = () => {
         <IonRow>
           <IonCol>
             <IonLabel>
-              <img src="diamond.png" alt="diamond" width={40} height={40} />
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/408/408472.png"
+                alt="diamond"
+                width={40}
+                height={40}
+              />
             </IonLabel>
           </IonCol>
           <IonCol>
