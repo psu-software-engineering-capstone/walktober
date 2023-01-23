@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
@@ -17,8 +18,10 @@ import {
   IonPage,
   IonHeader
 } from '@ionic/react';
+import { sendPasswordResetEmail } from 'firebase/auth';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { auth } from '../../firebase';
 import './forgotpassword.css';
 
 const ForgotPassword: React.FC = () => {
@@ -52,8 +55,9 @@ const ForgotPassword: React.FC = () => {
 
   // sign in with email and password (web & ios & android) //
   const sendResetPassword = async () => {
-    // Set up Firebase password reset
-    console.log(email);
+    return await sendPasswordResetEmail(auth, email)
+      .then(() => alert('A password reset email has been sent to your registered email address. Please follow the instructions in the email to reset your password.'))
+      .catch((err: any) => alert(err));
   };
 
   // move to signup button //
