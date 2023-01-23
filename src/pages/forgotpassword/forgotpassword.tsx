@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
@@ -56,7 +57,7 @@ const ForgotPassword: React.FC = () => {
   const sendResetPassword = async () => {
     return await sendPasswordResetEmail(auth, email)
       .then(() => alert('A password reset email has been sent to your registered email address. Please follow the instructions in the email to reset your password.'))
-      .catch((err) => alert(err));
+      .catch((err: any) => alert(err));
   };
 
   // move to signup button //
