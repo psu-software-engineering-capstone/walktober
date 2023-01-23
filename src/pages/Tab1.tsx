@@ -4,6 +4,8 @@ import './Tab1.css';
 import NavBar from '../components/NavBar';
 import Badge from '../components/Badge';
 import Diamond, { Attribute } from '../components/Badges/Diamond';
+import GoalComplete from '../components/Badges/CompleteGoal';
+import TeamPlayer from '../components/Badges/TeamPlayer';
 
 const Tab1: React.FC = () => {
   return (
@@ -17,7 +19,9 @@ const Tab1: React.FC = () => {
         </NavBar>
         <Badge></Badge>
         <Diamond />
+        <TeamPlayer />
         <Attribute></Attribute>
+        <GoalComplete />
         <ExploreContainer name="Tab 1 page" />
       </IonContent>
     </IonPage>
