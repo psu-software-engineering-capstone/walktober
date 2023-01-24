@@ -8,6 +8,7 @@ import {
   IonCard,
   IonCardContent,
   IonCardHeader,
+  IonCardTitle,
   IonIcon,
   IonInput,
   IonItem,
@@ -161,6 +162,7 @@ const Login: React.FC = () => {
         <IonCard className="right">
           <IonCardHeader>
             <img alt="Walktober logo" src={smallLogo} />
+            <IonCardTitle class="ion-text-center">Welcome to Walktober! Please log in to continue!</IonCardTitle>
           </IonCardHeader>
 
           <IonCardContent>

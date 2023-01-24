@@ -43,6 +43,10 @@ const SignupForm: React.FC = () => {
     header: 'Please select the most accurate frequency for your PSU Rec Center usage'
   };
 
+  const distFromCampus = {
+    header: 'Please select the most accurate distance you live from the PSU campus'
+  };
+
   const submitRegistration = () => {
     console.log('hello', newEmail, newFirstName, newLastName);
   };
@@ -51,10 +55,10 @@ const SignupForm: React.FC = () => {
       <IonPage>
         <IonHeader></IonHeader>
         <IonContent fullscreen className="signupForm">
-          <IonCard>
+          <IonCard class="ion-text-center">
             <IonCardHeader>
               <img alt="Walktober logo" src={logo} />
-              <IonCardTitle class="ion-text-center">Welcome to Walktober! Before we get started, please fill out our registration form!</IonCardTitle>
+              <IonCardTitle>Welcome to Walktober! Before we get started, please fill out our registration form!</IonCardTitle>
             </IonCardHeader>
 
             <IonCardContent>
@@ -138,6 +142,16 @@ const SignupForm: React.FC = () => {
                     </IonSelect>
                 </IonItem>
                 <IonItem>
+                  <IonLabel position="floating" color="primary">How far do you live from campus?</IonLabel>
+                    <IonSelect interfaceOptions={distFromCampus} interface="action-sheet" placeholder="Select One">
+                      <IonSelectOption value="on-campus">I live on campus</IonSelectOption>
+                      <IonSelectOption value="0-5-miles">Within 5 miles of campus</IonSelectOption>
+                      <IonSelectOption value="6-10-miles">6-10 miles from campus</IonSelectOption>
+                      <IonSelectOption value="11-24-miles">11-24 miles from campus</IonSelectOption>
+                      <IonSelectOption value="25+-miles">25+ miles from campus</IonSelectOption>
+                    </IonSelect>
+                </IonItem>
+                <IonItem>
                 <IonLabel position="floating" color="primary">How often do you use the PSU Rec Center?</IonLabel>
                     <IonSelect interfaceOptions={recCenterUsage} interface="action-sheet" placeholder="Select One">
                       <IonSelectOption value="never">I have never used the Rec Center</IonSelectOption>
@@ -147,6 +161,7 @@ const SignupForm: React.FC = () => {
                       <IonSelectOption value="4+-times-per-week">4+ times per week</IonSelectOption>
                     </IonSelect>
                 </IonItem>
+                <div>&nbsp;</div>
                 <IonButton expand="block" onClick={submitRegistration}>Complete Registration</IonButton>
               </IonList>
             </IonCardContent>
