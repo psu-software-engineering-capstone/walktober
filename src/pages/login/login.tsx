@@ -20,7 +20,7 @@ import {
   isPlatform
 } from '@ionic/react';
 import { eye, eyeOff, logoGoogle } from 'ionicons/icons';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   GoogleAuthProvider,
@@ -33,12 +33,8 @@ import { doc, getDoc } from 'firebase/firestore';
 import './login.css';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import smallLogo from '../../assets/Walktober.png';
-import AuthContext from '../../store/auth-context';
 
 const Login: React.FC = () => {
-  // auth context //
-  const ctx = useContext(AuthContext);
-
   // for routing //
   const history = useHistory();
 
@@ -87,8 +83,6 @@ const Login: React.FC = () => {
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('Sign-in successful');
-            // auth context //
-            ctx.onLogin();
             history.push('/app');
           } else {
             void auth.signOut();
@@ -116,8 +110,6 @@ const Login: React.FC = () => {
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('Sign-in successful');
-            // auth context //
-            ctx.onLogin();
             history.push('/app');
           } else {
             void GoogleAuth.signOut();
@@ -139,8 +131,6 @@ const Login: React.FC = () => {
       .then((data: unknown) => {
         console.log(data);
         alert('Sign-in successful');
-        // auth context //
-        ctx.onLogin();
         history.push('/app');
       })
       .catch((error: unknown) => {
