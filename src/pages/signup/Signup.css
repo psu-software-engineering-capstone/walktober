@@ -1,7 +1,4 @@
-.signup {
-    --background: url(../../assets/Walktober-graphic.png) center top;
-}
-
+.signup,
 .signupForm {
     --background: url(../../assets/Walktober-graphic.png) center top;
 }
