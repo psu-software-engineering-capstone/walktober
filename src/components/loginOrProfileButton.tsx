@@ -1,4 +1,5 @@
 /* eslint-disable multiline-ternary */
+/* eslint-disable @typescript-eslint/ban-types */
 import React, { ReactElement, useContext } from 'react';
 import { IonButton, IonIcon } from '@ionic/react';
 import AuthContext from '../store/auth-context';
@@ -7,7 +8,7 @@ import { useHistory } from 'react-router';
 const LoginOrProfileButton: React.FC<{}> = (): ReactElement => {
   const ctx = useContext(AuthContext);
   const history = useHistory();
-  return ctx.isLoggedIn ? (
+  return ctx.user ? (
     <IonButton
       class="loginHomeButton"
       onClick={() => {

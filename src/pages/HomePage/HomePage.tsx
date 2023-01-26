@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable multiline-ternary */
 import React, { useState, useContext } from 'react';
 import {
@@ -26,7 +29,7 @@ interface badgeOutline {
   name: string;
 }
 
-const HomePage: React.FC = () => {
+const HomePage: React.FC = (): any => {
   const ctx = useContext(AuthContext);
   const [steps, setSteps] = useState(0);
   const history = useHistory();
@@ -42,7 +45,7 @@ const HomePage: React.FC = () => {
     // console.log(newValue.value);
   };
 
-  return ctx.isLoggedIn ? (
+  return ctx.user ? (
     <IonPage>
       <IonHeader>
         <IonToolbar>

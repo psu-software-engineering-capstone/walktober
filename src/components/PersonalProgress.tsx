@@ -1,4 +1,5 @@
 /* eslint-disable multiline-ternary */
+/* eslint-disable @typescript-eslint/ban-types */
 import React, { ReactElement, useEffect, useState } from 'react';
 import { IonButton, IonItem, IonProgressBar } from '@ionic/react';
 
