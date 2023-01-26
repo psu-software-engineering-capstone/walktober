@@ -60,10 +60,11 @@ const Signup: React.FC = () => {
       name: newFirstName + ' ' + newLastName,
       badges: [],
       device: '',
-      num_steps: 0,
+      totalStep: 0,
       profile_pic: '',
       team: '',
-      team_leader: false
+      team_leader: false,
+      stepsByDate: []
     });
   };
 
@@ -74,10 +75,11 @@ const Signup: React.FC = () => {
       name: result.user.displayName,
       badges: [],
       device: '',
-      num_steps: 0,
+      totalStep: 0,
       profile_pic: result.user.photoURL,
       team: '',
-      team_leader: false
+      team_leader: false,
+      stepsByDate: []
     });
   };
 
@@ -88,10 +90,11 @@ const Signup: React.FC = () => {
       name: result.givenName + ' ' + result.familyName,
       badges: [],
       device: '',
-      num_steps: 0,
+      totalStep: 0,
       profile_pic: result.imageUrl,
       team: '',
-      team_leader: false
+      team_leader: false,
+      stepsByDate: []
     });
   };
 

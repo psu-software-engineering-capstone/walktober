@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // note to self, use the useEffect hook to pull in data from the server forthe steps logged etc.
 // useEffect will conditinaly run a passed in function, so it will not run with every state change.
 // maybe use isloading useState and render if the user has steps recorded or not with &&&
@@ -68,15 +69,13 @@ const ManualSteps: React.FC = () => {
   const sendNewLog = useCallback(async (newLog: any) => {
     return; // only temporary
     try {
-      const response = await fetch('https://some_firebase_address',
-        {
-          method: 'POST',
-          body: JSON.stringify(newLog),
-          headers: {
-            'Content-Type': 'application/json'
-          }
+      const response = await fetch('https://some_firebase_address', {
+        method: 'POST',
+        body: JSON.stringify(newLog),
+        headers: {
+          'Content-Type': 'application/json'
         }
-      );
+      });
       if (!response.ok) {
         throw new Error('could not update DB with new log');
       }
@@ -84,10 +83,10 @@ const ManualSteps: React.FC = () => {
       console.log(error);
     }
   }, []);
-    // use effect called to load in the data for the logs
-  useEffect(
-    () => { getRecordsFromDB; }
-    , []);
+  // use effect called to load in the data for the logs
+  useEffect(() => {
+    getRecordsFromDB;
+  }, []);
 
   let stepsToLog: number;
   let date: Date;
@@ -96,37 +95,35 @@ const ManualSteps: React.FC = () => {
   let minDate: Date;
   let maxDate: Date;
 
-  function DisplayRecords (): any {
+  function DisplayRecords(): any {
     if (stepLogs.length > 0) {
       return (
-                <>
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol>Date:</IonCol>
-                            <IonCol>Steps:</IonCol>
-                        </IonRow>
+        <>
+          <IonGrid>
+            <IonRow>
+              <IonCol>Date:</IonCol>
+              <IonCol>Steps:</IonCol>
+            </IonRow>
 
-                        {
-                            stepLogs.map(item => (
-                                <IonRow key={Math.random()}>
-                                    <IonCol>{item.time.toLocaleDateString('en-US')}</IonCol>
-                                    <IonCol>{item.stepsLogged}</IonCol>
-                                </IonRow>
-                            ))
-                        }
-                    </IonGrid>
-                </>
+            {stepLogs.map((item) => (
+              <IonRow key={Math.random()}>
+                <IonCol>{item.time.toLocaleDateString('en-US')}</IonCol>
+                <IonCol>{item.stepsLogged}</IonCol>
+              </IonRow>
+            ))}
+          </IonGrid>
+        </>
       );
     } else {
       return (
-                <>
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol>Date:</IonCol>
-                            <IonCol>Steps:</IonCol>
-                        </IonRow>
-                    </IonGrid>
-                </>
+        <>
+          <IonGrid>
+            <IonRow>
+              <IonCol>Date:</IonCol>
+              <IonCol>Steps:</IonCol>
+            </IonRow>
+          </IonGrid>
+        </>
       );
     }
   }
@@ -135,15 +132,14 @@ const ManualSteps: React.FC = () => {
     event.preventDefault();
     const stepsFromForm = document.querySelector('#steps');
     const timeFromForm = document.querySelector('#time');
-    if ((stepsFromForm != null) && (timeFromForm != null)) {
+    if (stepsFromForm != null && timeFromForm != null) {
       // date = new Date((timeFromForm as HTMLInputElement).value.toString().replace(/-/g, '\/')); need to test if this gets mad at me in new change
-      date = new Date((timeFromForm as HTMLInputElement).value.toString().replace(/-/g, '/'));
-      stepsToLog = Number(((stepsFromForm as HTMLInputElement).value).toString());
+      date = new Date(
+        (timeFromForm as HTMLInputElement).value.toString().replace(/-/g, '/')
+      );
+      stepsToLog = Number((stepsFromForm as HTMLInputElement).value.toString());
       setStepLogs((prev) => {
-        return [
-          ...prev,
-          { time: date, stepsLogged: stepsToLog }
-        ];
+        return [...prev, { time: date, stepsLogged: stepsToLog }];
       });
     }
     console.log((stepsFromForm as HTMLInputElement).value);
@@ -155,45 +151,51 @@ const ManualSteps: React.FC = () => {
   };
 
   return (
-        <>
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle>
-                        Steps log
-                    </IonTitle>
-                </IonToolbar>
-            </IonHeader>
+    <>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Steps log</IonTitle>
+        </IonToolbar>
+      </IonHeader>
 
-            <IonContent className="ion-padding">
-                <form id='stepLog' onSubmit={(event: React.FormEvent) => submitHandler(event)}>
-                    <IonItem>
-                        <IonLabel position="floating">Number of steps</IonLabel>
-                        <IonInput min='1' id='steps' type="number" onInput={
-                            (event: any) => {
-                              // if (storeSteps(event) == false) {
-                              /* Print an error msg */
-
-                              // }
-                            }
-                        }></IonInput>
-                        <IonRouterLink slot="helper" href="./stepsCalculator">Need help calculating steps?</IonRouterLink>
-                    </IonItem>
-                    <IonItem>
-                        <IonLabel position="floating"></IonLabel>
-                        <IonInput id='time' type="date" onInput={
-                            (event: any) => {
-                              // storeNewDate(event);
-                            }
-                        }></IonInput>
-                    </IonItem>
-                    <IonCol>
-                        <IonButton type="submit">Submit</IonButton>
-                    </IonCol>
-                </form>
-                <IonItem>{DisplayRecords()}</IonItem>
-
-            </IonContent>
-        </>
+      <IonContent className="ion-padding">
+        <form
+          id="stepLog"
+          onSubmit={(event: React.FormEvent) => submitHandler(event)}
+        >
+          <IonItem>
+            <IonLabel position="floating">Number of steps</IonLabel>
+            <IonInput
+              min="1"
+              id="steps"
+              type="number"
+              onInput={(event: any) => {
+                // if (storeSteps(event) == false) {
+                /* Print an error msg */
+                // }
+              }}
+            ></IonInput>
+            <IonRouterLink slot="helper" href="./stepsCalculator">
+              Need help calculating steps?
+            </IonRouterLink>
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating"></IonLabel>
+            <IonInput
+              id="time"
+              type="date"
+              onInput={(event: any) => {
+                // storeNewDate(event);
+              }}
+            ></IonInput>
+          </IonItem>
+          <IonCol>
+            <IonButton type="submit">Submit</IonButton>
+          </IonCol>
+        </form>
+        <IonItem>{DisplayRecords()}</IonItem>
+      </IonContent>
+    </>
   );
 };
 
