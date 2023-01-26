@@ -1,9 +1,5 @@
 import { addCircleOutline, paperPlaneOutline } from 'ionicons/icons';
-import {
-  IonIcon,
-  IonButton,
-  IonInput
-} from '@ionic/react';
+import { IonIcon, IonButton, IonInput } from '@ionic/react';
 import './ChatInput.scss';
 
 const ChatInput: React.FC = () => {

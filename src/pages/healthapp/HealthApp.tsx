@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -6,11 +7,15 @@ import {
   IonHeader,
   IonPage,
   IonTitle,
-  IonToolbar
-  , IonButton
+  IonToolbar,
+  IonButton
 } from '@ionic/react';
 import './HealthApp.css';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
+import { auth, FirestoreDB } from '../../firebase';
+import { doc } from 'firebase/firestore';
+import { useHistory } from 'react-router';
+import { updateDoc } from 'firebase/firestore';
 
 const HealthApp: React.FC = () => {
   const available = async () => {
@@ -44,7 +49,26 @@ const HealthApp: React.FC = () => {
       .catch((error: any) => alert(JSON.stringify(error)));
   };
 
-  const readSteps = async () => {
+  // const readSteps = async () => {
+  //   const date = new Date();
+  //   const stepOptions = {
+  //     startDate: new Date(date.getFullYear(), date.getMonth(), 1),
+  //     endDate: new Date(),
+  //     unit: 'count',
+  //     sampleType: 'HKQuantityTypeIdentifierStepCount'
+  //   };
+  //   await HealthKit.querySampleType(stepOptions)
+  //     .then((data: any) => {
+  //       const totalStep = data.reduce(
+  //         (a: any, b: { quantity: any }) => a + b.quantity,
+  //         0
+  //       );
+  //       alert(JSON.stringify(totalStep));
+  //     })
+  //     .catch((error: any) => alert(JSON.stringify(error)));
+  // };
+
+  const updateSteps = async () => {
     const date = new Date();
     const stepOptions = {
       startDate: new Date(date.getFullYear(), date.getMonth(), 1),
@@ -53,11 +77,37 @@ const HealthApp: React.FC = () => {
       sampleType: 'HKQuantityTypeIdentifierStepCount'
     };
     await HealthKit.querySampleType(stepOptions)
-      .then((data: any) => {
-        const totalStep = data.reduce((a: any, b: { quantity: any }) => a + b.quantity, 0);
-        alert(JSON.stringify(totalStep));
+      .then(async (data: any) => {
+        const stepsByDate = [];
+        let totalStep = 0;
+        for (let i = 0; i < data.length; i++) {
+          const current = data[i];
+          const date = current.startDate.toString().slice(0, 10);
+          const steps = current.quantity;
+          totalStep += current.quantity;
+          stepsByDate[i] = { date, steps };
+        }
+        await updateCurrentUser(stepsByDate, totalStep);
+        alert('Steps Updated!');
       })
       .catch((error: any) => alert(JSON.stringify(error)));
+  };
+
+  const updateCurrentUser = async (stepsByDate: any, totalStep: any) => {
+    if (auth.currentUser == null) {
+      alert('You are not looged in!');
+      useHistory().push("/login");
+      return;
+    }
+    const currentUserRef = doc(
+      FirestoreDB,
+      'users',
+      auth.currentUser.email as string
+    );
+    await updateDoc(currentUserRef, {
+      stepsByDate: stepsByDate,
+      totalStep: totalStep
+    });
   };
 
   return (
@@ -83,8 +133,8 @@ const HealthApp: React.FC = () => {
         <IonButton expand="block" onClick={checkAuthStatus}>
           Check Auth Status
         </IonButton>
-        <IonButton expand="block" onClick={readSteps}>
-          Read Step Count
+        <IonButton expand="block" onClick={updateSteps}>
+          Update Step Count
         </IonButton>
         <h2>Fitbit</h2>
         <h2>Garmin</h2>
@@ -101,3 +151,4 @@ const HealthApp: React.FC = () => {
 };
 
 export default HealthApp;
+

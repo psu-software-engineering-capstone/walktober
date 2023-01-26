@@ -1,15 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   IonButton,
-  IonCol,
   IonContent,
   IonCard,
   IonCardContent,
   IonCardHeader,
-  IonCardTitle,
   IonIcon,
   IonInput,
   IonItem,
@@ -20,19 +19,20 @@ import {
   IonHeader,
   isPlatform
 } from '@ionic/react';
-import { logoGoogle } from 'ionicons/icons';
+import { eye, eyeOff, logoGoogle } from 'ionicons/icons';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signInWithCredential
 } from 'firebase/auth';
 import { FirestoreDB, auth } from '../../firebase';
-import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
 import { doc, getDoc } from 'firebase/firestore';
 import './login.css';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import smallLogo from '../../assets/Walktober.png';
 
 const Login: React.FC = () => {
   // for routing //
@@ -46,6 +46,7 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [isTouched, setIsTouched] = useState(false);
   const [isValid, setIsValid] = useState<boolean>();
+  const [passwordShown, setPasswordShown] = useState(false);
 
   // email validation functionality //
   const validateEmail = (email: string) => {
@@ -54,12 +55,17 @@ const Login: React.FC = () => {
     );
   };
 
-  // validate the email input //
+  // validates input as non-empty email address //
   const validate = (ev: Event) => {
     const value = (ev.target as HTMLInputElement).value;
     setIsValid(undefined);
     if (value === '') return;
     validateEmail(value) !== null ? setIsValid(true) : setIsValid(false);
+  };
+
+  // toggle password visibility
+  const togglePasswordVisibility = () => {
+    setPasswordShown(!passwordShown);
   };
 
   // mark the email input as touched //
@@ -71,9 +77,36 @@ const Login: React.FC = () => {
   const signInWithGoogle = async () => {
     // web //
     if (!isPlatform('capacitor')) {
-      await signInWithPopup(auth, provider)
-        .then(async (result) => {
+      signInWithPopup(auth, provider)
+        .then(async (result: { user: { email: string } }) => {
           const dbRef = doc(FirestoreDB, 'users', result.user.email as string);
+          const dbSnap = await getDoc(dbRef);
+          if (dbSnap.exists()) {
+            alert('Sign-in successful');
+            history.push('/app');
+          } else {
+            void auth.signOut();
+            alert(
+              'This email is not a Walktober account. Please sign-up first.'
+            );
+          }
+        })
+        .catch((error: unknown) => {
+          console.log(error);
+          alert(error);
+        });
+      // ios & android //
+    } else {
+      void GoogleAuth.signOut();
+      await GoogleAuth.signIn()
+        .then(async (result) => {
+          const idToken = result.authentication.idToken;
+          const credential = GoogleAuthProvider.credential(idToken);
+          signInWithCredential(auth, credential).catch((error: any) => {
+            console.log(error);
+            alert(error);
+          });
+          const dbRef = doc(FirestoreDB, 'users', result.email);
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('Sign-in successful');
@@ -89,61 +122,42 @@ const Login: React.FC = () => {
           console.log(error);
           alert(error);
         });
-    // ios & android //
-    } else {
-      await GoogleAuth.signIn()
-        .then(async (result) => {
-          void FirebaseAuthentication.signInWithGoogle(
-            result.authentication.idToken,
-            result.authentication.accessToken
-          );
-          const dbRef = doc(FirestoreDB, 'users', result.email);
-          const dbSnap = await getDoc(dbRef);
-          if (dbSnap.exists()) {
-            alert('Sign-in successful');
-            history.push('/app');
-          } else {
-            await GoogleAuth.signOut();
-            await FirebaseAuthentication.signOut();
-            alert(
-              'This email is not a Walktober account. Please sign-up first.'
-            );
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          alert(error);
-        });
     }
   };
 
   // sign in with email and password (web & ios & android) //
-  const signInEmailPassword = async () => {
-    await signInWithEmailAndPassword(auth, email, password)
-      .then((data) => {
+  const signInEmailPassword = () => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((data: unknown) => {
         console.log(data);
         alert('Sign-in successful');
         history.push('/app');
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         console.log(error);
         alert(error);
       });
   };
 
-  // move to signup button //
+  // move to signup button
   const moveToSignup = () => {
     history.push('/signup');
+  };
+
+  // move to forgot password page //
+  const moveToForgotPassword = () => {
+    history.push('/password/reset');
   };
 
   return (
     <IonPage>
       <IonHeader></IonHeader>
-      <IonContent fullscreen>
-        <IonCard>
+      <IonContent fullscreen className="login">
+        <IonCard className="right">
           <IonCardHeader>
-            <IonCardTitle>Login</IonCardTitle>
+            <img alt="Walktober logo" src={smallLogo} />
           </IonCardHeader>
+
           <IonCardContent>
             <IonItem
               fill="solid"
@@ -165,23 +179,48 @@ const Login: React.FC = () => {
             </IonItem>
 
             <IonItem fill="solid">
-              <IonLabel position="floating">Password input</IonLabel>
+              <IonLabel position="floating">Password</IonLabel>
               <IonInput
-                type="password"
+                type={passwordShown ? 'text' : 'password'}
                 onIonInput={(event: any) => setPassword(event.target.value)}
               ></IonInput>
-              <IonRouterLink slot="helper" href="#">
-                Forgot Password?
-              </IonRouterLink>
+              <IonIcon
+                icon={passwordShown ? eyeOff : eye}
+                slot="end"
+                onClick={togglePasswordVisibility}
+              ></IonIcon>
             </IonItem>
 
-            <IonCol>
-              <IonButton onClick={signInEmailPassword}>Login</IonButton>
-              <IonButton onClick={signInWithGoogle} color="tertiary">
-                <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign in with Google
-              </IonButton>
-              <IonButton onClick={moveToSignup}>New User?</IonButton>
-            </IonCol>
+            <IonRouterLink
+              slot="helper"
+              href="/password/reset"
+              onClick={moveToForgotPassword}
+            >
+              <u>Forgot Password?</u>
+            </IonRouterLink>
+
+            <IonButton expand="block" onClick={signInEmailPassword}>
+              Login
+            </IonButton>
+            <h2 className="or-divider">
+              <span>OR</span>
+            </h2>
+            <IonButton
+              expand="block"
+              onClick={signInWithGoogle}
+              color="tertiary"
+            >
+              <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign in with Google
+            </IonButton>
+          </IonCardContent>
+        </IonCard>
+
+        <IonCard className="left">
+          <IonCardContent className="no-account">
+            Don&apos;t have an account?
+            <IonButton expand="block" onClick={moveToSignup} color="success">
+              Create new account
+            </IonButton>
           </IonCardContent>
         </IonCard>
       </IonContent>

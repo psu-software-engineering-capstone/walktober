@@ -5,15 +5,23 @@ import {
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
-  IonTabs
+  IonTabs,
+  isPlatform
 } from '@ionic/react';
 import { ellipse, square, triangle } from 'ionicons/icons';
+
+/* Pages */
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
 import HealthApp from './pages/healthapp/HealthApp';
+import TeamCreation from './pages/TeamCreation';
+
+/* Theming */
+import './theme/app.scss';
 
 const Dashboard: React.FC = () => {
+  const tabsVisible = isPlatform('android') || isPlatform('ios');
   return (
     <IonTabs>
       <IonRouterOutlet>
@@ -21,11 +29,12 @@ const Dashboard: React.FC = () => {
         <Route exact path="/app/tab2" component={Tab2} />
         <Route exact path="/app/tab3" component={Tab3} />
         <Route exact path="/app/healthapp" component={HealthApp} />
+        <Route exact path="/app/teamcreation" component={TeamCreation} />
         <Route exact path="/app">
           <Redirect to="/app/tab1" />
         </Route>
       </IonRouterOutlet>
-      <IonTabBar slot="bottom">
+      <IonTabBar slot="bottom" className={tabsVisible ? '' : 'hidden'}>
         <IonTabButton tab="tab1" href="/app/tab1">
           <IonIcon icon={triangle} />
           <IonLabel>Tab 1</IonLabel>
@@ -41,6 +50,10 @@ const Dashboard: React.FC = () => {
         <IonTabButton tab="healthapp" href="/app/healthapp">
           <IonIcon icon={square} />
           <IonLabel>Health App Integration</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="teamcreation" href="/app/teamcreation">
+          <IonIcon icon={square} />
+          <IonLabel>Team Creation</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>

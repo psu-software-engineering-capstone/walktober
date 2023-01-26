@@ -7,7 +7,9 @@ module.exports = {
   },
   extends: [
     'plugin:react/recommended',
-    'standard-with-typescript'
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended'
   ],
   overrides: [
     {
@@ -16,17 +18,24 @@ module.exports = {
         semi: ['error', 'always'],
         '@typescript-eslint/semi': ['error', 'always'],
         'react/react-in-jsx-scope': 'off',
-        'react/jsx-uses-react': 'off'
+        'react/jsx-uses-react': 'off',
+        '@typescript-eslint/no-empty-function': 'off',
+        "@typescript-eslint/consistent-type-imports": "off"
       }
     }
   ],
   parserOptions: {
     ecmaVersion: 'latest',
+    "ecmaFeatures": {
+      "jsx": true
+    },
     sourceType: 'module',
-    project: ['./tsconfig.json', '*', '*.*.*']
+    project: ['./tsconfig.json', '*', '*.*.*'],
+    tsconfigRootDir: __dirname
   },
   plugins: [
-    'react'
+    'react',
+    '@typescript-eslint'
   ],
   rules: {
     semi: ['error', 'always'],

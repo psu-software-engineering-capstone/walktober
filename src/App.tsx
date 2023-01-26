@@ -1,20 +1,11 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Redirect, Route } from 'react-router-dom';
-import {
-  IonApp,
-  IonIcon,
-  IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  setupIonicReact
-} from '@ionic/react';
+import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Login from './pages/login/login';
 import Signup from './pages/signup/Signup';
+import ForgotPassword from './pages/forgotpassword/forgotpassword';
 import Dashboard from './Dashboard';
 import Profile from './pages/profile/Profile';
 
@@ -38,19 +29,33 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 
 import { useEffect } from 'react';
+import { useAuthContext } from './store/auth-context';
 import { auth } from './firebase';
-import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
-import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 
 setupIonicReact();
 
-function App () {
-  // auto signout when the app is launched
+function App() {
+  const { user, loading } = useAuthContext();
+
   useEffect(() => {
     void auth.signOut();
-    void FirebaseAuthentication.signOut();
-    void GoogleAuth.signOut();
   }, []);
+
+  useEffect(() => {
+    if (user !== null) {
+      console.log('auth state: logged in');
+    } else {
+      console.log('auth state: logged out');
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (loading === true) {
+      console.log('loading state: true');
+    } else {
+      console.log('loading state: false');
+    }
+  }, [loading]);
 
   return (
     <IonApp>
@@ -58,8 +63,9 @@ function App () {
         <IonRouterOutlet>
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
+          <Route exact path="/password/reset" component={ForgotPassword} />
           <Route exact path="/profile" component={Profile} />
-          {/* cannot have exact here */}          
+          {/* cannot have exact here */}
           <Route path="/app" component={Dashboard} />
           <Route exact path="/">
             <Redirect to="/login" />
