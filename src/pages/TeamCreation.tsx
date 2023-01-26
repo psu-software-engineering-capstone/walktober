@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -88,7 +89,7 @@ const TeamCreation: React.FC = () => {
         await updateTeamMembers();
         await setAvgSteps();
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         console.error('Error writing document: ', error);
       });
   };
@@ -129,10 +130,10 @@ const TeamCreation: React.FC = () => {
       where('team', '==', newTeamName)
     );
     const querySnap = await getDocs(q);
-    querySnap.forEach((doc) => {
+    querySnap.forEach((doc: { data: () => any }) => {
       const data = doc.data();
-      if (data.num_steps) {
-        sum += data.num_steps as number;
+      if (data.totalStep) {
+        sum += data.totalStep as number;
         count++;
       }
     });
@@ -140,7 +141,7 @@ const TeamCreation: React.FC = () => {
     const dbSnap = await getDoc(dbRef);
     if (dbSnap.exists()) {
       const data = dbSnap.data();
-      sum += data.num_steps as number;
+      sum += data.totalStep as number;
       count++;
     }
     if (sum === 0) {

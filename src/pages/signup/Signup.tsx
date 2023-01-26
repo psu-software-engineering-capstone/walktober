@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -24,7 +25,6 @@ import { FirestoreDB, auth } from '../../firebase';
 import {
   signInWithPopup,
   GoogleAuthProvider,
-  UserCredential,
   createUserWithEmailAndPassword,
   signInWithCredential
 } from 'firebase/auth';
@@ -60,24 +60,26 @@ const Signup: React.FC = () => {
       name: newFirstName + ' ' + newLastName,
       badges: [],
       device: '',
-      num_steps: 0,
+      totalStep: 0,
       profile_pic: '',
       team: '',
-      team_leader: false
+      team_leader: false,
+      stepsByDate: []
     });
   };
 
   // user creation with google authentication (web) //
-  const createUserWithGoogleAuth = (result: UserCredential) => {
+  const createUserWithGoogleAuth = (result: any) => {
     void setDoc(doc(FirestoreDB, 'users', result.user.email as string), {
       email: result.user.email,
       name: result.user.displayName,
       badges: [],
       device: '',
-      num_steps: 0,
+      totalStep: 0,
       profile_pic: result.user.photoURL,
       team: '',
-      team_leader: false
+      team_leader: false,
+      stepsByDate: []
     });
   };
 
@@ -88,10 +90,11 @@ const Signup: React.FC = () => {
       name: result.givenName + ' ' + result.familyName,
       badges: [],
       device: '',
-      num_steps: 0,
+      totalStep: 0,
       profile_pic: result.imageUrl,
       team: '',
-      team_leader: false
+      team_leader: false,
+      stepsByDate: []
     });
   };
 
@@ -100,29 +103,30 @@ const Signup: React.FC = () => {
     // web //
     if (!isPlatform('capacitor')) {
       signInWithPopup(auth, provider)
-        .then(async (result) => {
+        .then(async (result: { user: { email: string } }) => {
           const dbRef = doc(FirestoreDB, 'users', result.user.email as string);
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('There is already an existing account under this email');
+            void auth.signOut();
           } else {
             alert('Sign-up successful');
             createUserWithGoogleAuth(result);
             history.push('/login');
           }
         })
-        .catch((error) => {
+        .catch((error: unknown) => {
           console.log(error);
           alert(error);
         });
-    // ios & android //
+      // ios & android //
     } else {
       void GoogleAuth.signOut();
       await GoogleAuth.signIn()
         .then(async (result) => {
           const idToken = result.authentication.idToken;
           const credential = GoogleAuthProvider.credential(idToken);
-          signInWithCredential(auth, credential).catch((error) => {
+          signInWithCredential(auth, credential).catch((error: unknown) => {
             console.log(error);
             alert(error);
           });
@@ -130,7 +134,7 @@ const Signup: React.FC = () => {
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('There is already an existing account under this email');
-            void GoogleAuth.signOut();
+            void auth.signOut();
           } else {
             alert('Sign-up successful');
             createUserWithGoogleAuthMobile(result);
@@ -148,13 +152,13 @@ const Signup: React.FC = () => {
   const signUpEmailPassword = () => {
     if (newPassword === newConfirmPassword) {
       createUserWithEmailAndPassword(auth, newEmail, newPassword)
-        .then((data) => {
+        .then((data: unknown) => {
           createUser();
           console.log(data);
           alert('Sign-up successful');
           history.push('/login');
         })
-        .catch((error) => {
+        .catch((error: unknown) => {
           console.log(error);
           alert(error);
         });
@@ -175,7 +179,10 @@ const Signup: React.FC = () => {
         <IonCard>
           <IonCardHeader>
             <img alt="Walktober logo" src={logo} />
-            <IonCardTitle class="ion-text-center">Sign up for the free 31-day walking challenge! Open to the entire PSU community.</IonCardTitle>
+            <IonCardTitle class="ion-text-center">
+              Sign up for the free 31-day walking challenge! Open to the entire
+              PSU community.
+            </IonCardTitle>
           </IonCardHeader>
 
           <IonCardContent>
@@ -222,7 +229,11 @@ const Signup: React.FC = () => {
                   name="password"
                   onIonChange={(e) => setNewPassword(e.target.value as string)}
                 ></IonInput>
-                <IonIcon icon={passwordShown ? eyeOff : eye} slot="end" onClick={togglePasswordVisibility}></IonIcon>
+                <IonIcon
+                  icon={passwordShown ? eyeOff : eye}
+                  slot="end"
+                  onClick={togglePasswordVisibility}
+                ></IonIcon>
               </IonItem>
 
               <IonItem>
@@ -232,24 +243,35 @@ const Signup: React.FC = () => {
                 <IonInput
                   type={passwordShown ? 'text' : 'password'}
                   name="cpassword"
-                  onIonChange={(e) => setNewConfirmPassword(e.target.value as string)}
+                  onIonChange={(e) =>
+                    setNewConfirmPassword(e.target.value as string)
+                  }
                 ></IonInput>
-                <IonIcon icon={passwordShown ? eyeOff : eye} slot="end" onClick={togglePasswordVisibility}></IonIcon>
+                <IonIcon
+                  icon={passwordShown ? eyeOff : eye}
+                  slot="end"
+                  onClick={togglePasswordVisibility}
+                ></IonIcon>
               </IonItem>
               <div>&nbsp;</div>
-              <IonButton expand="block" onClick={signUpEmailPassword}>Sign up</IonButton>
-              <h2 className="or-divider"><span>OR</span></h2>
+              <IonButton expand="block" onClick={signUpEmailPassword}>
+                Sign up
+              </IonButton>
+              <h2 className="or-divider">
+                <span>OR</span>
+              </h2>
               <IonButton expand="block" onClick={googleAuth} color="tertiary">
                 <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign up with Google
               </IonButton>
-
             </IonList>
           </IonCardContent>
         </IonCard>
 
         <IonCard className="left">
           <IonCardContent>
-              <IonButton expand="block" onClick={moveToLogin} color="success">Return to Login</IonButton>
+            <IonButton expand="block" onClick={moveToLogin} color="success">
+              Return to Login
+            </IonButton>
           </IonCardContent>
         </IonCard>
       </IonContent>
