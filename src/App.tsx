@@ -7,6 +7,7 @@ import Login from './pages/login/login';
 import Signup from './pages/signup/Signup';
 import ForgotPassword from './pages/forgotpassword/forgotpassword';
 import Dashboard from './Dashboard';
+import Profile from './pages/profile/Profile';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -33,7 +34,7 @@ import { auth } from './firebase';
 
 setupIonicReact();
 
-function App () {
+function App() {
   const { user, loading } = useAuthContext();
 
   useEffect(() => {
@@ -63,6 +64,7 @@ function App () {
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/password/reset" component={ForgotPassword} />
+          <Route exact path="/profile" component={Profile} />
           {/* cannot have exact here */}
           <Route path="/app" component={Dashboard} />
           <Route exact path="/">
@@ -75,5 +77,3 @@ function App () {
 }
 
 export default App;
-
-
