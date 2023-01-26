@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, isPlatform, setupIonicReact } from '@ionic/react';
+import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Login from './pages/login/login';
 import Signup from './pages/signup/Signup';
@@ -28,7 +28,6 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 
 import { useEffect } from 'react';
-import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { useAuthContext } from './store/auth-context';
 import { auth } from './firebase';
 
@@ -38,25 +37,22 @@ function App () {
   const { user, loading } = useAuthContext();
 
   useEffect(() => {
-    if (isPlatform('capacitor')) {
-      void GoogleAuth.signOut();
-      void auth.signOut();
-    } else {
-      void auth.signOut();
-    }
+    void auth.signOut();
   }, []);
 
   useEffect(() => {
     if (user !== null) {
-      alert(JSON.stringify(user));
+      console.log('auth state: logged in');
     } else {
-      alert('Logged Out!');
+      console.log('auth state: logged out');
     }
   }, [user]);
 
   useEffect(() => {
     if (loading === true) {
-      // splash screen //
+      console.log('loading state: true');
+    } else {
+      console.log('loading state: false');
     }
   }, [loading]);
 
@@ -79,4 +75,5 @@ function App () {
 }
 
 export default App;
+
 

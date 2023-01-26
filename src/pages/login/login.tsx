@@ -112,7 +112,7 @@ const Login: React.FC = () => {
             alert('Sign-in successful');
             history.push('/app');
           } else {
-            void GoogleAuth.signOut();
+            void auth.signOut();
             alert(
               'This email is not a Walktober account. Please sign-up first.'
             );
