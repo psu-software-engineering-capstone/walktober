@@ -25,77 +25,77 @@ const IndividualData = [
   {
     name: 'John Doe',
     profile_pic: 'https://example.com/john-doe.jpg',
-    num_steps: 10000
+    totalStep: 10000
   },
   {
     name: 'Jane Smith',
     profile_pic: 'https://example.com/jane-smith.jpg',
-    num_steps: 12000
+    totalStep: 12000
   },
   {
     name: 'Bob Johnson',
     profile_pic: 'https://example.com/bob-johnson.jpg',
-    num_steps: 9000
+    totalStep: 9000
   },
   {
     name: 'Alice Williams',
     profile_pic: 'https://example.com/alice-williams.jpg',
-    num_steps: 14000
+    totalStep: 14000
   },
   {
     name: 'Charlie Brown',
     profile_pic: 'https://example.com/charlie-brown.jpg',
-    num_steps: 8000
+    totalStep: 8000
   },
   {
     name: 'Emily Davis',
     profile_pic: 'https://example.com/emily-davis.jpg',
-    num_steps: 11000
+    totalStep: 11000
   },
   {
     name: 'Michael Martinez',
     profile_pic: 'https://example.com/michael-martinez.jpg',
-    num_steps: 12500
+    totalStep: 12500
   },
   {
     name: 'Jessica Garcia',
     profile_pic: 'https://example.com/jessica-garcia.jpg',
-    num_steps: 9000
+    totalStep: 9000
   },
   {
     name: 'David Rodriguez',
     profile_pic: 'https://example.com/david-rodriguez.jpg',
-    num_steps: 13000
+    totalStep: 13000
   },
   {
     name: 'Samantha Turner',
     profile_pic: 'https://example.com/samantha-turner.jpg',
-    num_steps: 10000
+    totalStep: 10000
   },
   {
     name: 'Ashley Phillips',
     profile_pic: 'https://example.com/ashley-phillips.jpg',
-    num_steps: 12000
+    totalStep: 12000
   },
   {
     name: 'Brian Lewis',
     profile_pic: 'https://example.com/brian-lewis.jpg',
-    num_steps: 9000
+    totalStep: 9000
   },
   {
     name: 'Amanda Lee',
     profile_pic: 'https://example.com/amanda-lee.jpg',
-    num_steps: 14000
+    totalStep: 14000
   },
   {
     name: 'Justin Scott',
     profile_pic: 'https://example.com/justin-scott.jpg',
-    num_steps: 8000
+    totalStep: 8000
   },
   {
     name: 'Brandon Perez',
     profile_pic: 'https://example.com/brandon-perez.jpg',
-    num_steps: 11000
+    totalStep: 11000
   }
 ];
 

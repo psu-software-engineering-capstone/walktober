@@ -132,8 +132,8 @@ const TeamCreation: React.FC = () => {
     const querySnap = await getDocs(q);
     querySnap.forEach((doc: { data: () => any }) => {
       const data = doc.data();
-      if (data.num_steps) {
-        sum += data.num_steps as number;
+      if (data.totalStep) {
+        sum += data.totalStep as number;
         count++;
       }
     });
@@ -141,7 +141,7 @@ const TeamCreation: React.FC = () => {
     const dbSnap = await getDoc(dbRef);
     if (dbSnap.exists()) {
       const data = dbSnap.data();
-      sum += data.num_steps as number;
+      sum += data.totalStep as number;
       count++;
     }
     if (sum === 0) {
