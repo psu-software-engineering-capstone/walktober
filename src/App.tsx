@@ -7,6 +7,8 @@ import Login from './pages/login/login';
 import Signup from './pages/signup/Signup';
 import ForgotPassword from './pages/forgotpassword/forgotpassword';
 import Dashboard from './Dashboard';
+import HomePage from './pages/HomePage/HomePage';
+import ManualSteps from './pages/manualLoggingSteps/manualLoggingSteps';
 import Profile from './pages/profile/Profile';
 
 /* Core CSS required for Ionic components to work properly */
@@ -67,6 +69,8 @@ function App() {
           <Route exact path="/profile" component={Profile} />
           {/* cannot have exact here */}
           <Route path="/app" component={Dashboard} />
+          <Route exact path="/home" component={user ? HomePage : Dashboard} />
+          <Route exact path={'/manualStepsLogging'} component={ManualSteps} />
           <Route exact path="/">
             <Redirect to="/login" />
           </Route>
