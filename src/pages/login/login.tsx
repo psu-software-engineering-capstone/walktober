@@ -162,7 +162,6 @@ const Login: React.FC = () => {
 
           <IonCardContent>
             <IonItem
-              fill="solid"
               className={`${(isValid ?? false) && 'ion-valid'} ${
                 isValid === false && 'ion-invalid'
               } ${isTouched && 'ion-touched'}` + " signup-card-field"}>
@@ -179,7 +178,7 @@ const Login: React.FC = () => {
               <IonNote slot="error">Invalid email</IonNote>
             </IonItem>
 
-            <IonItem className="signup-card-field" fill="solid">
+            <IonItem className="signup-card-field">
               <IonLabel position="floating">Password</IonLabel>
               <IonInput
                 type={passwordShown ? 'text' : 'password'}
