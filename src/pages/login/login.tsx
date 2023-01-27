@@ -9,6 +9,7 @@ import {
   IonCard,
   IonCardContent,
   IonCardHeader,
+  IonCardTitle,
   IonIcon,
   IonInput,
   IonItem,
@@ -153,18 +154,17 @@ const Login: React.FC = () => {
     <IonPage>
       <IonHeader></IonHeader>
       <IonContent fullscreen className="login">
-        <IonCard className="right">
+        <IonCard className="signup-card">
           <IonCardHeader>
             <img alt="Walktober logo" src={smallLogo} />
+            <IonCardTitle class="ion-text-center">Welcome to Walktober! Please log in to continue!</IonCardTitle>
           </IonCardHeader>
 
           <IonCardContent>
             <IonItem
-              fill="solid"
               className={`${(isValid ?? false) && 'ion-valid'} ${
                 isValid === false && 'ion-invalid'
-              } ${isTouched && 'ion-touched'}`}
-            >
+              } ${isTouched && 'ion-touched'}` + " signup-card-field"}>
               <IonLabel position="floating">Email</IonLabel>
               <IonInput
                 type="email"
@@ -178,7 +178,7 @@ const Login: React.FC = () => {
               <IonNote slot="error">Invalid email</IonNote>
             </IonItem>
 
-            <IonItem fill="solid">
+            <IonItem className="signup-card-field">
               <IonLabel position="floating">Password</IonLabel>
               <IonInput
                 type={passwordShown ? 'text' : 'password'}
@@ -215,7 +215,7 @@ const Login: React.FC = () => {
           </IonCardContent>
         </IonCard>
 
-        <IonCard className="left">
+        <IonCard className={"signup-card" + " bottom"}>
           <IonCardContent className="no-account">
             Don&apos;t have an account?
             <IonButton expand="block" onClick={moveToSignup} color="success">
