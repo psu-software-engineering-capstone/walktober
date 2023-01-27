@@ -176,7 +176,7 @@ const Signup: React.FC = () => {
     <IonPage>
       <IonHeader></IonHeader>
       <IonContent fullscreen className="signup">
-        <IonCard>
+        <IonCard className ="signup-card">
           <IonCardHeader>
             <img alt="Walktober logo" src={logo} />
             <IonCardTitle class="ion-text-center">
@@ -187,7 +187,7 @@ const Signup: React.FC = () => {
 
           <IonCardContent>
             <IonList class="ion-no-padding">
-              <IonItem>
+              <IonItem className="signup-card-field">
                 <IonLabel position="floating" color="primary">
                   Email
                 </IonLabel>
@@ -198,7 +198,7 @@ const Signup: React.FC = () => {
                 ></IonInput>
               </IonItem>
 
-              <IonItem>
+              <IonItem className="signup-card-field">
                 <IonLabel position="floating" color="primary">
                   First Name
                 </IonLabel>
@@ -209,7 +209,7 @@ const Signup: React.FC = () => {
                 ></IonInput>
               </IonItem>
 
-              <IonItem>
+              <IonItem className="signup-card-field">
                 <IonLabel position="floating" color="primary">
                   Last Name
                 </IonLabel>
@@ -220,7 +220,7 @@ const Signup: React.FC = () => {
                 ></IonInput>
               </IonItem>
 
-              <IonItem>
+              <IonItem className="signup-card-field">
                 <IonLabel position="floating" color="primary">
                   Password
                 </IonLabel>
@@ -236,7 +236,7 @@ const Signup: React.FC = () => {
                 ></IonIcon>
               </IonItem>
 
-              <IonItem>
+              <IonItem className="signup-card-field">
                 <IonLabel position="floating" color="primary">
                   Confirm Password
                 </IonLabel>
@@ -267,7 +267,7 @@ const Signup: React.FC = () => {
           </IonCardContent>
         </IonCard>
 
-        <IonCard className="left">
+        <IonCard className={"signup-card " + "bottom"}>
           <IonCardContent>
             <IonButton expand="block" onClick={moveToLogin} color="success">
               Return to Login
