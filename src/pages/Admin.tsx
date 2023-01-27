@@ -147,10 +147,24 @@ const Admin: React.FC = () => {
             </IonHeader>
             <IonContent className="ion-padding">
               <IonItem>
+                <IonLabel>Minimum Team Size</IonLabel>
+                <IonInput type="number"></IonInput>
+              </IonItem>
+              <IonItem>
                 <IonLabel>Maxiumum Team Size</IonLabel>
                 <IonInput type="number"></IonInput>
               </IonItem>
+              <IonItem>
+               <IonButton>Set Team Deadline</IonButton><IonDatetimeButton datetime="datetime"></IonDatetimeButton>
+              </IonItem>
+              <IonItem>
+               <IonButton>Set Registration Deadline</IonButton><IonDatetimeButton datetime="datetime"></IonDatetimeButton>
+              </IonItem>
               <IonButton class="modal-button" size='large' expand='block'>Save Settings</IonButton>
+              
+              <IonModal keepContentsMounted={true} backdropDismiss={false}>
+                <IonDatetime id="datetime"></IonDatetime>
+              </IonModal>
             </IonContent>
           </IonModal>
 
