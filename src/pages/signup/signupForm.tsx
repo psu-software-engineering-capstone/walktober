@@ -55,16 +55,16 @@ const SignupForm: React.FC = () => {
       <IonPage>
         <IonHeader></IonHeader>
         <IonContent fullscreen className="signupForm">
-          <IonCard class="ion-text-center">
+          <IonCard className="signup-card">
             <IonCardHeader>
               <img alt="Walktober logo" src={logo} />
-              <IonCardTitle>Welcome to Walktober! Before we get started, please fill out our registration form!</IonCardTitle>
+              <IonCardTitle class="ion-text-center">Welcome to Walktober! Before we get started, please fill out our registration form!</IonCardTitle>
             </IonCardHeader>
 
             <IonCardContent>
               <IonList class="ion-no-padding">
-                <IonItem>
-                  <IonLabel position="floating" color="primary">
+                <IonItem className="signup-card-field">
+                  <IonLabel position="floating">
                     Email
                   </IonLabel>
                   <IonInput
@@ -74,8 +74,8 @@ const SignupForm: React.FC = () => {
                   ></IonInput>
                 </IonItem>
 
-                <IonItem>
-                  <IonLabel position="floating" color="primary">
+                <IonItem className="signup-card-field">
+                  <IonLabel position="floating">
                     First Name
                   </IonLabel>
                   <IonInput
@@ -85,8 +85,8 @@ const SignupForm: React.FC = () => {
                   ></IonInput>
                 </IonItem>
 
-                <IonItem>
-                  <IonLabel position="floating" color="primary">
+                <IonItem className="signup-card-field">
+                  <IonLabel position="floating">
                     Last Name
                   </IonLabel>
                   <IonInput
@@ -96,8 +96,8 @@ const SignupForm: React.FC = () => {
                   ></IonInput>
                 </IonItem>
 
-                <IonItem>
-                  <IonLabel position="floating" color="primary">What is your affiliation to PSU?</IonLabel>
+                <IonItem className="signup-card-field">
+                  <IonLabel position="floating">What is your affiliation to PSU?</IonLabel>
                     <IonSelect interfaceOptions={affiliationPSUOptions} interface="action-sheet" placeholder="Select One">
                       <IonSelectOption value="student">Student</IonSelectOption>
                       <IonSelectOption value="faculty">Faculty</IonSelectOption>
@@ -107,8 +107,8 @@ const SignupForm: React.FC = () => {
                     </IonSelect>
                 </IonItem>
 
-                <IonItem>
-                  <IonLabel position="floating" color="primary">How did you hear about Walktober?</IonLabel>
+                <IonItem className="signup-card-field">
+                  <IonLabel position="floating">How did you hear about Walktober?</IonLabel>
                     <IonSelect interfaceOptions={hearAboutWalktober} interface="action-sheet" placeholder="Select One">
                       <IonSelectOption value="print-materials">Print Materials</IonSelectOption>
                       <IonSelectOption value="word-of-mouth">Word of Mouth</IonSelectOption>
@@ -118,8 +118,9 @@ const SignupForm: React.FC = () => {
                       <IonSelectOption value="emails">PSU Currently or Virtual Viking Emails</IonSelectOption>
                     </IonSelect>
                 </IonItem>
-                <IonItem>
-                  <IonLabel position="floating" color="primary">How many hours per week are you active?</IonLabel>
+
+                <IonItem className="signup-card-field">
+                  <IonLabel position="floating">How many hours per week are you active?</IonLabel>
                     <IonSelect interfaceOptions={hoursPhysicallyActive} interface="action-sheet" placeholder="Select One">
                       <IonSelectOption value="0">0</IonSelectOption>
                       <IonSelectOption value="1">1</IonSelectOption>
@@ -131,8 +132,9 @@ const SignupForm: React.FC = () => {
                       <IonSelectOption value="7">7+</IonSelectOption>
                     </IonSelect>
                 </IonItem>
-                <IonItem>
-                  <IonLabel position="floating" color="primary">How many minutes of activity per day?</IonLabel>
+
+                <IonItem className="signup-card-field">
+                  <IonLabel position="floating">How many minutes of activity per day?</IonLabel>
                     <IonSelect interfaceOptions={minutesPhysicallyActive} interface="action-sheet" placeholder="Select One">
                       <IonSelectOption value="0-15">0-15</IonSelectOption>
                       <IonSelectOption value="16-30">16-30</IonSelectOption>
@@ -141,8 +143,9 @@ const SignupForm: React.FC = () => {
                       <IonSelectOption value="60+">60+</IonSelectOption>
                     </IonSelect>
                 </IonItem>
-                <IonItem>
-                  <IonLabel position="floating" color="primary">How far do you live from campus?</IonLabel>
+
+                <IonItem className="signup-card-field">
+                  <IonLabel position="floating">How far do you live from campus?</IonLabel>
                     <IonSelect interfaceOptions={distFromCampus} interface="action-sheet" placeholder="Select One">
                       <IonSelectOption value="on-campus">I live on campus</IonSelectOption>
                       <IonSelectOption value="0-5-miles">Within 5 miles of campus</IonSelectOption>
@@ -151,8 +154,9 @@ const SignupForm: React.FC = () => {
                       <IonSelectOption value="25+-miles">25+ miles from campus</IonSelectOption>
                     </IonSelect>
                 </IonItem>
-                <IonItem>
-                <IonLabel position="floating" color="primary">How often do you use the PSU Rec Center?</IonLabel>
+
+                <IonItem className="signup-card-field">
+                  <IonLabel position="floating">How often do you use the PSU Rec Center?</IonLabel>
                     <IonSelect interfaceOptions={recCenterUsage} interface="action-sheet" placeholder="Select One">
                       <IonSelectOption value="never">I have never used the Rec Center</IonSelectOption>
                       <IonSelectOption value="1-3">1-3 times total</IonSelectOption>
@@ -161,7 +165,9 @@ const SignupForm: React.FC = () => {
                       <IonSelectOption value="4+-times-per-week">4+ times per week</IonSelectOption>
                     </IonSelect>
                 </IonItem>
+
                 <div>&nbsp;</div>
+
                 <IonButton expand="block" onClick={submitRegistration}>Complete Registration</IonButton>
               </IonList>
             </IonCardContent>

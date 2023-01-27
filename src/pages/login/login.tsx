@@ -165,8 +165,7 @@ const Login: React.FC = () => {
               fill="solid"
               className={`${(isValid ?? false) && 'ion-valid'} ${
                 isValid === false && 'ion-invalid'
-              } ${isTouched && 'ion-touched'}` + " signup-card-field"}
-            >
+              } ${isTouched && 'ion-touched'}` + " signup-card-field"}>
               <IonLabel position="floating">Email</IonLabel>
               <IonInput
                 type="email"

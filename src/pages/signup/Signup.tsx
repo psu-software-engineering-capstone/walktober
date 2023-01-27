@@ -188,7 +188,7 @@ const Signup: React.FC = () => {
           <IonCardContent>
             <IonList class="ion-no-padding">
               <IonItem className="signup-card-field">
-                <IonLabel position="floating" color="primary">
+                <IonLabel position="floating">
                   Email
                 </IonLabel>
                 <IonInput
@@ -199,7 +199,7 @@ const Signup: React.FC = () => {
               </IonItem>
 
               <IonItem className="signup-card-field">
-                <IonLabel position="floating" color="primary">
+                <IonLabel position="floating">
                   First Name
                 </IonLabel>
                 <IonInput
@@ -210,7 +210,7 @@ const Signup: React.FC = () => {
               </IonItem>
 
               <IonItem className="signup-card-field">
-                <IonLabel position="floating" color="primary">
+                <IonLabel position="floating">
                   Last Name
                 </IonLabel>
                 <IonInput
@@ -221,7 +221,7 @@ const Signup: React.FC = () => {
               </IonItem>
 
               <IonItem className="signup-card-field">
-                <IonLabel position="floating" color="primary">
+                <IonLabel position="floating">
                   Password
                 </IonLabel>
                 <IonInput
@@ -237,7 +237,7 @@ const Signup: React.FC = () => {
               </IonItem>
 
               <IonItem className="signup-card-field">
-                <IonLabel position="floating" color="primary">
+                <IonLabel position="floating">
                   Confirm Password
                 </IonLabel>
                 <IonInput
@@ -253,13 +253,17 @@ const Signup: React.FC = () => {
                   onClick={togglePasswordVisibility}
                 ></IonIcon>
               </IonItem>
+
               <div>&nbsp;</div>
+
               <IonButton expand="block" onClick={signUpEmailPassword}>
                 Sign up
               </IonButton>
+
               <h2 className="or-divider">
                 <span>OR</span>
               </h2>
+
               <IonButton expand="block" onClick={googleAuth} color="tertiary">
                 <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign up with Google
               </IonButton>
