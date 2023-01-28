@@ -88,6 +88,7 @@ const ManualSteps: React.FC = () => {
 
   function DisplayRecords(): any {
     if (stepLogs.length > 0) {
+      stepLogs.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       return (
         <>
           <IonGrid>
