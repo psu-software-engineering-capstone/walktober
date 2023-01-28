@@ -4,6 +4,8 @@ $img-size: 36px + ($elem-margin * 2);
 .chat-message-container {
     display: grid;
     grid-template-columns: $img-size 1fr;
+    background-color: red;
+    border: 1px solid blue;
 }
 
 .chat-message {
@@ -12,6 +14,11 @@ $img-size: 36px + ($elem-margin * 2);
 
     &:not(.chat-message-sent) {
         background-color: var(--ion-color-light-tint);
+    }
+
+    ion-card {
+      margin: 0;
+      padding: 0;
     }
 
     ion-card-header {
@@ -36,6 +43,7 @@ $img-size: 36px + ($elem-margin * 2);
 }
 
 ion-img {
+  background-color: blue;
     align-self: end;
     margin: $elem-margin 0px ($elem-margin * 2) $elem-margin;
     max-height: $img-size;
