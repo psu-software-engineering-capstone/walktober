@@ -16,6 +16,7 @@ import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
 import HealthApp from './pages/healthapp/HealthApp';
 import TeamCreation from './pages/TeamCreation';
+import TeamHome from './pages/TeamHome';
 
 /* Theming */
 import './theme/app.scss';
@@ -28,6 +29,7 @@ const Dashboard: React.FC = () => {
         <Route exact path="/app/tab1" component={Tab1} />
         <Route exact path="/app/tab2" component={Tab2} />
         <Route exact path="/app/tab3" component={Tab3} />
+        <Route exact path="/app/team" component={TeamHome} />
         <Route exact path="/app/healthapp" component={HealthApp} />
         <Route exact path="/app/teamcreation" component={TeamCreation} />
         <Route exact path="/app">
@@ -54,6 +56,10 @@ const Dashboard: React.FC = () => {
         <IonTabButton tab="teamcreation" href="/app/teamcreation">
           <IonIcon icon={square} />
           <IonLabel>Team Creation</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="teamhome" href="/app/team">
+          <IonIcon icon={square} />
+          <IonLabel>My Team</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>

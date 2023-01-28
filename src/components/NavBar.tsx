@@ -35,7 +35,7 @@ const NavBar: React.FC<NavBarProps> = ({ collapse = undefined, children = null }
           {children}
           <div slot="end">
             <NavLink id="home" text="Home" href="/app/tab1" />
-            <NavLink id="team" text="Team" href="/app/tab2" />
+            <NavLink id="team" text="My Team" href="/app/team" />
             <NavLink id="profile" text="Profile" href="/app/profile">
               <NavLink id="logs" text="Logs" href="/app/tab3" />
             </NavLink>
