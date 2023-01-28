@@ -45,7 +45,7 @@ const HomePage: React.FC = (): any => {
     // console.log(newValue.value);
   };
 
-  return ctx.user ? (
+  return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
@@ -121,8 +121,6 @@ const HomePage: React.FC = (): any => {
         </IonGrid>
       </IonContent>
     </IonPage>
-  ) : (
-    history.push('/login')
   );
 };
 
