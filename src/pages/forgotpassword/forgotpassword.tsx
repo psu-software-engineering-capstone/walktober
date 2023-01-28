@@ -74,17 +74,17 @@ const ForgotPassword: React.FC = () => {
       <IonPage>
         <IonHeader></IonHeader>
         <IonContent fullscreen className="login">
-          <IonCard class="ion-text-center" className="right">
+          <IonCard className="signup-card">
             <IonCardHeader>
-              <IonCardTitle>Forgot Your Password?</IonCardTitle>
-              <IonCardSubtitle>Enter your email, and we&apos;ll send you a link to get back into your account.</IonCardSubtitle>
+              <IonCardTitle className="ion-text-center">Forgot Your Password?</IonCardTitle>
+              <IonCardSubtitle className="ion-text-center">Enter your email, and we&apos;ll send you a link to get back into your account.</IonCardSubtitle>
             </IonCardHeader>
             <IonCardContent>
               <IonItem
                 fill="solid"
                 className={`${(isValid ?? false) && 'ion-valid'} ${
                   isValid === false && 'ion-invalid'
-                } ${isTouched && 'ion-touched'}`} >
+                } ${isTouched && 'ion-touched'}` + " signup-card-field"} >
                 <IonLabel position="floating">Email</IonLabel>
                 <IonInput
                   type="email"
@@ -105,7 +105,7 @@ const ForgotPassword: React.FC = () => {
             </IonCardContent>
           </IonCard>
 
-          <IonCard className="left">
+          <IonCard className={"signup-card " + "bottom"}>
             <IonCardContent className="no-account">Don&apos;t have an account?
                 <IonButton expand="block" onClick={moveToSignup} color="success">Create new account</IonButton>
             </IonCardContent>

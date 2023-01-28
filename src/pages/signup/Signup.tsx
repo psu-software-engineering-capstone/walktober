@@ -60,10 +60,11 @@ const Signup: React.FC = () => {
       name: newFirstName + ' ' + newLastName,
       badges: [],
       device: '',
-      num_steps: 0,
+      totalStep: 0,
       profile_pic: '',
       team: '',
-      team_leader: false
+      team_leader: false,
+      stepsByDate: []
     });
   };
 
@@ -74,10 +75,11 @@ const Signup: React.FC = () => {
       name: result.user.displayName,
       badges: [],
       device: '',
-      num_steps: 0,
+      totalStep: 0,
       profile_pic: result.user.photoURL,
       team: '',
-      team_leader: false
+      team_leader: false,
+      stepsByDate: []
     });
   };
 
@@ -88,10 +90,11 @@ const Signup: React.FC = () => {
       name: result.givenName + ' ' + result.familyName,
       badges: [],
       device: '',
-      num_steps: 0,
+      totalStep: 0,
       profile_pic: result.imageUrl,
       team: '',
-      team_leader: false
+      team_leader: false,
+      stepsByDate: []
     });
   };
 
@@ -105,6 +108,7 @@ const Signup: React.FC = () => {
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('There is already an existing account under this email');
+            void auth.signOut();
           } else {
             alert('Sign-up successful');
             createUserWithGoogleAuth(result);
@@ -130,7 +134,7 @@ const Signup: React.FC = () => {
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('There is already an existing account under this email');
-            void GoogleAuth.signOut();
+            void auth.signOut();
           } else {
             alert('Sign-up successful');
             createUserWithGoogleAuthMobile(result);
@@ -172,7 +176,7 @@ const Signup: React.FC = () => {
     <IonPage>
       <IonHeader></IonHeader>
       <IonContent fullscreen className="signup">
-        <IonCard>
+        <IonCard className ="signup-card">
           <IonCardHeader>
             <img alt="Walktober logo" src={logo} />
             <IonCardTitle class="ion-text-center">
@@ -183,8 +187,8 @@ const Signup: React.FC = () => {
 
           <IonCardContent>
             <IonList class="ion-no-padding">
-              <IonItem>
-                <IonLabel position="floating" color="primary">
+              <IonItem className="signup-card-field">
+                <IonLabel position="floating">
                   Email
                 </IonLabel>
                 <IonInput
@@ -194,8 +198,8 @@ const Signup: React.FC = () => {
                 ></IonInput>
               </IonItem>
 
-              <IonItem>
-                <IonLabel position="floating" color="primary">
+              <IonItem className="signup-card-field">
+                <IonLabel position="floating">
                   First Name
                 </IonLabel>
                 <IonInput
@@ -205,8 +209,8 @@ const Signup: React.FC = () => {
                 ></IonInput>
               </IonItem>
 
-              <IonItem>
-                <IonLabel position="floating" color="primary">
+              <IonItem className="signup-card-field">
+                <IonLabel position="floating">
                   Last Name
                 </IonLabel>
                 <IonInput
@@ -216,8 +220,8 @@ const Signup: React.FC = () => {
                 ></IonInput>
               </IonItem>
 
-              <IonItem>
-                <IonLabel position="floating" color="primary">
+              <IonItem className="signup-card-field">
+                <IonLabel position="floating">
                   Password
                 </IonLabel>
                 <IonInput
@@ -232,8 +236,8 @@ const Signup: React.FC = () => {
                 ></IonIcon>
               </IonItem>
 
-              <IonItem>
-                <IonLabel position="floating" color="primary">
+              <IonItem className="signup-card-field">
+                <IonLabel position="floating">
                   Confirm Password
                 </IonLabel>
                 <IonInput
@@ -250,12 +254,16 @@ const Signup: React.FC = () => {
                 ></IonIcon>
               </IonItem>
 
+              <div>&nbsp;</div>
+
               <IonButton expand="block" onClick={signUpEmailPassword}>
                 Sign up
               </IonButton>
+
               <h2 className="or-divider">
                 <span>OR</span>
               </h2>
+
               <IonButton expand="block" onClick={googleAuth} color="tertiary">
                 <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign up with Google
               </IonButton>
@@ -263,7 +271,7 @@ const Signup: React.FC = () => {
           </IonCardContent>
         </IonCard>
 
-        <IonCard className="left">
+        <IonCard className={"signup-card " + "bottom"}>
           <IonCardContent>
             <IonButton expand="block" onClick={moveToLogin} color="success">
               Return to Login

@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, isPlatform, setupIonicReact } from '@ionic/react';
+import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Login from './pages/login/login';
 import Signup from './pages/signup/Signup';
+import SignupForm from './pages/signup/signupForm';
 import ForgotPassword from './pages/forgotpassword/forgotpassword';
 import Dashboard from './Dashboard';
+import HomePage from './pages/HomePage/HomePage';
+import ManualSteps from './pages/manualLoggingSteps/manualLoggingSteps';
+import Profile from './pages/profile/Profile';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -27,36 +31,34 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useAuthContext } from './store/auth-context';
 import { auth } from './firebase';
-import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
-import AuthContext from './store/auth-context';
 
 setupIonicReact();
 
-function App () {
-  const authCtx = useContext(AuthContext);
+function App() {
+  const { user, loading } = useAuthContext();
 
-  // auto signout //
   useEffect(() => {
-    if (isPlatform('capacitor')) {
-      void GoogleAuth.signOut();
-      void auth.signOut();
-      authCtx.onLogout();
-    } else {
-      window.addEventListener('beforeunload', () => {
-        void auth.signOut();
-        authCtx.onLogout();
-        console.log('User signed out');
-      });
-      return () => {
-        window.removeEventListener('beforeunload', () => {
-          void auth.signOut();
-          authCtx.onLogout();
-        });
-      };
-    }
+    void auth.signOut();
   }, []);
+
+  useEffect(() => {
+    if (user !== null) {
+      console.log('auth state: logged in');
+    } else {
+      console.log('auth state: logged out');
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (loading === true) {
+      console.log('loading state: true');
+    } else {
+      console.log('loading state: false');
+    }
+  }, [loading]);
 
   return (
     <IonApp>
@@ -64,9 +66,13 @@ function App () {
         <IonRouterOutlet>
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
+          <Route exact path="/register" component={SignupForm} />
           <Route exact path="/password/reset" component={ForgotPassword} />
+          <Route exact path="/profile" component={Profile} />
           {/* cannot have exact here */}
           <Route path="/app" component={Dashboard} />
+          <Route exact path="/home" component={user ? HomePage : Dashboard} />
+          <Route exact path={'/manualStepsLogging'} component={ManualSteps} />
           <Route exact path="/">
             <Redirect to="/login" />
           </Route>
