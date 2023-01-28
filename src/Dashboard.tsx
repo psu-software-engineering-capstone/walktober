@@ -17,7 +17,7 @@ import Tab3 from './pages/Tab3';
 import HealthApp from './pages/healthapp/HealthApp';
 import HomePage from './pages/HomePage/HomePage';
 import TeamCreation from './pages/TeamCreation';
-import TeamHome from './pages/TeamHome';
+import TeamHome from './pages/TeamHome/TeamHome';
 
 /* Theming */
 import './theme/app.scss';

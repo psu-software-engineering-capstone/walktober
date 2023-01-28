@@ -1,6 +1,6 @@
 import { IonContent, IonPage, IonTitle } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
-import NavBar from '../components/NavBar';
+import NavBar from '../../components/NavBar';
 import './TeamHome.scss';
 
 const TeamHome: React.FC = () => {
