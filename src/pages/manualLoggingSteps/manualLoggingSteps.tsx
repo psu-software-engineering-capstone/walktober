@@ -1,9 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// note to self, use the useEffect hook to pull in data from the server forthe steps logged etc.
-// useEffect will conditinaly run a passed in function, so it will not run with every state change.
-// maybe use isloading useState and render if the user has steps recorded or not with &&&
-
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import {
   IonButton,
   IonCol,
@@ -19,84 +15,80 @@ import {
   IonRow
 } from '@ionic/react';
 import './manualLoggingSteps.css';
-
-// function Record (date: Date, stepslogged: number): {} {
-//   return { time: Date, stepslogged };
-// }
-
-const DummyDataForTesting = [
-  { time: new Date('2021-05-05'), stepsLogged: 100 },
-  { time: new Date('2021-06-05'), stepsLogged: 200 },
-  { time: new Date('2021-07-05'), stepsLogged: 300 },
-  { time: new Date('2021-08-05'), stepsLogged: 400 },
-  { time: new Date('2021-09-05'), stepsLogged: 500 },
-  { time: new Date('2021-10-05'), stepsLogged: 600 },
-  { time: new Date('2021-11-05'), stepsLogged: 700 },
-  { time: new Date('2021-12-05'), stepsLogged: 800 }
-];
+import { auth, FirestoreDB } from '../../firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { updateDoc } from 'firebase/firestore';
 
 const ManualSteps: React.FC = () => {
-  const getRecordsFromDB = useCallback(async () => {
-    // datesFromDB = callToDB();
-    // stepsFromDB = callToDB();
-    /* for number of dates in datesFromDB{
-        let newReccord: Record;
-        newRecord.time = dates.at(index);
-        newRecord.stepsWaled = stepds.at(index);
-        pastRecords.append(newReccord);
-    }
-    */
-    return; // only temporary
-    try {
-      const response = await fetch('https://some_firebase_address');
-      if (!response.ok) {
-        throw new Error('couldnt get data');
+  interface StepLog {
+    date: string;
+    steps: number;
+  }
+
+  const [manualDate, setManualDate] = useState('');
+  const [manualSteps, setManualSteps] = useState(0);
+  const [stepLogs, setStepLogs] = useState<StepLog[]>([]);
+  const [totalStep, setTotalStep] = useState(0);
+  const [updateTotalStep, setUpdateTotalStep] = useState(false);
+  const [updateDB, setUpdateDB] = useState(false);
+  
+  useEffect(() => {
+    getRecordsFromDB();
+  }, []);
+
+  useEffect(() => {
+    if (updateTotalStep === true) {
+      let sum = 0;
+      for (let i = 0; i < stepLogs.length; i++) {
+        sum += stepLogs[i].steps;
       }
-      const data = await response.json();
-      const transformedData = data.results.map((item: any) => {
-        return {
-          logDate: item.logedDate,
-          steps: item.logedSteps
-        };
-      });
-    } catch (error: any) {
-      console.log(error);
+      setTotalStep(sum);
+      setUpdateDB(true);
+    }
+    setUpdateTotalStep(false);
+  }, [updateTotalStep]);
+
+  useEffect(() => {
+    if (updateDB === true) {
+      sendNewLog();
+    }
+    setUpdateDB(false);
+  }, [updateDB]);
+
+  const getRecordsFromDB = async () => {
+    if (auth.currentUser === null) {
+      alert('You are not logged in!');
       return;
     }
-    // here we would add the data to databasse etc
-  }, []);
+    let stepsByDate = [];
+    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
+    const dbSnap = await getDoc(dbRef);
+    stepsByDate = dbSnap.data().stepsByDate;
+    setStepLogs(stepsByDate);
+  };
 
-  const sendNewLog = useCallback(async (newLog: any) => {
-    return; // only temporary
-    try {
-      const response = await fetch('https://some_firebase_address', {
-        method: 'POST',
-        body: JSON.stringify(newLog),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      if (!response.ok) {
-        throw new Error('could not update DB with new log');
-      }
-    } catch (error: any) {
-      console.log(error);
+  const sendNewLog = async () => {
+    if (auth.currentUser === null) {
+      alert('You are not logged in!');
+      return;
     }
-  }, []);
-  // use effect called to load in the data for the logs
-  useEffect(() => {
-    getRecordsFromDB;
-  }, []);
-
-  let stepsToLog: number;
-  let date: Date;
-  const [stepLogs, setStepLogs] = useState(DummyDataForTesting); // state update so that we load in new step logs when steps are added.
-  // let pastRecordDates: Array: Date;
-  let minDate: Date;
-  let maxDate: Date;
+    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
+    await updateDoc(dbRef, {
+      stepsByDate: stepLogs,
+      totalStep: totalStep
+    })
+      .then(() => {
+        console.log(stepLogs, totalStep);
+        alert('Steps Updated!');
+      })
+      .catch((error: any) => {
+        alert(error);
+      });
+  };
 
   function DisplayRecords(): any {
     if (stepLogs.length > 0) {
+      stepLogs.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       return (
         <>
           <IonGrid>
@@ -107,8 +99,8 @@ const ManualSteps: React.FC = () => {
 
             {stepLogs.map((item) => (
               <IonRow key={Math.random()}>
-                <IonCol>{item.time.toLocaleDateString('en-US')}</IonCol>
-                <IonCol>{item.stepsLogged}</IonCol>
+                <IonCol>{item.date}</IonCol>
+                <IonCol>{item.steps}</IonCol>
               </IonRow>
             ))}
           </IonGrid>
@@ -128,26 +120,29 @@ const ManualSteps: React.FC = () => {
     }
   }
 
-  const submitHandler = (event: React.FormEvent): void => {
+  const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    const stepsFromForm = document.querySelector('#steps');
-    const timeFromForm = document.querySelector('#time');
-    if (stepsFromForm != null && timeFromForm != null) {
-      // date = new Date((timeFromForm as HTMLInputElement).value.toString().replace(/-/g, '\/')); need to test if this gets mad at me in new change
-      date = new Date(
-        (timeFromForm as HTMLInputElement).value.toString().replace(/-/g, '/')
-      );
-      stepsToLog = Number((stepsFromForm as HTMLInputElement).value.toString());
-      setStepLogs((prev) => {
-        return [...prev, { time: date, stepsLogged: stepsToLog }];
-      });
+    if (!manualSteps || !manualDate) {
+      alert('Please enter a valid number of steps and date');
+      return;
     }
-    console.log((stepsFromForm as HTMLInputElement).value);
-    console.log((timeFromForm as HTMLInputElement).value);
-    const theStepsLogForm = document.querySelector('#stepLog');
-    if (theStepsLogForm != null) {
-      (theStepsLogForm as HTMLFormElement).reset();
-    }
+    setStepLogs((prev) => {
+      const existingIndex = prev.findIndex((log) => log.date === manualDate);
+      if (existingIndex !== -1) {
+        const newLogs = prev.map((log, index) => {
+          if (index === existingIndex) {
+            return { ...log, steps: log.steps + manualSteps };
+          }
+          return log;
+        });
+        return newLogs;
+      }
+      return [...prev, { date: manualDate, steps: manualSteps }];
+    });
+    (event.target as HTMLFormElement).reset();
+    setManualSteps(0);
+    setManualDate('');
+    setUpdateTotalStep(true);
   };
 
   return (
@@ -161,7 +156,9 @@ const ManualSteps: React.FC = () => {
       <IonContent className="ion-padding">
         <form
           id="stepLog"
-          onSubmit={(event: React.FormEvent) => submitHandler(event)}
+          onSubmit={(event: React.FormEvent) => {
+            submitHandler(event);
+          }}
         >
           <IonItem>
             <IonLabel position="floating">Number of steps</IonLabel>
@@ -170,9 +167,7 @@ const ManualSteps: React.FC = () => {
               id="steps"
               type="number"
               onInput={(event: any) => {
-                // if (storeSteps(event) == false) {
-                /* Print an error msg */
-                // }
+                setManualSteps(Number(event.target.value));
               }}
             ></IonInput>
             <IonRouterLink slot="helper" href="./stepsCalculator">
@@ -185,7 +180,9 @@ const ManualSteps: React.FC = () => {
               id="time"
               type="date"
               onInput={(event: any) => {
-                // storeNewDate(event);
+                setManualDate(
+                  new Date(event.target.value).toISOString().slice(0, 10)
+                );
               }}
             ></IonInput>
           </IonItem>
