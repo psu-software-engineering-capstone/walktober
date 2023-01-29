@@ -100,7 +100,7 @@ const Login: React.FC = () => {
     } else {
       void GoogleAuth.signOut();
       await GoogleAuth.signIn()
-        .then(async (result) => {
+        .then(async (result: any) => {
           const idToken = result.authentication.idToken;
           const credential = GoogleAuthProvider.credential(idToken);
           signInWithCredential(auth, credential).catch((error: any) => {
@@ -119,7 +119,7 @@ const Login: React.FC = () => {
             );
           }
         })
-        .catch((error) => {
+        .catch((error: any) => {
           console.log(error);
           alert(error);
         });
@@ -157,14 +157,19 @@ const Login: React.FC = () => {
         <IonCard className="signup-card">
           <IonCardHeader>
             <img alt="Walktober logo" src={smallLogo} />
-            <IonCardTitle class="ion-text-center">Welcome to Walktober! Please log in to continue!</IonCardTitle>
+            <IonCardTitle class="ion-text-center">
+              Welcome to Walktober! Please log in to continue!
+            </IonCardTitle>
           </IonCardHeader>
 
           <IonCardContent>
             <IonItem
-              className={`${(isValid ?? false) && 'ion-valid'} ${
-                isValid === false && 'ion-invalid'
-              } ${isTouched && 'ion-touched'}` + " signup-card-field"}>
+              className={
+                `${(isValid ?? false) && 'ion-valid'} ${
+                  isValid === false && 'ion-invalid'
+                } ${isTouched && 'ion-touched'}` + ' signup-card-field'
+              }
+            >
               <IonLabel position="floating">Email</IonLabel>
               <IonInput
                 type="email"
@@ -215,7 +220,7 @@ const Login: React.FC = () => {
           </IonCardContent>
         </IonCard>
 
-        <IonCard className={"signup-card" + " bottom"}>
+        <IonCard className={'signup-card' + ' bottom'}>
           <IonCardContent className="no-account">
             Don&apos;t have an account?
             <IonButton expand="block" onClick={moveToSignup} color="success">
