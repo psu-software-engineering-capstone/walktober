@@ -21,6 +21,7 @@ import {
   IonInput,
   IonButton
 } from '@ionic/react';
+import WidgetBot from '@widgetbot/react-embed';
 import AuthContext from '../../store/auth-context';
 import { useHistory } from 'react-router';
 import LoginOrProfileButton from '../../components/loginOrProfileButton';
@@ -50,7 +51,7 @@ const HomePage: React.FC = (): any => {
     history.push("/app/manualsteps");
   };
 
-  return ctx.user ? (
+  return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
@@ -111,7 +112,12 @@ const HomePage: React.FC = (): any => {
         <IonGrid>
           <IonRow>
             <IonCol>Location for leaderboards</IonCol>
-            <IonCol>Loaction for chat</IonCol>
+            <IonCol>
+              <WidgetBot className="discord-widget"
+                server="1068966007886069841"
+                channel="1068966009106600110"
+              />
+            </IonCol>
             <IonCol>
               <IonRow>
                 <IonCol>Location for anouncments</IonCol>
@@ -126,8 +132,6 @@ const HomePage: React.FC = (): any => {
         </IonGrid>
       </IonContent>
     </IonPage>
-  ) : (
-    history.push('/login')
   );
 };
 
