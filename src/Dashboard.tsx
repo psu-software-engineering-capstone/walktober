@@ -53,10 +53,6 @@ const Dashboard: React.FC = () => {
           <IonIcon icon={triangle} />
           <IonLabel>Health App</IonLabel>
         </IonTabButton>
-        {/* <IonTabButton tab="teamcreation" href="/app/teamcreation">
-          <IonIcon icon={triangle} />
-          <IonLabel>Team Creation</IonLabel>
-        </IonTabButton> */}
         <IonTabButton tab="team" href="/app/team">
           <IonIcon icon={square} />
           <IonLabel>Team</IonLabel>

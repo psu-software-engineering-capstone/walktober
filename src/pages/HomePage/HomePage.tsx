@@ -27,6 +27,7 @@ import { useHistory } from 'react-router';
 import LoginOrProfileButton from '../../components/loginOrProfileButton';
 import HomePageMenuItems from '../../components/HomePageMenuItems';
 import PersonalProgress from '../../components/PersonalProgress';
+
 interface badgeOutline {
   name: string;
 }
