@@ -18,7 +18,8 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonInput
+  IonInput,
+  IonButton
 } from '@ionic/react';
 import AuthContext from '../../store/auth-context';
 import { useHistory } from 'react-router';
@@ -43,6 +44,10 @@ const HomePage: React.FC = (): any => {
       setSteps(newSteps);
     }
     // console.log(newValue.value);
+  };
+
+  const moveToManualSteps = () => {
+    history.push("/app/manualsteps");
   };
 
   return ctx.user ? (
@@ -86,7 +91,7 @@ const HomePage: React.FC = (): any => {
             </IonRow>
             <IonRow>
               click
-              <a href="/manualStepsLogging">here</a>
+              <IonButton onClick={moveToManualSteps}>here</IonButton>
               to see previous logs
             </IonRow>
           </IonGrid>
