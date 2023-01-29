@@ -36,20 +36,6 @@ const PersonalProgress: React.FC<{}> = (): ReactElement => {
         )}
       </IonItem>
       <IonProgressBar value={1 - stepsLeft / goalSteps / 1}></IonProgressBar>
-      {devmode ? (
-        <IonButton
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-          onClick={(event: any) => {
-            setStepsLeft((prev) => {
-              return prev - 10000;
-            });
-          }}
-        >
-          press to increase steps
-        </IonButton>
-      ) : (
-        ''
-      )}
     </>
   );
 };
