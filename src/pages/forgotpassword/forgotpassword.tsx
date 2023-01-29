@@ -62,12 +62,12 @@ const ForgotPassword: React.FC = () => {
 
   // move to signup button //
   const moveToSignup = () => {
-    history.push('/signup');
+    history.push("/signup");
   };
 
   // move to login button //
   const moveToLogin = () => {
-    history.push('/login');
+    history.push("/login");
   };
 
   return (

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable multiline-ternary */
-import React, { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import {
   IonContent,
   IonHeader,
@@ -22,7 +22,7 @@ import {
   IonButton
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
-import AuthContext from '../../store/auth-context';
+// import AuthContext from '../../store/auth-context';
 import { useHistory } from 'react-router';
 import LoginOrProfileButton from '../../components/loginOrProfileButton';
 import HomePageMenuItems from '../../components/HomePageMenuItems';
@@ -32,7 +32,7 @@ interface badgeOutline {
 }
 
 const HomePage: React.FC = (): any => {
-  const ctx = useContext(AuthContext);
+  // const ctx = useContext(AuthContext);
   const [steps, setSteps] = useState(0);
   const history = useHistory();
   const [badges, setBadges] = useState(Array<badgeOutline>);
