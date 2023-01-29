@@ -101,7 +101,7 @@ const HomePage: React.FC = (): any => {
         {/* below is only for development testing purposes */}
         <IonGrid>
           <IonRow>
-            <IonCol>Location for leaderboards</IonCol>
+            <IonCol className="boxSize">Location for leaderboards</IonCol>
             <IonCol className="boxSize">
               <WidgetBot
                 className="discord-widget"
@@ -111,10 +111,10 @@ const HomePage: React.FC = (): any => {
             </IonCol>
             <IonCol>
               <IonRow>
-                <IonCol>Location for anouncments</IonCol>
+                <IonCol className="boxSize">Location for anouncments</IonCol>
               </IonRow>
               <IonRow>
-                <IonCol>
+                <IonCol className="boxSize">
                   Location for personal Progress: <PersonalProgress />
                 </IonCol>
               </IonRow>
