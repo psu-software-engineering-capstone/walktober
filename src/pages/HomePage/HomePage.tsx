@@ -27,6 +27,8 @@ import { useHistory } from 'react-router';
 import LoginOrProfileButton from '../../components/loginOrProfileButton';
 import HomePageMenuItems from '../../components/HomePageMenuItems';
 import PersonalProgress from '../../components/PersonalProgress';
+import NavBar from '../../components/NavBar';
+import './HomePage.css';
 interface badgeOutline {
   name: string;
 }
@@ -48,27 +50,15 @@ const HomePage: React.FC = (): any => {
   };
 
   const moveToManualSteps = () => {
-    history.push("/app/manualsteps");
+    history.push('/app/manualsteps');
   };
 
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
-          <IonButtons id="homePage">
-            <IonMenuButton autoHide={false}></IonMenuButton>
-          </IonButtons>
-          <IonTitle slot="secondary">Home Page</IonTitle>
-          <LoginOrProfileButton />
-        </IonToolbar>
+        <NavBar />
       </IonHeader>
       <IonContent fullscreen={true} className="ion-padding">
-        <IonMenu contentId="homePage">
-          <IonToolbar>
-            <IonTitle>Menue</IonTitle>
-          </IonToolbar>
-          <HomePageMenuItems />
-        </IonMenu>
         <IonItem>
           <IonGrid>
             <IonRow>
@@ -112,8 +102,9 @@ const HomePage: React.FC = (): any => {
         <IonGrid>
           <IonRow>
             <IonCol>Location for leaderboards</IonCol>
-            <IonCol>
-              <WidgetBot className="discord-widget"
+            <IonCol className="boxSize">
+              <WidgetBot
+                className="discord-widget"
                 server="1068966007886069841"
                 channel="1068966009106600110"
               />

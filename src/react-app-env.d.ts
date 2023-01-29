@@ -4,3 +4,4 @@ declare module 'ionicons/icons';
 declare module 'firebase/auth';
 declare module 'firebase/firestore';
 declare module 'react-chartjs-2';
+declare module '@widgetbot/react-embed';
