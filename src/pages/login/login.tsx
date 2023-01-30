@@ -84,7 +84,7 @@ const Login: React.FC = () => {
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('Sign-in successful');
-            history.push("/app");
+            history.push('/app');
           } else {
             void auth.signOut();
             alert(
@@ -100,25 +100,27 @@ const Login: React.FC = () => {
     } else {
       void GoogleAuth.signOut();
       await GoogleAuth.signIn()
-        .then(async (result: any) => {
-          const idToken = result.authentication.idToken;
-          const credential = GoogleAuthProvider.credential(idToken);
-          signInWithCredential(auth, credential).catch((error: any) => {
-            console.log(error);
-            alert(error);
-          });
-          const dbRef = doc(FirestoreDB, 'users', result.email);
-          const dbSnap = await getDoc(dbRef);
-          if (dbSnap.exists()) {
-            alert('Sign-in successful');
-            history.push("/app");
-          } else {
-            void auth.signOut();
-            alert(
-              'This email is not a Walktober account. Please sign-up first.'
-            );
+        .then(
+          async (result: { authentication: { idToken: any }; email: any }) => {
+            const idToken = result.authentication.idToken;
+            const credential = GoogleAuthProvider.credential(idToken);
+            signInWithCredential(auth, credential).catch((error: any) => {
+              console.log(error);
+              alert(error);
+            });
+            const dbRef = doc(FirestoreDB, 'users', result.email);
+            const dbSnap = await getDoc(dbRef);
+            if (dbSnap.exists()) {
+              alert('Sign-in successful');
+              history.push('/app');
+            } else {
+              void auth.signOut();
+              alert(
+                'This email is not a Walktober account. Please sign-up first.'
+              );
+            }
           }
-        })
+        )
         .catch((error: any) => {
           console.log(error);
           alert(error);
@@ -132,7 +134,7 @@ const Login: React.FC = () => {
       .then((data: unknown) => {
         console.log(data);
         alert('Sign-in successful');
-        history.push("/app");
+        history.push('/app');
       })
       .catch((error: unknown) => {
         console.log(error);
@@ -142,12 +144,12 @@ const Login: React.FC = () => {
 
   // move to signup button
   const moveToSignup = () => {
-    history.push("/signup");
+    history.push('/signup');
   };
 
   // move to forgot password page //
   const moveToForgotPassword = () => {
-    history.push("/password/reset");
+    history.push('/password/reset');
   };
 
   return (
