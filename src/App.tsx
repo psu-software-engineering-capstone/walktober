@@ -8,9 +8,6 @@ import Signup from './pages/signup/Signup';
 import SignupForm from './pages/signup/signupForm';
 import ForgotPassword from './pages/forgotpassword/forgotpassword';
 import Dashboard from './Dashboard';
-import HomePage from './pages/HomePage/HomePage';
-import ManualSteps from './pages/manualLoggingSteps/manualLoggingSteps';
-import Profile from './pages/profile/Profile';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -33,16 +30,16 @@ import './theme/variables.css';
 
 import { useEffect } from 'react';
 import { useAuthContext } from './store/auth-context';
-import { auth } from './firebase';
+// import { auth } from './firebase';
 
 setupIonicReact();
 
 function App() {
   const { user, loading } = useAuthContext();
 
-  useEffect(() => {
-    void auth.signOut();
-  }, []);
+  // useEffect(() => {
+  //   void auth.signOut();
+  // }, []);
 
   useEffect(() => {
     if (user !== null) {
@@ -68,11 +65,7 @@ function App() {
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/register" component={SignupForm} />
           <Route exact path="/password/reset" component={ForgotPassword} />
-          <Route exact path="/profile" component={Profile} />
-          {/* cannot have exact here */}
           <Route path="/app" component={Dashboard} />
-          <Route exact path="/home" component={user ? HomePage : Dashboard} />
-          <Route exact path={'/manualStepsLogging'} component={ManualSteps} />
           <Route exact path="/">
             <Redirect to="/login" />
           </Route>
