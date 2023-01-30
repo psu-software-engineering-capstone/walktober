@@ -12,7 +12,8 @@ import {
   IonTitle,
   IonToolbar,
   IonGrid,
-  IonRow
+  IonRow,
+  IonPage
 } from '@ionic/react';
 import './manualLoggingSteps.css';
 import { auth, FirestoreDB } from '../../firebase';
@@ -146,13 +147,12 @@ const ManualSteps: React.FC = () => {
   };
 
   return (
-    <>
+    <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Steps log</IonTitle>
         </IonToolbar>
       </IonHeader>
-
       <IonContent className="ion-padding">
         <form
           id="stepLog"
@@ -192,7 +192,7 @@ const ManualSteps: React.FC = () => {
         </form>
         <IonItem>{DisplayRecords()}</IonItem>
       </IonContent>
-    </>
+    </IonPage>
   );
 };
 

@@ -112,7 +112,7 @@ const Signup: React.FC = () => {
           } else {
             alert('Sign-up successful');
             createUserWithGoogleAuth(result);
-            history.push('/login');
+            history.push("/login");
           }
         })
         .catch((error: unknown) => {
@@ -138,7 +138,7 @@ const Signup: React.FC = () => {
           } else {
             alert('Sign-up successful');
             createUserWithGoogleAuthMobile(result);
-            history.push('/login');
+            history.push("/login");
           }
         })
         .catch((error: any) => {
@@ -156,7 +156,7 @@ const Signup: React.FC = () => {
           createUser();
           console.log(data);
           alert('Sign-up successful');
-          history.push('/login');
+          history.push("/login");
         })
         .catch((error: unknown) => {
           console.log(error);
@@ -169,7 +169,7 @@ const Signup: React.FC = () => {
 
   // move to login button //
   const moveToLogin = () => {
-    history.push('/login');
+    history.push("/login");
   };
 
   return (
