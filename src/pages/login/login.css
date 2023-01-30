@@ -5,13 +5,14 @@
 .or-divider{
     overflow: hidden;
     text-align: center;
-    color: white;
     padding: 10px;
 }
+
 .or-divider > span{
    position: relative;
    display: inline-block;
 }
+
 .or-divider > span:before, .or-divider > span:after{
    content: '';
    position: absolute;
@@ -20,18 +21,15 @@
    width: calc(100% + 175px);
    margin: 0 20px;
 }
+
 .or-divider > span:before{
    right: 100%;
 }
+
 .or-divider > span:after{
    left: 100%;
 }
 
 .no-account {
    text-align: center;
-   color: white;
-}
-
-.left {
-   margin-top: 20px;
 }

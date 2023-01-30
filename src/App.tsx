@@ -5,6 +5,7 @@ import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Login from './pages/login/login';
 import Signup from './pages/signup/Signup';
+import SignupForm from './pages/signup/signupForm';
 import ForgotPassword from './pages/forgotpassword/forgotpassword';
 import Dashboard from './Dashboard';
 
@@ -27,23 +28,34 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-import { useContext, useEffect } from 'react';
-import { auth } from './firebase';
-import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
-import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
-import AuthContext from './store/auth-context';
+import { useEffect } from 'react';
+import { useAuthContext } from './store/auth-context';
+// import { auth } from './firebase';
 
 setupIonicReact();
 
-function App () {
-  const authCtx = useContext(AuthContext);
-  // auto signout when the app is launched
+function App() {
+  const { user, loading } = useAuthContext();
+
+  // useEffect(() => {
+  //   void auth.signOut();
+  // }, []);
+
   useEffect(() => {
-    void auth.signOut();
-    void FirebaseAuthentication.signOut();
-    void GoogleAuth.signOut();
-    authCtx.onLogout();
-  }, []);
+    if (user !== null) {
+      console.log('auth state: logged in');
+    } else {
+      console.log('auth state: logged out');
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (loading === true) {
+      console.log('loading state: true');
+    } else {
+      console.log('loading state: false');
+    }
+  }, [loading]);
 
   return (
     <IonApp>
@@ -51,8 +63,8 @@ function App () {
         <IonRouterOutlet>
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
+          <Route exact path="/register" component={SignupForm} />
           <Route exact path="/password/reset" component={ForgotPassword} />
-          {/* cannot have exact here */}
           <Route path="/app" component={Dashboard} />
           <Route exact path="/">
             <Redirect to="/login" />

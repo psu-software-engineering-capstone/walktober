@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
@@ -8,6 +9,7 @@ import {
   IonCard,
   IonCardContent,
   IonCardHeader,
+  IonCardTitle,
   IonIcon,
   IonInput,
   IonItem,
@@ -19,24 +21,21 @@ import {
   isPlatform
 } from '@ionic/react';
 import { eye, eyeOff, logoGoogle } from 'ionicons/icons';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signInWithCredential
 } from 'firebase/auth';
 import { FirestoreDB, auth } from '../../firebase';
-import { FirebaseAuthentication } from '@awesome-cordova-plugins/firebase-authentication';
 import { doc, getDoc } from 'firebase/firestore';
 import './login.css';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import smallLogo from '../../assets/Walktober.png';
-import AuthContext from '../../store/auth-context';
-
 
 const Login: React.FC = () => {
-  const ctx = useContext(AuthContext);
   // for routing //
   const history = useHistory();
 
@@ -57,14 +56,11 @@ const Login: React.FC = () => {
     );
   };
 
-  // front end //
+  // validates input as non-empty email address //
   const validate = (ev: Event) => {
     const value = (ev.target as HTMLInputElement).value;
-
     setIsValid(undefined);
-
     if (value === '') return;
-
     validateEmail(value) !== null ? setIsValid(true) : setIsValid(false);
   };
 
@@ -82,50 +78,48 @@ const Login: React.FC = () => {
   const signInWithGoogle = async () => {
     // web //
     if (!isPlatform('capacitor')) {
-      await signInWithPopup(auth, provider)
-        .then(async (result) => {
+      signInWithPopup(auth, provider)
+        .then(async (result: { user: { email: string } }) => {
           const dbRef = doc(FirestoreDB, 'users', result.user.email as string);
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('Sign-in successful');
-            // note - change auth context here
-            ctx.onLogin();
-            // testing stuffs
-            history.push('/app');
+            history.push("/app");
           } else {
-            await auth.signOut();
-            alert('This email is not a Walktober account. Please sign-up first.');
+            void auth.signOut();
+            alert(
+              'This email is not a Walktober account. Please sign-up first.'
+            );
           }
         })
-        .catch((error) => {
+        .catch((error: unknown) => {
           console.log(error);
           alert(error);
         });
       // ios & android //
     } else {
-      await GoogleAuth.signOut();
-      await FirebaseAuthentication.signOut();
+      void GoogleAuth.signOut();
       await GoogleAuth.signIn()
-        .then(async (result) => {
-          await FirebaseAuthentication.signInWithGoogle(
-            result.authentication.idToken,
-            result.authentication.accessToken
-          );
+        .then(async (result: any) => {
+          const idToken = result.authentication.idToken;
+          const credential = GoogleAuthProvider.credential(idToken);
+          signInWithCredential(auth, credential).catch((error: any) => {
+            console.log(error);
+            alert(error);
+          });
           const dbRef = doc(FirestoreDB, 'users', result.email);
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('Sign-in successful');
-            // note - change auth context here
-            ctx.onLogin();
-            // testing stuffs
-            history.push('/app');
+            history.push("/app");
           } else {
-            await GoogleAuth.signOut();
-            await FirebaseAuthentication.signOut();
-            alert('This email is not a Walktober account. Please sign-up first.');
+            void auth.signOut();
+            alert(
+              'This email is not a Walktober account. Please sign-up first.'
+            );
           }
         })
-        .catch((error) => {
+        .catch((error: any) => {
           console.log(error);
           alert(error);
         });
@@ -133,17 +127,14 @@ const Login: React.FC = () => {
   };
 
   // sign in with email and password (web & ios & android) //
-  const signInEmailPassword = async () => {
-    await signInWithEmailAndPassword(auth, email, password)
-      .then((data) => {
+  const signInEmailPassword = () => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((data: unknown) => {
         console.log(data);
         alert('Sign-in successful');
-        // note - change auth context here
-        ctx.onLogin();
-        // testing stuffs
-        history.push('/app');
+        history.push("/app");
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         console.log(error);
         alert(error);
       });
@@ -151,29 +142,34 @@ const Login: React.FC = () => {
 
   // move to signup button
   const moveToSignup = () => {
-    history.push('/signup');
+    history.push("/signup");
   };
 
   // move to forgot password page //
   const moveToForgotPassword = () => {
-    history.push('/password/reset');
+    history.push("/password/reset");
   };
 
   return (
     <IonPage>
       <IonHeader></IonHeader>
       <IonContent fullscreen className="login">
-        <IonCard className="right">
+        <IonCard className="signup-card">
           <IonCardHeader>
             <img alt="Walktober logo" src={smallLogo} />
+            <IonCardTitle class="ion-text-center">
+              Welcome to Walktober! Please log in to continue!
+            </IonCardTitle>
           </IonCardHeader>
 
           <IonCardContent>
             <IonItem
-              fill="solid"
-              className={`${(isValid ?? false) && 'ion-valid'} ${
-                isValid === false && 'ion-invalid'
-              } ${isTouched && 'ion-touched'}`} >
+              className={
+                `${(isValid ?? false) && 'ion-valid'} ${
+                  isValid === false && 'ion-invalid'
+                } ${isTouched && 'ion-touched'}` + ' signup-card-field'
+              }
+            >
               <IonLabel position="floating">Email</IonLabel>
               <IonInput
                 type="email"
@@ -181,40 +177,57 @@ const Login: React.FC = () => {
                   validate(event);
                   setEmail(event.target.value);
                 }}
-                onIonBlur={() => markTouched()} >
-              </IonInput>
+                onIonBlur={() => markTouched()}
+              ></IonInput>
               <IonNote slot="helper">Enter a valid email</IonNote>
               <IonNote slot="error">Invalid email</IonNote>
             </IonItem>
 
-            <IonItem fill="solid">
+            <IonItem className="signup-card-field">
               <IonLabel position="floating">Password</IonLabel>
               <IonInput
                 type={passwordShown ? 'text' : 'password'}
                 onIonInput={(event: any) => setPassword(event.target.value)}
               ></IonInput>
-              <IonIcon icon={passwordShown ? eyeOff : eye} slot="end" onClick={togglePasswordVisibility}></IonIcon>
+              <IonIcon
+                icon={passwordShown ? eyeOff : eye}
+                slot="end"
+                onClick={togglePasswordVisibility}
+              ></IonIcon>
             </IonItem>
 
-            <IonRouterLink slot="helper" href='/password/reset' onClick={moveToForgotPassword}>
+            <IonRouterLink
+              slot="helper"
+              href="/password/reset"
+              onClick={moveToForgotPassword}
+            >
               <u>Forgot Password?</u>
             </IonRouterLink>
 
-            <IonButton expand="block" onClick={signInEmailPassword}>Login</IonButton>
-            <h2 className="or-divider"><span>OR</span></h2>
-            <IonButton expand="block" onClick={signInWithGoogle} color="tertiary">
+            <IonButton expand="block" onClick={signInEmailPassword}>
+              Login
+            </IonButton>
+            <h2 className="or-divider">
+              <span>OR</span>
+            </h2>
+            <IonButton
+              expand="block"
+              onClick={signInWithGoogle}
+              color="tertiary"
+            >
               <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign in with Google
             </IonButton>
-
           </IonCardContent>
         </IonCard>
 
-        <IonCard className="left">
-          <IonCardContent className="no-account">Don&apos;t have an account?
-              <IonButton expand="block" onClick={moveToSignup} color="success">Create new account</IonButton>
+        <IonCard className={'signup-card' + ' bottom'}>
+          <IonCardContent className="no-account">
+            Don&apos;t have an account?
+            <IonButton expand="block" onClick={moveToSignup} color="success">
+              Create new account
+            </IonButton>
           </IonCardContent>
         </IonCard>
-
       </IonContent>
     </IonPage>
   );
