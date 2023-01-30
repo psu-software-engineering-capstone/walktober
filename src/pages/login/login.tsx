@@ -84,7 +84,7 @@ const Login: React.FC = () => {
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('Sign-in successful');
-            history.push("/app");
+            history.push('/app');
           } else {
             void auth.signOut();
             alert(
@@ -100,7 +100,7 @@ const Login: React.FC = () => {
     } else {
       void GoogleAuth.signOut();
       await GoogleAuth.signIn()
-        .then(async (result: any) => {
+        .then(async (result) => {
           const idToken = result.authentication.idToken;
           const credential = GoogleAuthProvider.credential(idToken);
           signInWithCredential(auth, credential).catch((error: any) => {
@@ -111,7 +111,7 @@ const Login: React.FC = () => {
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('Sign-in successful');
-            history.push("/app");
+            history.push('/app');
           } else {
             void auth.signOut();
             alert(
@@ -119,7 +119,7 @@ const Login: React.FC = () => {
             );
           }
         })
-        .catch((error: any) => {
+        .catch((error) => {
           console.log(error);
           alert(error);
         });
@@ -132,7 +132,7 @@ const Login: React.FC = () => {
       .then((data: unknown) => {
         console.log(data);
         alert('Sign-in successful');
-        history.push("/app");
+        history.push('/app');
       })
       .catch((error: unknown) => {
         console.log(error);
@@ -142,12 +142,12 @@ const Login: React.FC = () => {
 
   // move to signup button
   const moveToSignup = () => {
-    history.push("/signup");
+    history.push('/signup');
   };
 
   // move to forgot password page //
   const moveToForgotPassword = () => {
-    history.push("/password/reset");
+    history.push('/password/reset');
   };
 
   return (
@@ -157,19 +157,14 @@ const Login: React.FC = () => {
         <IonCard className="signup-card">
           <IonCardHeader>
             <img alt="Walktober logo" src={smallLogo} />
-            <IonCardTitle class="ion-text-center">
-              Welcome to Walktober! Please log in to continue!
-            </IonCardTitle>
+            <IonCardTitle class="ion-text-center">Welcome to Walktober! Please log in to continue!</IonCardTitle>
           </IonCardHeader>
 
           <IonCardContent>
             <IonItem
-              className={
-                `${(isValid ?? false) && 'ion-valid'} ${
-                  isValid === false && 'ion-invalid'
-                } ${isTouched && 'ion-touched'}` + ' signup-card-field'
-              }
-            >
+              className={`${(isValid ?? false) && 'ion-valid'} ${
+                isValid === false && 'ion-invalid'
+              } ${isTouched && 'ion-touched'}` + " signup-card-field"}>
               <IonLabel position="floating">Email</IonLabel>
               <IonInput
                 type="email"
@@ -220,7 +215,7 @@ const Login: React.FC = () => {
           </IonCardContent>
         </IonCard>
 
-        <IonCard className={'signup-card' + ' bottom'}>
+        <IonCard className={"signup-card" + " bottom"}>
           <IonCardContent className="no-account">
             Don&apos;t have an account?
             <IonButton expand="block" onClick={moveToSignup} color="success">
