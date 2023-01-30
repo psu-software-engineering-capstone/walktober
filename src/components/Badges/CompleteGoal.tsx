@@ -21,7 +21,7 @@ const GoalComplete: React.FC<{}> = () => {
             Summit reached
             <IonItem class="p">
               You set a steps goal for the event and reached it,
-              congradulations!
+              congratulations!
             </IonItem>
           </IonCol>
         </IonRow>
