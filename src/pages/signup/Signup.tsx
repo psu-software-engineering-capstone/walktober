@@ -123,7 +123,7 @@ const Signup: React.FC = () => {
     } else {
       void GoogleAuth.signOut();
       await GoogleAuth.signIn()
-        .then(async (result) => {
+        .then(async (result: any) => {
           const idToken = result.authentication.idToken;
           const credential = GoogleAuthProvider.credential(idToken);
           signInWithCredential(auth, credential).catch((error: unknown) => {
@@ -141,7 +141,7 @@ const Signup: React.FC = () => {
             history.push('/login');
           }
         })
-        .catch((error) => {
+        .catch((error: any) => {
           console.log(error);
           alert(error);
         });
