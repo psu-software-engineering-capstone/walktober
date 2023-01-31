@@ -11,11 +11,12 @@ import {
 import { ellipse, square, triangle } from 'ionicons/icons';
 
 /* Pages */
-import Tab1 from './pages/Tab1';
-import Tab2 from './pages/Tab2';
-import Tab3 from './pages/Tab3';
+import HomePage from './pages/HomePage/HomePage';
+import Profile from './pages/profile/Profile';
+import ManualSteps from './pages/manualLoggingSteps/manualLoggingSteps';
 import HealthApp from './pages/healthapp/HealthApp';
 import TeamCreation from './pages/TeamCreation';
+import TeamHome from './pages/TeamHome/TeamHome';
 
 /* Theming */
 import './theme/app.scss';
@@ -25,35 +26,36 @@ const Dashboard: React.FC = () => {
   return (
     <IonTabs>
       <IonRouterOutlet>
-        <Route exact path="/app/tab1" component={Tab1} />
-        <Route exact path="/app/tab2" component={Tab2} />
-        <Route exact path="/app/tab3" component={Tab3} />
+        <Route exact path="/app/home" component={HomePage} />
+        <Route exact path="/app/profile" component={Profile} />
+        <Route exact path="/app/manualsteps" component={ManualSteps} />
         <Route exact path="/app/healthapp" component={HealthApp} />
         <Route exact path="/app/teamcreation" component={TeamCreation} />
+        <Route exact path="/app/team" component={TeamHome} />
         <Route exact path="/app">
-          <Redirect to="/app/tab1" />
+          <Redirect to="/app/home" />
         </Route>
       </IonRouterOutlet>
       <IonTabBar slot="bottom" className={tabsVisible ? '' : 'hidden'}>
-        <IonTabButton tab="tab1" href="/app/tab1">
+        <IonTabButton tab="home" href="/app/home">
           <IonIcon icon={triangle} />
-          <IonLabel>Tab 1</IonLabel>
+          <IonLabel>Home</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="tab2" href="/app/tab2">
+        <IonTabButton tab="profile" href="/app/profile">
           <IonIcon icon={ellipse} />
-          <IonLabel>Tab 2</IonLabel>
+          <IonLabel>Profile</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="tab3" href="/app/tab3">
+        <IonTabButton tab="manualsteps" href="/app/manualsteps">
           <IonIcon icon={square} />
-          <IonLabel>Tab 3</IonLabel>
+          <IonLabel>Manual Steps</IonLabel>
         </IonTabButton>
         <IonTabButton tab="healthapp" href="/app/healthapp">
-          <IonIcon icon={square} />
-          <IonLabel>Health App Integration</IonLabel>
+          <IonIcon icon={triangle} />
+          <IonLabel>Health App</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="teamcreation" href="/app/teamcreation">
+        <IonTabButton tab="team" href="/app/team">
           <IonIcon icon={square} />
-          <IonLabel>Team Creation</IonLabel>
+          <IonLabel>Team</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>

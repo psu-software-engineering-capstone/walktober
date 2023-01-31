@@ -15,7 +15,6 @@ const Tab1: React.FC = () => {
         <NavBar collapse="condense">
           <IonTitle size="large">Tab 1</IonTitle>
         </NavBar>
-
         <ExploreContainer name="Tab 1 page" />
       </IonContent>
     </IonPage>

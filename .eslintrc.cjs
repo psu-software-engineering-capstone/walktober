@@ -39,6 +39,7 @@ module.exports = {
   ],
   rules: {
     semi: ['error', 'always'],
-    '@typescript-eslint/semi': ['error', 'always']
+    '@typescript-eslint/semi': ['error', 'always'],
+    "@typescript-eslint/no-explicit-any": "off"
   }
 };

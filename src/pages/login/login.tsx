@@ -9,6 +9,7 @@ import {
   IonCard,
   IonCardContent,
   IonCardHeader,
+  IonCardTitle,
   IonIcon,
   IonInput,
   IonItem,
@@ -20,7 +21,7 @@ import {
   isPlatform
 } from '@ionic/react';
 import { eye, eyeOff, logoGoogle } from 'ionicons/icons';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   GoogleAuthProvider,
@@ -33,12 +34,8 @@ import { doc, getDoc } from 'firebase/firestore';
 import './login.css';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import smallLogo from '../../assets/Walktober.png';
-import AuthContext from '../../store/auth-context';
 
 const Login: React.FC = () => {
-  // auth context //
-  const ctx = useContext(AuthContext);
-
   // for routing //
   const history = useHistory();
 
@@ -87,8 +84,6 @@ const Login: React.FC = () => {
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
             alert('Sign-in successful');
-            // auth context //
-            ctx.onLogin();
             history.push('/app');
           } else {
             void auth.signOut();
@@ -105,28 +100,28 @@ const Login: React.FC = () => {
     } else {
       void GoogleAuth.signOut();
       await GoogleAuth.signIn()
-        .then(async (result) => {
-          const idToken = result.authentication.idToken;
-          const credential = GoogleAuthProvider.credential(idToken);
-          signInWithCredential(auth, credential).catch((error: any) => {
-            console.log(error);
-            alert(error);
-          });
-          const dbRef = doc(FirestoreDB, 'users', result.email);
-          const dbSnap = await getDoc(dbRef);
-          if (dbSnap.exists()) {
-            alert('Sign-in successful');
-            // auth context //
-            ctx.onLogin();
-            history.push('/app');
-          } else {
-            void GoogleAuth.signOut();
-            alert(
-              'This email is not a Walktober account. Please sign-up first.'
-            );
+        .then(
+          async (result: { authentication: { idToken: any }; email: any }) => {
+            const idToken = result.authentication.idToken;
+            const credential = GoogleAuthProvider.credential(idToken);
+            signInWithCredential(auth, credential).catch((error: any) => {
+              console.log(error);
+              alert(error);
+            });
+            const dbRef = doc(FirestoreDB, 'users', result.email);
+            const dbSnap = await getDoc(dbRef);
+            if (dbSnap.exists()) {
+              alert('Sign-in successful');
+              history.push('/app');
+            } else {
+              void auth.signOut();
+              alert(
+                'This email is not a Walktober account. Please sign-up first.'
+              );
+            }
           }
-        })
-        .catch((error) => {
+        )
+        .catch((error: any) => {
           console.log(error);
           alert(error);
         });
@@ -139,8 +134,6 @@ const Login: React.FC = () => {
       .then((data: unknown) => {
         console.log(data);
         alert('Sign-in successful');
-        // auth context //
-        ctx.onLogin();
         history.push('/app');
       })
       .catch((error: unknown) => {
@@ -163,17 +156,21 @@ const Login: React.FC = () => {
     <IonPage>
       <IonHeader></IonHeader>
       <IonContent fullscreen className="login">
-        <IonCard className="right">
+        <IonCard className="signup-card">
           <IonCardHeader>
             <img alt="Walktober logo" src={smallLogo} />
+            <IonCardTitle class="ion-text-center">
+              Welcome to Walktober! Please log in to continue!
+            </IonCardTitle>
           </IonCardHeader>
 
           <IonCardContent>
             <IonItem
-              fill="solid"
-              className={`${(isValid ?? false) && 'ion-valid'} ${
-                isValid === false && 'ion-invalid'
-              } ${isTouched && 'ion-touched'}`}
+              className={
+                `${(isValid ?? false) && 'ion-valid'} ${
+                  isValid === false && 'ion-invalid'
+                } ${isTouched && 'ion-touched'}` + ' signup-card-field'
+              }
             >
               <IonLabel position="floating">Email</IonLabel>
               <IonInput
@@ -188,7 +185,7 @@ const Login: React.FC = () => {
               <IonNote slot="error">Invalid email</IonNote>
             </IonItem>
 
-            <IonItem fill="solid">
+            <IonItem className="signup-card-field">
               <IonLabel position="floating">Password</IonLabel>
               <IonInput
                 type={passwordShown ? 'text' : 'password'}
@@ -225,7 +222,7 @@ const Login: React.FC = () => {
           </IonCardContent>
         </IonCard>
 
-        <IonCard className="left">
+        <IonCard className={'signup-card' + ' bottom'}>
           <IonCardContent className="no-account">
             Don&apos;t have an account?
             <IonButton expand="block" onClick={moveToSignup} color="success">
