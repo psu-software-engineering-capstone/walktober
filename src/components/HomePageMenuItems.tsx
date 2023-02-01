@@ -1,4 +1,5 @@
-import React, { ReactElement } from 'react';
+/* eslint-disable @typescript-eslint/ban-types */
+import { ReactElement } from 'react';
 import { IonContent, IonButton } from '@ionic/react';
 import { useHistory } from 'react-router';
 
@@ -8,7 +9,7 @@ const HomePageMenuItems: React.FC<{}> = (): ReactElement => {
     <IonContent>
       <IonButton
         onClick={() => {
-          history.push('/home/team');
+          history.push("/app/team");
         }}
       >
         Team Home
@@ -16,7 +17,7 @@ const HomePageMenuItems: React.FC<{}> = (): ReactElement => {
       <hr />
       <IonButton
         onClick={() => {
-          history.push('/chat/team');
+          history.push("app/chat/team");
         }}
       >
         Team Chat
@@ -24,7 +25,7 @@ const HomePageMenuItems: React.FC<{}> = (): ReactElement => {
       <hr />
       <IonButton
         onClick={() => {
-          history.push('/app');
+          history.push("/app/home");
         }}
       >
         Filler

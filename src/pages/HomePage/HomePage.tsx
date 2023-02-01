@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable multiline-ternary */
-import React, { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import {
   IonContent,
   IonHeader,
@@ -15,19 +18,23 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonInput
+  IonInput,
+  IonButton
 } from '@ionic/react';
-import AuthContext from '../../store/auth-context';
+import WidgetBot from '@widgetbot/react-embed';
+// import AuthContext from '../../store/auth-context';
 import { useHistory } from 'react-router';
 import LoginOrProfileButton from '../../components/loginOrProfileButton';
 import HomePageMenuItems from '../../components/HomePageMenuItems';
 import PersonalProgress from '../../components/PersonalProgress';
+import NavBar from '../../components/NavBar';
+import './HomePage.css';
 interface badgeOutline {
   name: string;
 }
 
-const HomePage: React.FC = () => {
-  const ctx = useContext(AuthContext);
+const HomePage: React.FC = (): any => {
+  // const ctx = useContext(AuthContext);
   const [steps, setSteps] = useState(0);
   const history = useHistory();
   const [badges, setBadges] = useState(Array<badgeOutline>);
@@ -42,24 +49,16 @@ const HomePage: React.FC = () => {
     // console.log(newValue.value);
   };
 
-  return ctx.isLoggedIn ? (
+  const moveToManualSteps = () => {
+    history.push('/app/manualsteps');
+  };
+
+  return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
-          <IonButtons id="homePage">
-            <IonMenuButton autoHide={false}></IonMenuButton>
-          </IonButtons>
-          <IonTitle slot="secondary">Home Page</IonTitle>
-          <LoginOrProfileButton />
-        </IonToolbar>
+        <NavBar />
       </IonHeader>
       <IonContent fullscreen={true} className="ion-padding">
-        <IonMenu contentId="homePage">
-          <IonToolbar>
-            <IonTitle>Menue</IonTitle>
-          </IonToolbar>
-          <HomePageMenuItems />
-        </IonMenu>
         <IonItem>
           <IonGrid>
             <IonRow>
@@ -83,7 +82,7 @@ const HomePage: React.FC = () => {
             </IonRow>
             <IonRow>
               click
-              <a href="/manualStepsLogging">here</a>
+              <IonButton onClick={moveToManualSteps}>here</IonButton>
               to see previous logs
             </IonRow>
           </IonGrid>
@@ -102,14 +101,20 @@ const HomePage: React.FC = () => {
         {/* below is only for development testing purposes */}
         <IonGrid>
           <IonRow>
-            <IonCol>Location for leaderboards</IonCol>
-            <IonCol>Loaction for chat</IonCol>
+            <IonCol className="boxSize">Location for leaderboards</IonCol>
+            <IonCol className="boxSize">
+              <WidgetBot
+                className="discord-widget"
+                server="1068966007886069841"
+                channel="1068966009106600110"
+              />
+            </IonCol>
             <IonCol>
               <IonRow>
-                <IonCol>Location for anouncments</IonCol>
+                <IonCol className="boxSize">Location for anouncments</IonCol>
               </IonRow>
               <IonRow>
-                <IonCol>
+                <IonCol className="boxSize">
                   Location for personal Progress: <PersonalProgress />
                 </IonCol>
               </IonRow>
@@ -118,8 +123,6 @@ const HomePage: React.FC = () => {
         </IonGrid>
       </IonContent>
     </IonPage>
-  ) : (
-    history.push('/login')
   );
 };
 

@@ -1,5 +1,6 @@
 /* eslint-disable multiline-ternary */
-import React, { ReactElement, useContext } from 'react';
+/* eslint-disable @typescript-eslint/ban-types */
+import { ReactElement, useContext } from 'react';
 import { IonButton, IonIcon } from '@ionic/react';
 import AuthContext from '../store/auth-context';
 import { useHistory } from 'react-router';
@@ -7,11 +8,11 @@ import { useHistory } from 'react-router';
 const LoginOrProfileButton: React.FC<{}> = (): ReactElement => {
   const ctx = useContext(AuthContext);
   const history = useHistory();
-  return ctx.isLoggedIn ? (
+  return ctx.user ? (
     <IonButton
       class="loginHomeButton"
       onClick={() => {
-        history.push('/app/profile');
+        history.push("/app/profile");
       }}
       slot="end"
     >
@@ -22,7 +23,7 @@ const LoginOrProfileButton: React.FC<{}> = (): ReactElement => {
     <IonButton
       class="loginHomeButton"
       onClick={() => {
-        history.push('/login');
+        history.push("/login");
       }}
       slot="end"
     >

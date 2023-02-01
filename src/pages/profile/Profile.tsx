@@ -17,34 +17,42 @@ import {
   IonToolbar
 } from '@ionic/react';
 import './Profile.css';
+import { auth, FirestoreDB } from '../../firebase';
+import { doc } from 'firebase/firestore';
+import { getDoc } from 'firebase/firestore';
+import { useHistory } from 'react-router';
 
 const Profile: React.FC = () => {
   const [email, setEmail] = useState('');
-  // let email: string;
   const [joinDate, setJoinDate] = useState(new Date());
-  const [joinDateString, SetJoinDateString] = useState('');
+  const [joinDateString, setJoinDateString] = useState('');
   const [name, SetName] = useState('');
   const [profilePic, setProfilePic] = useState('');
-  const [totalDistance, SetTotalDistance] = useState(0);
-  const [username, SetUsername] = useState('');
+  const [totalDistance, setTotalDistance] = useState(0);
+  const [username, setUsername] = useState('');
   // let badges;
 
-  function GetRecords(): void {
-    // TODO: Get information from database
-    setProfilePic(
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Kristen_Stewart_in_2022.JPG/1280px-Kristen_Stewart_in_2022.JPG'
-    );
-    SetName('Kristen Stewart');
-    SetUsername('kStewart0409');
-    setEmail('stewart@pdx.edu');
-    setJoinDate(new Date('2015-03-25'));
-    SetJoinDateString(joinDate.toLocaleDateString());
-    SetTotalDistance(500);
+  async function GetRecords(): Promise<void> {
+    if (auth.currentUser === null) {
+      alert('You are not logged in!');
+      useHistory().push("/login");
+      return;
+    }
+    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
+    const dbSnap = await getDoc(dbRef);
+    const userData = dbSnap.data();
+    setProfilePic(userData.profile_pic);
+    SetName(userData.name);
+    setUsername('');
+    setEmail(userData.email);
+    setJoinDate(new Date(auth.currentUser.metadata.creationTime));
+    setJoinDateString(joinDate.toLocaleDateString());
+    setTotalDistance(userData.totalStep / 2000);
   }
 
   useEffect(() => {
     GetRecords();
-  }, [GetRecords]);
+  }, []);
 
   return (
     <IonPage>

@@ -34,10 +34,10 @@ const NavBar: React.FC<NavBarProps> = ({ collapse = undefined, children = null }
             draggable="false" />
           {children}
           <div slot="end">
-            <NavLink id="home" text="Home" href="/app/tab1" />
-            <NavLink id="team" text="Team" href="/app/tab2" />
+            <NavLink id="home" text="Home" href="/app/home" />
+            <NavLink id="team" text="Team" href="/app/team" />
             <NavLink id="profile" text="Profile" href="/app/profile">
-              <NavLink id="logs" text="Logs" href="/app/tab3" />
+              <NavLink id="logs" text="Logs" href="/app/manualsteps" />
             </NavLink>
             <NavLink id="admin" text="Admin" href="/app/admin">
               <NavLink id="admin-announcements"
