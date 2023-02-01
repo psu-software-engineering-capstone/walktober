@@ -13,14 +13,14 @@ import {
   IonPage,
   IonRow,
   IonText,
-  IonTitle,
-  IonToolbar
+  IonTitle
 } from '@ionic/react';
 import './Profile.css';
 import { auth, FirestoreDB } from '../../firebase';
 import { doc } from 'firebase/firestore';
 import { getDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router';
+import NavBar from '../../components/NavBar';
 
 const Profile: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -35,7 +35,7 @@ const Profile: React.FC = () => {
   async function GetRecords(): Promise<void> {
     if (auth.currentUser === null) {
       alert('You are not logged in!');
-      useHistory().push("/login");
+      useHistory().push('/login');
       return;
     }
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
@@ -54,12 +54,21 @@ const Profile: React.FC = () => {
     GetRecords();
   }, []);
 
+  const newAvatar = () => {
+    useHistory().push('/profile/newAvater');
+  };
+
+  const changePassword = () => {
+    useHistory().push('/profile/newAvater');
+    return;
+  };
+
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
+        <NavBar>
           <IonTitle>Profile</IonTitle>
-        </IonToolbar>
+        </NavBar>
       </IonHeader>
       <IonContent>
         <IonItem>
@@ -72,7 +81,9 @@ const Profile: React.FC = () => {
                     src={profilePic}
                     alt="Profile picture for the user signed in"
                   ></IonImg>
-                  <IonButton>Change Profile Picture</IonButton>
+                  <IonButton onClick={newAvatar}>
+                    Change Profile Picture
+                  </IonButton>
                   <h2>{name}</h2>
                   <p>
                     {username}
@@ -81,7 +92,10 @@ const Profile: React.FC = () => {
                     </IonButton>
                   </p>
                   <p>{email}</p>
-                  <IonButton>Change Password</IonButton> <br></br>
+                  <IonButton onClick={changePassword}>
+                    Change Password
+                  </IonButton>{' '}
+                  <br></br>
                   <IonButton>Change Health App Preferences</IonButton>
                 </IonText>
               </IonCol>
