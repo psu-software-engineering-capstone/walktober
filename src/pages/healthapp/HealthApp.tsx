@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+
 import {
   IonContent,
   IonHeader,
@@ -62,25 +63,6 @@ const HealthApp: React.FC = () => {
       .then((data: any) => alert(JSON.stringify(data)))
       .catch((error: any) => alert(JSON.stringify(error)));
   };
-
-  // const readSteps = async () => {
-  //   const date = new Date();
-  //   const stepOptions = {
-  //     startDate: new Date(date.getFullYear(), date.getMonth(), 1),
-  //     endDate: new Date(),
-  //     unit: 'count',
-  //     sampleType: 'HKQuantityTypeIdentifierStepCount'
-  //   };
-  //   await HealthKit.querySampleType(stepOptions)
-  //     .then((data: any) => {
-  //       const totalStep = data.reduce(
-  //         (a: any, b: { quantity: any }) => a + b.quantity,
-  //         0
-  //       );
-  //       alert(JSON.stringify(totalStep));
-  //     })
-  //     .catch((error: any) => alert(JSON.stringify(error)));
-  // };
 
   const updateSteps = async () => {
     if (!isPlatform('ios')) {
@@ -221,8 +203,6 @@ const GFupdateSteps = async () => {
         <IonButton expand="block" onClick={updateSteps}>
           Update Step Count
         </IonButton>
-        <h2>Fitbit</h2>
-        <h2>Garmin</h2>
         <h2>Google Fit</h2>
         <IonButton expand="block" onClick={GFavailable}>
           Health Available?
@@ -236,16 +216,17 @@ const GFupdateSteps = async () => {
         <IonButton expand="block" onClick={GFupdateSteps}>
           Update Step Count
         </IonButton>
-        <h2>Misfit</h2>
-        <h2>Omron</h2>
-        <h2>Polar</h2>
+        <h2>Fitbit</h2>
+        <IonButton expand="block" >
+          Implementing...
+        </IonButton>
         <h2>Samsung Health</h2>
-        <h2>Withings (Nokia)</h2>
-        <h2>Strava</h2>
+        <IonButton expand="block" >
+          Implementing...
+        </IonButton>
       </IonContent>
     </IonPage>
   );
 };
 
 export default HealthApp;
-
