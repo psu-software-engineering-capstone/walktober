@@ -138,7 +138,7 @@ const supportedTypes = [
 
 const GFavailable = async () => {
   if (!isPlatform('android')) {
-    alert('Apple Health is only available on android');
+    alert('Google Fit is only available on android');
     return;
   }
   await Health.isAvailable()
@@ -148,7 +148,7 @@ const GFavailable = async () => {
 
 const GFrequestAuthorization = async () => {
   if (!isPlatform('android')) {
-    alert('Apple Health is only available on android');
+    alert('Google Fit is only available on android');
     return;
   }
   await Health.requestAuthorization(supportedTypes)
@@ -158,7 +158,7 @@ const GFrequestAuthorization = async () => {
 
 const GFcheckAuthStatus = async () => {
   if (!isPlatform('android')) {
-    alert('Apple Health is only available on android');
+    alert('Google Fit is only available on android');
     return;
   }
   Health.isAuthorized(supportedTypes)
@@ -168,7 +168,7 @@ const GFcheckAuthStatus = async () => {
 
 const GFupdateSteps = async () => {
   if (!isPlatform('android')) {
-    alert('Apple Health is only available on android');
+    alert('Google Fit is only available on android');
     return;
   }
   const date = new Date();
