@@ -14,6 +14,9 @@ const populateCalendar = () => {
   return (
     <IonGrid>
       <IonRow>
+        <IonCol>{'October'}</IonCol>
+      </IonRow>
+      <IonRow>
         <IonCol>
           <IonItem>{monthStart.getDay() == 0 ? number++ : ''}</IonItem>
         </IonCol>
