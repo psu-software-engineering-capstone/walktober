@@ -163,7 +163,8 @@ const GFupdateSteps = async () => {
   const stepOptions : HealthQueryOptions = {
     startDate: new Date(date.getFullYear(), date.getMonth(), 1),
     endDate: new Date(),
-    dataType: 'steps'
+    dataType: 'steps',
+    filtered: true
   };
   await Health.query(stepOptions)
     .then(async (data: any) => {
@@ -172,14 +173,14 @@ const GFupdateSteps = async () => {
       for (let i = 0; i < data.length; i++) {
         const current = data[i];
         const date = current.startDate.toString().slice(0, 10);
-        const steps = current.quantity;
-        totalStep += current.quantity;
+        const steps = current.value;
+        totalStep += current.value;
         stepsByDate[i] = { date, steps };
       }
       await updateCurrentUser(stepsByDate, totalStep);
       alert('Steps Updated!');
     })
-    .catch((error: any) => alert(JSON.stringify(error)));
+    .catch((error: any) => alert(JSON.stringify(error) + "query failed"));
 };
   return (
     <IonPage>
