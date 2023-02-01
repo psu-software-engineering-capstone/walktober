@@ -8,7 +8,8 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  IonButton
+  IonButton,
+  isPlatform
 } from '@ionic/react';
 import './HealthApp.css';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
@@ -20,12 +21,20 @@ import { Health, HealthQueryOptions } from '@awesome-cordova-plugins/health';
 
 const HealthApp: React.FC = () => {
   const available = async () => {
+    if (!isPlatform('ios')) {
+      alert('Apple Health is only available on iOS');
+      return;
+    }
     await HealthKit.available()
       .then((data: any) => alert(JSON.stringify(data)))
       .catch((error: any) => alert(JSON.stringify(error)));
   };
 
   const requestAuthorization = async () => {
+    if (!isPlatform('ios')) {
+      alert('Apple Health is only available on iOS');
+      return;
+    }
     const supportedTypes = [
       'HKQuantityTypeIdentifierHeight',
       'HKQuantityTypeIdentifierStepCount',
@@ -43,6 +52,10 @@ const HealthApp: React.FC = () => {
   };
 
   const checkAuthStatus = async () => {
+    if (!isPlatform('ios')) {
+      alert('Apple Health is only available on iOS');
+      return;
+    }
     HealthKit.checkAuthStatus({
       type: 'HKQuantityTypeIdentifierHeight'
     })
@@ -70,6 +83,10 @@ const HealthApp: React.FC = () => {
   // };
 
   const updateSteps = async () => {
+    if (!isPlatform('ios')) {
+      alert('Apple Health is only available on iOS');
+      return;
+    }
     const date = new Date();
     const stepOptions = {
       startDate: new Date(date.getFullYear(), date.getMonth(), 1),
@@ -120,24 +137,40 @@ const supportedTypes = [
 ];
 
 const GFavailable = async () => {
+  if (!isPlatform('android')) {
+    alert('Apple Health is only available on android');
+    return;
+  }
   await Health.isAvailable()
     .then((data: any) => alert(JSON.stringify(data)))
     .catch((error: any) => alert(JSON.stringify(error)));
 };
 
 const GFrequestAuthorization = async () => {
+  if (!isPlatform('android')) {
+    alert('Apple Health is only available on android');
+    return;
+  }
   await Health.requestAuthorization(supportedTypes)
     .then((data: any) => alert(JSON.stringify(data)))
     .catch((error: any) => alert(JSON.stringify(error)));
 };
 
 const GFcheckAuthStatus = async () => {
+  if (!isPlatform('android')) {
+    alert('Apple Health is only available on android');
+    return;
+  }
   Health.isAuthorized(supportedTypes)
     .then((data: any) => alert(JSON.stringify(data)))
     .catch((error: any) => alert(JSON.stringify(error)));
 };
 
 const GFupdateSteps = async () => {
+  if (!isPlatform('android')) {
+    alert('Apple Health is only available on android');
+    return;
+  }
   const date = new Date();
   const stepOptions : HealthQueryOptions = {
     startDate: new Date(date.getFullYear(), date.getMonth(), 1),
