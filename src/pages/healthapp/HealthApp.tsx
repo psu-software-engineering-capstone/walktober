@@ -83,7 +83,7 @@ const HealthApp: React.FC = () => {
         let totalStep = 0;
         for (let i = 0; i < data.length; i++) {
           const current = data[i];
-          const date = current.startDate.toString().slice(0, 10);
+          const date = current.startDate.toISOString().slice(0, 10);
           const steps = current.quantity;
           totalStep += current.quantity;
           stepsByDate[i] = { date, steps };
@@ -110,10 +110,6 @@ const HealthApp: React.FC = () => {
       totalStep: totalStep
     });
   };
-//------------------------------------------------------------------------------------------------------------
-// const supportedTypes = [
-//   'TYPE_STEP_COUNT_DELTA'
-// ];
 
 const supportedTypes = [
   'steps', 'distance',   // Read and write permissions
@@ -141,23 +137,6 @@ const GFcheckAuthStatus = async () => {
     .catch((error: any) => alert(JSON.stringify(error)));
 };
 
-// const GFupdateCurrentUser = async (stepsByDate: any, totalStep: any) => {
-//   if (auth.currentUser == null) {
-//     alert('You are not logged in!');
-//     useHistory().push("/login");
-//     return;
-//   }
-//   const currentUserRef = doc(
-//     FirestoreDB,
-//     'users',
-//     auth.currentUser.email as string
-//   );
-//   await updateDoc(currentUserRef, {
-//     stepsByDate: stepsByDate,
-//     totalStep: totalStep
-//   });
-// };
-
 const GFupdateSteps = async () => {
   const date = new Date();
   const stepOptions : HealthQueryOptions = {
@@ -171,9 +150,9 @@ const GFupdateSteps = async () => {
       let totalStep = 0;
       for (let i = 0; i < data.length; i++) {
         const current = data[i];
-        const date = current.startDate.toString().slice(0, 10);
-        const steps = current.quantity;
-        totalStep += current.quantity;
+        const date = current.startDate.toISOString().slice(0, 10);
+        const steps = current.value;
+        totalStep += current.value;
         stepsByDate[i] = { date, steps };
       }
       await updateCurrentUser(stepsByDate, totalStep);
@@ -181,6 +160,7 @@ const GFupdateSteps = async () => {
     })
     .catch((error: any) => alert(JSON.stringify(error)));
 };
+
   return (
     <IonPage>
       <IonHeader>
