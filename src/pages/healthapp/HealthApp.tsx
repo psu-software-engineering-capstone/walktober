@@ -8,7 +8,6 @@ import {
   IonHeader,
   IonPage,
   IonTitle,
-  IonToolbar,
   IonButton,
   isPlatform
 } from '@ionic/react';
@@ -19,6 +18,7 @@ import { doc } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import { updateDoc } from 'firebase/firestore';
 import { Health, HealthQueryOptions } from '@awesome-cordova-plugins/health';
+import NavBar from '../../components/NavBar';
 
 const HealthApp: React.FC = () => {
   const available = async () => {
@@ -180,16 +180,11 @@ const GFupdateSteps = async () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
+        <NavBar>
           <IonTitle>Health App Integration</IonTitle>
-        </IonToolbar>
+        </NavBar>
       </IonHeader>
       <IonContent fullscreen={true} className="ion-padding">
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Health App Integration</IonTitle>
-          </IonToolbar>
-        </IonHeader>
         <h2>Apple Health</h2>
         <IonButton expand="block" onClick={available}>
           Health Available?
