@@ -19,8 +19,14 @@ import { useHistory } from 'react-router';
 import { updateDoc } from 'firebase/firestore';
 import { Health, HealthQueryOptions } from '@awesome-cordova-plugins/health';
 import NavBar from '../../components/NavBar';
+import { useContext } from 'react';
+import AuthContext from '../../store/auth-context';
 
 const HealthApp: React.FC = () => {
+  const ctx = useContext(AuthContext);
+
+  const history = useHistory();
+
   const available = async () => {
     if (!isPlatform('ios')) {
       alert('Apple Health is only available on iOS');
@@ -94,9 +100,9 @@ const HealthApp: React.FC = () => {
   };
 
   const updateCurrentUser = async (stepsByDate: any, totalStep: any) => {
-    if (auth.currentUser == null) {
+    if (ctx.user === null) {
       alert('You are not looged in!');
-      useHistory().push("/login");
+      history.push("/login");
       return;
     }
     const currentUserRef = doc(
