@@ -12,4 +12,8 @@
         </provider>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
+    <queries>
+        <package android:name="com.google.android.apps.fitness" />
+    </queries>
 </manifest>

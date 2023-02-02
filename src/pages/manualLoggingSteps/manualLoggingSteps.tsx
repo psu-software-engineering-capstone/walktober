@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
   IonButton,
   IonCol,
@@ -10,7 +10,6 @@ import {
   IonLabel,
   IonRouterLink,
   IonTitle,
-  IonToolbar,
   IonGrid,
   IonRow,
   IonPage
@@ -19,12 +18,19 @@ import './manualLoggingSteps.css';
 import { auth, FirestoreDB } from '../../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { updateDoc } from 'firebase/firestore';
+import { useHistory } from 'react-router';
+import AuthContext from '../../store/auth-context';
+import NavBar from '../../components/NavBar';
 
 const ManualSteps: React.FC = () => {
   interface StepLog {
     date: string;
     steps: number;
   }
+
+  const history = useHistory();
+
+  const ctx = useContext(AuthContext);
 
   const [manualDate, setManualDate] = useState('');
   const [manualSteps, setManualSteps] = useState(0);
@@ -57,8 +63,9 @@ const ManualSteps: React.FC = () => {
   }, [updateDB]);
 
   const getRecordsFromDB = async () => {
-    if (auth.currentUser === null) {
+    if (ctx.user === null) {
       alert('You are not logged in!');
+      history.push('/login');
       return;
     }
     let stepsByDate = [];
@@ -149,9 +156,9 @@ const ManualSteps: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
+        <NavBar>
           <IonTitle>Steps log</IonTitle>
-        </IonToolbar>
+        </NavBar>
       </IonHeader>
       <IonContent className="ion-padding">
         <form

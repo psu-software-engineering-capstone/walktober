@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/space-before-function-paren */
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   IonButton,
   IonCol,
@@ -13,14 +13,15 @@ import {
   IonPage,
   IonRow,
   IonText,
-  IonTitle,
-  IonToolbar
+  IonTitle
 } from '@ionic/react';
 import './Profile.css';
 import { auth, FirestoreDB } from '../../firebase';
 import { doc } from 'firebase/firestore';
 import { getDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router';
+import AuthContext from '../../store/auth-context';
+import NavBar from '../../components/NavBar';
 
 const Profile: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -32,10 +33,14 @@ const Profile: React.FC = () => {
   const [username, setUsername] = useState('');
   // let badges;
 
+  const history = useHistory();
+
+  const ctx = useContext(AuthContext);
+
   async function GetRecords(): Promise<void> {
-    if (auth.currentUser === null) {
+    if (ctx.user === null) {
       alert('You are not logged in!');
-      useHistory().push("/login");
+      history.push("/login");
       return;
     }
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
@@ -57,9 +62,9 @@ const Profile: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
+        <NavBar>
           <IonTitle>Profile</IonTitle>
-        </IonToolbar>
+        </NavBar>
       </IonHeader>
       <IonContent>
         <IonItem>

@@ -56,7 +56,9 @@ const HomePage: React.FC = (): any => {
   return (
     <IonPage>
       <IonHeader>
-        <NavBar />
+        <NavBar>
+          <IonTitle>Home</IonTitle>
+        </NavBar>
       </IonHeader>
       <IonContent fullscreen={true} className="ion-padding">
         <IonItem>
