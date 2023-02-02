@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable multiline-ternary */
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import {
   IonContent,
   IonHeader,
@@ -10,11 +10,7 @@ import {
   IonLabel,
   IonPage,
   IonTitle,
-  IonToolbar,
   IonIcon,
-  IonMenu,
-  IonMenuButton,
-  IonButtons,
   IonGrid,
   IonRow,
   IonCol,
@@ -22,31 +18,64 @@ import {
   IonButton
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
-// import AuthContext from '../../store/auth-context';
 import { useHistory } from 'react-router';
-import LoginOrProfileButton from '../../components/loginOrProfileButton';
-import HomePageMenuItems from '../../components/HomePageMenuItems';
 import PersonalProgress from '../../components/PersonalProgress';
 import NavBar from '../../components/NavBar';
 import './HomePage.css';
+import AuthContext from '../../store/auth-context';
+import { getDoc } from 'firebase/firestore';
+import { auth, FirestoreDB } from '../../firebase';
+import { doc } from 'firebase/firestore';
+
 interface badgeOutline {
   name: string;
 }
 
+interface StepLog {
+  date: string;
+  steps: number;
+}
+
 const HomePage: React.FC = (): any => {
-  // const ctx = useContext(AuthContext);
   const [steps, setSteps] = useState(0);
-  const history = useHistory();
   const [badges, setBadges] = useState(Array<badgeOutline>);
+  const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
+  const history = useHistory();
+
+  const ctx = useContext(AuthContext);
+
+  useEffect(() => {
+    getPastSevenDaysSteps();
+  }, []);
+
+  const getPastSevenDaysSteps = async () => {
+    if (ctx.user === null) {
+      alert('You are not logged in!');
+      history.push('/login');
+      return;
+    }
+    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
+    const dbSnap = await getDoc(dbRef);
+    const userData = dbSnap.data();
+    const stepsByDate = userData.stepsByDate;
+    const today = new Date();
+    const pastSevenDays = [];
+    for (let i = 0; i < stepsByDate.length; i++) {
+      const date = new Date(stepsByDate[i].date);
+      const diff = (today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
+      if (diff < 8 && diff >= 0) {
+        pastSevenDays.push(stepsByDate[i]);
+      }
+    }
+    setPastSevenDaysSteps(pastSevenDays);
+  };
 
   const stepUpdateHandler = (event: any): void => {
     const newValue = document.querySelector('#stepsUpdate') as HTMLInputElement;
     const newSteps = Number(newValue.value);
     if (newSteps > 0) {
-      // console.log(newSteps);
       setSteps(newSteps);
     }
-    // console.log(newValue.value);
   };
 
   const moveToManualSteps = () => {
