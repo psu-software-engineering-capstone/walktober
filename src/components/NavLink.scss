@@ -1,0 +1,63 @@
+$dropdown-padding: 10px;
+
+.nav-link-container {
+    margin-right: 15px;
+    display: inline-block;
+
+    ion-item {
+        --background: none;
+        --background-hover: none;
+        --background-focused: none;
+        --background-activated: none;
+        --border-style: none;
+        --inner-padding-bottom: 0;
+        --inner-padding-end: 0;
+        --inner-padding-start: 0;
+        --inner-padding-top: 0;
+        --min-height: 0;
+        --ripple-color: transparent;
+
+        &:hover {
+            text-decoration: underline;
+
+            // using this instead of --color-hover to fix bug where hovering
+            // wouldn't change color, but moving mouse out and back in
+            // would
+            text-decoration-color: var(--ion-color-primary);
+            color: var(--ion-color-primary);
+
+            ion-icon {
+                color: var(--ion-color-primary);
+            }
+
+            span {
+                color: var(--ion-color-primary);
+            }
+        }
+
+        ion-icon {
+            font-size: 1.1em;
+            margin: 0;
+        }
+
+        span {
+            font-size: 1.1em;
+            font-family: "Oswald", sans-serif;
+            text-transform: uppercase;
+            margin-right: 3px;
+        }
+    }
+}
+
+ion-popover {
+    max-width: max-content;
+    --background: var(--ion-color-light-tint);
+
+    .nav-link-container {
+        padding: $dropdown-padding $dropdown-padding 0px $dropdown-padding;
+
+        &:last-child {
+            padding-bottom: $dropdown-padding;
+        }
+    }
+}

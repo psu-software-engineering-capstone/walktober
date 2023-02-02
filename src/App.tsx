@@ -1,20 +1,21 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Redirect, Route } from 'react-router-dom';
-import {
-  IonApp,
-  IonIcon,
-  IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  setupIonicReact
-} from '@ionic/react';
+import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+<<<<<<< HEAD
 import { ellipse, square, triangle } from 'ionicons/icons';
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
 import Admin from './pages/Admin';
+=======
+import Login from './pages/login/login';
+import Signup from './pages/signup/Signup';
+import SignupForm from './pages/signup/signupForm';
+import ForgotPassword from './pages/forgotpassword/forgotpassword';
+import Dashboard from './Dashboard';
+>>>>>>> 64f1984450fec5552f332dea7412e67025ff51a3
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -35,29 +36,52 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
+import { useEffect } from 'react';
+import { useAuthContext } from './store/auth-context';
+// import { auth } from './firebase';
+
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonTabs>
+function App() {
+  const { user, loading } = useAuthContext();
+
+  // useEffect(() => {
+  //   void auth.signOut();
+  // }, []);
+
+  useEffect(() => {
+    if (user !== null) {
+      console.log('auth state: logged in');
+    } else {
+      console.log('auth state: logged out');
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (loading === true) {
+      console.log('loading state: true');
+    } else {
+      console.log('loading state: false');
+    }
+  }, [loading]);
+
+  return (
+    <IonApp>
+      <IonReactRouter>
         <IonRouterOutlet>
-          <Route exact path="/tab1">
-            <Tab1 />
-          </Route>
-          <Route exact path="/tab2">
-            <Tab2 />
-          </Route>
-          <Route path="/tab3">
-            <Tab3 />
-          </Route>
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/signup" component={Signup} />
+          <Route exact path="/register" component={SignupForm} />
+          <Route exact path="/password/reset" component={ForgotPassword} />
+          <Route path="/app" component={Dashboard} />
           <Route exact path="/">
-            <Redirect to="/tab1" />
+            <Redirect to="/login" />
           </Route>
           <Route exact path="/admin">
             <Admin />
           </Route>
         </IonRouterOutlet>
+<<<<<<< HEAD
         <IonTabBar slot="bottom">
           <IonTabButton tab="tab1" href="/tab1">
             <IonIcon icon={triangle} />
@@ -80,5 +104,11 @@ const App: React.FC = () => (
     </IonReactRouter>
   </IonApp>
 );
+=======
+      </IonReactRouter>
+    </IonApp>
+  );
+}
+>>>>>>> 64f1984450fec5552f332dea7412e67025ff51a3
 
 export default App;
