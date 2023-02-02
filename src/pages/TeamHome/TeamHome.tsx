@@ -10,9 +10,6 @@ const TeamHome: React.FC = () => {
         <IonTitle>My Team</IonTitle>
       </NavBar>
       <IonContent fullscreen>
-        <NavBar collapse="condense">
-          <IonTitle size="large">My Team</IonTitle>
-        </NavBar>
         { /*
            * TODO: change channel based on current team
            *
