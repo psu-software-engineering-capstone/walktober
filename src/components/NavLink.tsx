@@ -1,6 +1,8 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { IonIcon, IonPopover } from '@ionic/react';
+import {
+  IonIcon, IonPopover, IonItem
+} from '@ionic/react';
 import { chevronDown } from 'ionicons/icons';
 import React, { MouseEvent } from 'react';
 import './NavLink.scss';
@@ -19,17 +21,18 @@ const NavLink: React.FC<NavLinkProps> = ({
   children = null
 }) => {
   const dismissPopover = (e: MouseEvent): void => {
-    const elem = document.body.querySelector('#' + id + '-popover');
-    (elem as HTMLIonPopoverElement)?.dismiss();
+    const target = e.target as Element;
+    const popover = target.parentElement?.parentElement as HTMLIonPopoverElement;
+    void popover.dismiss();
   };
 
   if (children) {
     return (
       <div className="nav-link-container">
-        <span className="nav-link-text" id={id}>
-          {href !== '' ? (<a href={href} slot="start">{text}</a>) : (<span>{text}</span>)}
+        <IonItem id={id} href={href}>
+          <span>{text}</span>
           <IonIcon icon={chevronDown} />
-        </span>
+        </IonItem>
         <div className="nav-link-dropdown" onMouseLeave={dismissPopover}>
           <IonPopover
             id={`${id}-popover`}
@@ -52,9 +55,13 @@ const NavLink: React.FC<NavLinkProps> = ({
   } else {
     return (
       <div className="nav-link-container">
-        <span className="nav-link-text" id={id}>
-          {href !== '' ? <a href={href}>{text}</a> : <span>{text}</span>}
-        </span>
+        {href
+          ? (<IonItem href={href} id={id}>
+               <span>{text}</span>
+             </IonItem>)
+          : (<IonItem id={id}>
+               <span>{text}</span>
+             </IonItem>)}
       </div>
     );
   }

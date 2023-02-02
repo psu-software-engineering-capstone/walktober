@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { useState } from 'react';
 import {
   IonButton,
   IonCol,
