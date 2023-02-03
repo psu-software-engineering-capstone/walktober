@@ -38,7 +38,7 @@ const ManualSteps: React.FC = () => {
   const [totalStep, setTotalStep] = useState(0);
   const [updateTotalStep, setUpdateTotalStep] = useState(false);
   const [updateDB, setUpdateDB] = useState(false);
-  
+
   useEffect(() => {
     getRecordsFromDB();
   }, []);
@@ -96,7 +96,9 @@ const ManualSteps: React.FC = () => {
 
   function DisplayRecords(): any {
     if (stepLogs.length > 0) {
-      stepLogs.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      stepLogs.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
       return (
         <>
           <IonGrid>
@@ -177,7 +179,13 @@ const ManualSteps: React.FC = () => {
                 setManualSteps(Number(event.target.value));
               }}
             ></IonInput>
-            <IonRouterLink slot="helper" href="./stepsCalculator">
+            <IonRouterLink
+              slot="helper"
+              href="/app/stepscalc"
+              onClick={() => {
+                history.push('/app/stepscalc');
+              }}
+            >
               Need help calculating steps?
             </IonRouterLink>
           </IonItem>
