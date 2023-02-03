@@ -30,16 +30,11 @@ import './theme/variables.css';
 
 import { useEffect } from 'react';
 import { useAuthContext } from './store/auth-context';
-// import { auth } from './firebase';
 
 setupIonicReact();
 
 function App() {
   const { user, loading } = useAuthContext();
-
-  // useEffect(() => {
-  //   void auth.signOut();
-  // }, []);
 
   useEffect(() => {
     if (user !== null) {
@@ -65,6 +60,7 @@ function App() {
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/register" component={SignupForm} />
           <Route exact path="/password/reset" component={ForgotPassword} />
+          {/* Cannot have exact here */}
           <Route path="/app" component={Dashboard} />
           <Route exact path="/">
             <Redirect to="/login" />
