@@ -38,6 +38,8 @@ const NavBar: React.FC<NavBarProps> = ({ collapse = undefined, children = null }
             <NavLink id="nav-team" text="Team" href="/app/team" />
             <NavLink id="nav-profile" text="Profile" href="/app/profile">
               <NavLink id="nav-logs" text="Logs" href="/app/manualsteps" />
+              <NavLink id="nav-health-app" text="Health App Settings"
+                href="/app/healthapp" />
             </NavLink>
             <NavLink id="nav-admin" text="Admin" href="/app/admin">
               <NavLink id="nav-admin-announcements"
