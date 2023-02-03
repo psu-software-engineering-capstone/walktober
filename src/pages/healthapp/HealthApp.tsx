@@ -161,7 +161,7 @@ const HealthApp: React.FC = () => {
       return;
     }
     const date = new Date();
-    const stepOptions: object = {
+    const stepOptions: HealthQueryOptions = {
       startDate: new Date(date.getFullYear(), date.getMonth(), 1),
       endDate: new Date(),
       dataType: 'steps',
