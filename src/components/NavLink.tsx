@@ -1,8 +1,12 @@
 import {
-  IonIcon, IonPopover, IonItem
+  IonIcon,
+  IonItem,
+  useIonPopover,
+  IonContent
 } from '@ionic/react';
 import { chevronDown } from 'ionicons/icons';
-import React, { MouseEvent } from 'react';
+import React from 'react';
+import { useHistory } from 'react-router';
 import './NavLink.scss';
 
 interface NavLinkProps {
@@ -13,34 +17,65 @@ interface NavLinkProps {
 }
 
 const NavLink: React.FC<NavLinkProps> = ({ id, text, href, children = null }) => {
-  const dismissPopover = (e: MouseEvent): void => {
-    const target = e.target as Element;
-    const popover = target.parentElement?.parentElement as HTMLIonPopoverElement;
-    void popover.dismiss();
+  const history = useHistory();
+
+  const [present, dismiss] = useIonPopover(() =>
+    <IonContent onMouseLeave={dismiss}>
+      {children}
+    </IonContent>
+  );
+
+  const dismissPopover = (e: React.MouseEvent) => {
+    // get the element under the mouse pointer
+    const elem = document.elementFromPoint(e.clientX, e.clientY);
+
+    // if the mouse is not hovering in the popover, dismiss the popover
+    if(elem?.closest('ion-popover') === null) {
+      dismiss();
+    }
+  };
+
+  const navigate = (e: React.MouseEvent) => {
+    const popover = e.currentTarget.closest('ion-popover') as HTMLIonPopoverElement;
+
+    // links inside popovers have no access to useHistory(), so they will
+    // pass their current 'href' to the dismiss() event
+    if(popover !== null) {
+      popover.dismiss(href);
+    }
+    // links outside popovers can navigate directly
+    else {
+      history.push(href);
+    }
   };
 
   if (children) {
     return (
       <div className="nav-link-container">
-        <IonItem id={id} href={href}>
+        <IonItem id={id} routerLink={href} onMouseEnter={(e: any) => {
+          present({
+            event: e,
+            animated: false,
+            arrow: false,
+            showBackdrop: false,
+            size: 'auto',
+            cssClass: 'dropdown-popover',
+            onDidDismiss: (e: CustomEvent) => {
+              if(e.detail.data !== undefined) {
+                history.push(e.detail.data);
+              }
+            }
+          });
+        }} onMouseLeave={dismissPopover}>
           <span>{text}</span>
           <IonIcon icon={chevronDown} />
         </IonItem>
-        <div className="nav-link-dropdown" onMouseLeave={dismissPopover}>
-          <IonPopover id={`${id}-popover`} trigger={id}
-            triggerAction="hover" side="bottom" alignment="start"
-            animated={false} arrow={false} showBackdrop={false}
-            dismissOnSelect={true} backdropDismiss={true}
-            size="auto">
-            {children}
-          </IonPopover>
-        </div>
       </div>
     );
   } else {
     return (
         <div className="nav-link-container">
-          <IonItem href={href} id={id}>
+          <IonItem id={id} onClick={navigate}>
             <span>{text}</span>
           </IonItem>
         </div>
