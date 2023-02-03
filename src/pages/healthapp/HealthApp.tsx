@@ -17,7 +17,7 @@ import { auth, FirestoreDB } from '../../firebase';
 import { doc } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import { updateDoc } from 'firebase/firestore';
-import { Health, HealthQueryOptions } from '@awesome-cordova-plugins/health';
+import { Health } from '@awesome-cordova-plugins/health'; // removed , HealthQueryOptions
 import NavBar from '../../components/NavBar';
 import { useContext } from 'react';
 import AuthContext from '../../store/auth-context';
@@ -161,7 +161,8 @@ const HealthApp: React.FC = () => {
       return;
     }
     const date = new Date();
-    const stepOptions: HealthQueryOptions = {
+    const stepOptions: object = {
+      // note I change it from HealthQueryOptions to object as HealthQueryOptions is not valid typing
       startDate: new Date(date.getFullYear(), date.getMonth(), 1),
       endDate: new Date(),
       dataType: 'steps',
