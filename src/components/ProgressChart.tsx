@@ -2,7 +2,7 @@ import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { IonLabel, IonProgressBar } from '@ionic/react';
 
-interface dataProps {
+interface StepLog {
   date: string;
   steps: number;
 }
@@ -11,7 +11,7 @@ const stepsLeft = 500;
 const goalSteps = 1000;
 const currentSteps = 500;
 
-const ProgressChart: React.FC<{ data: dataProps[] }> = ({ data }) => {
+const ProgressChart: React.FC<{ data: Array<StepLog> }> = ({ data }) => {
   return (
     <>
       <h1>Goal steps: 1000</h1>

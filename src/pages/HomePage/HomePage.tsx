@@ -34,6 +34,7 @@ import AuthContext from '../../store/auth-context';
 import { getDoc } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
 import { doc } from 'firebase/firestore';
+import { randomInt } from 'crypto';
 interface badgeOutline {
   name: string;
 }
@@ -165,11 +166,18 @@ const HomePage: React.FC = (): any => {
                 <br />
                 <IonCol className="boxSize">
                   Location for personal Progress:
-                  {pastSevenDaysSteps.length > 1 ? (
+                  {
+                    /* {pastSevenDaysSteps.length > 1 ? (
                     <ProgressChart data={pastSevenDaysSteps} />
                   ) : (
                     ' '
-                  )}
+                  )} */
+                    // pastSevenDaysSteps.map((item) => (
+                    //   <IonItem key={Math.random()}>
+                    //     {item.date + ' ' + item.steps}
+                    //   </IonItem>
+                    // ))
+                  }
                 </IonCol>
               </IonGrid>
             </IonCol>
