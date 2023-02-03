@@ -102,7 +102,7 @@ const HealthApp: React.FC = () => {
   const updateCurrentUser = async (stepsByDate: any, totalStep: any) => {
     if (ctx.user === null) {
       alert('You are not looged in!');
-      history.push("/login");
+      history.push('/login');
       return;
     }
     const currentUserRef = doc(
@@ -116,72 +116,73 @@ const HealthApp: React.FC = () => {
     });
   };
 
-const supportedTypes = [
-  'steps', 'distance',   // Read and write permissions
-  {
-    read : ['steps'],       // Read only permission
-    write : ['height', 'weight']  // Write only permission
-  }
-];
+  const supportedTypes = [
+    'steps',
+    'distance', // Read and write permissions
+    {
+      read: ['steps'], // Read only permission
+      write: ['height', 'weight'] // Write only permission
+    }
+  ];
 
-const GFavailable = async () => {
-  if (!isPlatform('android')) {
-    alert('Google Fit is only available on android');
-    return;
-  }
-  await Health.isAvailable()
-    .then((data: any) => alert(JSON.stringify(data)))
-    .catch((error: any) => alert(JSON.stringify(error)));
-};
-
-const GFrequestAuthorization = async () => {
-  if (!isPlatform('android')) {
-    alert('Google Fit is only available on android');
-    return;
-  }
-  await Health.requestAuthorization(supportedTypes)
-    .then((data: any) => alert(JSON.stringify(data)))
-    .catch((error: any) => alert(JSON.stringify(error)));
-};
-
-const GFcheckAuthStatus = async () => {
-  if (!isPlatform('android')) {
-    alert('Google Fit is only available on android');
-    return;
-  }
-  Health.isAuthorized(supportedTypes)
-    .then((data: any) => alert(JSON.stringify(data)))
-    .catch((error: any) => alert(JSON.stringify(error)));
-};
-
-const GFupdateSteps = async () => {
-  if (!isPlatform('android')) {
-    alert('Google Fit is only available on android');
-    return;
-  }
-  const date = new Date();
-  const stepOptions : HealthQueryOptions = {
-    startDate: new Date(date.getFullYear(), date.getMonth(), 1),
-    endDate: new Date(),
-    dataType: 'steps',
-    filtered: true
+  const GFavailable = async () => {
+    if (!isPlatform('android')) {
+      alert('Google Fit is only available on android');
+      return;
+    }
+    await Health.isAvailable()
+      .then((data: any) => alert(JSON.stringify(data)))
+      .catch((error: any) => alert(JSON.stringify(error)));
   };
-  await Health.query(stepOptions)
-    .then(async (data: any) => {
-      const stepsByDate = [];
-      let totalStep = 0;
-      for (let i = 0; i < data.length; i++) {
-        const current = data[i];
-        const date = current.startDate.toISOString().slice(0, 10);
-        const steps = current.value;
-        totalStep += current.value;
-        stepsByDate[i] = { date, steps };
-      }
-      await updateCurrentUser(stepsByDate, totalStep);
-      alert('Steps Updated!');
-    })
-    .catch((error: any) => alert(JSON.stringify(error) + "query failed"));
-};
+
+  const GFrequestAuthorization = async () => {
+    if (!isPlatform('android')) {
+      alert('Google Fit is only available on android');
+      return;
+    }
+    await Health.requestAuthorization(supportedTypes)
+      .then((data: any) => alert(JSON.stringify(data)))
+      .catch((error: any) => alert(JSON.stringify(error)));
+  };
+
+  const GFcheckAuthStatus = async () => {
+    if (!isPlatform('android')) {
+      alert('Google Fit is only available on android');
+      return;
+    }
+    Health.isAuthorized(supportedTypes)
+      .then((data: any) => alert(JSON.stringify(data)))
+      .catch((error: any) => alert(JSON.stringify(error)));
+  };
+
+  const GFupdateSteps = async () => {
+    if (!isPlatform('android')) {
+      alert('Google Fit is only available on android');
+      return;
+    }
+    const date = new Date();
+    const stepOptions: object = {
+      startDate: new Date(date.getFullYear(), date.getMonth(), 1),
+      endDate: new Date(),
+      dataType: 'steps',
+      filtered: true
+    };
+    await Health.query(stepOptions)
+      .then(async (data: any) => {
+        const stepsByDate = [];
+        let totalStep = 0;
+        for (let i = 0; i < data.length; i++) {
+          const current = data[i];
+          const date = current.startDate.toISOString().slice(0, 10);
+          const steps = current.value;
+          totalStep += current.value;
+          stepsByDate[i] = { date, steps };
+        }
+        await updateCurrentUser(stepsByDate, totalStep);
+        alert('Steps Updated!');
+      })
+      .catch((error: any) => alert(JSON.stringify(error) + 'query failed'));
+  };
 
   return (
     <IonPage>
@@ -218,13 +219,9 @@ const GFupdateSteps = async () => {
           Update Step Count
         </IonButton>
         <h2>Fitbit</h2>
-        <IonButton expand="block" >
-          Implementing...
-        </IonButton>
+        <IonButton expand="block">Implementing...</IonButton>
         <h2>Samsung Health</h2>
-        <IonButton expand="block" >
-          Implementing...
-        </IonButton>
+        <IonButton expand="block">Implementing...</IonButton>
       </IonContent>
     </IonPage>
   );
