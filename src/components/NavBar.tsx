@@ -1,8 +1,5 @@
 /* eslint-disable react/prop-types */
-import {
-  IonToolbar,
-  IonHeader
-} from '@ionic/react';
+import { IonToolbar, IonHeader } from '@ionic/react';
 
 /* Components */
 import NavLink from './NavLink';
@@ -11,17 +8,25 @@ import NavLink from './NavLink';
 import { isPlatform } from '@ionic/core';
 
 interface NavBarProps {
-  collapse?: 'condense' | 'fade' // carryover from ion-header
-  children?: React.ReactNode // child elements like titles
+  collapse?: 'condense' | 'fade'; // carryover from ion-header
+  children?: React.ReactNode; // child elements like titles
 }
 
-const NavBar: React.FC<NavBarProps> = ({ collapse = undefined, children = null }) => {
+const NavBar: React.FC<NavBarProps> = ({
+  collapse = undefined,
+  children = null
+}) => {
   if (isPlatform('android') || isPlatform('ios')) {
     return (
       <IonHeader collapse={collapse}>
         <IonToolbar>
-          <img id="psu-logo" src="assets/logo.svg" slot="start" alt="PSU logo"
-            draggable="false" />
+          <img
+            id="psu-logo"
+            src="assets/logo.svg"
+            slot="start"
+            alt="PSU logo"
+            draggable="false"
+          />
           {children}
         </IonToolbar>
       </IonHeader>
@@ -30,8 +35,13 @@ const NavBar: React.FC<NavBarProps> = ({ collapse = undefined, children = null }
     return (
       <IonHeader collapse={collapse}>
         <IonToolbar>
-          <img id="psu-logo" src="assets/logo.svg" slot="start" alt="PSU logo"
-            draggable="false" />
+          <img
+            id="psu-logo"
+            src="assets/logo.svg"
+            slot="start"
+            alt="PSU logo"
+            draggable="false"
+          />
           {children}
           <div slot="end">
             <NavLink id="nav-home" text="Home" href="/app/home" />

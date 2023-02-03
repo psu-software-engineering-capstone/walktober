@@ -6,27 +6,17 @@ import { useState, useContext, useEffect } from 'react';
 import {
   IonContent,
   IonHeader,
-  IonItem,
   IonLabel,
   IonPage,
   IonTitle,
-  IonToolbar,
   IonIcon,
-  IonMenu,
-  IonMenuButton,
-  IonButtons,
   IonGrid,
   IonRow,
   IonCol,
-  IonInput,
-  IonButton
+  IonInput
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
-// import AuthContext from '../../store/auth-context';
 import { useHistory } from 'react-router';
-import LoginOrProfileButton from '../../components/loginOrProfileButton';
-import HomePageMenuItems from '../../components/HomePageMenuItems';
-import PersonalProgress from '../../components/PersonalProgress';
 import NavBar from '../../components/NavBar';
 import './HomePage.css';
 import ProgressChart from '../../components/ProgressChart';
@@ -34,7 +24,6 @@ import AuthContext from '../../store/auth-context';
 import { getDoc } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
 import { doc } from 'firebase/firestore';
-import { randomInt } from 'crypto';
 interface badgeOutline {
   name: string;
 }
@@ -44,8 +33,7 @@ interface StepLog {
   steps: number;
 }
 
-const HomePage: React.FC = (): any => {
-  // const ctx = useContext(AuthContext);
+const HomePage: React.FC = () => {
   const [steps, setSteps] = useState(0);
   const history = useHistory();
   const [badges, setBadges] = useState(Array<badgeOutline>);
@@ -94,7 +82,9 @@ const HomePage: React.FC = (): any => {
   return (
     <IonPage>
       <IonHeader>
-        <NavBar>Home Page</NavBar>
+        <NavBar>
+          <IonTitle>Home Page</IonTitle>
+        </NavBar>
       </IonHeader>
       <IonContent fullscreen={true} className="ion-padding testing">
         <IonGrid>
