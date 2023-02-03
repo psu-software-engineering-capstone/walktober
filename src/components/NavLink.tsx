@@ -8,11 +8,11 @@ import './NavLink.scss';
 interface NavLinkProps {
   id: string // id for dropdown trigger
   text: string // text to display for link
-  href?: string // link location (omit for just text)
+  href: string // link location
   children?: React.ReactNode // links present in dropdown
 }
 
-const NavLink: React.FC<NavLinkProps> = ({ id, text, href = '', children = null }) => {
+const NavLink: React.FC<NavLinkProps> = ({ id, text, href, children = null }) => {
   const dismissPopover = (e: MouseEvent): void => {
     const target = e.target as Element;
     const popover = target.parentElement?.parentElement as HTMLIonPopoverElement;
@@ -39,15 +39,11 @@ const NavLink: React.FC<NavLinkProps> = ({ id, text, href = '', children = null 
     );
   } else {
     return (
-      <div className="nav-link-container">
-        {href
-          ? (<IonItem href={href} id={id}>
-               <span>{text}</span>
-             </IonItem>)
-          : (<IonItem id={id}>
-               <span>{text}</span>
-             </IonItem>)}
-      </div>
+        <div className="nav-link-container">
+          <IonItem href={href} id={id}>
+            <span>{text}</span>
+          </IonItem>
+        </div>
     );
   }
 };
