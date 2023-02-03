@@ -44,12 +44,18 @@ const NavBar: React.FC<NavBarProps> = ({
           />
           {children}
           <div slot="end">
-            <NavLink id="home" text="Home" routerLink="/app/home" />
-            <NavLink id="team" text="Team" routerLink="/app/team" />
-            <NavLink id="profile" text="Profile" routerLink="/app/profile" />
-            <NavLink id="logs" text="Logs" routerLink="/app/manualsteps" />
-            <NavLink id="admin" text="Admin" routerLink="/app/admin" />
-            <NavLink id="admin-announcements" text="Announcements" routerLink="/app/admin/announcements" />
+            <NavLink id="nav-home" text="Home" href="/app/home" />
+            <NavLink id="nav-team" text="Team" href="/app/team" />
+            <NavLink id="nav-profile" text="Profile" href="/app/profile">
+              <NavLink id="nav-logs" text="Logs" href="/app/manualsteps" />
+              <NavLink id="nav-health-app" text="Health App Settings"
+                href="/app/healthapp" />
+            </NavLink>
+            <NavLink id="nav-admin" text="Admin" href="/app/admin">
+              <NavLink id="nav-admin-announcements"
+                  text="Announcements"
+                  href="/app/admin/announcements" />
+            </NavLink>
           </div>
         </IonToolbar>
       </IonHeader>
