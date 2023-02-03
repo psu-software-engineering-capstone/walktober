@@ -98,8 +98,14 @@ const HomePage: React.FC = (): any => {
       <IonContent fullscreen={true} className="ion-padding testing">
         <IonGrid>
           <IonRow>
-            <IonCol size="9"></IonCol>
-            <IonCol size="3">
+            <IonCol
+              size="9"
+              sizeSm="6"
+              sizeXs="12"
+              sizeMd="6"
+              sizeLg="9"
+            ></IonCol>
+            <IonCol size="3" sizeSm="6" sizeXs="12" sizeMd="6" sizeLg="3">
               <IonLabel className="localStepsUpdater">Todays Steps:</IonLabel>
               <IonInput
                 className="localStepsUpdater"
@@ -113,8 +119,14 @@ const HomePage: React.FC = (): any => {
                 step="1"
               ></IonInput>
             </IonCol>
-            <IonCol size="9"></IonCol>
-            <IonCol size="3">
+            <IonCol
+              size="9"
+              sizeSm="6"
+              sizeXs="12"
+              sizeMd="6"
+              sizeLg="9"
+            ></IonCol>
+            <IonCol size="3" sizeSm="6" sizeXs="12" sizeMd="6" sizeLg="3">
               click
               <a onClick={moveToManualSteps}> here </a>
               to see previous logs
