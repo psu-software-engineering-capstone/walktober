@@ -1,5 +1,3 @@
-
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import {
   IonIcon, IonPopover, IonItem
 } from '@ionic/react';
