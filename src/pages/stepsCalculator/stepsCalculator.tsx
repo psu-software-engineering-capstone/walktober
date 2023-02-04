@@ -13,7 +13,8 @@ import {
   IonToolbar,
   IonGrid,
   IonRow,
-  IonToggle
+  IonToggle,
+  IonPage
 } from '@ionic/react';
 import './stepsCalculator.css';
 import Metric from './Metric';
@@ -123,7 +124,7 @@ const StepsCalculator: React.FC = () => {
   };
 
   return (
-    <>
+    <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Steps Calculator</IonTitle>
@@ -194,7 +195,7 @@ const StepsCalculator: React.FC = () => {
           </IonRow>
         </IonGrid>
       </IonContent>
-    </>
+    </IonPage>
   );
 };
 
