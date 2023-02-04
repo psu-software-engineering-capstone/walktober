@@ -48,7 +48,7 @@ const HomePage: React.FC = () => {
   const getPastSevenDaysSteps = async () => {
     if (ctx.user === null) {
       alert('You are not logged in!');
-      history.push('/login');
+      history.replace('/login');
       return;
     }
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);

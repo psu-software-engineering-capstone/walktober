@@ -28,19 +28,19 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-import { useEffect } from 'react';
-import { useAuthContext } from './store/auth-context';
+import { useContext, useEffect } from 'react';
+import AuthContext from './store/auth-context';
 
 setupIonicReact();
 
 function App() {
-  const { user, loading } = useAuthContext();
+  const { user, loading } = useContext(AuthContext);
 
   useEffect(() => {
-    if (user !== null) {
-      console.log('auth state: logged in');
-    } else {
+    if (user === null) {
       console.log('auth state: logged out');
+    } else {
+      console.log('auth state: logged in');
     }
   }, [user]);
 

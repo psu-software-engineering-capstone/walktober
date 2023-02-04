@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { onAuthStateChanged } from 'firebase/auth';
 import { createContext, SetStateAction, useContext, useEffect, useState } from 'react';
 import { auth } from '../firebase';
 
@@ -11,30 +10,25 @@ export const useAuthContext = () => useContext(AuthContext);
 export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [complete, setComplete] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    const unsubscribe = onAuthStateChanged(
-      auth,
+    const unsubscribe = auth.onAuthStateChanged(
       (res: SetStateAction<null>) => {
         res ? setUser(res) : setUser(null);
         setLoading(false);
+        setComplete(true);
       }
     );
-    return unsubscribe;
+    return () => unsubscribe();
   }, [auth]);
 
   return (
     <AuthContext.Provider value={{ user, loading }}>
-      {props.children}
+      {complete && props.children}
     </AuthContext.Provider>
   );
 };
 
 export default AuthContext;
-
-// <div id="homePage">
-//   <IonButton>
-//     <IonMenuButton></IonMenuButton>
-//   </IonButton>
-// </div>;
