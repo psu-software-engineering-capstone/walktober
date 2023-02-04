@@ -34,23 +34,23 @@ import AuthContext from './store/auth-context';
 setupIonicReact();
 
 function App() {
-  const { user, loading } = useContext(AuthContext);
+  const ctx = useContext(AuthContext);
 
   useEffect(() => {
-    if (user === null) {
+    if (ctx.user === null) {
       console.log('auth state: logged out');
     } else {
       console.log('auth state: logged in');
     }
-  }, [user]);
+  }, [ctx.user]);
 
   useEffect(() => {
-    if (loading === true) {
-      console.log('loading state: true');
+    if (ctx.admin === true) {
+      console.log('user type: admin');
     } else {
-      console.log('loading state: false');
+      console.log('user type: regular');
     }
-  }, [loading]);
+  }, [ctx.admin]);
 
   return (
     <IonApp>

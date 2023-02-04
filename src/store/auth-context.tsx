@@ -1,31 +1,42 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { doc, getDoc } from 'firebase/firestore';
 import { createContext, SetStateAction, useContext, useEffect, useState } from 'react';
-import { auth } from '../firebase';
+import { auth, FirestoreDB } from '../firebase';
 
-const AuthContext = createContext({ user: null, loading: false });
+const AuthContext = createContext({ user: null, admin: false });
 
 export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [admin, setAdmin] = useState(false);
   const [complete, setComplete] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
     const unsubscribe = auth.onAuthStateChanged(
-      (res: SetStateAction<null>) => {
+      async (res: SetStateAction<null>) => {
         res ? setUser(res) : setUser(null);
-        setLoading(false);
+        await getUserInfo();
         setComplete(true);
       }
     );
     return () => unsubscribe();
   }, [auth]);
 
+  const getUserInfo = async () => {
+    if (auth.currentUser !== null) {
+      const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
+      const dbSnap = await getDoc(dbRef);
+      const userData = dbSnap.data();
+      if (userData.admin === true) {
+        setAdmin(true);
+      }
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, admin }}>
       {complete && props.children}
     </AuthContext.Provider>
   );
