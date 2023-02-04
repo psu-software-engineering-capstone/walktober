@@ -113,7 +113,7 @@ const Signup: React.FC = () => {
             alert('Sign-up successful');
             createUserWithGoogleAuth(result);
             void auth.signOut();
-            history.push('/login');
+            history.push('/register');
           }
         })
         .catch((error: unknown) => {
@@ -141,7 +141,7 @@ const Signup: React.FC = () => {
               alert('Sign-up successful');
               createUserWithGoogleAuthMobile(result);
               void auth.signOut();
-              history.push('/login');
+              history.push('/register');
             }
           }
         )
@@ -160,7 +160,7 @@ const Signup: React.FC = () => {
           createUser();
           console.log(data);
           alert('Sign-up successful');
-          history.push('/login');
+          history.push('/register');
         })
         .catch((error: unknown) => {
           console.log(error);
