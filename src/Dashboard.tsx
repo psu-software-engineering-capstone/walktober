@@ -20,6 +20,7 @@ import TeamHome from './pages/TeamHome/TeamHome';
 
 /* Theming */
 import './theme/app.scss';
+import StepsCalculator from './pages/stepsCalculator/stepsCalculator';
 
 const Dashboard: React.FC = () => {
   const tabsVisible = isPlatform('android') || isPlatform('ios');
@@ -29,6 +30,7 @@ const Dashboard: React.FC = () => {
         <Route exact path="/app/home" component={HomePage} />
         <Route exact path="/app/profile" component={Profile} />
         <Route exact path="/app/manualsteps" component={ManualSteps} />
+        <Route exact path="/app/stepscalc" component={StepsCalculator} />
         <Route exact path="/app/healthapp" component={HealthApp} />
         <Route exact path="/app/teamcreation" component={TeamCreation} />
         <Route exact path="/app/team" component={TeamHome} />
