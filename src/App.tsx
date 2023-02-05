@@ -36,34 +36,29 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-import { useEffect } from 'react';
-import { useAuthContext } from './store/auth-context';
-// import { auth } from './firebase';
+import { useContext, useEffect } from 'react';
+import AuthContext from './store/auth-context';
 
 setupIonicReact();
 
 function App() {
-  const { user, loading } = useAuthContext();
-
-  // useEffect(() => {
-  //   void auth.signOut();
-  // }, []);
+  const ctx = useContext(AuthContext);
 
   useEffect(() => {
-    if (user !== null) {
-      console.log('auth state: logged in');
-    } else {
+    if (ctx.user === null) {
       console.log('auth state: logged out');
+    } else {
+      console.log('auth state: logged in');
     }
-  }, [user]);
+  }, [ctx.user]);
 
   useEffect(() => {
-    if (loading === true) {
-      console.log('loading state: true');
+    if (ctx.admin === true) {
+      console.log('user type: admin');
     } else {
-      console.log('loading state: false');
+      console.log('user type: regular');
     }
-  }, [loading]);
+  }, [ctx.admin]);
 
   return (
     <IonApp>
@@ -73,6 +68,7 @@ function App() {
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/register" component={SignupForm} />
           <Route exact path="/password/reset" component={ForgotPassword} />
+          {/* Cannot have exact here */}
           <Route path="/app" component={Dashboard} />
           <Route exact path="/">
             <Redirect to="/login" />
