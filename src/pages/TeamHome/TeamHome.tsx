@@ -1,8 +1,7 @@
-import { IonContent, IonItem, IonPage, IonRow, IonCol, IonGrid, IonTitle } from '@ionic/react';
+import { IonContent, IonPage, IonTitle } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
 import NavBar from '../../components/NavBar';
 import './TeamHome.scss';
-import FirstTimeModal from './FirstTimeModal';
 
 const TeamHome: React.FC = () => {
   return (
@@ -11,12 +10,6 @@ const TeamHome: React.FC = () => {
         <IonTitle>My Team</IonTitle>
       </NavBar>
       <IonContent fullscreen>
-          <IonGrid>
-              <IonRow>
-                  <IonCol>
-                  <FirstTimeModal/>
-                  </IonCol>
-                  <IonCol>
         { /*
            * TODO: change channel based on current team
            *
@@ -30,9 +23,6 @@ const TeamHome: React.FC = () => {
             server="1068966007886069841"
             channel="1068966009106600110"
           />
-          </IonCol>
-        </IonRow>
-        </IonGrid>
       </IonContent>
     </IonPage>
   );
