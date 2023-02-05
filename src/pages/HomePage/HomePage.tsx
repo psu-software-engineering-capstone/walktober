@@ -13,7 +13,7 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonInput
+  IonInput,
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
 import { useHistory } from 'react-router';
@@ -24,6 +24,8 @@ import AuthContext from '../../store/auth-context';
 import { getDoc } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
 import { doc } from 'firebase/firestore';
+//import ExitSurveyModal from '../exitQuestions/exitQuestionsModal';
+
 interface badgeOutline {
   name: string;
 }
