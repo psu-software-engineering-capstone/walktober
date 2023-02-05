@@ -26,6 +26,7 @@ import AuthContext from '../../store/auth-context';
 import { getDoc } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
 import { doc } from 'firebase/firestore';
+import Example from '../exitQuestions/exitQuestionsModal';
 
 interface badgeOutline {
   name: string;
@@ -143,6 +144,7 @@ const HomePage: React.FC = (): any => {
             <IonCol>
               <IonRow>
                 <IonCol className="boxSize">Location for anouncments</IonCol>
+                  <Example/>
               </IonRow>
               <IonRow>
                 <IonCol className="boxSize">
