@@ -6,7 +6,6 @@ import { useState, useContext, useEffect } from 'react';
 import {
   IonContent,
   IonHeader,
-  IonItem,
   IonLabel,
   IonPage,
   IonTitle,
@@ -14,14 +13,13 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonInput,
-  IonButton
+  IonInput
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
 import { useHistory } from 'react-router';
-import PersonalProgress from '../../components/PersonalProgress';
 import NavBar from '../../components/NavBar';
 import './HomePage.css';
+import ProgressChart from '../../components/ProgressChart';
 import AuthContext from '../../store/auth-context';
 import { getDoc } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
@@ -37,11 +35,11 @@ interface StepLog {
   steps: number;
 }
 
-const HomePage: React.FC = (): any => {
+const HomePage: React.FC = () => {
   const [steps, setSteps] = useState(0);
+  const history = useHistory();
   const [badges, setBadges] = useState(Array<badgeOutline>);
   const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
-  const history = useHistory();
 
   const ctx = useContext(AuthContext);
 
@@ -52,7 +50,7 @@ const HomePage: React.FC = (): any => {
   const getPastSevenDaysSteps = async () => {
     if (ctx.user === null) {
       alert('You are not logged in!');
-      history.push('/login');
+      history.replace('/login');
       return;
     }
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
@@ -87,70 +85,105 @@ const HomePage: React.FC = (): any => {
     <IonPage>
       <IonHeader>
         <NavBar>
-          <IonTitle>Home</IonTitle>
+          <IonTitle>Home Page</IonTitle>
         </NavBar>
       </IonHeader>
-      <IonContent fullscreen={true} className="ion-padding">
-        <IonItem>
-          <IonGrid>
-            <IonRow>
-              <IonCol size="auto">
-                <IonItem>
-                  <IonLabel>
-                    Todays Steps:
-                    <IonInput
-                      id="stepsUpdate"
-                      type="number"
-                      placeholder={steps.toString()}
-                      onInput={(event: any) => {
-                        stepUpdateHandler(event);
-                      }}
-                      min="1"
-                      step="1"
-                    ></IonInput>
-                  </IonLabel>
-                </IonItem>
-              </IonCol>
-            </IonRow>
-            <IonRow>
+      <IonContent fullscreen={true} className="ion-padding testing">
+        <IonGrid>
+          <IonRow>
+            <IonCol
+              size="9"
+              sizeSm="6"
+              sizeXs="12"
+              sizeMd="6"
+              sizeLg="9"
+            ></IonCol>
+            <IonCol size="3" sizeSm="6" sizeXs="12" sizeMd="6" sizeLg="3">
+              <IonLabel className="localStepsUpdater">Todays Steps:</IonLabel>
+              <IonInput
+                className="localStepsUpdater"
+                id="stepsUpdate"
+                type="number"
+                placeholder={steps.toString()}
+                onInput={(event: any) => {
+                  stepUpdateHandler(event);
+                }}
+                min="1"
+                step="1"
+              ></IonInput>
+            </IonCol>
+            <IonCol
+              size="9"
+              sizeSm="6"
+              sizeXs="12"
+              sizeMd="6"
+              sizeLg="9"
+            ></IonCol>
+            <IonCol size="3" sizeSm="6" sizeXs="12" sizeMd="6" sizeLg="3">
               click
-              <IonButton onClick={moveToManualSteps}>here</IonButton>
+              <a onClick={moveToManualSteps}> here </a>
               to see previous logs
-            </IonRow>
-          </IonGrid>
-        </IonItem>
-        <IonItem>
-          <IonLabel>
-            Badges Acquired:
-            <div>
-              {badges.map((badge) => (
-                <IonIcon name={badge.name} key={Math.random()}></IonIcon>
-              ))}
-            </div>
-          </IonLabel>
-        </IonItem>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
 
         {/* below is only for development testing purposes */}
         <IonGrid>
           <IonRow>
-            <IonCol className="boxSize">Location for leaderboards</IonCol>
-            <IonCol className="boxSize">
+            <IonCol
+              className="boxSize"
+              sizeSm="12"
+              sizeLg="4"
+              sizeMd="6"
+              sizeXs="12"
+            >
+              Location for leaderboards
+            </IonCol>
+            <IonCol
+              className="boxSize"
+              sizeSm="12"
+              sizeLg="4"
+              sizeMd="6"
+              sizeXs="12"
+            >
               <WidgetBot
                 className="discord-widget"
                 server="1068966007886069841"
                 channel="1068966009106600110"
               />
             </IonCol>
-            <IonCol>
-              <IonRow>
-                <IonCol className="boxSize">Location for anouncments</IonCol>
-                  <Example/>
-              </IonRow>
-              <IonRow>
+            <IonCol sizeSm="12" sizeLg="4" sizeMd="6" sizeXs="12">
+              <IonGrid>
+                <IonCol className="boxSize">Location for announcements</IonCol>
+                <br />
                 <IonCol className="boxSize">
-                  Location for personal Progress: <PersonalProgress />
+                  Location for personal Progress:
+                  {
+                    /* {pastSevenDaysSteps.length > 1 ? (
+                    <ProgressChart data={pastSevenDaysSteps} />
+                  ) : (
+                    ' '
+                  )} */
+                    // pastSevenDaysSteps.map((item) => (
+                    //   <IonItem key={Math.random()}>
+                    //     {item.date + ' ' + item.steps}
+                    //   </IonItem>
+                    // ))
+                  }
                 </IonCol>
-              </IonRow>
+              </IonGrid>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <IonLabel>
+                Badges Acquired:
+                <div>
+                  {badges.map((badge) => (
+                    <IonIcon name={badge.name} key={Math.random()}></IonIcon>
+                  ))}
+                </div>
+              </IonLabel>
             </IonCol>
           </IonRow>
         </IonGrid>
