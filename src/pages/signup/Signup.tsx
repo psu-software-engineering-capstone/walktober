@@ -26,7 +26,9 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
-  signInWithCredential
+  signInWithCredential,
+  getAuth,
+  sendEmailVerification
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
@@ -159,6 +161,8 @@ const Signup: React.FC = () => {
         .then((data: unknown) => {
           createUser();
           console.log(data);
+          //send a verification link to the email
+          emailVerification();
           alert('Sign-up successful');
           history.push('/register');
         })
@@ -169,6 +173,17 @@ const Signup: React.FC = () => {
     } else {
       alert('Passwords are not matching');
     }
+  };
+
+  // sends a verication link to the user's email //
+  const emailVerification = () => {
+    const user = getAuth();
+    sendEmailVerification(user.currentUser)
+    .then(alert("Verification link has been sent to email!"))
+    .catch((error: unknown) => {
+      console.log(error);
+      alert(error);
+    });
   };
 
   // move to login button //
