@@ -22,8 +22,18 @@ import {
   IonToolbar
 } from '@ionic/react';
 import NavBar from '../../components/NavBar';
+//import { auth, FirestoreDB } from '../../firebase';
+//import { doc, getDoc } from 'firebase/firestore';
+//import { updateDoc } from 'firebase/firestore';
+//import { useHistory } from 'react-router';
+//import AuthContext from '../../store/auth-context';
 import { closeCircleSharp } from 'ionicons/icons';
-import React, { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { auth, FirestoreDB } from '../../firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { updateDoc } from 'firebase/firestore';
+import { useHistory } from 'react-router';
+import AuthContext from '../../store/auth-context';
 import './admin.css';
 
 const Admin: React.FC = () => {
@@ -31,6 +41,102 @@ const Admin: React.FC = () => {
   const [isOpenTeam, setIsOpenTeam] = useState(false);
   const [isOpenAnnouncements, setIsOpenAnnouncements] = useState(false);
   const [isOpenReport, setIsOpenReport] = useState(false);
+
+  interface StepLog {
+    user: string;
+    team: string;
+    email: string;
+    steps: number;
+  }
+
+  const [userLogs, setUserLogs] = useState<StepLog[]>([]);
+
+  useEffect(() => {
+    getRecordsFromDB();
+  }, []);
+
+  const getRecordsFromDB = async () => {
+    let usersByName = [];
+    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
+    const dbSnap = await getDoc(dbRef);
+    usersByName = dbSnap.data().usersByName;
+    setUserLogs(usersByName);
+  };
+
+  function DisplayUsers(): any {
+    if (userLogs.length > 0) {
+
+      return (
+        <>
+          <IonGrid fixed={true}>
+            <IonRow class="header-row">
+              <IonCol sizeMd='3' size="5" class="header-col">
+                Name
+              </IonCol>
+
+              <IonCol sizeMd='3' size="5" class="header-col">
+                Team
+              </IonCol>
+
+              <IonCol sizeMd='4' size="5" class="header-col">
+                Email
+              </IonCol>
+
+              <IonCol sizeMd='3' size="8" class="header-col">
+                Total Steps
+              </IonCol>
+
+              <IonCol sizeMd='3' size="8" class="header-col">
+                Actions
+              </IonCol>
+            </IonRow>
+
+            {userLogs.map((item) => (
+              <IonRow key={Math.random()}>
+                <IonCol sizeMd='3' size="5">{item.user}</IonCol>
+                <IonCol sizeMd='3' size="5">{item.team}</IonCol>
+                <IonCol sizeMd='4' size="5">{item.email}</IonCol>
+                <IonCol sizeMd='3' size="8">{item.steps}</IonCol>
+                <IonCol sizeMd='3' size="8">
+                  <IonButton size="small">
+                    <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>Remove
+                  </IonButton>
+                <IonButton size="small">Edit Step Log</IonButton></IonCol>
+              </IonRow>
+            ))}
+          </IonGrid>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <IonGrid fixed={true}>
+            <IonRow class="header-row">
+              <IonCol sizeMd='3' size="5" class="header-col">
+                Name
+              </IonCol>
+
+              <IonCol sizeMd='3' size="5" class="header-col">
+                Team
+              </IonCol>
+
+              <IonCol sizeMd='4' size="5" class="header-col">
+                Email
+              </IonCol>
+
+              <IonCol sizeMd='3' size="8" class="header-col">
+                Total Steps
+              </IonCol>
+
+              <IonCol sizeMd='3' size="8" class="header-col">
+                Actions
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </>
+      );
+    }
+  }
 
   return (
     <IonPage>
@@ -43,6 +149,7 @@ const Admin: React.FC = () => {
             <IonTitle size="large">Admin</IonTitle>
           </IonToolbar>
         </IonHeader>
+        <IonItem>{DisplayUsers()}</IonItem>
         <IonGrid class="invis-grid">
           <IonRow></IonRow>
           <IonRow>
