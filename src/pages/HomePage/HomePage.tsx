@@ -29,6 +29,7 @@ import HomePageMenuItems from '../../components/HomePageMenuItems';
 import PersonalProgress from '../../components/PersonalProgress';
 import NavBar from '../../components/NavBar';
 import './HomePage.css';
+import BarGraph from '../../components/BarGraph/BarGraph';
 interface badgeOutline {
   name: string;
 }
@@ -103,7 +104,9 @@ const HomePage: React.FC = (): any => {
         {/* below is only for development testing purposes */}
         <IonGrid>
           <IonRow>
-            <IonCol className="boxSize">Location for leaderboards</IonCol>
+            <IonCol className="boxSize leaderBoardBox">
+              <BarGraph></BarGraph>
+            </IonCol>
             <IonCol className="boxSize">
               <WidgetBot
                 className="discord-widget"
