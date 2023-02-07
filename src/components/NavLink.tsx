@@ -30,7 +30,7 @@ const NavLink: React.FC<NavLinkProps> = ({ id, text, href, children = null }) =>
     const elem = document.elementFromPoint(e.clientX, e.clientY);
 
     // if the mouse is not hovering in the popover, dismiss the popover
-    if(elem?.closest('ion-popover') === null) {
+    if(elem?.closest('ion-popover') !== null) {
       dismiss();
     }
   };
