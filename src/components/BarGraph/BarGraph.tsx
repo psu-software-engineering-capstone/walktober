@@ -9,6 +9,9 @@ ChartJS.register(...registerables);
 
 const BarGraph: React.FC = () => {
   const [chartData, setChartData] = useState({
+    /*Sorts the data of all users by the amount of steps taken. Labels formed from the names
+    * of the user, and the bars are the number of steps the user took
+    */
     labels: People.sort((a: any, b: any) => (a.steps > b.steps ? -1 : 1)).map(
       (row) => row.name
     ),
