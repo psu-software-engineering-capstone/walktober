@@ -17,15 +17,10 @@ import './NewTeamCreation.css';
 import { useState } from 'react';
 import { auth, FirestoreDB } from '../firebase';
 import {
-  collection,
   doc,
   getDoc,
-  getDocs,
-  query,
   setDoc,
   updateDoc,
-  where,
-  arrayUnion,
   Timestamp
 } from 'firebase/firestore';
 
@@ -81,7 +76,7 @@ const NewTeamCreation: React.FC = () => {
       return;
     }
     const currentDate: Timestamp = Timestamp.now();
-    const adminRef = doc(FirestoreDB, 'users', 'admin');
+    const adminRef = doc(FirestoreDB, 'admin', 'admin');
     const adminSnap = await getDoc(adminRef);
     const teamCreationDueDate: Timestamp = adminSnap.data().team_creation_due;
     if(currentDate.compareTo(teamCreationDueDate) > 0){
