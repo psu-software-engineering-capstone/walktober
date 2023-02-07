@@ -54,18 +54,6 @@ const NewTeamCreation: React.FC = () => {
       alert('You are not signed-in!');
       return;
     }
-    console.log(`newTeamStatus is: ${newTeamStatus}.`);
-    console.log(`newTeamPassword is: ${newTeamPassword}.`);
-    if(newTeamStatus == 0){
-      console.log('it is 0');
-    }
-    if(newTeamPassword === ''){
-      console.log('password is null');
-    }
-    else{
-      console.log('pw is not null');
-    }
-
     const userRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     const userSnap = await getDoc(userRef);
     const userData = userSnap.data();
