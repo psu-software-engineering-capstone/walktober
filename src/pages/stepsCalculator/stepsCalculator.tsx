@@ -13,10 +13,12 @@ import {
   IonToolbar,
   IonGrid,
   IonRow,
-  IonToggle
+  IonToggle,
+  IonPage
 } from '@ionic/react';
 import './stepsCalculator.css';
 import Metric from './Metric';
+import { useHistory } from 'react-router';
 
 const StepsCalculator: React.FC = () => {
   const [metric, setMetric] = useState(false);
@@ -30,8 +32,9 @@ const StepsCalculator: React.FC = () => {
   const stepsPerMile = 2250;
   let miles: number;
   const kmtom = 0.621371;
+  const history = useHistory();
 
-  function calculate (ev: Event): number {
+  function calculate(ev: Event): number {
     miles = Number((ev.target as HTMLInputElement).value);
     if (miles <= 0) {
       return 0;
@@ -40,7 +43,7 @@ const StepsCalculator: React.FC = () => {
     return steps;
   }
 
-  function calculateKm (ev: Event): number {
+  function calculateKm(ev: Event): number {
     miles = Number((ev.target as HTMLInputElement).value);
     if (miles <= 0) {
       return 0;
@@ -50,7 +53,7 @@ const StepsCalculator: React.FC = () => {
     return steps;
   }
 
-  function getHeightFt (ev: Event): number {
+  function getHeightFt(ev: Event): number {
     heightFt = Number((ev.target as HTMLInputElement).value);
     if (heightFt <= 0) {
       return 0;
@@ -58,7 +61,7 @@ const StepsCalculator: React.FC = () => {
     return heightFt;
   }
 
-  function getHeightIn (ev: Event): number {
+  function getHeightIn(ev: Event): number {
     heightIn = Number((ev.target as HTMLInputElement).value);
     if (heightIn <= 0) {
       return 0;
@@ -66,7 +69,7 @@ const StepsCalculator: React.FC = () => {
     return heightIn;
   }
 
-  function getHeightcm (ev: Event): number {
+  function getHeightcm(ev: Event): number {
     heightCm = Number((ev.target as HTMLInputElement).value);
     if (heightCm <= 0) {
       return 0;
@@ -74,7 +77,7 @@ const StepsCalculator: React.FC = () => {
     return heightCm;
   }
 
-  function placeHolder (ev: Event): void {
+  function placeHolder(ev: Event): void {
     ev.preventDefault();
     if (metric) {
       console.log('ASDASDSADASDSADASDQWDQWDQWEAQWEASDAWEAWEASEWAQEDWQDQAW');
@@ -121,7 +124,7 @@ const StepsCalculator: React.FC = () => {
   };
 
   return (
-    <>
+    <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Steps Calculator</IonTitle>
@@ -154,7 +157,13 @@ const StepsCalculator: React.FC = () => {
             </IonRow>
             <IonRow>
               <a>
-                <IonRouterLink slot="helper" href="./manualLoggingSteps">
+                <IonRouterLink
+                  slot="helper"
+                  href="/app/manualsteps"
+                  onClick={() => {
+                    history.push('/app/manualsteps');
+                  }}
+                >
                   Return to steps logging
                 </IonRouterLink>
               </a>
@@ -186,7 +195,7 @@ const StepsCalculator: React.FC = () => {
           </IonRow>
         </IonGrid>
       </IonContent>
-    </>
+    </IonPage>
   );
 };
 
