@@ -28,9 +28,9 @@ const NavLink: React.FC<NavLinkProps> = ({ id, text, href, children = null }) =>
   const dismissPopover = (e: React.MouseEvent) => {
     // get the element under the mouse pointer
     const elem = document.elementFromPoint(e.clientX, e.clientY);
+    const tag = elem?.nodeName.toLowerCase();
 
-    // if the mouse is not hovering in the popover, dismiss the popover
-    if(elem?.closest('ion-popover') !== null) {
+    if(tag !== 'ion-content' && tag !== 'ion-toolbar') {
       dismiss();
     }
   };
