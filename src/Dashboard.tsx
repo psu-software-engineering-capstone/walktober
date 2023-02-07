@@ -17,6 +17,7 @@ import ManualSteps from './pages/manualLoggingSteps/manualLoggingSteps';
 import HealthApp from './pages/healthapp/HealthApp';
 import TeamCreation from './pages/TeamCreation';
 import TeamHome from './pages/TeamHome/TeamHome';
+import NewTeamCreation from './pages/NewTeamCreation';
 
 /* Theming */
 import './theme/app.scss';
@@ -32,7 +33,7 @@ const Dashboard: React.FC = () => {
         <Route exact path="/app/manualsteps" component={ManualSteps} />
         <Route exact path="/app/stepscalc" component={StepsCalculator} />
         <Route exact path="/app/healthapp" component={HealthApp} />
-        <Route exact path="/app/teamcreation" component={TeamCreation} />
+        <Route exact path="/app/teamcreation" component={NewTeamCreation} />
         <Route exact path="/app/team" component={TeamHome} />
         <Route exact path="/app">
           <Redirect to="/app/home" />
@@ -58,6 +59,10 @@ const Dashboard: React.FC = () => {
         <IonTabButton tab="team" href="/app/team">
           <IonIcon icon={square} />
           <IonLabel>Team</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="teamCreate" href="/app/teamcreation">
+          <IonIcon icon={square} />
+          <IonLabel>Team Creation</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>
