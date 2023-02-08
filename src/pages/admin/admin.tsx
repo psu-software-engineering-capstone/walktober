@@ -28,12 +28,12 @@ import NavBar from '../../components/NavBar';
 //import { useHistory } from 'react-router';
 //import AuthContext from '../../store/auth-context';
 import { closeCircleSharp } from 'ionicons/icons';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { auth, FirestoreDB } from '../../firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { updateDoc } from 'firebase/firestore';
-import { useHistory } from 'react-router';
-import AuthContext from '../../store/auth-context';
+// import { updateDoc } from 'firebase/firestore';
+// import { useHistory } from 'react-router';
+// import AuthContext from '../../store/auth-context';
 import './admin.css';
 
 const Admin: React.FC = () => {
