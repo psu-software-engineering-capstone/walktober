@@ -25,8 +25,7 @@ import NavBar from '../../components/NavBar';
 
 const Profile: React.FC = () => {
   const [email, setEmail] = useState('');
-  const [joinDate, setJoinDate] = useState(new Date());
-  const [joinDateString, setJoinDateString] = useState('');
+  const [joinDate, setJoinDate] = useState('');
   const [name, SetName] = useState('');
   const [profilePic, setProfilePic] = useState('');
   const [totalDistance, setTotalDistance] = useState(0);
@@ -50,8 +49,7 @@ const Profile: React.FC = () => {
     SetName(userData.name);
     // setUsername('');
     setEmail(userData.email);
-    setJoinDate(new Date(auth.currentUser.metadata.creationTime));
-    setJoinDateString(joinDate.toLocaleDateString());
+    setJoinDate(new Date(auth.currentUser.metadata.creationTime).toLocaleDateString());
     setTotalDistance(userData.totalStep / 2000);
   }
 
@@ -103,7 +101,7 @@ const Profile: React.FC = () => {
               </IonCol>
               <IonCol>
                 <IonText>
-                  <p>Joined on {joinDateString}</p>
+                  <p>Joined on {joinDate}</p>
                   <p>{totalDistance} miles walked in total</p>
                   <IonLabel>Step Goal: </IonLabel>
                   <IonItem fill="outline">
