@@ -30,7 +30,7 @@ const Profile: React.FC = () => {
   const [name, SetName] = useState('');
   const [profilePic, setProfilePic] = useState('');
   const [totalDistance, setTotalDistance] = useState(0);
-  const [username, setUsername] = useState('');
+  // const [username, setUsername] = useState('');
   // let badges;
 
   const history = useHistory();
@@ -48,7 +48,7 @@ const Profile: React.FC = () => {
     const userData = dbSnap.data();
     setProfilePic(userData.profile_pic);
     SetName(userData.name);
-    setUsername('');
+    // setUsername('');
     setEmail(userData.email);
     setJoinDate(new Date(auth.currentUser.metadata.creationTime));
     setJoinDateString(joinDate.toLocaleDateString());
@@ -61,6 +61,11 @@ const Profile: React.FC = () => {
 
   const moveToCreateTeam = () => {
     history.push('/app/teamcreation');
+  };
+
+  const signOut = async () => {
+    await auth.signOut();
+    history.replace('/login');
   };
 
   return (
@@ -83,16 +88,17 @@ const Profile: React.FC = () => {
                   ></IonImg>
                   <IonButton>Change Profile Picture</IonButton>
                   <h2>{name}</h2>
-                  <p>
+                  {/* <p>
                     {username}
                     <IonButton fill="clear" size="small">
                       Change Username
                     </IonButton>
-                  </p>
+                  </p> */}
                   <p>{email}</p>
                   <IonButton>Change Password</IonButton> <br></br>
                   <IonButton>Change Health App Preferences</IonButton>
                   <IonButton onClick={moveToCreateTeam}>Create a Team</IonButton>
+                  <IonButton onClick={signOut}>Sign Out</IonButton>
                 </IonText>
               </IonCol>
               <IonCol>
