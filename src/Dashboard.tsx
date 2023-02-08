@@ -15,7 +15,7 @@ import HomePage from './pages/HomePage/HomePage';
 import Profile from './pages/profile/Profile';
 import ManualSteps from './pages/manualLoggingSteps/manualLoggingSteps';
 import HealthApp from './pages/healthapp/HealthApp';
-import TeamCreation from './pages/TeamCreation';
+// import TeamCreation from './pages/TeamCreation';
 import TeamHome from './pages/TeamHome/TeamHome';
 import NewTeamCreation from './pages/NewTeamCreation';
 
