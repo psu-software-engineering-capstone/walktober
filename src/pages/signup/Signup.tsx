@@ -265,7 +265,7 @@ const Signup: React.FC = () => {
           </IonCardContent>
         </IonCard>
 
-        <IonCard className={'signup-card ' + 'bottom'}>
+        <IonCard className="signup-card bottom">
           <IonCardContent>
             <IonButton expand="block" onClick={moveToLogin} color="tertiary">
               Return to Login
