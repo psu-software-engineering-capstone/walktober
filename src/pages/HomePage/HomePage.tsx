@@ -13,7 +13,7 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonInput,
+  IonInput
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
 import { useHistory } from 'react-router';
@@ -132,7 +132,7 @@ const HomePage: React.FC = () => {
         <IonGrid>
           <IonRow>
             <IonCol
-              className="boxSize leaderBoardBox"
+              className="boxSize"
               sizeSm="12"
               sizeLg="4"
               sizeMd="6"
