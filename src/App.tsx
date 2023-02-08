@@ -7,8 +7,6 @@ import Login from './pages/login/login';
 import Signup from './pages/signup/Signup';
 import SignupForm from './pages/signup/signupForm';
 import ForgotPassword from './pages/forgotpassword/forgotpassword';
-import newPassword from './pages/profile/newPassword';
-import changeAvatar from './pages/profile/changeAvatar';
 import Dashboard from './Dashboard';
 
 /* Core CSS required for Ionic components to work properly */
@@ -67,8 +65,6 @@ function App() {
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/register" component={SignupForm} />
           <Route exact path="/password/reset" component={ForgotPassword} />
-          <Route exact path="/profile/passwordChange" component={newPassword} />
-          <Route exact path="/profile/newAvatar" component={changeAvatar} />
           <Route path="/app" component={Dashboard} />
           <Route exact path="/">
             <Redirect to="/login" />

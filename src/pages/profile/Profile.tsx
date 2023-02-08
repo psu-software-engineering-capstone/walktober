@@ -11,16 +11,20 @@ import {
   IonItem,
   IonLabel,
   IonPage,
+  IonRouterOutlet,
   IonRow,
   IonText,
   IonTitle
 } from '@ionic/react';
 import './Profile.css';
+import { Route } from 'react-router-dom';
 import { auth, FirestoreDB } from '../../firebase';
 import { doc } from 'firebase/firestore';
 import { getDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
+import newPassword from './newPassword';
+import changeAvatar from './changeAvatar';
 
 const Profile: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -30,6 +34,7 @@ const Profile: React.FC = () => {
   const [profilePic, setProfilePic] = useState('');
   const [totalDistance, setTotalDistance] = useState(0);
   const [username, setUsername] = useState('');
+  const history = useHistory();
   // let badges;
 
   async function GetRecords(): Promise<void> {
@@ -41,6 +46,7 @@ const Profile: React.FC = () => {
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     const dbSnap = await getDoc(dbRef);
     const userData = dbSnap.data();
+    
     setProfilePic(userData.profile_pic);
     SetName(userData.name);
     setUsername('');
@@ -55,16 +61,20 @@ const Profile: React.FC = () => {
   }, []);
 
   const newAvatar = () => {
-    useHistory().push('/profile/newAvater');
+    history.push('/app/profile/newAvater');
   };
 
   const changePassword = () => {
-    useHistory().push('/profile/newAvater');
+    history.push('/app/profile/passwordChange');
     return;
   };
 
   return (
     <IonPage>
+      <IonRouterOutlet>
+        <Route exact path="/app/profile/passwordChange" component={newPassword} />
+        <Route exact path="/app/profile/newAvatar" component={changeAvatar} />
+      </IonRouterOutlet>
       <IonHeader>
         <NavBar>
           <IonTitle>Profile</IonTitle>

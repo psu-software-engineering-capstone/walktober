@@ -23,6 +23,7 @@ const newPassword: React.FC = () => {
   const [veriPassword, setVeriPassword] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [passwordShown, setPasswordShown] = useState(false);
+  const history = useHistory();
 
   const togglePasswordVisibility = () => {
     setPasswordShown(!passwordShown);
@@ -44,7 +45,7 @@ const newPassword: React.FC = () => {
   updatePassword(auth.currentUser, newPassword)
     .then(() => {
       alert('Password change successful');
-      useHistory().push('/profile');
+      history.push('/profile');
     })
     .catch((error: any) => {
       alert('Something went wrong, please try again');
@@ -73,6 +74,7 @@ const newPassword: React.FC = () => {
             onClick={togglePasswordVisibility}
           ></IonIcon>
         </IonItem>
+
         <IonItem>
           <IonLabel position="floating">New Password</IonLabel>
           <IonInput
@@ -86,6 +88,7 @@ const newPassword: React.FC = () => {
             onClick={togglePasswordVisibility}
           ></IonIcon>
         </IonItem>
+        
         <IonItem>
           <IonLabel position="floating">Verify New Password</IonLabel>
           <IonInput
