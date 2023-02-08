@@ -21,8 +21,8 @@ import { useState } from 'react';
 import './Signup.css';
 import logo from '../../assets/Walktober.png';
 import { useHistory } from 'react-router-dom';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { FirestoreDB, auth } from '../../firebase';
+import { doc, setDoc } from 'firebase/firestore';
+import { FirestoreDB } from '../../firebase';
 
 const SignupForm: React.FC = () => {
   // registration variables //
