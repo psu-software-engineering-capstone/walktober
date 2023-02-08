@@ -113,7 +113,6 @@ const Signup: React.FC = () => {
           } else {
             alert('Sign-up successful');
             createUserWithGoogleAuth(result);
-            void auth.signOut();
             history.push('/register');
           }
         })
@@ -141,7 +140,6 @@ const Signup: React.FC = () => {
             } else {
               alert('Sign-up successful');
               createUserWithGoogleAuthMobile(result);
-              void auth.signOut();
               history.push('/register');
             }
           }
