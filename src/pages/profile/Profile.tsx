@@ -71,6 +71,9 @@ const Profile: React.FC = () => {
     history.push('/app/profile/passwordChange');
     return;
   };
+  const moveToCreateTeam = () => {
+    history.push('/app/teamcreation');
+  };
 
   return (
     <IonPage>
@@ -110,6 +113,7 @@ const Profile: React.FC = () => {
                   </IonButton>{' '}
                   <br></br>
                   <IonButton>Change Health App Preferences</IonButton>
+                  <IonButton onClick={moveToCreateTeam}>Create a Team</IonButton>
                 </IonText>
               </IonCol>
               <IonCol>
