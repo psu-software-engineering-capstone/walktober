@@ -28,44 +28,37 @@ import NavBar from '../../components/NavBar';
 //import { useHistory } from 'react-router';
 //import AuthContext from '../../store/auth-context';
 import { closeCircleSharp } from 'ionicons/icons';
-import { useState, useEffect, useContext } from 'react';
-import { auth, FirestoreDB } from '../../firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import { updateDoc } from 'firebase/firestore';
-import { useHistory } from 'react-router';
-import AuthContext from '../../store/auth-context';
+import { useState} from 'react';
 import './admin.css';
 
 const Admin: React.FC = () => {
+  //used to open and close modals
   const [isOpenUser, setIsOpenUser] = useState(false);
   const [isOpenTeam, setIsOpenTeam] = useState(false);
   const [isOpenAnnouncements, setIsOpenAnnouncements] = useState(false);
   const [isOpenReport, setIsOpenReport] = useState(false);
 
-  interface StepLog {
+  
+  //for getting user information from the db
+  /*
+  const [name, SetName] = useState('');
+  const [email, setEmail] = useState('');
+  const [team, setTeam] = useState(new Date());
+  const [steps, setSteps] = useState('');*/
+
+  interface user {
     user: string;
     team: string;
     email: string;
     steps: number;
   }
 
-  const [userLogs, setUserLogs] = useState<StepLog[]>([]);
-
-  useEffect(() => {
-    getRecordsFromDB();
-  }, []);
-
-  const getRecordsFromDB = async () => {
-    let usersByName = [];
-    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-    const dbSnap = await getDoc(dbRef);
-    usersByName = dbSnap.data().usersByName;
-    setUserLogs(usersByName);
-  };
+  //for once information is fetched
+  //const [users, setUsers] = useState<user[]>([]);
+  const [users] = useState<user[]>([]);
 
   function DisplayUsers(): any {
-    if (userLogs.length > 0) {
-
+    if (users.length > 0) {
       return (
         <>
           <IonGrid fixed={true}>
@@ -91,7 +84,7 @@ const Admin: React.FC = () => {
               </IonCol>
             </IonRow>
 
-            {userLogs.map((item) => (
+            {users.map((item) => (
               <IonRow key={Math.random()}>
                 <IonCol sizeMd='3' size="5">{item.user}</IonCol>
                 <IonCol sizeMd='3' size="5">{item.team}</IonCol>
@@ -149,7 +142,6 @@ const Admin: React.FC = () => {
             <IonTitle size="large">Admin</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonItem>{DisplayUsers()}</IonItem>
         <IonGrid class="invis-grid">
           <IonRow></IonRow>
           <IonRow>
@@ -197,99 +189,7 @@ const Admin: React.FC = () => {
         </IonGrid>
 
         <IonItem>Users</IonItem>
-        <IonGrid fixed={true}>
-          <IonRow class="header-row">
-            <IonCol size="3" class="header-col">
-              Name
-            </IonCol>
-
-            <IonCol size="3" class="header-col">
-              Team
-            </IonCol>
-
-            <IonCol size="4" class="header-col">
-              Email
-            </IonCol>
-
-            <IonCol size="3" class="header-col">
-              Total Steps
-            </IonCol>
-
-            <IonCol size="3" class="header-col">
-              Actions
-            </IonCol>
-          </IonRow>
-
-          <IonRow>
-            {/*The below line should serve as a template for populating data into the table, to be implmented
-              {data.map((column, index) => (<IonCol key={index}>{column}</IonCol>))}*/}
-            <IonCol size="3">Test Name</IonCol>
-
-            <IonCol size="3">Kraban</IonCol>
-
-            <IonCol size="4">fakemail@gmail.com</IonCol>
-
-            <IonCol size="3">9001</IonCol>
-
-            <IonCol size="3">
-              <IonButton size="small">
-                <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>Remove
-              </IonButton>
-              <IonButton size="small">Edit Step Log</IonButton>
-            </IonCol>
-          </IonRow>
-
-          <IonRow>
-            <IonCol size="3">Test Name2</IonCol>
-
-            <IonCol size="3">Stars</IonCol>
-
-            <IonCol size="4">fakemail@aol.com</IonCol>
-
-            <IonCol size="3">1135813</IonCol>
-
-            <IonCol size="3">
-              <IonButton size="small">
-                <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>Remove
-              </IonButton>
-              <IonButton size="small">Edit Step Log</IonButton>
-            </IonCol>
-          </IonRow>
-
-          <IonRow>
-            <IonCol size="3">Test Name3</IonCol>
-
-            <IonCol size="3">Blank</IonCol>
-
-            <IonCol size="4">mail@mail.com</IonCol>
-
-            <IonCol size="3">1235711</IonCol>
-
-            <IonCol size="3">
-              <IonButton size="small">
-                <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>Remove
-              </IonButton>
-              <IonButton size="small">Edit Step Log</IonButton>
-            </IonCol>
-          </IonRow>
-
-          <IonRow>
-            <IonCol size="3">Test Name4</IonCol>
-
-            <IonCol size="3"></IonCol>
-
-            <IonCol size="4">fakemail@yahoo.com</IonCol>
-
-            <IonCol size="3">987654321</IonCol>
-
-            <IonCol size="3">
-              <IonButton size="small">
-                <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>Remove
-              </IonButton>
-              <IonButton size="small">Edit Step Log</IonButton>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
+        <IonItem>{DisplayUsers()}</IonItem>
 
         <IonModal isOpen={isOpenUser} backdropDismiss={false}>
           <IonHeader>
