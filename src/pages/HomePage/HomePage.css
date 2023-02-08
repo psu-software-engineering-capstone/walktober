@@ -22,5 +22,17 @@
 
 .boxSize {
   width: 500px;
-  height: 500px;
+  height: 600px;
+}
+
+.testing {
+  --background: url(../../assets/Walktober-graphic.png);
+}
+
+.profileButton {
+  float: right;
+}
+
+.localStepsUpdater {
+  display: inline;
 }

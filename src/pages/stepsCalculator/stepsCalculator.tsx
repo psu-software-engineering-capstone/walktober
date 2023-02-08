@@ -13,10 +13,12 @@ import {
   IonToolbar,
   IonGrid,
   IonRow,
-  IonToggle
+  IonToggle,
+  IonPage
 } from '@ionic/react';
 import './stepsCalculator.css';
 import Metric from './Metric';
+import { useHistory } from 'react-router';
 
 const StepsCalculator: React.FC = () => {
   const [metric, setMetric] = useState(false);
@@ -30,8 +32,9 @@ const StepsCalculator: React.FC = () => {
   const stepsPerMile = 2250;
   let miles: number;
   const kmtom = 0.621371;
+  const history = useHistory();
 
-  function calculate (ev: Event): number {
+  function calculate(ev: Event): number {
     miles = Number((ev.target as HTMLInputElement).value);
     if (miles <= 0) {
       return 0;
@@ -40,7 +43,7 @@ const StepsCalculator: React.FC = () => {
     return steps;
   }
 
-  function calculateKm (ev: Event): number {
+  function calculateKm(ev: Event): number {
     miles = Number((ev.target as HTMLInputElement).value);
     if (miles <= 0) {
       return 0;
@@ -50,7 +53,7 @@ const StepsCalculator: React.FC = () => {
     return steps;
   }
 
-  function getHeightFt (ev: Event): number {
+  function getHeightFt(ev: Event): number {
     heightFt = Number((ev.target as HTMLInputElement).value);
     if (heightFt <= 0) {
       return 0;
@@ -58,7 +61,7 @@ const StepsCalculator: React.FC = () => {
     return heightFt;
   }
 
-  function getHeightIn (ev: Event): number {
+  function getHeightIn(ev: Event): number {
     heightIn = Number((ev.target as HTMLInputElement).value);
     if (heightIn <= 0) {
       return 0;
@@ -66,7 +69,7 @@ const StepsCalculator: React.FC = () => {
     return heightIn;
   }
 
-  function getHeightcm (ev: Event): number {
+  function getHeightcm(ev: Event): number {
     heightCm = Number((ev.target as HTMLInputElement).value);
     if (heightCm <= 0) {
       return 0;
@@ -74,9 +77,11 @@ const StepsCalculator: React.FC = () => {
     return heightCm;
   }
 
-  function placeHolder (ev: Event): void {
+  function placeHolder(ev: Event): void {
     ev.preventDefault();
-    if (metric) { console.log('ASDASDSADASDSADASDQWDQWDQWEAQWEASDAWEAWEASEWAQEDWQDQAW'); }
+    if (metric) {
+      console.log('ASDASDSADASDSADASDQWDQWDQWEAQWEASDAWEAWEASEWAQEDWQDQAW');
+    }
     const updateSteps = document.querySelector('#result');
     if (updateSteps != null) {
       if (!metric && heightFt > 0) {
@@ -84,13 +89,23 @@ const StepsCalculator: React.FC = () => {
         // height in IN * convert = inches per stride
         // IN per stride / 12 = feet per stride
         // 5280 / feet per stride = steps per mile
-        steps = miles * (5280 / ((((heightFt * 12) + heightIn) * strideConverter) / 12));
+        steps =
+          miles *
+          (5280 / (((heightFt * 12 + heightIn) * strideConverter) / 12));
       } else if (metric) {
-        if (heightCm === 0.0) { steps = miles * stepsPerMile; } else { steps = miles * (5280 / (((heightCm * cmToIn) * strideConverter) / 12)); }
+        if (heightCm === 0.0) {
+          steps = miles * stepsPerMile;
+        } else {
+          steps = miles * (5280 / ((heightCm * cmToIn * strideConverter) / 12));
+        }
         console.log('placeholder');
         console.log(steps);
       }
-      if (steps.toString() !== 'NaN' && steps !== 0) { updateSteps.innerHTML = Math.round(steps).toString(); } else { updateSteps.innerHTML = '0'; }
+      if (steps.toString() !== 'NaN' && steps !== 0) {
+        updateSteps.innerHTML = Math.round(steps).toString();
+      } else {
+        updateSteps.innerHTML = '0';
+      }
     }
 
     // updateSteps.innerHTML = steps.toString();
@@ -102,52 +117,85 @@ const StepsCalculator: React.FC = () => {
       (testing as HTMLFormElement).reset();
     }
     /// console.log(testing);
-    setMetric((prev) => { return !prev; });
+    setMetric((prev) => {
+      return !prev;
+    });
     /// console.log(metric);
   };
 
   return (
-        <>
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle>
-                        Steps Calculator
-                    </IonTitle>
-                </IonToolbar>
-            </IonHeader>
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Steps Calculator</IonTitle>
+        </IonToolbar>
+      </IonHeader>
 
-            <IonContent className="ion-padding">
-                <IonItem>
-                    <IonLabel >{metric ? 'Metric' : 'Imperial'}</IonLabel>
-                    <IonToggle slot="end" onClick={changeMetricImperial}></IonToggle>
-                </IonItem>
-                <form onSubmit={(event: any) => placeHolder(event)} id="stepsForm">
-                    <IonGrid>
-                        <IonRow >
-                        {<Metric HeightFt={getHeightFt} HeightIn={getHeightIn} HeightCm={getHeightcm} metric={Boolean(metric)} updateSteps={calculate} updateStepsKm={calculateKm} />}
-                        </IonRow>
-                        <IonRow>
-                            <IonCol>
-                                <IonButton type="submit" >Calculate </IonButton>
-                            </IonCol>
-                        </IonRow>
-                        <IonRow><a><IonRouterLink slot="helper" href="./manualLoggingSteps">Return to steps logging</IonRouterLink></a></IonRow>
-                    </IonGrid>
-                </form>
+      <IonContent className="ion-padding">
+        <IonItem>
+          <IonLabel>{metric ? 'Metric' : 'Imperial'}</IonLabel>
+          <IonToggle slot="end" onClick={changeMetricImperial}></IonToggle>
+        </IonItem>
+        <form onSubmit={(event: any) => placeHolder(event)} id="stepsForm">
+          <IonGrid>
+            <IonRow>
+              {
+                <Metric
+                  HeightFt={getHeightFt}
+                  HeightIn={getHeightIn}
+                  HeightCm={getHeightcm}
+                  metric={Boolean(metric)}
+                  updateSteps={calculate}
+                  updateStepsKm={calculateKm}
+                />
+              }
+            </IonRow>
+            <IonRow>
+              <IonCol>
+                <IonButton type="submit">Calculate </IonButton>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <a>
+                <IonRouterLink
+                  slot="helper"
+                  href="/app/manualsteps"
+                  onClick={() => {
+                    history.push('/app/manualsteps');
+                  }}
+                >
+                  Return to steps logging
+                </IonRouterLink>
+              </a>
+            </IonRow>
+          </IonGrid>
+        </form>
 
-                <IonItem id="result">{steps.toLocaleString('en-US')}</IonItem>
-                <IonGrid>
-                    <IonRow>
-                        <IonCol size="auto"><IonItem>20 min/mi = Slow walk</IonItem></IonCol>
-                        <IonCol size="auto"><IonItem>15 min/mi = Brisk walk</IonItem></IonCol>
-                        <IonCol size="auto"><IonItem>12 min/mi = Jog</IonItem></IonCol>
-                        <IonCol size="auto"><IonItem>9 min/mi = Run</IonItem></IonCol>
-                        <IonCol size="auto"><IonItem>7 min/mi = Fast run</IonItem></IonCol>
-                        <IonCol size="auto"><IonItem>5 min/mi = Very fast run</IonItem></IonCol>
-                    </IonRow>
-                </IonGrid>
-            </IonContent>
-        </>
+        <IonItem id="result">{steps.toLocaleString('en-US')}</IonItem>
+        <IonGrid>
+          <IonRow>
+            <IonCol size="auto">
+              <IonItem>20 min/mi = Slow walk</IonItem>
+            </IonCol>
+            <IonCol size="auto">
+              <IonItem>15 min/mi = Brisk walk</IonItem>
+            </IonCol>
+            <IonCol size="auto">
+              <IonItem>12 min/mi = Jog</IonItem>
+            </IonCol>
+            <IonCol size="auto">
+              <IonItem>9 min/mi = Run</IonItem>
+            </IonCol>
+            <IonCol size="auto">
+              <IonItem>7 min/mi = Fast run</IonItem>
+            </IonCol>
+            <IonCol size="auto">
+              <IonItem>5 min/mi = Very fast run</IonItem>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+      </IonContent>
+    </IonPage>
   );
 };
 
