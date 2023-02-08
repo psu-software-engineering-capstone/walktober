@@ -6,6 +6,12 @@ import NavLink from './NavLink';
 
 /* Pages */
 import { isPlatform } from '@ionic/core';
+import { useContext } from 'react';
+import AuthContext from '../store/auth-context';
+// import { FirestoreDB, auth } from '../firebase';
+// import { doc } from 'firebase/firestore';
+// import { getDoc } from 'firebase/firestore';
+// import { useState } from 'react';
 
 interface NavBarProps {
   collapse?: 'condense' | 'fade'; // carryover from ion-header
@@ -16,6 +22,10 @@ const NavBar: React.FC<NavBarProps> = ({
   collapse = undefined,
   children = null
 }) => {
+  // checks if the user is an admin or not
+  const ctx = useContext(AuthContext);
+  const isAdmin = ctx.admin;
+  
   if (isPlatform('android') || isPlatform('ios')) {
     return (
       <IonHeader collapse={collapse}>
@@ -51,11 +61,11 @@ const NavBar: React.FC<NavBarProps> = ({
               <NavLink id="nav-health-app" text="Health App Settings"
                 href="/app/healthapp" />
             </NavLink>
-            <NavLink id="nav-admin" text="Admin" href="/app/admin">
+            {isAdmin && <NavLink id="nav-admin" text="Admin" href="/app/admin">
               <NavLink id="nav-admin-announcements"
                   text="Announcements"
                   href="/app/admin/announcements" />
-            </NavLink>
+            </NavLink>}
           </div>
         </IonToolbar>
       </IonHeader>
