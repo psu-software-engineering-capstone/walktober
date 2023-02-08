@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import './LeaderBoardChart.scss';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { People } from '../../utils';
-import { TeamData, IndividualData} from '../../pages/SampleData';
+//import { People } from '../../utils';
+import { IndividualData} from '../../pages/SampleData';
 
 ChartJS.register(...registerables);
 
