@@ -20,12 +20,38 @@ import {
 import { useState } from 'react';
 import './Signup.css';
 import logo from '../../assets/Walktober.png';
+import { useHistory } from 'react-router-dom';
+import { doc, setDoc } from 'firebase/firestore';
+import { FirestoreDB } from '../../firebase';
 
 const SignupForm: React.FC = () => {
   // registration variables //
   const [newEmail, setNewEmail] = useState('');
   const [newFirstName, setNewFirstName] = useState('');
   const [newLastName, setNewLastName] = useState('');
+  const [newAffiliation, setAffiliation] = useState('');
+  const [newHeardAboutFrom, setHeardAboutFrom] = useState('');
+  const [newHoursPhysical, setHoursPhysical] = useState('');
+  const [newMinPhysical, setMinPhysical] = useState('');
+  const [newRecCenterUse, setRecCenterUse] = useState('');
+  const [newDistFromCamp, setDistFromCamp] = useState('');
+
+  // for routing
+  const history = useHistory();
+
+  // pushes questions answered from the form to the database
+  const createRegistrationQuestions = () => {
+    void setDoc(doc(FirestoreDB, 'registrationQuestions', newEmail), {
+      email: newEmail,
+      name: newFirstName + ' ' + newLastName,
+      affiliation: newAffiliation,
+      heardAboutFrom: newHeardAboutFrom,
+      hoursPhysical: newHoursPhysical,
+      minsPhysical: newMinPhysical,
+      recCenterUse: newRecCenterUse,
+      distFromCamp: newDistFromCamp
+    });
+  };
 
   const affiliationPSUOptions = {
     header: 'Please select your affiliation to PSU'
@@ -48,7 +74,9 @@ const SignupForm: React.FC = () => {
   };
 
   const submitRegistration = () => {
-    console.log('hello', newEmail, newFirstName, newLastName);
+    console.log('hello', newEmail, newFirstName, newLastName, newAffiliation, newDistFromCamp, newHeardAboutFrom, newHoursPhysical, newMinPhysical, newRecCenterUse);
+    createRegistrationQuestions();
+    history.push('/app');
   };
 
   return (
@@ -98,7 +126,7 @@ const SignupForm: React.FC = () => {
 
                 <IonItem className="signup-card-field">
                   <IonLabel position="floating">What is your affiliation to PSU?</IonLabel>
-                    <IonSelect interfaceOptions={affiliationPSUOptions} interface="action-sheet" placeholder="Select One">
+                    <IonSelect interfaceOptions={affiliationPSUOptions} interface="action-sheet" placeholder="Select One" onIonChange={(e) => setAffiliation(e.target.value as string)}>
                       <IonSelectOption value="student">Student</IonSelectOption>
                       <IonSelectOption value="faculty">Faculty</IonSelectOption>
                       <IonSelectOption value="staff">Staff</IonSelectOption>
@@ -109,7 +137,7 @@ const SignupForm: React.FC = () => {
 
                 <IonItem className="signup-card-field">
                   <IonLabel position="floating">How did you hear about Walktober?</IonLabel>
-                    <IonSelect interfaceOptions={hearAboutWalktober} interface="action-sheet" placeholder="Select One">
+                    <IonSelect interfaceOptions={hearAboutWalktober} interface="action-sheet" placeholder="Select One"onIonChange={(e) => setHeardAboutFrom(e.target.value as string)}>
                       <IonSelectOption value="print-materials">Print Materials</IonSelectOption>
                       <IonSelectOption value="word-of-mouth">Word of Mouth</IonSelectOption>
                       <IonSelectOption value="campus-rec-website">Campus Rec Website</IonSelectOption>
@@ -121,7 +149,7 @@ const SignupForm: React.FC = () => {
 
                 <IonItem className="signup-card-field">
                   <IonLabel position="floating">How many hours per week are you active?</IonLabel>
-                    <IonSelect interfaceOptions={hoursPhysicallyActive} interface="action-sheet" placeholder="Select One">
+                    <IonSelect interfaceOptions={hoursPhysicallyActive} interface="action-sheet" placeholder="Select One"onIonChange={(e) => setHoursPhysical(e.target.value as string)}>
                       <IonSelectOption value="0">0</IonSelectOption>
                       <IonSelectOption value="1">1</IonSelectOption>
                       <IonSelectOption value="2">2</IonSelectOption>
@@ -135,7 +163,7 @@ const SignupForm: React.FC = () => {
 
                 <IonItem className="signup-card-field">
                   <IonLabel position="floating">How many minutes of activity per day?</IonLabel>
-                    <IonSelect interfaceOptions={minutesPhysicallyActive} interface="action-sheet" placeholder="Select One">
+                    <IonSelect interfaceOptions={minutesPhysicallyActive} interface="action-sheet" placeholder="Select One" onIonChange={(e) => setMinPhysical(e.target.value as string)}>
                       <IonSelectOption value="0-15">0-15</IonSelectOption>
                       <IonSelectOption value="16-30">16-30</IonSelectOption>
                       <IonSelectOption value="31-45">31-45</IonSelectOption>
@@ -146,7 +174,7 @@ const SignupForm: React.FC = () => {
 
                 <IonItem className="signup-card-field">
                   <IonLabel position="floating">How far do you live from campus?</IonLabel>
-                    <IonSelect interfaceOptions={distFromCampus} interface="action-sheet" placeholder="Select One">
+                    <IonSelect interfaceOptions={distFromCampus} interface="action-sheet" placeholder="Select One" onIonChange={(e) => setDistFromCamp(e.target.value as string)}>
                       <IonSelectOption value="on-campus">I live on campus</IonSelectOption>
                       <IonSelectOption value="0-5-miles">Within 5 miles of campus</IonSelectOption>
                       <IonSelectOption value="6-10-miles">6-10 miles from campus</IonSelectOption>
@@ -157,7 +185,7 @@ const SignupForm: React.FC = () => {
 
                 <IonItem className="signup-card-field">
                   <IonLabel position="floating">How often do you use the PSU Rec Center?</IonLabel>
-                    <IonSelect interfaceOptions={recCenterUsage} interface="action-sheet" placeholder="Select One">
+                    <IonSelect interfaceOptions={recCenterUsage} interface="action-sheet" placeholder="Select One" onIonChange={(e) => setRecCenterUse(e.target.value as string)}>
                       <IonSelectOption value="never">I have never used the Rec Center</IonSelectOption>
                       <IonSelectOption value="1-3">1-3 times total</IonSelectOption>
                       <IonSelectOption value="1-3-times-per-month">1-3 times per month</IonSelectOption>
