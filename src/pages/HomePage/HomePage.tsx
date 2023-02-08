@@ -26,7 +26,7 @@ import { auth, FirestoreDB } from '../../firebase';
 import { doc } from 'firebase/firestore';
 //import ExitSurveyModal from '../exitQuestions/exitQuestionsModal';
 
-import BarGraph from '../../components/BarGraph/BarGraph';
+import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
 interface badgeOutline {
   name: string;
 }
@@ -138,7 +138,7 @@ const HomePage: React.FC = () => {
               sizeMd="6"
               sizeXs="12"
             >
-              <BarGraph></BarGraph>
+              <LeaderBoardChart></LeaderBoardChart>
             </IonCol>
             <IonCol
               className="boxSize"
