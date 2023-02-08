@@ -21,7 +21,6 @@ import '../Tab1.css';
 const newPassword: React.FC = () => {
   const [newPassword, setNewPassword] = useState('');
   const [veriPassword, setVeriPassword] = useState('');
-  const [oldPassword, setOldPassword] = useState('');
   const [passwordShown, setPasswordShown] = useState(false);
   const history = useHistory();
 
@@ -30,27 +29,26 @@ const newPassword: React.FC = () => {
   };
 
   async function changePass() {
-    if (oldPassword == auth.currentUser.Password) {
-      if (newPassword == veriPassword) {
-        updatePassword(auth.currentUser, newPassword);
-      } else {
-        alert(
-          'The new password does not match the password entered for verification'
-        );
-      }
+    if (newPassword == veriPassword) {
+      updatePassword(auth.currentUser, newPassword)
+      .then(() => {
+        alert('Password change successful');
+        console.log("Password has been changed");
+        history.push("/app/profile");
+      })
+      .catch((error: any) => {
+        alert('Something went wrong, please try again.\n If you have been logged in recently, you may have to log back in before attempting this.');
+        console.log("Password has not been changed");
+        console.log(error);
+      });
     } else {
-      alert('The current password does not match the one on file.');
+      alert(
+        'The new password does not match the password entered for verification'
+      );
+      console.log("New password and verifying password doesn't match");
     }
   }
-  updatePassword(auth.currentUser, newPassword)
-    .then(() => {
-      alert('Password change successful');
-      history.push('/profile');
-    })
-    .catch((error: any) => {
-      alert('Something went wrong, please try again');
-      console.log(error);
-    });
+  
 
   return (
     <IonPage>
@@ -61,19 +59,6 @@ const newPassword: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
         <ExploreContainer name="Change Password" />
-        <IonItem>
-          <IonLabel position="floating">Old Password</IonLabel>
-          <IonInput
-            type={passwordShown ? 'text' : 'password'}
-            name="password"
-            onIonChange={(e) => setOldPassword(e.target.value as string)}
-          ></IonInput>
-          <IonIcon
-            icon={passwordShown ? eyeOff : eye}
-            slot="end"
-            onClick={togglePasswordVisibility}
-          ></IonIcon>
-        </IonItem>
 
         <IonItem>
           <IonLabel position="floating">New Password</IonLabel>
@@ -88,7 +73,7 @@ const newPassword: React.FC = () => {
             onClick={togglePasswordVisibility}
           ></IonIcon>
         </IonItem>
-        
+
         <IonItem>
           <IonLabel position="floating">Verify New Password</IonLabel>
           <IonInput
