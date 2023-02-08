@@ -59,6 +59,10 @@ const Profile: React.FC = () => {
     GetRecords();
   }, []);
 
+  const moveToCreateTeam = () => {
+    history.push('/app/teamcreation');
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -88,6 +92,7 @@ const Profile: React.FC = () => {
                   <p>{email}</p>
                   <IonButton>Change Password</IonButton> <br></br>
                   <IonButton>Change Health App Preferences</IonButton>
+                  <IonButton onClick={moveToCreateTeam}>Create a Team</IonButton>
                 </IonText>
               </IonCol>
               <IonCol>
