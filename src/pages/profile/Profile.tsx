@@ -64,7 +64,8 @@ const Profile: React.FC = () => {
   }, []);
 
   const newAvatar = () => {
-    history.push('/app/profile/newAvater');
+    history.push('/app/profile/newAvatar');
+    return;
   };
 
   const changePassword = () => {
