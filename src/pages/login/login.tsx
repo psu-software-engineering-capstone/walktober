@@ -222,7 +222,7 @@ const Login: React.FC = () => {
           </IonCardContent>
         </IonCard>
 
-        <IonCard className={'signup-card' + ' bottom'}>
+        <IonCard className="signup-card bottom">
           <IonCardContent className="no-account">
             Don&apos;t have an account?
             <IonButton expand="block" onClick={moveToSignup} color="tertiary">
