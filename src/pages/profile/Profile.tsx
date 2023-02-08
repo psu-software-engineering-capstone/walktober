@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/space-before-function-paren */
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   IonButton,
   IonCol,
@@ -25,6 +25,7 @@ import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import newPassword from './newPassword';
 import changeAvatar from './changeAvatar';
+import AuthContext from '../../store/auth-context';
 
 const Profile: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -37,10 +38,12 @@ const Profile: React.FC = () => {
   const history = useHistory();
   // let badges;
 
+  const ctx = useContext(AuthContext);
+
   async function GetRecords(): Promise<void> {
-    if (auth.currentUser === null) {
+    if (ctx.user === null) {
       alert('You are not logged in!');
-      useHistory().push('/login');
+      history.replace("/login");
       return;
     }
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
