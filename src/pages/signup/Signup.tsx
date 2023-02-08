@@ -27,7 +27,6 @@ import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithCredential,
-  getAuth,
   sendEmailVerification
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -177,8 +176,7 @@ const Signup: React.FC = () => {
 
   // sends a verication link to the user's email //
   const emailVerification = () => {
-    const user = getAuth();
-    sendEmailVerification(user.currentUser)
+    sendEmailVerification(auth.currentUser)
     .then(alert("Verification link has been sent to email!"))
     .catch((error: unknown) => {
       console.log(error);
