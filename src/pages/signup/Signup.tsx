@@ -26,7 +26,8 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
-  signInWithCredential
+  signInWithCredential,
+  sendEmailVerification
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
@@ -112,8 +113,7 @@ const Signup: React.FC = () => {
           } else {
             alert('Sign-up successful');
             createUserWithGoogleAuth(result);
-            void auth.signOut();
-            history.push('/login');
+            history.push('/register');
           }
         })
         .catch((error: unknown) => {
@@ -140,8 +140,7 @@ const Signup: React.FC = () => {
             } else {
               alert('Sign-up successful');
               createUserWithGoogleAuthMobile(result);
-              void auth.signOut();
-              history.push('/login');
+              history.push('/register');
             }
           }
         )
@@ -159,8 +158,10 @@ const Signup: React.FC = () => {
         .then((data: unknown) => {
           createUser();
           console.log(data);
+          //send a verification link to the email
+          emailVerification();
           alert('Sign-up successful');
-          history.push('/login');
+          history.push('/register');
         })
         .catch((error: unknown) => {
           console.log(error);
@@ -169,6 +170,16 @@ const Signup: React.FC = () => {
     } else {
       alert('Passwords are not matching');
     }
+  };
+
+  // sends a verication link to the user's email //
+  const emailVerification = () => {
+    sendEmailVerification(auth.currentUser)
+    .then(alert("Verification link has been sent to email!"))
+    .catch((error: unknown) => {
+      console.log(error);
+      alert(error);
+    });
   };
 
   // move to login button //

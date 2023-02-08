@@ -18,6 +18,8 @@ import HealthApp from './pages/healthapp/HealthApp';
 // import TeamCreation from './pages/TeamCreation';
 import TeamHome from './pages/TeamHome/TeamHome';
 import NewTeamCreation from './pages/NewTeamCreation';
+import Admin from './pages/admin/admin';
+
 
 /* Theming */
 import './theme/app.scss';
@@ -35,6 +37,7 @@ const Dashboard: React.FC = () => {
         <Route exact path="/app/healthapp" component={HealthApp} />
         <Route exact path="/app/teamcreation" component={NewTeamCreation} />
         <Route exact path="/app/team" component={TeamHome} />
+        <Route exact path="/app/admin" component={Admin} />
         <Route exact path="/app">
           <Redirect to="/app/home" />
         </Route>
