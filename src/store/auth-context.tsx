@@ -31,7 +31,11 @@ export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) =
       const userData = dbSnap.data();
       if (userData.admin === true) {
         setAdmin(true);
+      } else {
+        setAdmin(false);
       }
+    } else {
+      setAdmin(false);
     }
   };
 
