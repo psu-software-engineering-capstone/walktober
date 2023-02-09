@@ -49,8 +49,11 @@ const Profile: React.FC = () => {
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     const dbSnap = await getDoc(dbRef);
     const userData = dbSnap.data();
-    
-    setProfilePic(userData.profile_pic);
+    if (userData.profile_pic === '') {
+      setProfilePic('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png');
+    } else {
+      setProfilePic(userData.profile_pic);
+    }
     SetName(userData.name);
     setUsername('');
     setEmail(userData.email);
