@@ -23,8 +23,10 @@ import {
 } from '@ionic/react';
 import NavBar from '../../components/NavBar';
 import { closeCircleSharp } from 'ionicons/icons';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import './admin.css';
+import AuthContext from '../../store/auth-context';
+import { useHistory } from 'react-router-dom';
 
 const Admin: React.FC = () => {
   const [isOpenUser, setIsOpenUser] = useState(false);
@@ -40,6 +42,16 @@ const Admin: React.FC = () => {
   }
 
   const [userLogs, setUserLogs] = useState<StepLog[]>([]);
+
+  const history = useHistory();
+  const ctx = useContext(AuthContext);
+  const isAdmin = ctx.admin;
+  
+  // prevents the user from entering the admin page from the url if they are not an admin
+  if(isAdmin === false){
+    history.push('/app');
+    return;
+  }
 
   useEffect(() => {
     setUserLogs([]);
@@ -501,7 +513,7 @@ const Admin: React.FC = () => {
         </IonModal>
       </IonContent>
     </IonPage>
-  );
+  )as any;
 };
 
 export default Admin;
