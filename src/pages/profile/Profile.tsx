@@ -18,7 +18,7 @@ import {
 } from '@ionic/react';
 import './Profile.css';
 import { Route } from 'react-router-dom';
-import { auth, FirestoreDB } from '../../firebase';
+import { auth, FirestoreDB, storage } from '../../firebase';
 import { doc } from 'firebase/firestore';
 import { getDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router';
@@ -26,25 +26,28 @@ import NavBar from '../../components/NavBar';
 import newPassword from './newPassword';
 import changeAvatar from './changeAvatar';
 import AuthContext from '../../store/auth-context';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { updateProfile } from 'firebase/auth';
 
 const Profile: React.FC = () => {
+  const history = useHistory();
+  const ctx = useContext(AuthContext);
+
   const [email, setEmail] = useState('');
   const [joinDate, setJoinDate] = useState('');
   const [name, SetName] = useState('');
   const [profilePic, setProfilePic] = useState('');
   const [totalDistance, setTotalDistance] = useState(0);
-  // const [username, setUsername] = useState('');
-  // let badges;
+  const [photo, setPhoto] = useState<any>(null);
 
-  const history = useHistory();
-  // let badges;
-
-  const ctx = useContext(AuthContext);
+  useEffect(() => {
+    GetRecords();
+  }, []);
 
   async function GetRecords(): Promise<void> {
     if (ctx.user === null) {
       alert('You are not logged in!');
-      history.replace("/login");
+      history.push("/login");
       return;
     }
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
@@ -53,21 +56,31 @@ const Profile: React.FC = () => {
     if (userData.profile_pic === '') {
       setProfilePic('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png');
     } else {
-      setProfilePic(userData.profile_pic);
+      setProfilePic(auth.currentUser.photoURL);
     }
     SetName(userData.name);
-    // setUsername('');
     setEmail(userData.email);
     setJoinDate(new Date(auth.currentUser.metadata.creationTime).toLocaleDateString());
     setTotalDistance(userData.totalStep / 2000);
   }
 
-  useEffect(() => {
-    GetRecords();
-  }, []);
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setPhoto(e.target.files[0]);
+    }
+  };
 
-  const newAvatar = () => {
-    history.push('/app/profile/newAvater');
+  const handleSubmit = async () => {
+    const imageRef = ref(storage, auth.currentUser.email + '.png');
+    await uploadBytes(imageRef, photo);
+    const photoURL = await getDownloadURL(imageRef);
+    updateProfile(auth.currentUser, { photoURL })
+    .then(() => {
+      alert('profile picture updated!');
+    })
+    .catch((error: any) => {
+      alert(error);
+    });
   };
 
   const changePassword = () => {
@@ -80,7 +93,7 @@ const Profile: React.FC = () => {
 
   const signOut = async () => {
     await auth.signOut();
-    history.replace('/login');
+    history.push('/login');
   };
 
   return (
@@ -105,7 +118,8 @@ const Profile: React.FC = () => {
                     src={profilePic}
                     alt="Profile picture for the user signed in"
                   ></IonImg>
-                  <IonButton onClick={newAvatar}>
+                  <input type="file" onChange={handleImageChange} />
+                  <IonButton onClick={handleSubmit}>
                     Change Profile Picture
                   </IonButton>
                   <h2>{name}</h2>
