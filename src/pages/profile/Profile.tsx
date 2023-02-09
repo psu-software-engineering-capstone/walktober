@@ -29,12 +29,13 @@ import AuthContext from '../../store/auth-context';
 
 const Profile: React.FC = () => {
   const [email, setEmail] = useState('');
-  const [joinDate, setJoinDate] = useState(new Date());
-  const [joinDateString, setJoinDateString] = useState('');
+  const [joinDate, setJoinDate] = useState('');
   const [name, SetName] = useState('');
   const [profilePic, setProfilePic] = useState('');
   const [totalDistance, setTotalDistance] = useState(0);
-  const [username, setUsername] = useState('');
+  // const [username, setUsername] = useState('');
+  // let badges;
+
   const history = useHistory();
   // let badges;
 
@@ -55,10 +56,9 @@ const Profile: React.FC = () => {
       setProfilePic(userData.profile_pic);
     }
     SetName(userData.name);
-    setUsername('');
+    // setUsername('');
     setEmail(userData.email);
-    setJoinDate(new Date(auth.currentUser.metadata.creationTime));
-    setJoinDateString(joinDate.toLocaleDateString());
+    setJoinDate(new Date(auth.currentUser.metadata.creationTime).toLocaleDateString());
     setTotalDistance(userData.totalStep / 2000);
   }
 
@@ -76,6 +76,11 @@ const Profile: React.FC = () => {
   };
   const moveToCreateTeam = () => {
     history.push('/app/teamcreation');
+  };
+
+  const signOut = async () => {
+    await auth.signOut();
+    history.replace('/login');
   };
 
   return (
@@ -104,12 +109,12 @@ const Profile: React.FC = () => {
                     Change Profile Picture
                   </IonButton>
                   <h2>{name}</h2>
-                  <p>
+                  {/* <p>
                     {username}
                     <IonButton fill="clear" size="small">
                       Change Username
                     </IonButton>
-                  </p>
+                  </p> */}
                   <p>{email}</p>
                   <IonButton onClick={changePassword}>
                     Change Password
@@ -117,11 +122,12 @@ const Profile: React.FC = () => {
                   <br></br>
                   <IonButton>Change Health App Preferences</IonButton>
                   <IonButton onClick={moveToCreateTeam}>Create a Team</IonButton>
+                  <IonButton onClick={signOut}>Sign Out</IonButton>
                 </IonText>
               </IonCol>
               <IonCol>
                 <IonText>
-                  <p>Joined on {joinDateString}</p>
+                  <p>Joined on {joinDate}</p>
                   <p>{totalDistance} miles walked in total</p>
                   <IonLabel>Step Goal: </IonLabel>
                   <IonItem fill="outline">

@@ -13,7 +13,7 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonInput,
+  IonInput
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
 import { useHistory } from 'react-router';
@@ -26,6 +26,7 @@ import { auth, FirestoreDB } from '../../firebase';
 import { doc } from 'firebase/firestore';
 //import ExitSurveyModal from '../exitQuestions/exitQuestionsModal';
 
+import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
 interface badgeOutline {
   name: string;
 }
@@ -137,7 +138,7 @@ const HomePage: React.FC = () => {
               sizeMd="6"
               sizeXs="12"
             >
-              Location for leaderboards
+              <LeaderBoardChart></LeaderBoardChart>
             </IonCol>
             <IonCol
               className="boxSize"

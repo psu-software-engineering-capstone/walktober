@@ -41,16 +41,13 @@ function App() {
       console.log('auth state: logged out');
     } else {
       console.log('auth state: logged in');
+      if (ctx.admin === true) {
+        console.log('user type: admin');
+      } else {
+        console.log('user type: regular');
+      }
     }
-  }, [ctx.user]);
-
-  useEffect(() => {
-    if (ctx.admin === true) {
-      console.log('user type: admin');
-    } else {
-      console.log('user type: regular');
-    }
-  }, [ctx.admin]);
+  }, [ctx]);
 
   return (
     <IonApp>
@@ -72,3 +69,4 @@ function App() {
 }
 
 export default App;
+
