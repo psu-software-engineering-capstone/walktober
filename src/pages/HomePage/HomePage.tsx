@@ -13,7 +13,7 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonInput,
+  IonInput
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
 import { useHistory } from 'react-router';
@@ -26,6 +26,7 @@ import { auth, FirestoreDB } from '../../firebase';
 import { doc } from 'firebase/firestore';
 //import ExitSurveyModal from '../exitQuestions/exitQuestionsModal';
 
+import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
 interface badgeOutline {
   name: string;
 }
@@ -44,13 +45,16 @@ const HomePage: React.FC = () => {
   const ctx = useContext(AuthContext);
 
   useEffect(() => {
-    getPastSevenDaysSteps();
-  }, []);
+    if (ctx.user) {
+      console.log('get past seven days steps');
+      getPastSevenDaysSteps();
+    }
+  }, [ctx.user]);
 
   const getPastSevenDaysSteps = async () => {
     if (ctx.user === null) {
       alert('You are not logged in!');
-      history.replace('/login');
+      history.push('/login');
       return;
     }
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
@@ -137,7 +141,7 @@ const HomePage: React.FC = () => {
               sizeMd="6"
               sizeXs="12"
             >
-              Location for leaderboards
+              <LeaderBoardChart></LeaderBoardChart>
             </IonCol>
             <IonCol
               className="boxSize"
