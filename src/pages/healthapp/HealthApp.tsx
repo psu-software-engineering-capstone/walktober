@@ -91,12 +91,12 @@ const HealthApp: React.FC = () => {
           const date = current.startDate.toISOString().slice(0, 10);
           const steps = current.quantity;
           totalStep += current.quantity;
-          stepsByDate[i] = { date, steps };
+          stepsByDate.push({ date, steps });
         }
         await updateCurrentUser(stepsByDate, totalStep);
         alert('Steps Updated!');
       })
-      .catch((error: any) => alert(JSON.stringify(error)));
+      .catch((error: any) => alert(JSON.stringify(error) + 'query failed'));
   };
 
   const updateCurrentUser = async (stepsByDate: any, totalStep: any) => {
