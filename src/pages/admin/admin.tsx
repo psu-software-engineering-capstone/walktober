@@ -22,18 +22,8 @@ import {
   IonToolbar
 } from '@ionic/react';
 import NavBar from '../../components/NavBar';
-//import { auth, FirestoreDB } from '../../firebase';
-//import { doc, getDoc } from 'firebase/firestore';
-//import { updateDoc } from 'firebase/firestore';
-//import { useHistory } from 'react-router';
-//import AuthContext from '../../store/auth-context';
 import { closeCircleSharp } from 'ionicons/icons';
-import { useState, useEffect } from 'react';
-import { auth, FirestoreDB } from '../../firebase';
-import { doc, getDoc } from 'firebase/firestore';
-// import { updateDoc } from 'firebase/firestore';
-// import { useHistory } from 'react-router';
-// import AuthContext from '../../store/auth-context';
+import { useEffect, useState } from 'react';
 import './admin.css';
 
 const Admin: React.FC = () => {
@@ -52,16 +42,8 @@ const Admin: React.FC = () => {
   const [userLogs, setUserLogs] = useState<StepLog[]>([]);
 
   useEffect(() => {
-    getRecordsFromDB();
+    setUserLogs([]);
   }, []);
-
-  const getRecordsFromDB = async () => {
-    let usersByName = [];
-    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-    const dbSnap = await getDoc(dbRef);
-    usersByName = dbSnap.data().usersByName;
-    setUserLogs(usersByName);
-  };
 
   function DisplayUsers(): any {
     if (userLogs.length > 0) {
@@ -140,15 +122,12 @@ const Admin: React.FC = () => {
 
   return (
     <IonPage>
-      <NavBar>
-        <IonTitle>Home Page</IonTitle>
-      </NavBar>
+      <IonHeader>
+        <NavBar>
+          <IonTitle>Admin</IonTitle>
+        </NavBar>
+      </IonHeader>
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Admin</IonTitle>
-          </IonToolbar>
-        </IonHeader>
         <IonItem>{DisplayUsers()}</IonItem>
         <IonGrid class="invis-grid">
           <IonRow></IonRow>
