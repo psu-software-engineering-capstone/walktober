@@ -35,7 +35,7 @@ const Profile: React.FC = () => {
 
   const [email, setEmail] = useState('');
   const [joinDate, setJoinDate] = useState('');
-  const [name, SetName] = useState('');
+  const [name, setName] = useState('');
   const [profilePic, setProfilePic] = useState('');
   const [totalDistance, setTotalDistance] = useState(0);
   const [photo, setPhoto] = useState<any>(null);
@@ -47,20 +47,24 @@ const Profile: React.FC = () => {
   async function GetRecords(): Promise<void> {
     if (ctx.user === null) {
       alert('You are not logged in!');
-      history.push("/login");
+      history.push('/login');
       return;
     }
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     const dbSnap = await getDoc(dbRef);
     const userData = dbSnap.data();
-    if (userData.profile_pic === '') {
-      setProfilePic('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png');
+    if (auth.currentUser.photoURL === null) {
+      setProfilePic(
+        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
+      );
     } else {
       setProfilePic(auth.currentUser.photoURL);
     }
-    SetName(userData.name);
+    setName(userData.name);
     setEmail(userData.email);
-    setJoinDate(new Date(auth.currentUser.metadata.creationTime).toLocaleDateString());
+    setJoinDate(
+      new Date(auth.currentUser.metadata.creationTime).toLocaleDateString()
+    );
     setTotalDistance(userData.totalStep / 2000);
   }
 
@@ -75,14 +79,14 @@ const Profile: React.FC = () => {
     await uploadBytes(imageRef, photo);
     const photoURL = await getDownloadURL(imageRef);
     updateProfile(auth.currentUser, { photoURL })
-    .then(() => {
-      alert('profile picture updated!');
-    })
-    .catch((error: any) => {
-      alert(error);
-    });
+      .then(() => {
+        alert('profile picture updated!');
+      })
+      .catch((error: any) => {
+        alert(error);
+      });
   };
-
+  
   const changePassword = () => {
     history.push('/app/profile/passwordChange');
     return;
@@ -99,7 +103,11 @@ const Profile: React.FC = () => {
   return (
     <IonPage>
       <IonRouterOutlet>
-        <Route exact path="/app/profile/passwordChange" component={newPassword} />
+        <Route
+          exact
+          path="/app/profile/passwordChange"
+          component={newPassword}
+        />
         <Route exact path="/app/profile/newAvatar" component={changeAvatar} />
       </IonRouterOutlet>
       <IonHeader>
@@ -135,7 +143,9 @@ const Profile: React.FC = () => {
                   </IonButton>{' '}
                   <br></br>
                   <IonButton>Change Health App Preferences</IonButton>
-                  <IonButton onClick={moveToCreateTeam}>Create a Team</IonButton>
+                  <IonButton onClick={moveToCreateTeam}>
+                    Create a Team
+                  </IonButton>
                   <IonButton onClick={signOut}>Sign Out</IonButton>
                 </IonText>
               </IonCol>
