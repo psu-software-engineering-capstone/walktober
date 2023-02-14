@@ -103,8 +103,8 @@ const HealthApp: React.FC = () => {
         for (let i = 0; i < data.length; i++) {
           const current = data[i];
           const steps = current.quantity;
-          const date = current.startDate.toISOString().slice(0, 10);
-          const prevDate = data[prevIndex].startDate.toISOString().slice(0, 10);
+          const date = current.startDate.toString().slice(0, 10);
+          const prevDate = data[prevIndex].startDate.toString().slice(0, 10);
           if (date === prevDate && i != 0) {
             healthAppData[dayCount - 1].steps += steps;
           }
