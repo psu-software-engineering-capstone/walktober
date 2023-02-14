@@ -4,7 +4,8 @@ import './LeaderBoardChart.scss';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 //import { People } from '../../utils';
-import { IndividualData} from '../../pages/SampleData';
+import { IndividualData } from '../../pages/SampleData';
+import placeholder from '../../assets/placeholder.png';
 
 ChartJS.register(...registerables);
 
@@ -24,26 +25,45 @@ const LeaderBoardChart: React.FC = () => {
     /*Sorts the data of all users by the amount of steps taken. Labels formed from the names
      * of the user, and the bars are the number of steps the user took
      */
-    labels: data.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1)).map(
-      (row) => row.name
-    ),
+    labels: data.map((row) => row.name),
     datasets: [
       {
         label: 'Steps',
-        data: data.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1)).map(
-          (col) => col.totalStep
-        )
+        data: data.map((col) => col.totalStep),
+        image: data.map((col) => col.profile_pic)
       }
     ]
   });
+
+  const imgItems = {
+    id: 'imgItems',
+    beforeDatasetsDraw(chart: any, args: any, pluginOptions: any) {
+      const { ctx, data, scales: {x,y} } = chart;
+
+      ctx.save();
+      const imgSize = chartOptions.layout.padding.left;
+      
+      data.datasets[0].image.forEach((imageLink: string, index: number) => {
+        const profilePic = new Image();
+        profilePic.src = placeholder;
+        ctx.drawImage(profilePic, 0, y.getPixelForValue(index) - (imgSize / 2), imgSize, imgSize);
+      });
+      
+      
+      }
+  };
   const chartOptions = {
     indexAxis: 'y',
     maintainAspectRatio: false,
     responive: true,
     scaleShowValues: true,
-    layout: {},
     elements: {
-      borderWidth: 2
+      borderWidth: 1
+    },
+    layout:{
+      padding: {
+        left: 30,
+      },
     },
     scales: {
       x: {
@@ -93,7 +113,7 @@ const LeaderBoardChart: React.FC = () => {
     }
   };
   useEffect(() => {
-    setData(IndividualData);
+    setData(IndividualData.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1)));
     boxAjust();
   }, []);
 
@@ -101,7 +121,7 @@ const LeaderBoardChart: React.FC = () => {
     <IonContent>
       <IonHeader>LeaderBoard</IonHeader>
       <IonContent class="box">
-        <Bar data={chartData} options={chartOptions}></Bar>
+        <Bar data={chartData} options={chartOptions} plugins={[imgItems]}></Bar>
       </IonContent>
     </IonContent>
   );
