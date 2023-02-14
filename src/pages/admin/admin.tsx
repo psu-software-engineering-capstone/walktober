@@ -36,6 +36,7 @@ import { useState} from 'react';
 //import { useHistory } from 'react-router';
 //import AuthContext from '../../store/auth-context';
 import './admin.css';
+import {userData} from '../SampleData';
 
 const Admin: React.FC = () => {
   //used to open and close modals
@@ -52,19 +53,18 @@ const Admin: React.FC = () => {
   const [team, setTeam] = useState(new Date());
   const [steps, setSteps] = useState('');*/
 
-  interface user {
-    user: string;
+  
+  /*interface user {
+    name: string;
     team: string;
     email: string;
     steps: number;
-  }
+  }*/
 
   //for once information is fetched
-  //const [users, setUsers] = useState<user[]>([]);
-  const [users] = useState<user[]>([]);
 
-  function DisplayUsers(): any {
-    if (users.length > 0) {
+  function DisplayUsers(userData: any[]): any {
+    if (userData.length > 0) {
       return (
         <>
           <IonGrid fixed={true}>
@@ -90,12 +90,12 @@ const Admin: React.FC = () => {
               </IonCol>
             </IonRow>
 
-            {users.map((item) => (
+            {userData.map((item) => (
               <IonRow key={Math.random()}>
-                <IonCol sizeMd='3' size="5">{item.user}</IonCol>
+                <IonCol sizeMd='3' size="5">{item.name}</IonCol>
                 <IonCol sizeMd='3' size="5">{item.team}</IonCol>
                 <IonCol sizeMd='4' size="5">{item.email}</IonCol>
-                <IonCol sizeMd='3' size="8">{item.steps}</IonCol>
+                <IonCol sizeMd='3' size="8">{item.totalStep}</IonCol>
                 <IonCol sizeMd='3' size="8">
                   <IonButton size="small">
                     <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>Remove
@@ -195,7 +195,7 @@ const Admin: React.FC = () => {
         </IonGrid>
 
         <IonItem>Users</IonItem>
-        <IonItem>{DisplayUsers()}</IonItem>
+        <IonItem>{DisplayUsers(userData)}</IonItem>
 
         <IonModal isOpen={isOpenUser} backdropDismiss={false}>
           <IonHeader>

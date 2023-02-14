@@ -99,4 +99,97 @@ const IndividualData = [
   }
 ];
 
-export { TeamData, IndividualData };
+const userData = [
+  {
+    name: 'John Doe',
+    team: 'Team 1',
+    email: 'jdoe@gmail.com',
+    totalStep: 10000
+  },
+  {
+    name: 'Jane Smith',
+    team: 'Team 1',
+    email: 'jsmith@pdx.edu',
+    totalStep: 12000
+  },
+  {
+    name: 'Bob Johnson',
+    team: 'Team 1',
+    email: 'bjohnson@pdx.edu',
+    totalStep: 9000
+  },
+  {
+    name: 'Alice Williams',
+    team: 'Team 2',
+    email: 'awilliams@pdx.edu',
+    totalStep: 14000
+  },
+  {
+    name: 'Charlie Brown',
+    team: 'Team 2',
+    email: 'cbrown@gmail.com',
+    totalStep: 8000
+  },
+  {
+    name: 'Emily Davis',
+    team: '',
+    email: 'edavis@gmail.com',
+    totalStep: 11000
+  },
+  {
+    name: 'Michael Martinez',
+    team: 'Team 2',
+    email: 'mmartinez@gmail.com',
+    totalStep: 12500
+  },
+  {
+    name: 'Jessica Garcia',
+    team: '',
+    email: 'jgarcia@pdx.edu',
+    totalStep: 9000
+  },
+  {
+    name: 'David Rodriguez',
+    team: 'Team 5',
+    email: 'drodriguez@hotmail.com',
+    totalStep: 13000
+  },
+  {
+    name: 'Samantha Turner',
+    team: 'Team 2',
+    email: 'sturner@aol.com',
+    totalStep: 10000
+  },
+  {
+    name: 'Ashley Phillips',
+    team: 'Team 6',
+    email: 'aphillips@pdx.edu',
+    totalStep: 12000
+  },
+  {
+    name: 'Brian Lewis',
+    team: 'Team 9',
+    email: 'nlewis@pdx.edu',
+    totalStep: 9000
+  },
+  {
+    name: 'Amanda Lee',
+    team: 'Team 10',
+    email: 'alee@pdx.edu',
+    totalStep: 14000
+  },
+  {
+    name: 'Justin Scott',
+    team: 'Team 9',
+    email: 'jscott@gmail.com',
+    totalStep: 8000
+  },
+  {
+    name: 'Brandon Perez',
+    team: 'Team 8',
+    email: 'bperez@gmail.com',
+    totalStep: 11000
+  }
+];
+
+export { TeamData, IndividualData, userData};
