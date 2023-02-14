@@ -13,7 +13,6 @@ import { updatePassword } from 'firebase/auth';
 import { eyeOff, eye } from 'ionicons/icons';
 import { useState } from 'react';
 import { useHistory } from 'react-router';
-import ExploreContainer from '../../components/ExploreContainer';
 import NavBar from '../../components/NavBar';
 import { auth } from '../../firebase';
 import '../Tab1.css';
@@ -58,8 +57,6 @@ const newPassword: React.FC = () => {
         </NavBar>
       </IonHeader>
       <IonContent fullscreen>
-        <ExploreContainer name="Change Password" />
-
         <IonItem>
           <IonLabel position="floating">New Password</IonLabel>
           <IonInput

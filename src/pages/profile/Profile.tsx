@@ -19,12 +19,10 @@ import {
 import './Profile.css';
 import { Route } from 'react-router-dom';
 import { auth, FirestoreDB, storage } from '../../firebase';
-import { doc } from 'firebase/firestore';
-import { getDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import newPassword from './newPassword';
-import changeAvatar from './changeAvatar';
 import AuthContext from '../../store/auth-context';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
@@ -103,12 +101,7 @@ const Profile: React.FC = () => {
   return (
     <IonPage>
       <IonRouterOutlet>
-        <Route
-          exact
-          path="/app/profile/passwordChange"
-          component={newPassword}
-        />
-        <Route exact path="/app/profile/newAvatar" component={changeAvatar} />
+        <Route exact path="/app/profile/passwordChange" component={newPassword} />
       </IonRouterOutlet>
       <IonHeader>
         <NavBar>
