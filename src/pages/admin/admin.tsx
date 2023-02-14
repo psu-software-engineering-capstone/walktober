@@ -61,42 +61,42 @@ const Admin: React.FC = () => {
     steps: number;
   }*/
 
-  //for once information is fetched
-
+  //creates the grid, if the sample data has users in the individual data collection, it pulls the relevant information
+  //and adds it into rows
   function DisplayUsers(IndividualData: any[]): any {
     if (IndividualData.length > 0) {
       return (
         <>
           <IonGrid fixed={true}>
             <IonRow class="header-row">
-              <IonCol sizeMd='3' size="5" class="header-col">
+              <IonCol sizeMd='3' size="5" class="header-col admin-col">
                 Name
               </IonCol>
 
-              <IonCol sizeMd='3' size="5" class="header-col">
+              <IonCol sizeMd='3' size="5" class="header-col admin-col">
                 Team
               </IonCol>
 
-              <IonCol sizeMd='4' size="5" class="header-col">
+              <IonCol sizeMd='4' size="6" class="header-col admin-col">
                 Email
               </IonCol>
 
-              <IonCol sizeMd='3' size="8" class="header-col">
+              <IonCol sizeMd='3' size="8" class="header-col admin-col">
                 Total Steps
               </IonCol>
 
-              <IonCol sizeMd='3' size="8" class="header-col">
+              <IonCol sizeMd='3' size="8" class="header-col admin-col">
                 Actions
               </IonCol>
             </IonRow>
 
             {IndividualData.map((item) => (
               <IonRow key={Math.random()}>
-                <IonCol sizeMd='3' size="5">{item.name}</IonCol>
-                <IonCol sizeMd='3' size="5">{item.team}</IonCol>
-                <IonCol sizeMd='4' size="5">{item.email}</IonCol>
-                <IonCol sizeMd='3' size="8">{item.totalStep}</IonCol>
-                <IonCol sizeMd='3' size="8">
+                <IonCol sizeMd='3' size="5" class="admin-col">{item.name}</IonCol>
+                <IonCol sizeMd='3' size="5" class="admin-col">{item.team}</IonCol>
+                <IonCol sizeMd='4' size="6" class="admin-col">{item.email}</IonCol>
+                <IonCol sizeMd='3' size="8" class="admin-col">{item.totalStep}</IonCol>
+                <IonCol sizeMd='3' size="8" class="admin-col">
                   <IonButton size="small">
                     <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>Remove
                   </IonButton>
@@ -119,7 +119,7 @@ const Admin: React.FC = () => {
                 Team
               </IonCol>
 
-              <IonCol sizeMd='4' size="5" class="header-col">
+              <IonCol sizeMd='4' size="6" class="header-col">
                 Email
               </IonCol>
 
@@ -142,7 +142,7 @@ const Admin: React.FC = () => {
       <NavBar>
         <IonTitle>Home Page</IonTitle>
       </NavBar>
-      <IonContent fullscreen>
+      <IonContent fullscreen class="admin-content">
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">Admin</IonTitle>
@@ -194,21 +194,21 @@ const Admin: React.FC = () => {
           </IonRow>
         </IonGrid>
 
-        <IonItem>Users</IonItem>
+        <IonItem class="grid-title">Users</IonItem>
         <IonItem>{DisplayUsers(IndividualData)}</IonItem>
 
         <IonModal isOpen={isOpenUser} backdropDismiss={false}>
-          <IonHeader>
+          <IonHeader class="modal-header">
             <IonToolbar>
-              <IonTitle>User Settings</IonTitle>
+              <IonTitle class="modal-title">User Settings</IonTitle>
               <IonButtons slot="end">
-                <IonButton onClick={() => setIsOpenUser(false)} color="light">
+                <IonButton onClick={() => setIsOpenUser(false)} class="admin-close-modal">
                   Close
                 </IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
-          <IonContent className="ion-padding">
+          <IonContent className="ion-padding" class="modal-content">
             <IonRadioGroup value={'User Sertings'}>
               <IonItem>
                 <IonLabel>User Settings 1</IonLabel>
@@ -227,17 +227,17 @@ const Admin: React.FC = () => {
         </IonModal>
 
         <IonModal isOpen={isOpenTeam} backdropDismiss={false}>
-          <IonHeader>
+          <IonHeader class="modal-header">
             <IonToolbar>
-              <IonTitle>Team Settings</IonTitle>
+              <IonTitle class="modal-title">Team Settings</IonTitle>
               <IonButtons slot="end">
-                <IonButton onClick={() => setIsOpenTeam(false)} color="light">
+                <IonButton onClick={() => setIsOpenTeam(false)} class="admin-close-modal">
                   Close
                 </IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
-          <IonContent className="ion-padding">
+          <IonContent className="ion-padding" class="modal-content">
             <IonItem>
               <IonLabel>Minimum Team Size</IonLabel>
               <IonInput type="number"></IonInput>
@@ -265,20 +265,20 @@ const Admin: React.FC = () => {
         </IonModal>
 
         <IonModal isOpen={isOpenAnnouncements} backdropDismiss={false}>
-          <IonHeader>
+          <IonHeader class="modal-header">
             <IonToolbar>
-              <IonTitle>Announcements</IonTitle>
+              <IonTitle class="modal-title">Announcements</IonTitle>
               <IonButtons slot="end">
                 <IonButton
                   onClick={() => setIsOpenAnnouncements(false)}
-                  color="light"
+                  class="admin-close-modal"
                 >
                   Close
                 </IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
-          <IonContent className="ion-padding">
+          <IonContent className="ion-padding" class="modal-content">
             <IonItem>
               <IonTextarea
                 placeholder="Type announcement message here"
@@ -287,10 +287,10 @@ const Admin: React.FC = () => {
             </IonItem>
             <IonGrid>
               <IonRow>
-                <IonCol size="7" class="invis-grid-col">
+                <IonCol size="5" class="invis-announcements">
                   <IonButton>Post Announcement</IonButton>
                 </IonCol>
-                <IonCol size="9" class="invis-grid-col">
+                <IonCol size="7" class="invis-announcements">
                   <IonButton>Schedule Announcement</IonButton>
                   <IonDatetimeButton datetime="datetime"></IonDatetimeButton>
                 </IonCol>
@@ -298,85 +298,14 @@ const Admin: React.FC = () => {
             </IonGrid>
             <IonGrid>
               <IonRow class="header-row">
-                <IonCol size="4">Time Scheduled</IonCol>
-                <IonCol size="8">Announcement Contents</IonCol>
-                <IonCol size="4">Delete</IonCol>
+                <IonCol size="4" class="admin-col">Time Scheduled</IonCol>
+                <IonCol size="8" class="admin-col">Announcement Contents</IonCol>
+                <IonCol size="4" class="admin-col">Delete</IonCol>
               </IonRow>
               <IonRow>
-                <IonCol size="4">January 20, 2023 7:00PM</IonCol>
-                <IonCol size="8">Challenge #1</IonCol>
-                <IonCol size="4">
-                  <IonButton size="small">
-                    <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>
-                    Remove
-                  </IonButton>
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol size="4">January 28, 2023 3:30PM</IonCol>
-                <IonCol size="8">Challenge #2</IonCol>
-                <IonCol size="4">
-                  <IonButton size="small">
-                    <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>
-                    Remove
-                  </IonButton>
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol size="4">February 2, 2023 9:15AM</IonCol>
-                <IonCol size="8">Challenge #3</IonCol>
-                <IonCol size="4">
-                  <IonButton size="small">
-                    <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>
-                    Remove
-                  </IonButton>
-                </IonCol>
-              </IonRow>
-
-              <IonRow>
-                <IonCol size="4">February 2, 2023 9:15AM</IonCol>
-                <IonCol size="8">Challenge #3</IonCol>
-                <IonCol size="4">
-                  <IonButton size="small">
-                    <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>
-                    Remove
-                  </IonButton>
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol size="4">February 2, 2023 9:15AM</IonCol>
-                <IonCol size="8">Challenge #3</IonCol>
-                <IonCol size="4">
-                  <IonButton size="small">
-                    <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>
-                    Remove
-                  </IonButton>
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol size="4">February 2, 2023 9:15AM</IonCol>
-                <IonCol size="8">Challenge #3</IonCol>
-                <IonCol size="4">
-                  <IonButton size="small">
-                    <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>
-                    Remove
-                  </IonButton>
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol size="4">February 2, 2023 9:15AM</IonCol>
-                <IonCol size="8">Challenge #3</IonCol>
-                <IonCol size="4">
-                  <IonButton size="small">
-                    <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>
-                    Remove
-                  </IonButton>
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol size="4">February 2, 2023 9:15AM</IonCol>
-                <IonCol size="8">Challenge #3</IonCol>
-                <IonCol size="">
+                <IonCol size="4" class="admin-col">January 20, 2023 7:00PM</IonCol>
+                <IonCol size="8" class="admin-col">Challenge #1</IonCol>
+                <IonCol size="4" class="admin-col">
                   <IonButton size="small">
                     <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>
                     Remove
@@ -391,20 +320,20 @@ const Admin: React.FC = () => {
         </IonModal>
 
         <IonModal isOpen={isOpenReport}>
-          <IonHeader>
+          <IonHeader class="modal-header">
             <IonToolbar>
-              <IonTitle>Generate Report</IonTitle>
+              <IonTitle class="modal-title">Generate Report</IonTitle>
               <IonButtons slot="end">
-                <IonButton onClick={() => setIsOpenReport(false)} color="light">
+                <IonButton onClick={() => setIsOpenReport(false)} class="admin-close-modal">
                   Close
                 </IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
-          <IonItem>
+          <IonItem class="modal-content">
             <IonLabel>Select Reports to Generate</IonLabel>
           </IonItem>
-          <IonContent className="ion-padding">
+          <IonContent className="ion-padding" class="modal-content">
             <IonItem>
               <IonCheckbox slot="start"></IonCheckbox>
               <IonLabel>Report Type 1</IonLabel>
@@ -432,8 +361,3 @@ const Admin: React.FC = () => {
 };
 
 export default Admin;
-
-/*Useful links
-https://www.youtube.com/watch?v=5xQlIYHgesg
-https://ionicacademy.com/responsive-data-ionic-grid/
-*/

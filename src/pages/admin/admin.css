@@ -1,16 +1,8 @@
-ion-content{
+.admin-content{
     --ion-background-color: #4d5123;
 }
 
-ion-header{
-    --ion-background-color: #4d5123
-}
-
-ion-title{
-    --color: #f6a71c;
-}
-
-ion-col {
+.admin-col {
     background-color: #98a140;
     border: solid 1px #000;
     color: #000;
@@ -19,20 +11,24 @@ ion-col {
     --ion-grid-columns: 16;
 }
 
-ion-row {
+.invis-announcements{
+    border: solid 0px #fff;
+    background-color: #98a140;
     text-align: center;
+    vertical-align: middle;
 }
 
-ion-grid{
+.header-col{
+    font-weight: bolder;
+}
+
+.full-grid{
     --ion-grid-width: 100%;
 }
 
-ion-button{
-    --background: #e17e26;
-}
-
-ion-item{
-    --background: transparent;
+.grid-title{
+    color: #fff;
+    font-weight: bold;
 }
 
 .admin-button{
@@ -41,6 +37,7 @@ ion-item{
     padding-top: 5px;
     padding-bottom: 5px;
     --background: #e17e26;
+    font-weight: bold;
 }
 
 .modal-button{
@@ -60,4 +57,20 @@ ion-item{
 
 .header-col{
     background-color: #98a140;
+}
+
+.modal-header{
+    --ion-background-color: #4d5123;
+}
+
+.admin-close-modal{
+    color: #fff;
+}
+
+.modal-title{
+    color: #fff;
+}
+
+.modal-content{
+    --ion-background-color: #98a140;
 }
