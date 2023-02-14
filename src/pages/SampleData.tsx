@@ -24,172 +24,109 @@ const TeamData = [
 const IndividualData = [
   {
     name: 'John Doe',
-    profile_pic: 'https://example.com/john-doe.jpg',
-    totalStep: 10000
-  },
-  {
-    name: 'Jane Smith',
-    profile_pic: 'https://example.com/jane-smith.jpg',
-    totalStep: 12000
-  },
-  {
-    name: 'Bob Johnson',
-    profile_pic: 'https://example.com/bob-johnson.jpg',
-    totalStep: 9000
-  },
-  {
-    name: 'Alice Williams',
-    profile_pic: 'https://example.com/alice-williams.jpg',
-    totalStep: 14000
-  },
-  {
-    name: 'Charlie Brown',
-    profile_pic: 'https://example.com/charlie-brown.jpg',
-    totalStep: 8000
-  },
-  {
-    name: 'Emily Davis',
-    profile_pic: 'https://example.com/emily-davis.jpg',
-    totalStep: 11000
-  },
-  {
-    name: 'Michael Martinez',
-    profile_pic: 'https://example.com/michael-martinez.jpg',
-    totalStep: 12500
-  },
-  {
-    name: 'Jessica Garcia',
-    profile_pic: 'https://example.com/jessica-garcia.jpg',
-    totalStep: 9000
-  },
-  {
-    name: 'David Rodriguez',
-    profile_pic: 'https://example.com/david-rodriguez.jpg',
-    totalStep: 13000
-  },
-  {
-    name: 'Samantha Turner',
-    profile_pic: 'https://example.com/samantha-turner.jpg',
-    totalStep: 10000
-  },
-  {
-    name: 'Ashley Phillips',
-    profile_pic: 'https://example.com/ashley-phillips.jpg',
-    totalStep: 12000
-  },
-  {
-    name: 'Brian Lewis',
-    profile_pic: 'https://example.com/brian-lewis.jpg',
-    totalStep: 9000
-  },
-  {
-    name: 'Amanda Lee',
-    profile_pic: 'https://example.com/amanda-lee.jpg',
-    totalStep: 14000
-  },
-  {
-    name: 'Justin Scott',
-    profile_pic: 'https://example.com/justin-scott.jpg',
-    totalStep: 8000
-  },
-  {
-    name: 'Brandon Perez',
-    profile_pic: 'https://example.com/brandon-perez.jpg',
-    totalStep: 11000
-  }
-];
-
-const userData = [
-  {
-    name: 'John Doe',
     team: 'Team 1',
     email: 'jdoe@gmail.com',
+    profile_pic: 'https://example.com/john-doe.jpg',
     totalStep: 10000
   },
   {
     name: 'Jane Smith',
     team: 'Team 1',
     email: 'jsmith@pdx.edu',
+    profile_pic: 'https://example.com/jane-smith.jpg',
     totalStep: 12000
   },
   {
     name: 'Bob Johnson',
     team: 'Team 1',
     email: 'bjohnson@pdx.edu',
+    profile_pic: 'https://example.com/bob-johnson.jpg',
     totalStep: 9000
   },
   {
     name: 'Alice Williams',
     team: 'Team 2',
     email: 'awilliams@pdx.edu',
+    profile_pic: 'https://example.com/alice-williams.jpg',
     totalStep: 14000
   },
   {
     name: 'Charlie Brown',
     team: 'Team 2',
     email: 'cbrown@gmail.com',
+    profile_pic: 'https://example.com/charlie-brown.jpg',
     totalStep: 8000
   },
   {
     name: 'Emily Davis',
     team: '',
     email: 'edavis@gmail.com',
+    profile_pic: 'https://example.com/emily-davis.jpg',
     totalStep: 11000
   },
   {
     name: 'Michael Martinez',
     team: 'Team 2',
     email: 'mmartinez@gmail.com',
+    profile_pic: 'https://example.com/michael-martinez.jpg',
     totalStep: 12500
   },
   {
     name: 'Jessica Garcia',
     team: '',
     email: 'jgarcia@pdx.edu',
+    profile_pic: 'https://example.com/jessica-garcia.jpg',
     totalStep: 9000
   },
   {
     name: 'David Rodriguez',
     team: 'Team 5',
     email: 'drodriguez@hotmail.com',
+    profile_pic: 'https://example.com/david-rodriguez.jpg',
     totalStep: 13000
   },
   {
     name: 'Samantha Turner',
     team: 'Team 2',
     email: 'sturner@aol.com',
+    profile_pic: 'https://example.com/samantha-turner.jpg',
     totalStep: 10000
   },
   {
     name: 'Ashley Phillips',
     team: 'Team 6',
     email: 'aphillips@pdx.edu',
+    profile_pic: 'https://example.com/ashley-phillips.jpg',
     totalStep: 12000
   },
   {
     name: 'Brian Lewis',
     team: 'Team 9',
     email: 'nlewis@pdx.edu',
+    profile_pic: 'https://example.com/brian-lewis.jpg',
     totalStep: 9000
   },
   {
     name: 'Amanda Lee',
     team: 'Team 10',
     email: 'alee@pdx.edu',
+    profile_pic: 'https://example.com/amanda-lee.jpg',
     totalStep: 14000
   },
   {
     name: 'Justin Scott',
     team: 'Team 9',
     email: 'jscott@gmail.com',
+    profile_pic: 'https://example.com/justin-scott.jpg',
     totalStep: 8000
   },
   {
     name: 'Brandon Perez',
     team: 'Team 8',
     email: 'bperez@gmail.com',
+    profile_pic: 'https://example.com/brandon-perez.jpg',
     totalStep: 11000
   }
 ];
 
-export { TeamData, IndividualData, userData};
+export { TeamData, IndividualData };

@@ -36,7 +36,7 @@ import { useState} from 'react';
 //import { useHistory } from 'react-router';
 //import AuthContext from '../../store/auth-context';
 import './admin.css';
-import {userData} from '../SampleData';
+import {IndividualData} from '../SampleData';
 
 const Admin: React.FC = () => {
   //used to open and close modals
@@ -63,8 +63,8 @@ const Admin: React.FC = () => {
 
   //for once information is fetched
 
-  function DisplayUsers(userData: any[]): any {
-    if (userData.length > 0) {
+  function DisplayUsers(IndividualData: any[]): any {
+    if (IndividualData.length > 0) {
       return (
         <>
           <IonGrid fixed={true}>
@@ -90,7 +90,7 @@ const Admin: React.FC = () => {
               </IonCol>
             </IonRow>
 
-            {userData.map((item) => (
+            {IndividualData.map((item) => (
               <IonRow key={Math.random()}>
                 <IonCol sizeMd='3' size="5">{item.name}</IonCol>
                 <IonCol sizeMd='3' size="5">{item.team}</IonCol>
@@ -195,7 +195,7 @@ const Admin: React.FC = () => {
         </IonGrid>
 
         <IonItem>Users</IonItem>
-        <IonItem>{DisplayUsers(userData)}</IonItem>
+        <IonItem>{DisplayUsers(IndividualData)}</IonItem>
 
         <IonModal isOpen={isOpenUser} backdropDismiss={false}>
           <IonHeader>
