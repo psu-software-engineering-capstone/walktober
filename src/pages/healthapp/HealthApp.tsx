@@ -14,7 +14,7 @@ import {
 import './HealthApp.css';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
 import { auth, FirestoreDB } from '../../firebase';
-import { doc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import { updateDoc } from 'firebase/firestore';
 import { Health } from '@awesome-cordova-plugins/health'; // removed , HealthQueryOptions
@@ -23,6 +23,11 @@ import { useContext } from 'react';
 import AuthContext from '../../store/auth-context';
 
 const HealthApp: React.FC = () => {
+  interface StepLog {
+    date: string;
+    steps: number;
+  }
+
   const ctx = useContext(AuthContext);
 
   const history = useHistory();
@@ -84,13 +89,43 @@ const HealthApp: React.FC = () => {
     };
     await HealthKit.querySampleType(stepOptions)
       .then(async (data: any) => {
-        const stepsByDate = [];
-        let totalStep = 0;
+        const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
+        const dbSnap = await getDoc(dbRef);
+        const dbStepsByDate: StepLog[] = dbSnap.data().stepsByDate;
+        if (dbStepsByDate.length > 0) {
+          dbStepsByDate.sort(
+            (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+          );
+        }
+        let dayCount = 0;
+        let prevIndex = 0;
+        const healthAppData: StepLog[] = [];
         for (let i = 0; i < data.length; i++) {
           const current = data[i];
-          const date = current.startDate.toISOString().slice(0, 10);
           const steps = current.quantity;
-          totalStep += current.quantity;
+          const date = current.startDate.toISOString().slice(0, 10);
+          const prevDate = data[prevIndex].startDate.toISOString().slice(0, 10);
+          if(date === prevDate && i != 0){
+            healthAppData[dayCount - 1].steps += steps;
+          }
+          else{
+            healthAppData[dayCount] = { date, steps };
+            dayCount++;
+          }
+          prevIndex = i;
+        }
+        const stepsByDate = [];
+        let totalStep = 0;
+        for (let i = 0; i < healthAppData.length; i++) {
+          const current = healthAppData[i];
+          const date = current.date;
+          const appSteps = current.steps;
+          let dbSteps = -1;
+          if(i < dbStepsByDate.length){
+            dbSteps = dbStepsByDate[i].steps;
+          }
+          const steps = dbSteps > appSteps ? dbSteps : appSteps;
+          totalStep += steps;
           stepsByDate[i] = { date, steps };
         }
         await updateCurrentUser(stepsByDate, totalStep);
@@ -170,13 +205,43 @@ const HealthApp: React.FC = () => {
     };
     await Health.query(stepOptions)
       .then(async (data: any) => {
-        const stepsByDate = [];
-        let totalStep = 0;
+        const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
+        const dbSnap = await getDoc(dbRef);
+        const dbStepsByDate: StepLog[] = dbSnap.data().stepsByDate;
+        if (dbStepsByDate.length > 0) {
+          dbStepsByDate.sort(
+            (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+          );
+        }
+        let dayCount = 0;
+        let prevIndex = 0;
+        const healthAppData: StepLog[] = [];
         for (let i = 0; i < data.length; i++) {
           const current = data[i];
-          const date = current.startDate.toISOString().slice(0, 10);
           const steps = current.value;
-          totalStep += current.value;
+          const date = current.startDate.toISOString().slice(0, 10);
+          const prevDate = data[prevIndex].startDate.toISOString().slice(0, 10);
+          if(date === prevDate && i != 0){
+            healthAppData[dayCount - 1].steps += steps;
+          }
+          else{
+            healthAppData[dayCount] = { date, steps };
+            dayCount++;
+          }
+          prevIndex = i;
+        }
+        const stepsByDate = [];
+        let totalStep = 0;
+        for (let i = 0; i < healthAppData.length; i++) {
+          const current = healthAppData[i];
+          const date = current.date;
+          const appSteps = current.steps;
+          let dbSteps = -1;
+          if(i < dbStepsByDate.length){
+            dbSteps = dbStepsByDate[i].steps;
+          }
+          const steps = dbSteps > appSteps ? dbSteps : appSteps;
+          totalStep += steps;
           stepsByDate[i] = { date, steps };
         }
         await updateCurrentUser(stepsByDate, totalStep);
