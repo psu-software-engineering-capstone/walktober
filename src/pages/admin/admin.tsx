@@ -23,10 +23,12 @@ import {
 } from '@ionic/react';
 import NavBar from '../../components/NavBar';
 import { closeCircleSharp } from 'ionicons/icons';
-import { useEffect, useState } from 'react';
-import './admin.css';
+import { useContext, useEffect, useState } from 'react';
+import AuthContext from '../../store/auth-context';
+import { useHistory } from 'react-router-dom';
 import { FirestoreDB } from '../../firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import './admin.css';
 
 const Admin: React.FC = () => {
   //used to open and close modals
@@ -62,6 +64,16 @@ const Admin: React.FC = () => {
     });
     setUserLogs(userLogsData);
   };
+
+  const history = useHistory();
+  const ctx = useContext(AuthContext);
+  const isAdmin = ctx.admin;
+  
+  // prevents the user from entering the admin page from the url if they are not an admin
+  if(isAdmin === false){
+    history.push('/app');
+    return;
+  }
 
   useEffect(() => {
     loadUserLogs();
@@ -365,7 +377,7 @@ const Admin: React.FC = () => {
         </IonModal>
       </IonContent>
     </IonPage>
-  );
+  )as any;
 };
 
 export default Admin;

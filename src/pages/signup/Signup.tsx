@@ -65,7 +65,8 @@ const Signup: React.FC = () => {
       profile_pic: '',
       team: '',
       team_leader: false,
-      stepsByDate: []
+      stepsByDate: [],
+      admin: false,
     });
   };
 
@@ -80,7 +81,8 @@ const Signup: React.FC = () => {
       profile_pic: result.user.photoURL,
       team: '',
       team_leader: false,
-      stepsByDate: []
+      stepsByDate: [],
+      admin: false,
     });
   };
 
@@ -95,7 +97,8 @@ const Signup: React.FC = () => {
       profile_pic: result.imageUrl,
       team: '',
       team_leader: false,
-      stepsByDate: []
+      stepsByDate: [],
+      admin: false,
     });
   };
 
