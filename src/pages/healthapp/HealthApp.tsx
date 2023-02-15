@@ -89,6 +89,7 @@ const HealthApp: React.FC = () => {
     };
     await HealthKit.querySampleType(stepOptions)
       .then(async (data: any) => {
+        console.log(data);
         const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
         const dbSnap = await getDoc(dbRef);
         const dbStepsByDate: StepLog[] = dbSnap.data().stepsByDate;
@@ -179,13 +180,13 @@ const HealthApp: React.FC = () => {
         await updateCurrentUser(stepsByDate, totalStep);
         alert('Steps Updated!');
       })
-      .catch((error: any) => alert(JSON.stringify(error)));
+      .catch((error: any) => alert(error));
   };
 
   const updateCurrentUser = async (stepsByDate: any, totalStep: any) => {
     if (ctx.user === null) {
       alert('You are not looged in!');
-      history.replace('/login');
+      history.push('/login');
       return;
     }
     const currentUserRef = doc(

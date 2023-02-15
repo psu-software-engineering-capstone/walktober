@@ -4,11 +4,13 @@ import './LeaderBoardChart.scss';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 //import { People } from '../../utils';
-import { IndividualData} from '../../pages/SampleData';
+//import { IndividualData } from '../../pages/SampleData';
+import { collection, getDocs } from 'firebase/firestore';
+import { FirestoreDB } from '../../firebase';
 
 ChartJS.register(...registerables);
 
-interface Data{
+interface Data {
   name: string;
   profile_pic: string;
   totalStep: number;
@@ -20,22 +22,22 @@ interface Data{
 const LeaderBoardChart: React.FC = () => {
   const [data, setData] = useState(Array<Data>);
 
-  const chartData = ({
+  const chartData = {
     /*Sorts the data of all users by the amount of steps taken. Labels formed from the names
      * of the user, and the bars are the number of steps the user took
      */
-    labels: data.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1)).map(
-      (row) => row.name
-    ),
+    labels: data
+      .sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
+      .map((row) => row.name),
     datasets: [
       {
         label: 'Steps',
-        data: data.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1)).map(
-          (col) => col.totalStep
-        )
+        data: data
+          .sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
+          .map((col) => col.totalStep)
       }
     ]
-  });
+  };
   const chartOptions = {
     indexAxis: 'y',
     maintainAspectRatio: false,
@@ -92,8 +94,24 @@ const LeaderBoardChart: React.FC = () => {
       }
     }
   };
+
+  async function getData() {
+    const indData: Array<Data> = [];
+    const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
+    querySnapshot.forEach((doc: any) => {
+      console.log(doc.id, ' => ', doc.data());
+      const person: Data = {
+        name: doc.data().name as string,
+        profile_pic: doc.data().profile_pic as string,
+        totalStep: doc.data().totalStep as number
+      };
+      indData.push(person);
+    });
+    setData(indData);
+  }
+
   useEffect(() => {
-    setData(IndividualData);
+    getData(); //go into the firestore and get all the users' names, pictures, and then totalStep
     boxAjust();
   }, []);
 
