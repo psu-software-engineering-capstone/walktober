@@ -25,6 +25,8 @@ import NavBar from '../../components/NavBar';
 import { closeCircleSharp } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import './admin.css';
+import { FirestoreDB } from '../../firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 const Admin: React.FC = () => {
   const [isOpenUser, setIsOpenUser] = useState(false);
@@ -32,18 +34,41 @@ const Admin: React.FC = () => {
   const [isOpenAnnouncements, setIsOpenAnnouncements] = useState(false);
   const [isOpenReport, setIsOpenReport] = useState(false);
 
-  interface StepLog {
-    user: string;
+  interface UserLog {
+    name: string;
     team: string;
     email: string;
     steps: number;
   }
 
-  const [userLogs, setUserLogs] = useState<StepLog[]>([]);
+  const [userLogs, setUserLogs] = useState<UserLog[]>([]);
+
+  const loadUserLogs = async () => {
+    const dbRef = collection(FirestoreDB, 'users');
+    const dbSnap = await getDocs(dbRef);
+    const userLogsData: UserLog[] = [];
+    dbSnap.forEach((doc: { data: () => any; }) => {
+      const data = doc.data();
+      if (data) {
+        const userLogData: UserLog = {
+          name: data.name,
+          team: data.team,
+          email: data.email,
+          steps: data.totalStep
+        };
+        userLogsData.push(userLogData);
+      }
+    });
+    setUserLogs(userLogsData);
+  };
 
   useEffect(() => {
-    setUserLogs([]);
+    loadUserLogs();
   }, []);
+
+  useEffect(() => {
+    console.log(userLogs);
+  }, [userLogs]);
 
   function DisplayUsers(): any {
     if (userLogs.length > 0) {
@@ -73,9 +98,9 @@ const Admin: React.FC = () => {
               </IonCol>
             </IonRow>
 
-            {userLogs.map((item) => (
+            {userLogs.map((item: { name: any; team: any; email: any; steps: any; }) => (
               <IonRow key={Math.random()}>
-                <IonCol sizeMd='3' size="5">{item.user}</IonCol>
+                <IonCol sizeMd='3' size="5">{item.name}</IonCol>
                 <IonCol sizeMd='3' size="5">{item.team}</IonCol>
                 <IonCol sizeMd='4' size="5">{item.email}</IonCol>
                 <IonCol sizeMd='3' size="8">{item.steps}</IonCol>
@@ -206,7 +231,7 @@ const Admin: React.FC = () => {
 
             <IonCol size="3">Kraban</IonCol>
 
-            <IonCol size="4">fakemail@gmail.com</IonCol>
+            <IonCol size="4">moes@pdx.edu</IonCol>
 
             <IonCol size="3">9001</IonCol>
 

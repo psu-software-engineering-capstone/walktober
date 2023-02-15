@@ -88,7 +88,7 @@ const HealthApp: React.FC = () => {
         let totalStep = 0;
         for (let i = 0; i < data.length; i++) {
           const current = data[i];
-          const date = current.startDate.toISOString().slice(0, 10);
+          const date = current.startDate.toString().slice(0, 10);
           const steps = current.quantity;
           totalStep += current.quantity;
           stepsByDate[i] = { date, steps };
@@ -102,7 +102,7 @@ const HealthApp: React.FC = () => {
   const updateCurrentUser = async (stepsByDate: any, totalStep: any) => {
     if (ctx.user === null) {
       alert('You are not looged in!');
-      history.replace('/login');
+      history.push('/login');
       return;
     }
     const currentUserRef = doc(
