@@ -66,7 +66,7 @@ const Signup: React.FC = () => {
       team: '',
       team_leader: false,
       stepsByDate: [],
-      isAdmin: false,
+      admin: false,
     });
   };
 
@@ -82,7 +82,7 @@ const Signup: React.FC = () => {
       team: '',
       team_leader: false,
       stepsByDate: [],
-      isAdmin: false,
+      admin: false,
     });
   };
 
@@ -98,7 +98,7 @@ const Signup: React.FC = () => {
       team: '',
       team_leader: false,
       stepsByDate: [],
-      isAdmin: false,
+      admin: false,
     });
   };
 
