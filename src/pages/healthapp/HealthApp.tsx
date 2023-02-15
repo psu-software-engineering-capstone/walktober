@@ -104,7 +104,7 @@ const HealthApp: React.FC = () => {
   const updateCurrentUser = async (stepsByDate: any, totalStep: any) => {
     if (ctx.user === null) {
       alert('You are not looged in!');
-      history.replace('/login');
+      history.push('/login');
       return;
     }
     const currentUserRef = doc(

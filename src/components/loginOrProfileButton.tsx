@@ -23,7 +23,7 @@ const LoginOrProfileButton: React.FC<{}> = (): ReactElement => {
     <IonButton
       class="loginHomeButton"
       onClick={() => {
-        history.replace("/login");
+        history.push("/login");
       }}
       slot="end"
     >
