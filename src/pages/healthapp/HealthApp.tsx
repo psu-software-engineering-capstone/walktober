@@ -84,10 +84,12 @@ const HealthApp: React.FC = () => {
     };
     await HealthKit.querySampleType(stepOptions)
       .then(async (data: any) => {
+        console.log(data);
         const stepsByDate = [];
         let totalStep = 0;
         for (let i = 0; i < data.length; i++) {
           const current = data[i];
+          // it has to be toString() not toISOString() //
           const date = current.startDate.toString().slice(0, 10);
           const steps = current.quantity;
           totalStep += current.quantity;
@@ -96,7 +98,7 @@ const HealthApp: React.FC = () => {
         await updateCurrentUser(stepsByDate, totalStep);
         alert('Steps Updated!');
       })
-      .catch((error: any) => alert(JSON.stringify(error)));
+      .catch((error: any) => alert(error));
   };
 
   const updateCurrentUser = async (stepsByDate: any, totalStep: any) => {
