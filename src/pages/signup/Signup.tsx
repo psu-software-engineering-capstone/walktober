@@ -32,7 +32,7 @@ import {
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import './Signup.css';
-import logo from '../../assets/Walktober.png';
+//import logo from '../../assets/Walktober.png';
 
 const Signup: React.FC = () => {
   // for routing //
@@ -196,7 +196,7 @@ const Signup: React.FC = () => {
       <IonContent fullscreen className="signup">
         <IonCard className="signup-card">
           <IonCardHeader>
-            <img alt="Walktober logo" src={logo} />
+            <img alt="Walktober logo" src={'../../assets/Walktober.png'} />
             <IonCardTitle class="ion-text-center">
               Sign up for the free 31-day walking challenge! Open to the entire
               PSU community.

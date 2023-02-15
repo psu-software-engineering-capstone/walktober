@@ -65,7 +65,7 @@ const ManualSteps: React.FC = () => {
   const getRecordsFromDB = async () => {
     if (ctx.user === null) {
       alert('You are not logged in!');
-      history.replace('/login');
+      history.push('/login');
       return;
     }
     let stepsByDate = [];

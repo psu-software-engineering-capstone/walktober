@@ -45,13 +45,16 @@ const HomePage: React.FC = () => {
   const ctx = useContext(AuthContext);
 
   useEffect(() => {
-    getPastSevenDaysSteps();
-  }, []);
+    if (ctx.user) {
+      console.log('get past seven days steps');
+      getPastSevenDaysSteps();
+    }
+  }, [ctx.user]);
 
   const getPastSevenDaysSteps = async () => {
     if (ctx.user === null) {
       alert('You are not logged in!');
-      history.replace('/login');
+      history.push('/login');
       return;
     }
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
