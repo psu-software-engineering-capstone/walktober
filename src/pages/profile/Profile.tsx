@@ -79,6 +79,7 @@ const Profile: React.FC = () => {
     updateProfile(auth.currentUser, { photoURL })
       .then(() => {
         alert('profile picture updated!');
+        history.push('/app/profile');
       })
       .catch((error: any) => {
         alert(error);
