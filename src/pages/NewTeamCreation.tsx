@@ -16,13 +16,8 @@ import {
 import './NewTeamCreation.css';
 import { useState } from 'react';
 import { auth, FirestoreDB } from '../firebase';
-import {
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-  Timestamp
-} from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, Timestamp } from 'firebase/firestore';
+import { useHistory } from 'react-router';
 
 interface Timestamp {
   seconds: number;
@@ -31,7 +26,7 @@ interface Timestamp {
   compareTo(other: Timestamp): number;
 }
 
-Timestamp.prototype.compareTo = function(other: Timestamp): number {
+Timestamp.prototype.compareTo = function (other: Timestamp): number {
   if (this.seconds === other.seconds) {
     return this.nanoseconds - other.nanoseconds;
   } else {
@@ -43,6 +38,7 @@ const NewTeamCreation: React.FC = () => {
   const [newTeamName, setNewTeamName] = useState('');
   const [newTeamStatus, setNewTeamStatus] = useState(0);
   const [newTeamPassword, setNewTeamPassword] = useState('');
+  const history = useHistory();
 
   const createTeam = async () => {
     if (auth.currentUser == null) {
@@ -52,7 +48,7 @@ const NewTeamCreation: React.FC = () => {
     const userRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     const userSnap = await getDoc(userRef);
     const userData = userSnap.data();
-    if(userData.team !== '') {
+    if (userData.team !== '') {
       alert('You are already in a team! You cannot create a team.');
       return;
     }
@@ -67,11 +63,11 @@ const NewTeamCreation: React.FC = () => {
         return;
       }
     }
-    if(newTeamStatus == 0 && newTeamPassword !== ''){
+    if (newTeamStatus == 0 && newTeamPassword !== '') {
       alert('You cannot create a password for a public team!');
       return;
     }
-    if(newTeamStatus == 1 && newTeamPassword === ''){
+    if (newTeamStatus == 1 && newTeamPassword === '') {
       alert('You must create a password for a private team!');
       return;
     }
@@ -79,17 +75,17 @@ const NewTeamCreation: React.FC = () => {
     const adminRef = doc(FirestoreDB, 'admin', 'admin');
     const adminSnap = await getDoc(adminRef);
     const teamCreationDueDate: Timestamp = adminSnap.data().team_creation_due;
-    if(currentDate.compareTo(teamCreationDueDate) > 0){
-      alert(`The team creation deadline is: ${teamCreationDueDate}. You cannot create a team now.`);
+    if (currentDate.compareTo(teamCreationDueDate) > 0) {
+      alert(
+        `The team creation deadline is: ${teamCreationDueDate}. You cannot create a team now.`
+      );
       return;
     }
     setDoc(doc(FirestoreDB, 'teams', newTeamName), {
       name: newTeamName,
-      avg_steps: userData.num_steps,
+      avg_steps: userData.totalStep,
       leader: auth.currentUser?.email,
-      members: [
-        userData.email
-      ],
+      members: [userData.email],
       status: newTeamStatus,
       password: newTeamPassword,
       team_size: 1
@@ -98,6 +94,7 @@ const NewTeamCreation: React.FC = () => {
         console.log('Document written successfully');
         alert('Your team has been created!');
         await updateCurrentUser();
+        history.push('/app/profile');
       })
       .catch((error: unknown) => {
         console.error('Error writing document: ', error);
@@ -141,7 +138,9 @@ const NewTeamCreation: React.FC = () => {
           ></IonInput>
         </IonItem>
         <IonItem>
-          <IonLabel position="floating">Team status. 0 is public, 1 is private</IonLabel>
+          <IonLabel position="floating">
+            Team status. 0 is public, 1 is private
+          </IonLabel>
           <IonInput
             type="number"
             name="Team status. 0 is public, 1 is private"

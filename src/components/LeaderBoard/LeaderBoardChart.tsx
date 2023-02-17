@@ -4,7 +4,6 @@ import './LeaderBoardChart.scss';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 //import { People } from '../../utils';
-//import { IndividualData } from '../../pages/SampleData';
 import { collection, getDocs } from 'firebase/firestore';
 import { FirestoreDB } from '../../firebase';
 
@@ -99,7 +98,6 @@ const LeaderBoardChart: React.FC = () => {
     const indData: Array<Data> = [];
     const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
     querySnapshot.forEach((doc: any) => {
-      console.log(doc.id, ' => ', doc.data());
       const person: Data = {
         name: doc.data().name as string,
         profile_pic: doc.data().profile_pic as string,
