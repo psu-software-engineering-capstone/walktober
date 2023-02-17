@@ -172,7 +172,6 @@ const HomePage: React.FC = () => {
                 <IonCol className="boxSize">Location for announcements</IonCol>
                 <br />
                 <IonCol className="boxSize">
-                  Location for personal Progress:
                   {pastSevenDaysSteps.length > 1 ? (
                     <ProgressChart data={pastSevenDaysSteps} />
                   ) : (
