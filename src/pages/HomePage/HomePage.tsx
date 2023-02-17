@@ -13,7 +13,9 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonInput
+  IonInput,
+  IonText,
+  IonItem
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
 import { useHistory } from 'react-router';
@@ -27,6 +29,7 @@ import { doc } from 'firebase/firestore';
 //import ExitSurveyModal from '../exitQuestions/exitQuestionsModal';
 
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
+import { library } from 'ionicons/icons';
 interface badgeOutline {
   name: string;
 }
@@ -95,27 +98,33 @@ const HomePage: React.FC = () => {
       <IonContent fullscreen={true} className="ion-padding testing">
         <IonGrid>
           <IonRow>
-            <IonCol
-              size="9"
-              sizeSm="6"
-              sizeXs="12"
-              sizeMd="6"
-              sizeLg="9"
-            ></IonCol>
-            <IonCol size="3" sizeSm="6" sizeXs="12" sizeMd="6" sizeLg="3">
-              <IonLabel className="localStepsUpdater">Todays Steps:</IonLabel>
-              <IonInput
+            <IonCol size="9" sizeSm="6" sizeXs="12" sizeMd="6" sizeLg="9">
+              <IonLabel className="">
+                Todays Steps:{' '}
+                <div className="localStepsUpdater">{steps.toString()}</div>
+              </IonLabel>
+              {/* <IonItem
                 className="localStepsUpdater"
                 id="stepsUpdate"
-                type="number"
                 placeholder={steps.toString()}
                 onInput={(event: any) => {
                   stepUpdateHandler(event);
                 }}
-                min="1"
-                step="1"
-              ></IonInput>
+              >
+                sad
+              </IonItem> */}
+              <br />
+              click
+              <a onClick={moveToManualSteps}> here </a>
+              to see previous logs
             </IonCol>
+            <IonCol
+              size="3"
+              sizeSm="6"
+              sizeXs="12"
+              sizeMd="6"
+              sizeLg="3"
+            ></IonCol>
             <IonCol
               size="9"
               sizeSm="6"
@@ -123,11 +132,13 @@ const HomePage: React.FC = () => {
               sizeMd="6"
               sizeLg="9"
             ></IonCol>
-            <IonCol size="3" sizeSm="6" sizeXs="12" sizeMd="6" sizeLg="3">
-              click
-              <a onClick={moveToManualSteps}> here </a>
-              to see previous logs
-            </IonCol>
+            <IonCol
+              size="3"
+              sizeSm="6"
+              sizeXs="12"
+              sizeMd="6"
+              sizeLg="3"
+            ></IonCol>
           </IonRow>
         </IonGrid>
 
