@@ -2,7 +2,6 @@ import {
   IonCol,
   IonContent,
   IonGrid,
-  IonInput,
   IonLabel,
   IonPage,
   IonRow,
@@ -15,6 +14,7 @@ import NavBar from '../../components/NavBar';
 import './TeamHome.scss';
 
 const TeamHome: React.FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [steps, setSteps] = useState(0);
   return (
     <IonPage>
