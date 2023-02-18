@@ -18,19 +18,17 @@ import './TeamHome.scss';
 const TeamJoin: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [allTeams, setTeams] = useState(Array<teamData>);
-
   interface teamData {
     name: string;
     leader: string;
     size: number;
     type: string;
   }
-
-  function toJoin(newTeam: teamData): any {
-    console.log(newTeam);
+  function toJoin(): void {
+    alert("Message");
   }
 
-  function DisplayTeams(teams: teamData[]): any {
+  const DisplayTeams = (teams: teamData[]): any => {
     if (teams.length > 0) {
       return (
         <>
@@ -78,7 +76,7 @@ const TeamJoin: React.FC = () => {
                     {item.type}
                   </IonCol>
                   <IonCol sizeMd="3" size="8" class="admin-col">
-                    <IonButton size="small" onClick={toJoin(item)}>
+                    <IonButton size="small" onClick={toJoin}>
                       Join
                     </IonButton>
                   </IonCol>
@@ -99,7 +97,7 @@ const TeamJoin: React.FC = () => {
         </>
       );
     }
-  }
+  };
 
   async function getData() {
     const indData: Array<teamData> = [];
@@ -107,14 +105,27 @@ const TeamJoin: React.FC = () => {
     querySnapshot.forEach((doc: any) => {
       console.log(doc.id, ' => ', doc.data());
       if (doc.data().members.length <= 9) {
-        const tem: teamData = {
-          name: doc.data().name as string,
-          leader: doc.data().leader as string,
-          size: doc.data().members.length as number,
-          type: doc.data().status as string
-        };
-        indData.push(tem);
-        console.log(tem);
+        if (doc.data().status === '1') {
+          const tem: teamData = {
+            name: doc.data().name as string,
+            leader: doc.data().leader as string,
+            size: doc.data().members.length as number,
+            type: 'Private'
+          };
+
+          indData.push(tem);
+          console.log(tem);
+        } else {
+          const tem: teamData = {
+            name: doc.data().name as string,
+            leader: doc.data().leader as string,
+            size: doc.data().members.length as number,
+            type: 'Public'
+          };
+
+          indData.push(tem);
+          console.log(tem);
+        }
       } else {
         console.log(doc.data().name, ' not added to the list');
       }
