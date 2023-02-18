@@ -31,6 +31,7 @@ const TeamHome: React.FC = () => {
               sizeMd="6"
               sizeLg="3"
               offset="3"
+              offsetMd="5"
             >
               <IonLabel className="">
                 Todays Steps:{' '}
@@ -39,10 +40,22 @@ const TeamHome: React.FC = () => {
             </IonCol>
           </IonRow>
           <IonRow>
-            <IonCol size="3">
+            <IonCol
+              size="3"
+              sizeLg="3"
+              sizeMd="6"
+              sizeSm="12"
+              className="member"
+            >
               Location for team chart: <LeaderBoardChart></LeaderBoardChart>
             </IonCol>
-            <IonCol size="7" className="box-size">
+            <IonCol
+              size="7"
+              sizeLg="7"
+              sizeMd="6"
+              sizeSm="12"
+              className="box-size"
+            >
               {/*
                * TODO: change channel based on current team
                *
@@ -58,7 +71,7 @@ const TeamHome: React.FC = () => {
                 channel="1068966009106600110"
               />
             </IonCol>
-            <IonCol size="2">
+            <IonCol size="2" sizeLg="2" sizeMd="12">
               Location for members status
               {}
             </IonCol>
