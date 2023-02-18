@@ -45,6 +45,7 @@ const TeamHome: React.FC = () => {
               sizeLg="3"
               sizeMd="6"
               sizeSm="12"
+              sizeXs="12"
               className="member"
             >
               Location for team chart: <LeaderBoardChart></LeaderBoardChart>
@@ -54,6 +55,7 @@ const TeamHome: React.FC = () => {
               sizeLg="7"
               sizeMd="6"
               sizeSm="12"
+              sizeXs="12"
               className="box-size"
             >
               {/*
