@@ -35,6 +35,11 @@ const TeamJoin: React.FC = () => {
       return (
         <>
           <IonGrid fixed={true}>
+            <IonRow align-items-stretch="true" class="top">
+              <IonCol align-self-center="true" class="header-col admin-col">
+                Available Teams
+              </IonCol>
+            </IonRow>
             <IonRow class="header-row">
               <IonCol sizeMd="3" size="5" class="header-col admin-col">
                 Team Name
@@ -128,7 +133,6 @@ const TeamJoin: React.FC = () => {
           <IonTitle> Team Join </IonTitle>
         </NavBar>
       </IonHeader>
-      <IonItem> You have entered the forbidden page</IonItem>
       <IonItem>{DisplayTeams(allTeams)}</IonItem>
       <IonContent fullscreen></IonContent>
     </IonPage>
