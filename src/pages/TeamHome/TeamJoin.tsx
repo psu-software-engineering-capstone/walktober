@@ -1,8 +1,12 @@
 import {
+  IonButton,
+  IonCol,
   IonContent,
+  IonGrid,
   IonHeader,
   IonItem,
   IonPage,
+  IonRow,
   IonTitle
 } from '@ionic/react';
 import { getDocs, collection } from 'firebase/firestore';
@@ -20,6 +24,76 @@ const TeamJoin: React.FC = () => {
     leader: string;
     size: number;
     type: string;
+  }
+
+  function toJoin(newTeam: teamData): any {
+    console.log(newTeam);
+  }
+
+  function DisplayTeams(teams: teamData[]): any {
+    if (teams.length > 0) {
+      return (
+        <>
+          <IonGrid fixed={true}>
+            <IonRow class="header-row">
+              <IonCol sizeMd="3" size="5" class="header-col admin-col">
+                Team Name
+              </IonCol>
+              <IonCol sizeMd="3" size="5" class="header-col admin-col">
+                Team Leader
+              </IonCol>
+              <IonCol sizeMd="4" size="6" class="header-col admin-col">
+                Team Size
+              </IonCol>
+              <IonCol sizeMd="3" size="8" class="header-col admin-col">
+                Team Privacy
+              </IonCol>
+              <IonCol sizeMd="3" size="8" class="header-col admin-col">
+                Join
+              </IonCol>
+            </IonRow>
+            {teams.map(
+              (item: {
+                name: string;
+                leader: string;
+                size: number;
+                type: string;
+              }) => (
+                <IonRow key={Math.random()}>
+                  <IonCol sizeMd="3" size="5" class="admin-col">
+                    {item.name}
+                  </IonCol>
+                  <IonCol sizeMd="3" size="5" class="admin-col">
+                    {item.leader}
+                  </IonCol>
+                  <IonCol sizeMd="4" size="5" class="admin-col">
+                    {item.size}
+                  </IonCol>
+                  <IonCol sizeMd="3" size="8" class="admin-col">
+                    {item.type}
+                  </IonCol>
+                  <IonCol sizeMd="3" size="8" class="admin-col">
+                    <IonButton size="small" onClick={toJoin(item)}>
+                      Join
+                    </IonButton>
+                  </IonCol>
+                </IonRow>
+              )
+            )}
+          </IonGrid>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <IonItem>
+            {' '}
+            There are no teams that can be joined currently. Please go to your
+            profile and make a team
+          </IonItem>
+        </>
+      );
+    }
   }
 
   async function getData() {
@@ -55,6 +129,7 @@ const TeamJoin: React.FC = () => {
         </NavBar>
       </IonHeader>
       <IonItem> You have entered the forbidden page</IonItem>
+      <IonItem>{DisplayTeams(allTeams)}</IonItem>
       <IonContent fullscreen></IonContent>
     </IonPage>
   );
