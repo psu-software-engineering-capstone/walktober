@@ -382,7 +382,7 @@ const HealthApp: React.FC = () => {
           Update Step Count
         </IonButton>
         <h2>Fitbit</h2>
-        <IonButton expand="block">Implementing...</IonButton>
+        <IonButton expand="block">Implementing..</IonButton>
         <h2>Samsung Health</h2>
         <IonButton expand="block">Implementing...</IonButton>
       </IonContent>
