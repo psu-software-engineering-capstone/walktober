@@ -3,9 +3,10 @@ import React, { useEffect, useState } from 'react';
 import './LeaderBoardChart.scss';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-//import { People } from '../../utils';
-import { IndividualData, TeamData } from '../../pages/SampleData';
+import { TeamData } from '../../pages/SampleData';
 import placeholder from '../../assets/placeholder.png';
+import { collection, getDocs } from 'firebase/firestore';
+import { FirestoreDB } from '../../firebase';
 
 ChartJS.register(...registerables);
 
@@ -19,6 +20,8 @@ interface Data {
 const LeaderBoardChart: React.FC = () => {
   const [data, setData] = useState(Array<Data>);
   const [loading, setLoading] = useState(false);
+  let dataType = 'individual';
+  
   /*Sorts the data of all users by the amount of steps taken. Labels formed from the names
    * of the user, and the bars are the number of steps the user took
    */
@@ -111,6 +114,8 @@ const LeaderBoardChart: React.FC = () => {
       }
     }
   };
+  
+  //ajusts the size of the element containing the chart in order to correctly size the chart.
   const boxAjust = (labelLength: number) => {
     const box = document.querySelector('.box');
     console.log('ran');
@@ -124,45 +129,48 @@ const LeaderBoardChart: React.FC = () => {
       }
     }
   };
-
-  const teamsChart = () => {
+    
+  async function getData(dataType: string) {
     setLoading(true);
-    setData(
-      TeamData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
-    );
-    boxAjust(TeamData.length);
+    if(dataType == 'individual'){
+    const indData: Array<Data> = [];
+    const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
+    querySnapshot.forEach((doc: any) => {
+      console.log(doc.id, ' => ', doc.data());
+      const person: Data = {
+        name: doc.data().name as string,
+        profile_pic: doc.data().profile_pic as string,
+        totalStep: doc.data().totalStep as number
+      };
+      indData.push(person);
+    });
+    setData(indData.sort((a: any, b: any) =>
+    a.totalStep > b.totalStep ? -1 : 1
+  ));
+    }
+    if(dataType == 'teams'){
+      setData(
+        TeamData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
+      );
+    }
+    boxAjust(data.length);
     setTimeout(() => {
       setLoading(false);
     }, 500);
-  };
-
-  const individualsChart = () => {
-    setLoading(true);
-    setData(
-      IndividualData.sort((a: any, b: any) =>
-        a.totalStep > b.totalStep ? -1 : 1
-      )
-    );
-    boxAjust(IndividualData.length);
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
-  };
+  }
 
   useEffect(() => {
-    if (data.length == 0) {
-      individualsChart();
-    }
+    getData(dataType); //go into the firestore and get all the users' names, pictures, and then totalStep
   }, []);
 
   return (
     <IonContent>
       <IonHeader>LeaderBoard</IonHeader>
 
-      <IonButton onClick={individualsChart} disabled={loading}>
+      <IonButton onClick={() => {dataType = 'individual'; getData(dataType);}} disabled={loading}>
         Individual
       </IonButton>
-      <IonButton onClick={teamsChart} disabled={loading}>
+      <IonButton onClick={() => {dataType = 'teams'; getData(dataType);}} disabled={loading}>
         Teams
       </IonButton>
       <IonContent class="box">
