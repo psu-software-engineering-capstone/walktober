@@ -88,7 +88,8 @@ const NewTeamCreation: React.FC = () => {
       members: [userData.email],
       status: newTeamStatus,
       password: newTeamPassword,
-      team_size: 1
+      team_size: 1, 
+      totalSteps: auth.currentUser?.totalStep
     })
       .then(async () => {
         console.log('Document written successfully');

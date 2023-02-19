@@ -13,6 +13,7 @@ import {
   IonTitle
 } from '@ionic/react';
 import {
+  getDoc,
   getDocs,
   collection,
   doc,
@@ -25,6 +26,7 @@ import { auth, FirestoreDB } from '../../firebase';
 import { eyeOff, eye } from 'ionicons/icons';
 import { useHistory } from 'react-router';
 import './TeamHome.scss';
+import { increment } from 'firebase/firestore';
 
 const TeamJoin: React.FC = () => {
   interface teamData {
@@ -40,7 +42,7 @@ const TeamJoin: React.FC = () => {
     value: string;
   }
 
-  const history = useHistory();
+  const history = useHistory(); //used to move to different pages
   const [joinTeam, setJoin] = useState(''); //variable to get the team that the user chooses from the drop down menu
   const [teamPass, setPass] = useState(''); //variable to collect team password
   const [passwordShown, setPasswordShown] = useState(false); //enable visability to see password
@@ -48,50 +50,65 @@ const TeamJoin: React.FC = () => {
   const [allTeams, setTeams] = useState(Array<teamData>); //array of teams from database
 
   const togglePasswordVisibility = () => {
+    //can we see the password?
     setPasswordShown(!passwordShown);
   };
 
   const joined = async () => {
     if (auth.currentUser == null) {
+      //is there a user logged on? Should be yes but might as well check
       return;
     }
     const currentUserRef = doc(
+      //make a reference to the user document
       FirestoreDB,
       'users',
       auth.currentUser.email as string
     );
     await updateDoc(currentUserRef, {
       team: joinTeam
-    });
-    const teamRef = doc(FirestoreDB, 'teams', joinTeam);
+    }); //add the team to the user's documet
+    const userSnap = await getDoc(currentUserRef); //get user document
+    const userData = userSnap.data(); //get all the data of the user
+    const teamRef = doc(FirestoreDB, 'teams', joinTeam); //make a reference to the team document
+    const teamSnap = await getDoc(teamRef); //get team document
+    const teamData = teamSnap.data(); // get team data
     await updateDoc(teamRef, {
-      members: arrayUnion(auth.currentUser.email)
-    });
+      members: arrayUnion(auth.currentUser.email),
+      totalStep: increment(userData.totalStep),
+      avg_steps:
+        (teamData.totalStep + userData.totalStep) /
+        (teamData.members.length + 1)
+    }); //update the teams members, their total steps, and the new average steps
+    console.log(teamNames); // just need it in here for the moment
     history.push('/app/team');
   };
 
   const toJoin = () => {
-    if(joinTeam===""){
-        alert("No team name has been entered as of yet");
-        return;
+    //
+    if (joinTeam === '') {
+      alert('No team name has been entered as of yet');
+      return;
     }
-    console.log(joinTeam, teamPass);
     for (let i = 0; i < allTeams.length + 1; i++) {
       if (allTeams[i].name === joinTeam) {
+        //check if it is one of the team's that is available
         if (allTeams[i].type === 'Private') {
-          if (allTeams[i].password === teamPass) {
-            console.log(allTeams[i]);
-            joined();
+          //okay we are gonna need a password
+          if (teamPass === '') {
+            alert(
+              'A password needs to be entered as this team is private. Please enter the password and try again.'
+            );
+          } else if (allTeams[i].password === teamPass) {
+            joined();//we can join them
             return;
-          } else {
+          } else {//incorrect password
             alert(
               'The password entered does not match the password for the team. Please try again'
             );
             return;
           }
-        } else {
-          console.log(allTeams[i]);
-          console.log('Joined with public team');
+        } else {//public team aka no password required
           joined();
           return;
         }
@@ -164,18 +181,18 @@ const TeamJoin: React.FC = () => {
   };
 
   async function getData() {
-    const indData: Array<teamData> = [];
-    const groupNames: Array<selectFormat> = [];
-    const querySnapshot = await getDocs(collection(FirestoreDB, 'teams'));
+    const indData: Array<teamData> = []; //temp array for the teams data
+    const groupNames: Array<selectFormat> = []; //need the group names to look thorugh
+    const querySnapshot = await getDocs(collection(FirestoreDB, 'teams'));//grab all the team documents
     querySnapshot.forEach((doc: any) => {
-      console.log(doc.id, ' => ', doc.data());
-      if (doc.data().members.length <= 9) {
-        const allNames: selectFormat = {
+      console.log(doc.id, ' => ', doc.data());//get the data from the doc
+      if (doc.data().members.length <= 9) {//this 9 can/will be changed but it checks to see if there too many in the group
+        const allNames: selectFormat = {//this was to create an array if we used the selection drop down method
           text: doc.data().name,
           value: doc.data().name
         };
-        groupNames.push(allNames);
-        if (doc.data().status === '1') {
+        groupNames.push(allNames);//push it to the overall array
+        if (doc.data().status === '1') {//private team
           const tem: teamData = {
             name: doc.data().name as string,
             leader: doc.data().leader as string,
@@ -183,9 +200,8 @@ const TeamJoin: React.FC = () => {
             type: 'Private',
             password: doc.data().password
           };
-          indData.push(tem);
-          console.log(tem);
-        } else {
+          indData.push(tem);//push the data to the array
+        } else {//public team
           const tem: teamData = {
             name: doc.data().name as string,
             leader: doc.data().leader as string,
@@ -194,16 +210,13 @@ const TeamJoin: React.FC = () => {
             password: doc.data().password
           };
           indData.push(tem);
-          console.log(tem);
         }
       } else {
         console.log(doc.data().name, ' not added to the list'); //too many members in team to join
       }
     });
     setNames(groupNames);
-    console.log(groupNames);
     setTeams(indData);
-    console.log(teamNames);
   }
 
   useEffect(() => {
