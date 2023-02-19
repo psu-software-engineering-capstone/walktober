@@ -21,11 +21,8 @@ const LeaderBoardChart: React.FC = () => {
   const [data, setData] = useState(Array<Data>);
   const [loading, setLoading] = useState(false);
   let dataType = 'individual';
-  
-  /*Sorts the data of all users by the amount of steps taken. Labels formed from the names
-   * of the user, and the bars are the number of steps the user took
-   */
 
+  //Formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
   const chartData = {
     labels: data.map((row) => row.name),
     datasets: [
@@ -39,6 +36,7 @@ const LeaderBoardChart: React.FC = () => {
     ]
   };
 
+  //adds image of users or team to the chart next to the user's/team's name
   const imgItems = {
     id: 'imgItems',
     beforeDatasetsDraw(chart: any) {
@@ -64,6 +62,8 @@ const LeaderBoardChart: React.FC = () => {
       });
     }
   };
+
+  //Changes the apearance of the chart
   const chartOptions = {
     indexAxis: 'y',
     maintainAspectRatio: false,
@@ -114,7 +114,7 @@ const LeaderBoardChart: React.FC = () => {
       }
     }
   };
-  
+
   //ajusts the size of the element containing the chart in order to correctly size the chart.
   const boxAjust = (labelLength: number) => {
     const box = document.querySelector('.box');
@@ -129,26 +129,27 @@ const LeaderBoardChart: React.FC = () => {
       }
     }
   };
-    
+
+  //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
   async function getData(dataType: string) {
     setLoading(true);
-    if(dataType == 'individual'){
-    const indData: Array<Data> = [];
-    const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
-    querySnapshot.forEach((doc: any) => {
-      console.log(doc.id, ' => ', doc.data());
-      const person: Data = {
-        name: doc.data().name as string,
-        profile_pic: doc.data().profile_pic as string,
-        totalStep: doc.data().totalStep as number
-      };
-      indData.push(person);
-    });
-    setData(indData.sort((a: any, b: any) =>
-    a.totalStep > b.totalStep ? -1 : 1
-  ));
+    if (dataType == 'individual') {
+      const indData: Array<Data> = [];
+      const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
+      querySnapshot.forEach((doc: any) => {
+        console.log(doc.id, ' => ', doc.data());
+        const person: Data = {
+          name: doc.data().name as string,
+          profile_pic: doc.data().profile_pic as string,
+          totalStep: doc.data().totalStep as number
+        };
+        indData.push(person);
+      });
+      setData(
+        indData.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
+      );
     }
-    if(dataType == 'teams'){
+    if (dataType == 'teams') {
       setData(
         TeamData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
       );
@@ -167,10 +168,22 @@ const LeaderBoardChart: React.FC = () => {
     <IonContent>
       <IonHeader>LeaderBoard</IonHeader>
 
-      <IonButton onClick={() => {dataType = 'individual'; getData(dataType);}} disabled={loading}>
+      <IonButton
+        onClick={() => {
+          dataType = 'individual';
+          getData(dataType);
+        }}
+        disabled={loading}
+      >
         Individual
       </IonButton>
-      <IonButton onClick={() => {dataType = 'teams'; getData(dataType);}} disabled={loading}>
+      <IonButton
+        onClick={() => {
+          dataType = 'teams';
+          getData(dataType);
+        }}
+        disabled={loading}
+      >
         Teams
       </IonButton>
       <IonContent class="box">
