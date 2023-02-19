@@ -26,6 +26,7 @@ import newPassword from './newPassword';
 import AuthContext from '../../store/auth-context';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
+import { updateDoc } from 'firebase/firestore';
 
 const Profile: React.FC = () => {
   const history = useHistory();
@@ -51,12 +52,12 @@ const Profile: React.FC = () => {
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     const dbSnap = await getDoc(dbRef);
     const userData = dbSnap.data();
-    if (auth.currentUser.photoURL === null) {
+    if (userData.profile_pic === "") {
       setProfilePic(
         'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
       );
     } else {
-      setProfilePic(auth.currentUser.photoURL);
+      setProfilePic(userData.profile_pic);
     }
     setName(userData.name);
     setEmail(userData.email);
@@ -77,13 +78,18 @@ const Profile: React.FC = () => {
     await uploadBytes(imageRef, photo);
     const photoURL = await getDownloadURL(imageRef);
     updateProfile(auth.currentUser, { photoURL })
-      .then(() => {
-        alert('profile picture updated!');
-        history.push('/app/profile');
-      })
       .catch((error: any) => {
         alert(error);
       });
+    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
+    await updateDoc(dbRef, { profile_pic: photoURL })
+    .then(() => {
+      alert('profile picture updated!');
+      history.go(0); //refresh page
+    })
+    .catch((error: any) => {
+      alert(error);
+    });
   };
   
   const changePassword = () => {
@@ -120,23 +126,16 @@ const Profile: React.FC = () => {
                     src={profilePic}
                     alt="Profile picture for the user signed in"
                   ></IonImg>
-                  <input type="file" onChange={handleImageChange} />
+                  <input type="file" id="img" name="img" accept="image/*" onChange={handleImageChange} />
                   <IonButton onClick={handleSubmit}>
                     Change Profile Picture
                   </IonButton>
                   <h2>{name}</h2>
-                  {/* <p>
-                    {username}
-                    <IonButton fill="clear" size="small">
-                      Change Username
-                    </IonButton>
-                  </p> */}
                   <p>{email}</p>
                   <IonButton onClick={changePassword}>
                     Change Password
                   </IonButton>{' '}
                   <br></br>
-                  <IonButton>Change Health App Preferences</IonButton>
                   <IonButton onClick={moveToCreateTeam}>
                     Create a Team
                   </IonButton>
