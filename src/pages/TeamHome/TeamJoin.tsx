@@ -10,15 +10,20 @@ import {
   IonLabel,
   IonPage,
   IonRow,
-  IonSelect,
-  IonSelectOption,
   IonTitle
 } from '@ionic/react';
-import { getDocs, collection } from 'firebase/firestore';
+import {
+  getDocs,
+  collection,
+  doc,
+  updateDoc,
+  arrayUnion
+} from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
-import { FirestoreDB } from '../../firebase';
+import { auth, FirestoreDB } from '../../firebase';
 import { eyeOff, eye } from 'ionicons/icons';
+import { useHistory } from 'react-router';
 import './TeamHome.scss';
 
 const TeamJoin: React.FC = () => {
@@ -27,6 +32,7 @@ const TeamJoin: React.FC = () => {
     leader: string;
     size: number;
     type: string;
+    password: string;
   }
 
   interface selectFormat {
@@ -34,36 +40,64 @@ const TeamJoin: React.FC = () => {
     value: string;
   }
 
+  const history = useHistory();
   const [joinTeam, setJoin] = useState(''); //variable to get the team that the user chooses from the drop down menu
-  const [teamPass, setPass] = useState(''); //variable to collect team password 
+  const [teamPass, setPass] = useState(''); //variable to collect team password
   const [passwordShown, setPasswordShown] = useState(false); //enable visability to see password
   const [teamNames, setNames] = useState(Array<selectFormat>); //array of only team names for the drop down menu
   const [allTeams, setTeams] = useState(Array<teamData>); //array of teams from database
-  /*
-  
-  function toJoin(): void {
-    alert('Message');
-  }
-//This goes in the first set of ionRow at the bottom
-<IonCol sizeMd="3" size="8" class="header-col admin-col">
-                Join
-              </IonCol>
-//This goes at the end of the second set of ionrows
-<IonCol sizeMd="3" size="8" class="admin-col">
-                    <IonButton size="small" onClick={toJoin}>
-                      Join
-                    </IonButton>
-                  </IonCol>
-
- */
 
   const togglePasswordVisibility = () => {
     setPasswordShown(!passwordShown);
   };
 
+  const joined = async () => {
+    if (auth.currentUser == null) {
+      return;
+    }
+    const currentUserRef = doc(
+      FirestoreDB,
+      'users',
+      auth.currentUser.email as string
+    );
+    await updateDoc(currentUserRef, {
+      team: joinTeam
+    });
+    const teamRef = doc(FirestoreDB, 'teams', joinTeam);
+    await updateDoc(teamRef, {
+      members: arrayUnion(auth.currentUser.email)
+    });
+    history.push('/app/team');
+  };
+
   const toJoin = () => {
-    alert('Join');
+    if(joinTeam===""){
+        alert("No team name has been entered as of yet");
+        return;
+    }
     console.log(joinTeam, teamPass);
+    for (let i = 0; i < allTeams.length + 1; i++) {
+      if (allTeams[i].name === joinTeam) {
+        if (allTeams[i].type === 'Private') {
+          if (allTeams[i].password === teamPass) {
+            console.log(allTeams[i]);
+            joined();
+            return;
+          } else {
+            alert(
+              'The password entered does not match the password for the team. Please try again'
+            );
+            return;
+          }
+        } else {
+          console.log(allTeams[i]);
+          console.log('Joined with public team');
+          joined();
+          return;
+        }
+      }
+    }
+    alert('No team was found that matched what was entered');
   };
 
   const DisplayTeams = (teams: teamData[]): any => {
@@ -146,7 +180,8 @@ const TeamJoin: React.FC = () => {
             name: doc.data().name as string,
             leader: doc.data().leader as string,
             size: doc.data().members.length as number,
-            type: 'Private'
+            type: 'Private',
+            password: doc.data().password
           };
           indData.push(tem);
           console.log(tem);
@@ -155,7 +190,8 @@ const TeamJoin: React.FC = () => {
             name: doc.data().name as string,
             leader: doc.data().leader as string,
             size: doc.data().members.length as number,
-            type: 'Public'
+            type: 'Public',
+            password: doc.data().password
           };
           indData.push(tem);
           console.log(tem);
@@ -185,12 +221,9 @@ const TeamJoin: React.FC = () => {
         <IonCol>
           <IonItem>
             <IonLabel position="floating">Team</IonLabel>
-            <IonSelect
-              interface="popover"
+            <IonInput
               onIonChange={(e) => setJoin(e.target.value as string)}
-            >
-              <IonSelectOption value={teamNames} />
-            </IonSelect>
+            ></IonInput>
           </IonItem>
         </IonCol>
         <IonCol>
@@ -209,10 +242,7 @@ const TeamJoin: React.FC = () => {
           </IonItem>
         </IonCol>
         <IonCol>
-          <IonButton onClick={toJoin}>
-            {' '}
-            Join{' '}
-          </IonButton>{' '}
+          <IonButton onClick={toJoin}> Join </IonButton>{' '}
         </IonCol>
       </IonRow>
       <IonItem>{DisplayTeams(allTeams)}</IonItem>

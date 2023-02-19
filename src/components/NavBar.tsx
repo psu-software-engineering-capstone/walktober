@@ -29,7 +29,6 @@ const NavBar: React.FC<NavBarProps> = ({
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     const dbSnap = await getDoc(dbRef);
     const userData = dbSnap.data();
-    console.log(userData.team);
     if (userData.team === '') {
       setAddr('/app/team/join');
     } else {
