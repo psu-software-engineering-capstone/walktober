@@ -210,8 +210,8 @@ const HealthApp: React.FC = () => {
   ];
 
   const GFavailable = async () => {
-    if (!isPlatform('android')) {
-      alert('Google Fit is only available on android');
+    if (!isPlatform('android') && !isPlatform('ios')) {
+      alert('Google Fit is only available on android and ios.');
       return;
     }
     await Health.isAvailable()
@@ -220,8 +220,8 @@ const HealthApp: React.FC = () => {
   };
 
   const GFrequestAuthorization = async () => {
-    if (!isPlatform('android')) {
-      alert('Google Fit is only available on android');
+    if (!isPlatform('android') && !isPlatform('ios')) {
+      alert('Google Fit is only available on android and ios.');
       return;
     }
     await Health.requestAuthorization(supportedTypes)
@@ -230,8 +230,8 @@ const HealthApp: React.FC = () => {
   };
 
   const GFcheckAuthStatus = async () => {
-    if (!isPlatform('android')) {
-      alert('Google Fit is only available on android');
+    if (!isPlatform('android') && !isPlatform('ios')) {
+      alert('Google Fit is only available on android and ios.');
       return;
     }
     Health.isAuthorized(supportedTypes)
@@ -240,8 +240,8 @@ const HealthApp: React.FC = () => {
   };
 
   const GFupdateSteps = async () => {
-    if (!isPlatform('android')) {
-      alert('Google Fit is only available on android');
+    if (!isPlatform('android') && !isPlatform('ios')) {
+      alert('Google Fit is only available on android and ios.');
       return;
     }
     const date = new Date();
