@@ -16,7 +16,9 @@ import {
   IonRefresher,
   IonRefresherContent,
   RefresherEventDetail,
-  isPlatform
+  isPlatform,
+  useIonToast,
+  IonToast
 } from '@ionic/react';
 import './manualLoggingSteps.css';
 import { auth, FirestoreDB } from '../../firebase';
@@ -26,6 +28,7 @@ import { useHistory } from 'react-router';
 import AuthContext from '../../store/auth-context';
 import NavBar from '../../components/NavBar';
 import { Health } from '@awesome-cordova-plugins/health';
+import { present } from '@ionic/core/dist/types/utils/overlays';
 
 const ManualSteps: React.FC = () => {
   interface StepLog {
@@ -43,6 +46,7 @@ const ManualSteps: React.FC = () => {
   const [totalStep, setTotalStep] = useState(0);
   const [updateTotalStep, setUpdateTotalStep] = useState(false);
   const [updateDB, setUpdateDB] = useState(false);
+  const [present] = useIonToast();
   const supportedTypes = [
     'steps',
     'distance', // Read and write permissions
@@ -263,13 +267,13 @@ const ManualSteps: React.FC = () => {
           }
         }
         await updateCurrentUser(stepsByDate, totalStep);
-        alert('Steps Updated!');
+        presentToast('Steps Updated!');
       })
       .catch((error: any) => alert(JSON.stringify(error) + 'query failed'));
   };
   const updateCurrentUser = async (stepsByDate: any, totalStep: any) => {
     if (ctx.user === null) {
-      alert('You are not looged in!');
+      alert('You are not logged in!');
       history.push('/login');
       return;
     }
@@ -281,6 +285,14 @@ const ManualSteps: React.FC = () => {
     await updateDoc(currentUserRef, {
       stepsByDate: stepsByDate,
       totalStep: totalStep
+    });
+  };
+
+  const presentToast = (message: any) => {
+    present({
+      message: message,
+      duration: 1500,
+      position: 'bottom'
     });
   };
 
@@ -316,7 +328,6 @@ const ManualSteps: React.FC = () => {
           <IonTitle>Steps log</IonTitle>
         </NavBar>
       </IonHeader>
-
       <IonContent className="ion-padding">
         <form
           id="stepLog"
@@ -361,12 +372,9 @@ const ManualSteps: React.FC = () => {
           </IonCol>
         </form>
         <IonItem>{DisplayRecords()}</IonItem>
-
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
-            <IonRefresherContent>
-            </IonRefresherContent>
+          <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
-
       </IonContent>
     </IonPage>
   );
