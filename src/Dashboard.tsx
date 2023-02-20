@@ -18,9 +18,9 @@ import ManualSteps from './pages/manualLoggingSteps/manualLoggingSteps';
 import HealthApp from './pages/healthapp/HealthApp';
 // import TeamCreation from './pages/TeamCreation';
 import TeamHome from './pages/TeamHome/TeamHome';
+import TeamJoin from './pages/TeamHome/TeamJoin';
 import NewTeamCreation from './pages/NewTeamCreation';
 import Admin from './pages/admin/admin';
-
 
 /* Theming */
 import './theme/app.scss';
@@ -33,12 +33,17 @@ const Dashboard: React.FC = () => {
       <IonRouterOutlet>
         <Route exact path="/app/home" component={HomePage} />
         <Route exact path="/app/profile" component={Profile} />
-        <Route exact path="/app/profile/passwordChange" component={newPassword} />
+        <Route
+          exact
+          path="/app/profile/passwordChange"
+          component={newPassword}
+        />
         <Route exact path="/app/manualsteps" component={ManualSteps} />
         <Route exact path="/app/stepscalc" component={StepsCalculator} />
         <Route exact path="/app/healthapp" component={HealthApp} />
         <Route exact path="/app/teamcreation" component={NewTeamCreation} />
         <Route exact path="/app/team" component={TeamHome} />
+        <Route exact path="/app/team/join" component={TeamJoin} />
         <Route exact path="/app/admin" component={Admin} />
         <Route exact path="/app">
           <Redirect to="/app/home" />
