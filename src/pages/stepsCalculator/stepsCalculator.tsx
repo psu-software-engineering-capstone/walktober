@@ -17,7 +17,6 @@ import {
 } from '@ionic/react';
 import './stepsCalculator.css';
 import Metric from './metric';
-import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 
 const StepsCalculator: React.FC = () => {
@@ -32,7 +31,6 @@ const StepsCalculator: React.FC = () => {
   const stepsPerMile = 2250;
   let miles: number;
   const kmtom = 0.621371;
-  const history = useHistory();
 
   function calculate(ev: Event): number {
     miles = Number((ev.target as HTMLInputElement).value);
@@ -159,10 +157,7 @@ const StepsCalculator: React.FC = () => {
               <a>
                 <IonRouterLink
                   slot="helper"
-                  href="/app/manualsteps"
-                  onClick={() => {
-                    history.push('/app/manualsteps');
-                  }}
+                  routerLink="/app/manualsteps"
                 >
                   Return to steps logging
                 </IonRouterLink>

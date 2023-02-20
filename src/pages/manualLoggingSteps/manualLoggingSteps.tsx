@@ -179,15 +179,14 @@ const ManualSteps: React.FC = () => {
                 setManualSteps(Number(event.target.value));
               }}
             ></IonInput>
-            <IonRouterLink
-              slot="helper"
-              href="/app/stepscalc"
-              onClick={() => {
-                history.push('/app/stepscalc');
-              }}
-            >
-              Need help calculating steps?
-            </IonRouterLink>
+            <a>
+              <IonRouterLink
+                slot="helper"
+                routerLink="/app/stepscalc"
+              >
+                Need help calculating steps?
+              </IonRouterLink>
+            </a>
           </IonItem>
           <IonItem>
             <IonLabel position="floating"></IonLabel>
