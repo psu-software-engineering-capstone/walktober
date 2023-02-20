@@ -225,8 +225,10 @@ const HealthApp: React.FC = () => {
       return;
     }
     await Health.requestAuthorization(supportedTypes)
-      .then((data: any) => alert(JSON.stringify(data)))
+      .then(GFupdateSteps)
       .catch((error: any) => alert(JSON.stringify(error)));
+
+    return;
   };
 
   const GFcheckAuthStatus = async () => {
@@ -347,6 +349,23 @@ const HealthApp: React.FC = () => {
       .catch((error: any) => alert(JSON.stringify(error) + 'query failed'));
   };
 
+  const Ahealth = async () => {
+    if (!isPlatform('ios'))
+      alert('Not ios yo');
+   
+    requestAuthorization();
+    return;
+  };
+
+  const Gfit = async () => {
+    if (!isPlatform('android') && !isPlatform('ios'))
+      alert('Not Compatible on this Device');
+    GFrequestAuthorization();
+
+    alert("Google Fit is now connected!");
+    return;
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -356,6 +375,9 @@ const HealthApp: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen={true} className="ion-padding">
         <h2>Apple Health</h2>
+        <IonButton expand="block" onClick={Ahealth}>
+          Apple Health Go!
+        </IonButton>
         <IonButton expand="block" onClick={available}>
           Health Available?
         </IonButton>
@@ -369,6 +391,9 @@ const HealthApp: React.FC = () => {
           Update Step Count
         </IonButton>
         <h2>Google Fit</h2>
+        <IonButton expand="block" onClick={Gfit}>
+          Google Fit Go!
+        </IonButton>
         <IonButton expand="block" onClick={GFavailable}>
           Health Available?
         </IonButton>
