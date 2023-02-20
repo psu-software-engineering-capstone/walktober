@@ -375,12 +375,14 @@ const HealthApp: React.FC = () => {
     return;
   };
 
-  const Gfit = async () => {
-    if (!isPlatform('android') && !isPlatform('ios'))
-      alert('Not Compatible on this Device');
-    GFrequestAuthorization();
+  const GFdisconnect = async () => {
+    if (!isPlatform('android'))
+      alert('Only available on Android.');
 
-    alert("Google Fit is now connected!");
+    await Health.disconnect()
+      .then((data: any) => alert(JSON.stringify(data)))
+      .catch((error: any) => alert(JSON.stringify(error)));
+    
     return;
   };
 
@@ -420,6 +422,9 @@ const HealthApp: React.FC = () => {
         </IonButton>
         <IonButton expand="block" onClick={GFupdateSteps}>
           Update Step Count
+        </IonButton>
+        <IonButton expand="block" onClick={GFdisconnect}>
+          Disconnect
         </IonButton>
         <h2>Fitbit</h2>
         <IonButton expand="block">Implementing..</IonButton>

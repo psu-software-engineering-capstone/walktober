@@ -29,7 +29,6 @@ import { auth, FirestoreDB } from '../../firebase';
 import { doc } from 'firebase/firestore';
 //import ExitSurveyModal from '../exitQuestions/exitQuestionsModal';
 import { Health } from '@awesome-cordova-plugins/health';
-import { HealthKit } from '@awesome-cordova-plugins/health-kit';
 import { updateDoc } from 'firebase/firestore';
 
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
@@ -48,7 +47,6 @@ const HomePage: React.FC = () => {
   const history = useHistory();
   const [badges, setBadges] = useState(Array<badgeOutline>);
   const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
-
   const supportedTypes = [
     'steps',
     'distance', // Read and write permissions
@@ -57,8 +55,6 @@ const HomePage: React.FC = () => {
       write: ['height', 'weight'] // Write only permission
     }
   ];
-
-
   const ctx = useContext(AuthContext);
 
   useEffect(() => {
