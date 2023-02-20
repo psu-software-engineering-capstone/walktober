@@ -10,6 +10,7 @@ import {
   IonLabel,
   IonPage,
   IonRow,
+  IonText,
   IonTitle
 } from '@ionic/react';
 import {
@@ -223,6 +224,10 @@ const TeamJoin: React.FC = () => {
     getData();
   }, []);
 
+  const moveToCreateTeam = () => {
+    history.push('/app/teamcreation');
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -255,7 +260,10 @@ const TeamJoin: React.FC = () => {
           </IonItem>
         </IonCol>
         <IonCol>
-          <IonButton onClick={toJoin}> Join </IonButton>{' '}
+          <IonItem>
+            <IonButton onClick={toJoin}> Join </IonButton>
+            <IonButton onClick={moveToCreateTeam}> Create a Team </IonButton>
+          </IonItem>
         </IonCol>
       </IonRow>
       <IonItem>{DisplayTeams(allTeams)}</IonItem>

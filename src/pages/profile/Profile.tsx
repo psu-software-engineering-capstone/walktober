@@ -90,9 +90,6 @@ const Profile: React.FC = () => {
     history.push('/app/profile/passwordChange');
     return;
   };
-  const moveToCreateTeam = () => {
-    history.push('/app/teamcreation');
-  };
 
   const signOut = async () => {
     await auth.signOut();
@@ -125,21 +122,11 @@ const Profile: React.FC = () => {
                     Change Profile Picture
                   </IonButton>
                   <h2>{name}</h2>
-                  {/* <p>
-                    {username}
-                    <IonButton fill="clear" size="small">
-                      Change Username
-                    </IonButton>
-                  </p> */}
                   <p>{email}</p>
                   <IonButton onClick={changePassword}>
                     Change Password
                   </IonButton>{' '}
                   <br></br>
-                  <IonButton>Change Health App Preferences</IonButton>
-                  <IonButton onClick={moveToCreateTeam}>
-                    Create a Team
-                  </IonButton>
                   <IonButton onClick={signOut}>Sign Out</IonButton>
                 </IonText>
               </IonCol>
