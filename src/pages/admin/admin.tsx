@@ -38,8 +38,8 @@ const Admin: React.FC = () => {
   const [isOpenReport, setIsOpenReport] = useState(false);
 
   //used for dates for teams
-  const [teamDeadline, setTeamDeadline] = useState('');
-  const [teamRegistrationDeadline, setTeamRegistrationDeadline] = useState('');
+  //const [teamDeadline, setTeamDeadline] = useState('');
+  //const [teamRegistrationDeadline, setTeamRegistrationDeadline] = useState('');
 
   interface UserLog {
     name: string;
@@ -292,11 +292,6 @@ const Admin: React.FC = () => {
               <IonInput
                 id="time"
                 type="date"
-                onInput={(event: any) => {
-                  setTeamDeadline(
-                    new Date(event.target.value).toISOString().slice(0, 10)
-                  );
-                }}
               ></IonInput>
             </IonItem>
             <IonItem>
@@ -304,11 +299,6 @@ const Admin: React.FC = () => {
               <IonInput
                 id="time"
                 type="date"
-                onInput={(event: any) => {
-                  setTeamRegistrationDeadline(
-                    new Date(event.target.value).toISOString().slice(0, 10)
-                  );
-                }}
               ></IonInput>
             </IonItem>
             <IonButton class="modal-button" size="large" expand="block">
