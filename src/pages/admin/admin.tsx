@@ -27,7 +27,7 @@ import { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../store/auth-context';
 import { useHistory } from 'react-router-dom';
 import { FirestoreDB } from '../../firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { doc, collection, getDocs, updateDoc } from 'firebase/firestore';
 import './admin.css';
 
 const Admin: React.FC = () => {
@@ -36,6 +36,11 @@ const Admin: React.FC = () => {
   const [isOpenTeam, setIsOpenTeam] = useState(false);
   const [isOpenAnnouncements, setIsOpenAnnouncements] = useState(false);
   const [isOpenReport, setIsOpenReport] = useState(false);
+
+  // used to send new team sizes and team creation date to database
+  const [newMaxTeamSize, setNewMaxTeamSize] = useState(10);
+  const [newMinTeamSize, setNewMinTeamSize] = useState(10);
+  const [newTeamCreationDate, setNewTeamCreationDate] = useState('');
 
   //used for dates for teams
   //const [teamDeadline, setTeamDeadline] = useState('');
@@ -78,6 +83,23 @@ const Admin: React.FC = () => {
     history.push('/app');
     return;
   }
+
+  // in team setting module, when user presses save setting, sends the data to database.
+  const sendNewTeamSetting = async () => {
+    const dbRef = doc(FirestoreDB, 'admin', 'admin');
+    await updateDoc(dbRef, {
+      min_team_size: newMinTeamSize,
+      max_team_size: newMaxTeamSize,
+      team_creation_due: newTeamCreationDate
+    })
+      .then(() => {
+        console.log(newMinTeamSize, newMaxTeamSize, newTeamCreationDate);
+        alert('Team Settings Updated!');
+      })
+      .catch((error: any) => {
+        alert(error);
+      });
+  };
 
   useEffect(() => {
     loadUserLogs();
@@ -281,17 +303,22 @@ const Admin: React.FC = () => {
           <IonContent className="ion-padding" class="modal-content">
             <IonItem>
               <IonLabel>Minimum Team Size</IonLabel>
-              <IonInput type="number"></IonInput>
+              <IonInput type="number" name="minTeamSize"onIonChange={(e) => setNewMinTeamSize(e.target.value as number)}></IonInput>
             </IonItem>
             <IonItem>
               <IonLabel>Maxiumum Team Size</IonLabel>
-              <IonInput type="number"></IonInput>
+              <IonInput type="number" name="maxTeamSize"onIonChange={(e) => setNewMaxTeamSize(e.target.value as number)}></IonInput>
             </IonItem>
             <IonItem>
               <IonLabel>Set Team Deadline</IonLabel>
               <IonInput
                 id="time"
                 type="date"
+                onInput={(event: any) => {
+                  setNewTeamCreationDate(
+                    new Date(event.target.value).toISOString().slice(0, 10)
+                  );
+                }}
               ></IonInput>
             </IonItem>
             <IonItem>
@@ -301,7 +328,7 @@ const Admin: React.FC = () => {
                 type="date"
               ></IonInput>
             </IonItem>
-            <IonButton class="modal-button" size="large" expand="block">
+            <IonButton class="modal-button" size="large" expand="block" onClick={sendNewTeamSetting}>
               Save Settings
             </IonButton>
 
