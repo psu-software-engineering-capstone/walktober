@@ -10,7 +10,6 @@ import {
   IonLabel,
   IonRouterLink,
   IonTitle,
-  IonToolbar,
   IonGrid,
   IonRow,
   IonToggle,
@@ -19,6 +18,7 @@ import {
 import './stepsCalculator.css';
 import Metric from './metric';
 import { useHistory } from 'react-router';
+import NavBar from '../../components/NavBar';
 
 const StepsCalculator: React.FC = () => {
   const [metric, setMetric] = useState(false);
@@ -126,9 +126,9 @@ const StepsCalculator: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
+        <NavBar>
           <IonTitle>Steps Calculator</IonTitle>
-        </IonToolbar>
+        </NavBar>
       </IonHeader>
 
       <IonContent className="ion-padding">

@@ -55,7 +55,7 @@ const Profile: React.FC = () => {
     if (userData.profile_pic === "") {
       setProfilePic(
         'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
-      );
+      ); //need to give credit to this image
     } else {
       setProfilePic(userData.profile_pic);
     }
@@ -98,8 +98,12 @@ const Profile: React.FC = () => {
   };
 
   const signOut = async () => {
-    await auth.signOut();
-    history.push('/login');
+    try {
+      await auth.signOut();
+      history.push('/login');
+    } catch (error) {
+      console.log('Error signing out:', error);
+    }
   };
 
   return (
@@ -131,7 +135,7 @@ const Profile: React.FC = () => {
                   <p>{email}</p>
                   <IonButton onClick={changePassword}>
                     Change Password
-                  </IonButton>{' '}
+                  </IonButton>
                   <br></br>
                   <IonButton onClick={signOut}>Sign Out</IonButton>
                 </IonText>
