@@ -46,6 +46,7 @@ function App() {
       } else {
         console.log('user type: regular');
       }
+      console.log(`team: ${ctx.team}`);
     }
   }, [ctx]);
 
