@@ -216,18 +216,16 @@ const HealthApp: React.FC = () => {
     }
     await Health.isAvailable()
       .then((data: any) => {
-        if (!isPlatform('android')) {
-          alert('Feature only available on Android');
-          return;
-        }
         if (!data) {
           alert('Please install Google Fit!');
-          Health.promptInstallFit()
-            .then()
-            .catch((error: any) => alert(JSON.stringify(error)));
+          if (isPlatform('android')) {
+            Health.promptInstallFit()
+              .then()
+              .catch((error: any) => alert(JSON.stringify(error)));
+          }
         }
         else
-          alert('Google Fit is available!');
+          alert('Compatible Health App available!');
         return;
       })
       .catch((error: any) => alert(JSON.stringify(error)));
