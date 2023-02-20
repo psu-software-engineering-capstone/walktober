@@ -215,7 +215,21 @@ const HealthApp: React.FC = () => {
       return;
     }
     await Health.isAvailable()
-      .then((data: any) => alert(JSON.stringify(data)))
+      .then((data: any) => {
+        if (!isPlatform('android')) {
+          alert('Feature only available on Android');
+          return;
+        }
+        if (!data) {
+          alert('Please install Google Fit!');
+          Health.promptInstallFit()
+            .then()
+            .catch((error: any) => alert(JSON.stringify(error)));
+        }
+        else
+          alert('Google Fit is available!');
+        return;
+      })
       .catch((error: any) => alert(JSON.stringify(error)));
   };
 
@@ -225,7 +239,11 @@ const HealthApp: React.FC = () => {
       return;
     }
     await Health.requestAuthorization(supportedTypes)
-      .then(GFupdateSteps)
+      .then((data: any) => {
+        if (data)
+          alert('Authorized');
+        return;
+      })
       .catch((error: any) => alert(JSON.stringify(error)));
 
     return;
@@ -391,9 +409,6 @@ const HealthApp: React.FC = () => {
           Update Step Count
         </IonButton>
         <h2>Google Fit</h2>
-        <IonButton expand="block" onClick={Gfit}>
-          Google Fit Go!
-        </IonButton>
         <IonButton expand="block" onClick={GFavailable}>
           Health Available?
         </IonButton>
