@@ -16,7 +16,8 @@ import {
   IonInput,
   IonText,
   IonItem,
-  isPlatform
+  isPlatform,
+  useIonToast
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
 import { useHistory } from 'react-router';
@@ -47,6 +48,7 @@ const HomePage: React.FC = () => {
   const history = useHistory();
   const [badges, setBadges] = useState(Array<badgeOutline>);
   const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
+  const [present] = useIonToast();
   const supportedTypes = [
     'steps',
     'distance', // Read and write permissions
@@ -201,7 +203,11 @@ const HomePage: React.FC = () => {
           }
         }
         await updateCurrentUser(stepsByDate, totalStep);
-        alert('Steps Updated!');
+        present({
+          message: 'Steps Updated!',
+          duration: 1500,
+          position: 'bottom'
+        });
       })
       .catch((error: any) => alert(JSON.stringify(error) + 'query failed'));
   };
