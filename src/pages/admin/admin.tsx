@@ -37,6 +37,10 @@ const Admin: React.FC = () => {
   const [isOpenAnnouncements, setIsOpenAnnouncements] = useState(false);
   const [isOpenReport, setIsOpenReport] = useState(false);
 
+  //used for dates for teams
+  //const [teamDeadline, setTeamDeadline] = useState('');
+  //const [teamRegistrationDeadline, setTeamRegistrationDeadline] = useState('');
+
   interface UserLog {
     name: string;
     team: string;
@@ -50,7 +54,7 @@ const Admin: React.FC = () => {
     const dbRef = collection(FirestoreDB, 'users');
     const dbSnap = await getDocs(dbRef);
     const userLogsData: UserLog[] = [];
-    dbSnap.forEach((doc: { data: () => any; }) => {
+    dbSnap.forEach((doc: { data: () => any }) => {
       const data = doc.data();
       if (data) {
         const userLogData: UserLog = {
@@ -68,9 +72,9 @@ const Admin: React.FC = () => {
   const history = useHistory();
   const ctx = useContext(AuthContext);
   const isAdmin = ctx.admin;
-  
+
   // prevents the user from entering the admin page from the url if they are not an admin
-  if(isAdmin === false){
+  if (isAdmin === false) {
     history.push('/app');
     return;
   }
@@ -91,40 +95,52 @@ const Admin: React.FC = () => {
         <>
           <IonGrid fixed={true}>
             <IonRow class="header-row">
-              <IonCol sizeMd='3' size="5" class="header-col admin-col">
+              <IonCol sizeMd="3" size="5" class="header-col admin-col">
                 Name
               </IonCol>
 
-              <IonCol sizeMd='3' size="5" class="header-col admin-col">
+              <IonCol sizeMd="3" size="5" class="header-col admin-col">
                 Team
               </IonCol>
 
-              <IonCol sizeMd='4' size="6" class="header-col admin-col">
+              <IonCol sizeMd="4" size="6" class="header-col admin-col">
                 Email
               </IonCol>
 
-              <IonCol sizeMd='3' size="8" class="header-col admin-col">
+              <IonCol sizeMd="3" size="8" class="header-col admin-col">
                 Total Steps
               </IonCol>
 
-              <IonCol sizeMd='3' size="8" class="header-col admin-col">
+              <IonCol sizeMd="3" size="8" class="header-col admin-col">
                 Actions
               </IonCol>
             </IonRow>
 
-            {userLogs.map((item: { name: any; team: any; email: any; steps: any; }) => (
-              <IonRow key={Math.random()}>
-                <IonCol sizeMd='3' size="5" class='admin-col'>{item.name}</IonCol>
-                <IonCol sizeMd='3' size="5" class='admin-col'>{item.team}</IonCol>
-                <IonCol sizeMd='4' size="5" class='admin-col'>{item.email}</IonCol>
-                <IonCol sizeMd='3' size="8" class='admin-col'>{item.steps}</IonCol>
-                <IonCol sizeMd='3' size="8" class='admin-col'>
-                  <IonButton size="small">
-                    <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>Remove
-                  </IonButton>
-                <IonButton size="small">Edit Step Log</IonButton></IonCol>
-              </IonRow>
-            ))}
+            {userLogs.map(
+              (item: { name: any; team: any; email: any; steps: any }) => (
+                <IonRow key={Math.random()}>
+                  <IonCol sizeMd="3" size="5" class="admin-col">
+                    {item.name}
+                  </IonCol>
+                  <IonCol sizeMd="3" size="5" class="admin-col">
+                    {item.team}
+                  </IonCol>
+                  <IonCol sizeMd="4" size="5" class="admin-col">
+                    {item.email}
+                  </IonCol>
+                  <IonCol sizeMd="3" size="8" class="admin-col">
+                    {item.steps}
+                  </IonCol>
+                  <IonCol sizeMd="3" size="8" class="admin-col">
+                    <IonButton size="small">
+                      <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>
+                      Remove
+                    </IonButton>
+                    <IonButton size="small">Edit Step Log</IonButton>
+                  </IonCol>
+                </IonRow>
+              )
+            )}
           </IonGrid>
         </>
       );
@@ -133,23 +149,23 @@ const Admin: React.FC = () => {
         <>
           <IonGrid fixed={true}>
             <IonRow class="header-row">
-              <IonCol sizeMd='3' size="5" class="header-col">
+              <IonCol sizeMd="3" size="5" class="header-col">
                 Name
               </IonCol>
 
-              <IonCol sizeMd='3' size="5" class="header-col">
+              <IonCol sizeMd="3" size="5" class="header-col">
                 Team
               </IonCol>
 
-              <IonCol sizeMd='4' size="6" class="header-col">
+              <IonCol sizeMd="4" size="6" class="header-col">
                 Email
               </IonCol>
 
-              <IonCol sizeMd='3' size="8" class="header-col">
+              <IonCol sizeMd="3" size="8" class="header-col">
                 Total Steps
               </IonCol>
 
-              <IonCol sizeMd='3' size="8" class="header-col">
+              <IonCol sizeMd="3" size="8" class="header-col">
                 Actions
               </IonCol>
             </IonRow>
@@ -159,7 +175,6 @@ const Admin: React.FC = () => {
     }
   }
 
-
   return (
     <IonPage>
       <IonHeader>
@@ -167,7 +182,7 @@ const Admin: React.FC = () => {
           <IonTitle>Admin</IonTitle>
         </NavBar>
       </IonHeader>
-      <IonContent fullscreen class='admin-content'>
+      <IonContent fullscreen class="admin-content">
         <IonGrid class="invis-grid">
           <IonRow></IonRow>
           <IonRow>
@@ -222,7 +237,10 @@ const Admin: React.FC = () => {
             <IonToolbar>
               <IonTitle class="modal-title">User Settings</IonTitle>
               <IonButtons slot="end">
-                <IonButton onClick={() => setIsOpenUser(false)} class="admin-close-modal">
+                <IonButton
+                  onClick={() => setIsOpenUser(false)}
+                  class="admin-close-modal"
+                >
                   Close
                 </IonButton>
               </IonButtons>
@@ -251,7 +269,10 @@ const Admin: React.FC = () => {
             <IonToolbar>
               <IonTitle class="modal-title">Team Settings</IonTitle>
               <IonButtons slot="end">
-                <IonButton onClick={() => setIsOpenTeam(false)} class="admin-close-modal">
+                <IonButton
+                  onClick={() => setIsOpenTeam(false)}
+                  class="admin-close-modal"
+                >
                   Close
                 </IonButton>
               </IonButtons>
@@ -267,12 +288,18 @@ const Admin: React.FC = () => {
               <IonInput type="number"></IonInput>
             </IonItem>
             <IonItem>
-              <IonButton>Set Team Deadline</IonButton>
-              <IonDatetimeButton datetime="datetime"></IonDatetimeButton>
+              <IonLabel>Set Team Deadline</IonLabel>
+              <IonInput
+                id="time"
+                type="date"
+              ></IonInput>
             </IonItem>
             <IonItem>
-              <IonButton>Set Registration Deadline</IonButton>
-              <IonDatetimeButton datetime="datetime"></IonDatetimeButton>
+              <IonLabel>Set Registration Deadline</IonLabel>
+              <IonInput
+                id="time"
+                type="date"
+              ></IonInput>
             </IonItem>
             <IonButton class="modal-button" size="large" expand="block">
               Save Settings
@@ -318,13 +345,23 @@ const Admin: React.FC = () => {
             </IonGrid>
             <IonGrid>
               <IonRow class="header-row">
-                <IonCol size="4" class="admin-col">Time Scheduled</IonCol>
-                <IonCol size="8" class="admin-col">Announcement Contents</IonCol>
-                <IonCol size="4" class="admin-col">Delete</IonCol>
+                <IonCol size="4" class="admin-col">
+                  Time Scheduled
+                </IonCol>
+                <IonCol size="8" class="admin-col">
+                  Announcement Contents
+                </IonCol>
+                <IonCol size="4" class="admin-col">
+                  Delete
+                </IonCol>
               </IonRow>
               <IonRow>
-                <IonCol size="4" class="admin-col">January 20, 2023 7:00PM</IonCol>
-                <IonCol size="8" class="admin-col">Challenge #1</IonCol>
+                <IonCol size="4" class="admin-col">
+                  January 20, 2023 7:00PM
+                </IonCol>
+                <IonCol size="8" class="admin-col">
+                  Challenge #1
+                </IonCol>
                 <IonCol size="4" class="admin-col">
                   <IonButton size="small">
                     <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>
@@ -344,7 +381,10 @@ const Admin: React.FC = () => {
             <IonToolbar>
               <IonTitle class="modal-title">Generate Report</IonTitle>
               <IonButtons slot="end">
-                <IonButton onClick={() => setIsOpenReport(false)} class="admin-close-modal">
+                <IonButton
+                  onClick={() => setIsOpenReport(false)}
+                  class="admin-close-modal"
+                >
                   Close
                 </IonButton>
               </IonButtons>
@@ -377,7 +417,7 @@ const Admin: React.FC = () => {
         </IonModal>
       </IonContent>
     </IonPage>
-  )as any;
+  ) as any;
 };
 
 export default Admin;
