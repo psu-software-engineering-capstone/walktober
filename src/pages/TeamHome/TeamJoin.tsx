@@ -25,7 +25,7 @@ import NavBar from '../../components/NavBar';
 import { auth, FirestoreDB } from '../../firebase';
 import { eyeOff, eye } from 'ionicons/icons';
 import { useHistory } from 'react-router';
-import './TeamHome.scss';
+import './teamHome.scss';
 import { increment } from 'firebase/firestore';
 
 const TeamJoin: React.FC = () => {

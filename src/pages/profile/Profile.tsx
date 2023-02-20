@@ -16,7 +16,7 @@ import {
   IonText,
   IonTitle
 } from '@ionic/react';
-import './Profile.css';
+import './profile.css';
 import { Route } from 'react-router-dom';
 import { auth, FirestoreDB, storage } from '../../firebase';
 import { doc, getDoc } from 'firebase/firestore';

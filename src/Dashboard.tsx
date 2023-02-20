@@ -11,15 +11,14 @@ import {
 import { ellipse, square, triangle } from 'ionicons/icons';
 
 /* Pages */
-import HomePage from './pages/HomePage/HomePage';
-import Profile from './pages/profile/Profile';
+import HomePage from './pages/homePage/homePage';
+import Profile from './pages/profile/profile';
 import newPassword from './pages/profile/newPassword';
 import ManualSteps from './pages/manualLoggingSteps/manualLoggingSteps';
-import HealthApp from './pages/healthapp/HealthApp';
-// import TeamCreation from './pages/TeamCreation';
-import TeamHome from './pages/TeamHome/TeamHome';
-import TeamJoin from './pages/TeamHome/TeamJoin';
-import NewTeamCreation from './pages/NewTeamCreation';
+import HealthApp from './pages/healthApp/healthApp';
+import TeamHome from './pages/teamHome/teamHome';
+import TeamJoin from './pages/teamHome/teamJoin';
+import TeamCreation from './pages/teamCreation/teamCreation';
 import Admin from './pages/admin/admin';
 
 /* Theming */
@@ -41,7 +40,7 @@ const Dashboard: React.FC = () => {
         <Route exact path="/app/manualsteps" component={ManualSteps} />
         <Route exact path="/app/stepscalc" component={StepsCalculator} />
         <Route exact path="/app/healthapp" component={HealthApp} />
-        <Route exact path="/app/teamcreation" component={NewTeamCreation} />
+        <Route exact path="/app/teamcreation" component={TeamCreation} />
         <Route exact path="/app/team" component={TeamHome} />
         <Route exact path="/app/team/join" component={TeamJoin} />
         <Route exact path="/app/admin" component={Admin} />

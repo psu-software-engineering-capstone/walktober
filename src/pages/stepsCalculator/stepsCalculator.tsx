@@ -17,7 +17,7 @@ import {
   IonPage
 } from '@ionic/react';
 import './stepsCalculator.css';
-import Metric from './Metric';
+import Metric from './metric';
 import { useHistory } from 'react-router';
 
 const StepsCalculator: React.FC = () => {

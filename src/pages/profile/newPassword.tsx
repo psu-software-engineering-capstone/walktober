@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import { auth } from '../../firebase';
-import '../Tab1.css';
+import '../old/Tab1.css';
 
 const newPassword: React.FC = () => {
   const [newPassword, setNewPassword] = useState('');
