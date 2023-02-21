@@ -98,7 +98,7 @@ const Profile: React.FC = () => {
   const signOut = async () => {
     try {
       await auth.signOut();
-      history.push('/login');
+      history.push('/');
     } catch (error) {
       console.log('Error signing out:', error);
     }
