@@ -165,8 +165,18 @@ const ManualSteps: React.FC = () => {
             .then((data: any) => presentToast(JSON.stringify(data)))
             .catch((error: any) => alert(JSON.stringify(error)));
         }
-        else
-          requestAuthorization();
+        else {
+          Health.requestAuthorization(supportedTypes)
+          .then((data: any) => {
+            if (data) {
+              presentToast('Updating Steps...');
+              updateSteps();
+            }
+            else
+              alert('Request for Authentication Failed.');
+          })
+          .catch((error: any) => alert(JSON.stringify(error)));
+        }
         return;
       })
       .catch((error: any) => alert(JSON.stringify(error)));
@@ -183,10 +193,8 @@ const ManualSteps: React.FC = () => {
             if (!hkAvail)
               alert('Apple Health Undetected!');
             else if (authStatus == "authorized") {
-              presentToast('Apple Health is already authorized!');
               presentToast('Updating Steps...');
               updateSteps();
-              presentToast('Updated!');
             }
             else 
               alert('Please Enable Permissions for Apple Health (need to deal with first time asking permisssions IOS Specific)');
