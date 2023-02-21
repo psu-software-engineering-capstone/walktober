@@ -201,6 +201,10 @@ const Admin: React.FC = () => {
       console.log("Generating survey alalysis report");
     }
 
+    if(devicesReportCheck){
+      console.log("Generating device usage report");
+    }
+
     console.log("Reports have been generated");
   };
 
