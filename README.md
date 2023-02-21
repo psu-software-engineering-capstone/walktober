@@ -18,7 +18,7 @@ Welcome to the Walktober project! Walktober is a yearly fitness challenge at PSU
 
 ## Run the app
 
-To run App Name, follow these steps:
+To run Walktober, follow these steps:
 
 - Start the app in the browser: ```ionic serve``` or ```npm run start```
 - Start the app on a specific platform (iOS/Android): ```ionic cap run ios/android```
