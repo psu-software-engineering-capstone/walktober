@@ -210,8 +210,8 @@ const HealthApp: React.FC = () => {
   ];
 
   const GFavailable = async () => {
-    if (!isPlatform('android') && !isPlatform('ios')) {
-      alert('Google Fit is only available on android and ios.');
+    if (!isPlatform('android')) {
+      alert('Google Fit is only available on android.');
       return;
     }
     await Health.isAvailable()
@@ -232,14 +232,16 @@ const HealthApp: React.FC = () => {
   };
 
   const GFrequestAuthorization = async () => {
-    if (!isPlatform('android') && !isPlatform('ios')) {
-      alert('Google Fit is only available on android and ios.');
+    if (!isPlatform('android')) {
+      alert('Google Fit is only available on android.');
       return;
     }
     await Health.requestAuthorization(supportedTypes)
       .then((data: any) => {
         if (data)
           alert('Authorized');
+        else
+          alert('Failed to Authorize');
         return;
       })
       .catch((error: any) => alert(JSON.stringify(error)));
@@ -248,8 +250,8 @@ const HealthApp: React.FC = () => {
   };
 
   const GFcheckAuthStatus = async () => {
-    if (!isPlatform('android') && !isPlatform('ios')) {
-      alert('Google Fit is only available on android and ios.');
+    if (!isPlatform('android')) {
+      alert('Google Fit is only available on android.');
       return;
     }
     Health.isAuthorized(supportedTypes)
@@ -258,8 +260,8 @@ const HealthApp: React.FC = () => {
   };
 
   const GFupdateSteps = async () => {
-    if (!isPlatform('android') && !isPlatform('ios')) {
-      alert('Google Fit is only available on android and ios.');
+    if (!isPlatform('android')) {
+      alert('Google Fit is only available on android.');
       return;
     }
     const date = new Date();
@@ -365,14 +367,6 @@ const HealthApp: React.FC = () => {
       .catch((error: any) => alert(JSON.stringify(error) + 'query failed'));
   };
 
-  const Ahealth = async () => {
-    if (!isPlatform('ios'))
-      alert('Not ios yo');
-   
-    requestAuthorization();
-    return;
-  };
-
   const GFdisconnect = async () => {
     if (!isPlatform('android'))
       alert('Only available on Android.');
@@ -393,9 +387,6 @@ const HealthApp: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen={true} className="ion-padding">
         <h2>Apple Health</h2>
-        <IonButton expand="block" onClick={Ahealth}>
-          Apple Health Go!
-        </IonButton>
         <IonButton expand="block" onClick={available}>
           Health Available?
         </IonButton>

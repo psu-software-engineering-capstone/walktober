@@ -28,6 +28,7 @@ import { useHistory } from 'react-router';
 import AuthContext from '../../store/auth-context';
 import NavBar from '../../components/NavBar';
 import { Health } from '@awesome-cordova-plugins/health';
+import { HealthKit } from '@awesome-cordova-plugins/health-kit';
 import { present } from '@ionic/core/dist/types/utils/overlays';
 
 const ManualSteps: React.FC = () => {
@@ -149,24 +150,91 @@ const ManualSteps: React.FC = () => {
   function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     setTimeout(async () => {
       // Any calls to load data go here
-      GFrequestAuthorization();
+      requestAuthorization();
       event.detail.complete();
     }, 2000);
   }
-  const GFrequestAuthorization = async () => {
-    if (!isPlatform('android') && !isPlatform('ios')) {
-      alert('Google Fit is only available on android and ios.');
-      return;
-    }
-    await Health.requestAuthorization(supportedTypes)
-      .then(GFupdateSteps)
-      .catch((error: any) => alert(JSON.stringify(error)));
 
+  const syncApp = async () => {
+    if (isPlatform('android')) {
+      await Health.isAvailable()
+      .then((data: any) => {
+        if (!data) {
+          alert('Please install Google Fit!');
+          Health.promptInstallFit()
+            .then((data: any) => presentToast(JSON.stringify(data)))
+            .catch((error: any) => alert(JSON.stringify(error)));
+        }
+        else
+          requestAuthorization();
+        return;
+      })
+      .catch((error: any) => alert(JSON.stringify(error)));
+    }
+    else if (isPlatform('ios')) {
+      await HealthKit.available()
+      .then(async (data: any) => {
+        const hkAvail = data;
+        HealthKit.checkAuthStatus({
+          type: 'HKQuantityTypeIdentifierHeight'
+        })
+          .then((data: any) => {
+            const authStatus = data;
+            if (!hkAvail)
+              alert('Apple Health Undetected!');
+            else if (authStatus == "authorized") {
+              presentToast('Apple Health is already authorized!');
+              presentToast('Updating Steps...');
+              updateSteps();
+              presentToast('Updated!');
+            }
+            else 
+              alert('Please Enable Permissions for Apple Health (need to deal with first time asking permisssions IOS Specific)');
+          })
+          .catch((error: any) => alert(JSON.stringify(error)));
+        return;
+      })
+      .catch((error: any) => alert(JSON.stringify(error)));
+    }
+    else
+      alert('Error: Unsupported Platform');
     return;
   };
-  const GFupdateSteps = async () => {
+
+  const requestAuthorization = async () => {
+    if (isPlatform('android')) {
+      await Health.requestAuthorization(supportedTypes)
+        .then((data: any) => {
+          if (data)
+            updateSteps();
+          else
+            alert('Error GFit: Authorization Failed');
+        })
+        .catch((error: any) => alert(JSON.stringify(error)));
+      return;
+    }
+    // quirk with IOS: if authorization was denied once, it won't/can't ask again
+    // so, need to just check if authorized, unlike android where you can request again.
+    else if (isPlatform('ios')) {
+      HealthKit.checkAuthStatus({
+        type: 'HKQuantityTypeIdentifierHeight'
+      })
+        .then((data: any) => {
+          if (data == "authorized")
+            updateSteps();
+          else
+            alert('Error AHealth: Please Enable Apple Health Permissions');
+        })
+        .catch((error: any) => alert(JSON.stringify(error)));
+      return;
+    }
+    else
+      alert('Error: Unknown Platform');
+    return;
+  };
+  const updateSteps = async () => {
     if (!isPlatform('android') && !isPlatform('ios')) {
-      alert('Google Fit is only available on android and ios.');
+      alert('Error: Unknown Platform');
       return;
     }
     const date = new Date();
@@ -369,6 +437,7 @@ const ManualSteps: React.FC = () => {
           </IonItem>
           <IonCol>
             <IonButton type="submit">Submit</IonButton>
+            <IonButton onClick={syncApp}>Sync Health App</IonButton>
           </IonCol>
         </form>
         <IonItem>{DisplayRecords()}</IonItem>

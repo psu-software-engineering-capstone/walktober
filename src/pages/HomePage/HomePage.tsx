@@ -63,7 +63,7 @@ const HomePage: React.FC = () => {
     if (ctx.user) {
       console.log('get past seven days steps');
       getPastSevenDaysSteps();
-      GFrequestAuthorization();
+      //GFrequestAuthorization();
     }
   }, [ctx.user]);
 
@@ -90,8 +90,8 @@ const HomePage: React.FC = () => {
   };
 
   const GFrequestAuthorization = async () => {
-    if (!isPlatform('android') && !isPlatform('ios')) {
-      alert('Google Fit is only available on android and ios.');
+    if (!isPlatform('android')) {
+      alert('Google Fit is only available on android.');
       return;
     }
     await Health.requestAuthorization(supportedTypes)
@@ -101,8 +101,8 @@ const HomePage: React.FC = () => {
     return;
   };
   const GFupdateSteps = async () => {
-    if (!isPlatform('android') && !isPlatform('ios')) {
-      alert('Google Fit is only available on android and ios.');
+    if (!isPlatform('android')) {
+      alert('Google Fit is only available on android.');
       return;
     }
     const date = new Date();
