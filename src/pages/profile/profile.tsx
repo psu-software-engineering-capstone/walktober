@@ -37,6 +37,7 @@ const Profile: React.FC = () => {
   const [profilePic, setProfilePic] = useState('');
   const [totalDistance, setTotalDistance] = useState(0);
   const [photo, setPhoto] = useState<any>(null);
+  const [isGoogleUser, setIsGoogleUser] = useState(false);
 
   useEffect(() => {
     GetRecords();
@@ -64,6 +65,7 @@ const Profile: React.FC = () => {
       new Date(auth.currentUser.metadata.creationTime).toLocaleDateString()
     );
     setTotalDistance(userData.totalStep / 2000);
+    setIsGoogleUser(auth.currentUser.providerData[0]?.providerId === 'google.com');
   }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,8 +93,10 @@ const Profile: React.FC = () => {
   };
 
   const changePassword = () => {
+    if (isGoogleUser) {
+      return;
+    }
     history.push('/app/profile/passwordChange');
-    return;
   };
 
   const signOut = async () => {
