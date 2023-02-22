@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonHeader, IonSpinner } from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonSpinner, IonTitle } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import './LeaderBoardChart.scss';
 import { Chart as ChartJS, registerables } from 'chart.js';
@@ -49,14 +49,14 @@ const LeaderBoardChart: React.FC = () => {
       } = chart;
 
       ctx.save();
-      const imgSize = chartOptions.layout.padding.left;
+      const imgSize = chartOptions.layout.padding.left - chartOptions.layout.padding.right;
 
       data.datasets[0].image.forEach((imageLink: string, index: number) => {
         const profilePic = new Image();
         profilePic.src = imageLink;
         ctx.drawImage(
           profilePic,
-          0,
+          0, 
           y.getPixelForValue(index) - imgSize / 2,
           imgSize,
           imgSize
@@ -64,7 +64,7 @@ const LeaderBoardChart: React.FC = () => {
       });
     }
   };
-
+  
   //Changes the apearance of the chart
   const chartOptions = {
     indexAxis: 'y',
@@ -76,10 +76,14 @@ const LeaderBoardChart: React.FC = () => {
     },
     layout: {
       padding: {
-        left: 40
+        left: 50,
+        right: 10
       }
     },
     plugins: {
+      legend: {
+        display: false
+      },
       datalabels: {
         color: 'grey',
         labels: {
@@ -146,7 +150,7 @@ const LeaderBoardChart: React.FC = () => {
     if (box != null) {
       box.setAttribute('style', 'height: 500px');
       if (labelLength > 10) {
-        const newHeight = 500 + (labelLength - 10) * 50;
+        const newHeight = 600 + (labelLength - 10) * 50;
         box.setAttribute('style', 'height: ' + newHeight.toString() + 'px');
       }
     }
@@ -155,8 +159,8 @@ const LeaderBoardChart: React.FC = () => {
   //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
   async function getData(dataType: string) {
     setLoading(true);
+    const indData: Array<Data> = [];
     if (dataType == 'individual') {
-      const indData: Array<Data> = [];
       const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
       querySnapshot.forEach((doc: any) => {
         //console.log(doc.id, ' => ', doc.data());
@@ -173,14 +177,27 @@ const LeaderBoardChart: React.FC = () => {
       boxAjust(indData.length);
     }
     if (dataType == 'teams') {
+      /*
+      needs firebase calls here for teams instead of the sample data
+      const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
+      querySnapshot.forEach((doc: any) => {
+        //console.log(doc.id, ' => ', doc.data());
+        const person: Data = {
+          name: doc.data().name as string,
+          profile_pic: doc.data().profile_pic as string,
+          totalStep: doc.data().totalStep as number
+        };
+        indData.push(person);
+      */
       setData(
         TeamData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
       );
       boxAjust(TeamData.length);
     }
+    //need to find way to not hardcode time
     setTimeout(() => {
       setLoading(false);
-    }, 600);
+    }, 0);
   }
 
   useEffect(() => {
@@ -189,36 +206,41 @@ const LeaderBoardChart: React.FC = () => {
 
   return (
     <IonContent>
-      <IonHeader>LeaderBoard</IonHeader>
-      <IonButton
-        onClick={() => {
-          dataType = 'individual';
-          getData(dataType);
-        }}
-        disabled={loading}
-      >
-        Individual
-      </IonButton>
-      <IonButton
-        onClick={() => {
-          dataType = 'teams';
-          getData(dataType);
-        }}
-        disabled={loading}
-      >
-        Teams
-      </IonButton>
-      <IonContent className="box">
-        {loading ? (
-          <IonSpinner />
-        ) : (
-          <Bar
-            data={chartData}
-            options={chartOptions}
-            plugins={[imgItems, ChartDataLabels]}
-          ></Bar>
-        )}
-      </IonContent>
+      <div className='leaderboard-container'>
+        <IonHeader className='title'>
+          <IonTitle>Leaderboard</IonTitle></IonHeader>
+        <div className='button-container'>
+          <IonButton
+            onClick={() => {
+              dataType = 'individual';
+              getData(dataType);
+            }}
+            disabled={loading}
+          >
+            Individual
+          </IonButton>
+          <IonButton
+            onClick={() => {
+              dataType = 'teams';
+              getData(dataType);
+            }}
+            disabled={loading}
+          >
+            Teams
+          </IonButton>
+        </div>
+        <IonContent className='box'>
+          {loading ? (
+            <IonSpinner className='spinner'/>
+          ) : (
+            <Bar
+              data={chartData}
+              options={chartOptions}
+              plugins={[imgItems, ChartDataLabels]}
+            ></Bar>
+          )}
+        </IonContent>
+      </div>
     </IonContent>
   );
 };
