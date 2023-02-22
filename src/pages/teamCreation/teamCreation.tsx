@@ -13,9 +13,9 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/react';
-import './NewTeamCreation.css';
+import './teamCreation.css';
 import { useState } from 'react';
-import { auth, FirestoreDB } from '../firebase';
+import { auth, FirestoreDB } from '../../firebase';
 import { doc, getDoc, setDoc, updateDoc, Timestamp } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 
@@ -34,7 +34,7 @@ Timestamp.prototype.compareTo = function (other: Timestamp): number {
   }
 };
 
-const NewTeamCreation: React.FC = () => {
+const TeamCreation: React.FC = () => {
   const [newTeamName, setNewTeamName] = useState('');
   const [newTeamStatus, setNewTeamStatus] = useState(0);
   const [newTeamPassword, setNewTeamPassword] = useState('');
@@ -164,4 +164,4 @@ const NewTeamCreation: React.FC = () => {
   );
 };
 
-export default NewTeamCreation;
+export default TeamCreation;

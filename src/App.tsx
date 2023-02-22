@@ -4,9 +4,9 @@ import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Login from './pages/login/login';
-import Signup from './pages/signup/Signup';
+import Signup from './pages/signup/signup';
 import SignupForm from './pages/signup/signupForm';
-import ForgotPassword from './pages/forgotpassword/forgotpassword';
+import ForgotPassword from './pages/forgotPassword/forgotPassword';
 import Dashboard from './Dashboard';
 
 /* Core CSS required for Ionic components to work properly */
@@ -41,12 +41,12 @@ function App() {
       console.log('auth state: logged out');
     } else {
       console.log('auth state: logged in');
+      console.log(`team: ${ctx.team}`);
       if (ctx.admin === true) {
         console.log('user type: admin');
       } else {
         console.log('user type: regular');
       }
-      console.log(`team: ${ctx.team}`);
     }
   }, [ctx]);
 

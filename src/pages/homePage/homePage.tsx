@@ -13,14 +13,11 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonInput,
-  IonText,
-  IonItem
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
-import './HomePage.css';
+import './homePage.css';
 import ProgressChart from '../../components/ProgressChart';
 import AuthContext from '../../store/auth-context';
 import { getDoc } from 'firebase/firestore';
@@ -29,7 +26,7 @@ import { doc } from 'firebase/firestore';
 //import ExitSurveyModal from '../exitQuestions/exitQuestionsModal';
 
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
-import { library } from 'ionicons/icons';
+// import { library } from 'ionicons/icons';
 interface badgeOutline {
   name: string;
 }

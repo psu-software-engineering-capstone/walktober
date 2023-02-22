@@ -13,10 +13,9 @@ import {
   IonPage,
   IonRouterOutlet,
   IonRow,
-  IonText,
   IonTitle
 } from '@ionic/react';
-import './Profile.css';
+import './profile.css';
 import { Route } from 'react-router-dom';
 import { auth, FirestoreDB, storage } from '../../firebase';
 import { doc, getDoc } from 'firebase/firestore';
@@ -52,10 +51,10 @@ const Profile: React.FC = () => {
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     const dbSnap = await getDoc(dbRef);
     const userData = dbSnap.data();
-    if (userData.profile_pic === "") {
+    if (userData.profile_pic === '') {
       setProfilePic(
         'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
-      );
+      ); //need to give credit to this image
     } else {
       setProfilePic(userData.profile_pic);
     }
@@ -77,35 +76,42 @@ const Profile: React.FC = () => {
     const imageRef = ref(storage, auth.currentUser.email + '.png');
     await uploadBytes(imageRef, photo);
     const photoURL = await getDownloadURL(imageRef);
-    updateProfile(auth.currentUser, { photoURL })
+    updateProfile(auth.currentUser, { photoURL }).catch((error: any) => {
+      alert(error);
+    });
+    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
+    await updateDoc(dbRef, { profile_pic: photoURL })
+      .then(() => {
+        alert('profile picture updated!');
+        history.go(0); //refresh page
+      })
       .catch((error: any) => {
         alert(error);
       });
-    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-    await updateDoc(dbRef, { profile_pic: photoURL })
-    .then(() => {
-      alert('profile picture updated!');
-      history.go(0); //refresh page
-    })
-    .catch((error: any) => {
-      alert(error);
-    });
   };
-  
+
   const changePassword = () => {
     history.push('/app/profile/passwordChange');
     return;
   };
 
   const signOut = async () => {
-    await auth.signOut();
-    history.push('/login');
+    try {
+      await auth.signOut();
+      history.push('/');
+    } catch (error) {
+      console.log('Error signing out:', error);
+    }
   };
 
   return (
     <IonPage>
       <IonRouterOutlet>
-        <Route exact path="/app/profile/passwordChange" component={newPassword} />
+        <Route
+          exact
+          path="/app/profile/passwordChange"
+          component={newPassword}
+        />
       </IonRouterOutlet>
       <IonHeader>
         <NavBar>
@@ -117,36 +123,60 @@ const Profile: React.FC = () => {
           <IonGrid>
             <IonRow>
               <IonCol size="auto">
-                <IonText>
+                <IonItem>
                   <IonImg
                     className="profile_pic"
                     src={profilePic}
                     alt="Profile picture for the user signed in"
                   ></IonImg>
-                  <input type="file" id="img" name="img" accept="image/*" onChange={handleImageChange} />
+                </IonItem>
+                <IonItem>
+                  <input
+                    type="file"
+                    id="img"
+                    name="img"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                  />
+                </IonItem>
+                <IonItem>
                   <IonButton onClick={handleSubmit}>
                     Change Profile Picture
                   </IonButton>
+                </IonItem>
+                <IonItem>
                   <h2>{name}</h2>
+                </IonItem>
+                <IonItem>
                   <p>{email}</p>
+                </IonItem>
+                <IonItem>
                   <IonButton onClick={changePassword}>
                     Change Password
-                  </IonButton>{' '}
-                  <br></br>
+                  </IonButton>
+                </IonItem>
+                <IonItem>
                   <IonButton onClick={signOut}>Sign Out</IonButton>
-                </IonText>
+                </IonItem>
               </IonCol>
               <IonCol>
-                <IonText>
+                <IonItem>
                   <p>Joined on {joinDate}</p>
+                </IonItem>
+                <IonItem>
                   <p>{totalDistance} miles walked in total</p>
-                  <IonLabel>Step Goal: </IonLabel>
-                  <IonItem fill="outline">
-                    <IonInput value="10,000" size={100}></IonInput>
-                  </IonItem>
+                </IonItem>
+                <IonItem fill="outline">
+                  <IonLabel position="floating">Step Goal</IonLabel>
+                  <IonInput
+                    id="steps"
+                    type="number"
+                    placeholder="10,000"
+                  ></IonInput>
+                </IonItem>
+                <IonItem>
                   <h6>Badges:</h6>
-                  {/* TODO: Put badges here */}
-                </IonText>
+                </IonItem>
               </IonCol>
             </IonRow>
           </IonGrid>

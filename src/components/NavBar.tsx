@@ -73,11 +73,11 @@ const NavBar: React.FC<NavBarProps> = ({
               <NavLink id="nav-team-profile" text="Team Profile" href="/app/team/profile"/>
             </NavLink>
             <NavLink id="nav-profile" text="Profile" href="/app/profile">
-              <NavLink id="nav-logs" text="Logs" href="/app/manualsteps" />
+              <NavLink id="nav-steps-log" text="Steps Log" href="/app/manualsteps" />
               <NavLink
-                id="nav-health-app"
-                text="Health App Settings"
-                href="/app/healthapp"
+                id="nav-steps-calc"
+                text="Steps Calculator"
+                href="/app/stepscalc"
               />
             </NavLink>
             {isAdmin && (
