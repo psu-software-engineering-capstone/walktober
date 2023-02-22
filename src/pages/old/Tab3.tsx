@@ -1,6 +1,6 @@
 import { IonContent, IonPage, IonTitle } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
-import NavBar from '../components/NavBar';
+import ExploreContainer from '../../components/ExploreContainer';
+import NavBar from '../../components/NavBar';
 import './Tab3.css';
 
 const Tab3: React.FC = () => {

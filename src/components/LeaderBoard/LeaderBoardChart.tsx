@@ -4,7 +4,8 @@ import './LeaderBoardChart.scss';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Bar } from 'react-chartjs-2';
-import { TeamData } from '../../pages/SampleData';
+import { TeamData } from '../../pages/sampleData';
+
 import { collection, getDocs } from 'firebase/firestore';
 import { FirestoreDB } from '../../firebase';
 
