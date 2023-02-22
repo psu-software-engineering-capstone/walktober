@@ -82,17 +82,6 @@ const Admin: React.FC = () => {
     setUserLogs(userLogsData);
   };
 
-
-  const history = useHistory();
-  const ctx = useContext(AuthContext);
-  const isAdmin = ctx.admin;
-
-  // prevents the user from entering the admin page from the url if they are not an admin
-  if (isAdmin === false) {
-    history.push('/app');
-    return;
-  }
-
   // in team setting module, when user presses save setting, sends the data to database.
   const sendNewTeamSetting = async () => {
     const dbRef = doc(FirestoreDB, 'admin', 'admin');
