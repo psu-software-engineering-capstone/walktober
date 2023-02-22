@@ -17,7 +17,7 @@ import {
   IonRefresherContent,
   RefresherEventDetail,
   isPlatform,
-  useIonToast,
+  useIonToast
 } from '@ionic/react';
 import './manualLoggingSteps.css';
 import { auth, FirestoreDB } from '../../firebase';
@@ -146,63 +146,55 @@ const ManualSteps: React.FC = () => {
   }
 
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
-    await new Promise(resolve => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
     getRecordsFromDB();
     event.detail.complete(); // Notify the refresher that loading is complete
-  }  
+  }
 
   const syncApp = async () => {
     if (isPlatform('android')) {
       await Health.isAvailable()
-      .then((data: any) => {
-        if (!data) {
-          alert('Please install Google Fit!');
-          Health.promptInstallFit()
-            .then((data: any) => presentToast(JSON.stringify(data)))
-            .catch((error: any) => alert(JSON.stringify(error)));
-        }
-        else {
-          Health.requestAuthorization(supportedTypes)
-          .then((data: any) => {
-            if (data) {
-              presentToast('Updating Steps...');
-              updateSteps();
-            }
-            else
-              alert('Request for Authentication Failed.');
-          })
-          .catch((error: any) => alert(JSON.stringify(error)));
-        }
-        return;
-      })
-      .catch((error: any) => alert(JSON.stringify(error)));
-    }
-    else if (isPlatform('ios')) {
-      await HealthKit.available()
-      .then(async (data: any) => {
-        const hkAvail = data;
-        HealthKit.checkAuthStatus({
-          type: 'HKQuantityTypeIdentifierHeight'
+        .then((data: any) => {
+          if (!data) {
+            alert('Please install Google Fit!');
+            Health.promptInstallFit()
+              .then((data: any) => presentToast(JSON.stringify(data)))
+              .catch((error: any) => alert(JSON.stringify(error)));
+          } else {
+            Health.requestAuthorization(supportedTypes)
+              .then((data: any) => {
+                if (data) {
+                  presentToast('Updating Steps...');
+                  updateSteps();
+                } else alert('Request for Authentication Failed.');
+              })
+              .catch((error: any) => alert(JSON.stringify(error)));
+          }
+          return;
         })
-          .then((data: any) => {
-            const authStatus = data;
-            if (!hkAvail)
-              alert('Apple Health Undetected!');
-            else if (authStatus == "authorized") {
-              presentToast('Updating Steps...');
-              updateSteps();
-            }
-            else 
-              // alert('Please Enable Permissions for Apple Health (need to deal with first time asking permisssions IOS Specific)');
-              requestAuthorization();
+        .catch((error: any) => alert(JSON.stringify(error)));
+    } else if (isPlatform('ios')) {
+      await HealthKit.available()
+        .then(async (data: any) => {
+          const hkAvail = data;
+          HealthKit.checkAuthStatus({
+            type: 'HKQuantityTypeIdentifierHeight'
           })
-          .catch((error: any) => alert(JSON.stringify(error)));
-        return;
-      })
-      .catch((error: any) => alert(JSON.stringify(error)));
-    }
-    else
-      alert('Error: Unsupported Platform');
+            .then((data: any) => {
+              const authStatus = data;
+              if (!hkAvail) alert('Apple Health Undetected!');
+              else if (authStatus == 'authorized') {
+                presentToast('Updating Steps...');
+                updateSteps();
+              }
+              // alert('Please Enable Permissions for Apple Health (need to deal with first time asking permisssions IOS Specific)');
+              else requestAuthorization();
+            })
+            .catch((error: any) => alert(JSON.stringify(error)));
+          return;
+        })
+        .catch((error: any) => alert(JSON.stringify(error)));
+    } else alert('Error: Unsupported Platform');
     return;
   };
 
@@ -210,10 +202,8 @@ const ManualSteps: React.FC = () => {
     if (isPlatform('android')) {
       await Health.requestAuthorization(supportedTypes)
         .then((data: any) => {
-          if (data)
-            updateSteps();
-          else
-            alert('Error GFit: Authorization Failed');
+          if (data) updateSteps();
+          else alert('Error GFit: Authorization Failed');
         })
         .catch((error: any) => alert(JSON.stringify(error)));
       return;
@@ -225,16 +215,12 @@ const ManualSteps: React.FC = () => {
         type: 'HKQuantityTypeIdentifierHeight'
       })
         .then((data: any) => {
-          if (data == "authorized")
-            updateSteps();
-          else
-            alert('Error AHealth: Please Enable Apple Health Permissions');
+          if (data == 'authorized') updateSteps();
+          else alert('Error AHealth: Please Enable Apple Health Permissions');
         })
         .catch((error: any) => alert(JSON.stringify(error)));
       return;
-    }
-    else
-      alert('Error: Unknown Platform');
+    } else alert('Error: Unknown Platform');
     return;
   };
 
@@ -243,107 +229,219 @@ const ManualSteps: React.FC = () => {
       alert('Error: Unknown Platform');
       return;
     }
-    const date = new Date();
-    const stepOptions: object = {
-      // note I change it from HealthQueryOptions to object as HealthQueryOptions is not valid typing
-      startDate: new Date(date.getFullYear(), date.getMonth(), 1),
-      endDate: new Date(),
-      dataType: 'steps',
-      filtered: true
-    };
-    await Health.query(stepOptions)
-      .then(async (data: any) => {
-        const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-        const dbSnap = await getDoc(dbRef);
-        const dbStepsByDate: StepLog[] = dbSnap.data().stepsByDate;
-        if (dbStepsByDate.length > 0) {
-          dbStepsByDate.sort(
-            (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    if (isPlatform('android')) {
+      const date = new Date();
+      const stepOptions: object = {
+        startDate: new Date(date.getFullYear(), date.getMonth(), 1),
+        endDate: new Date(),
+        dataType: 'steps',
+        filtered: true
+      };
+      await Health.query(stepOptions)
+        .then(async (data: any) => {
+          const dbRef = doc(
+            FirestoreDB,
+            'users',
+            auth.currentUser.email as string
           );
-        }
-        let dayCount = 0;
-        let prevIndex = 0;
-        const healthAppData: StepLog[] = [];
-        for (let i = 0; i < data.length; i++) {
-          const current = data[i];
-          const steps = current.value;
-          const date = current.startDate.toISOString().slice(0, 10);
-          const prevDate = data[prevIndex].startDate.toISOString().slice(0, 10);
-          if (date === prevDate && i != 0){
-            healthAppData[dayCount - 1].steps += steps;
+          const dbSnap = await getDoc(dbRef);
+          const dbStepsByDate: StepLog[] = dbSnap.data().stepsByDate;
+          if (dbStepsByDate.length > 0) {
+            dbStepsByDate.sort(
+              (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+            );
           }
-          else {
-            healthAppData[dayCount] = { date, steps };
-            dayCount++;
+          let dayCount = 0;
+          let prevIndex = 0;
+          const healthAppData: StepLog[] = [];
+          for (let i = 0; i < data.length; i++) {
+            const current = data[i];
+            const steps = current.value;
+            const date = current.startDate.toISOString().slice(0, 10);
+            const prevDate = data[prevIndex].startDate
+              .toISOString()
+              .slice(0, 10);
+            if (date === prevDate && i != 0) {
+              healthAppData[dayCount - 1].steps += steps;
+            } else {
+              healthAppData[dayCount] = { date, steps };
+              dayCount++;
+            }
+            prevIndex = i;
           }
-          prevIndex = i;
-        }
-        const stepsByDate = [];
-        let totalStep = 0;
-        let dbIndex = 0;
-        let healthAppIndex = 0;
-        let flag = -1;
-        let i = 0;
-        if (dbStepsByDate.length === 0) {
-          flag = 1;
-        } else if (healthAppData.length === 0) {
-          flag = 0;
-        }
-        while(flag === -1) {
-          const healthAppDateString = healthAppData[healthAppIndex].date;
-          const healthAppSteps = healthAppData[healthAppIndex].steps;
-          const dbDateString = dbStepsByDate[dbIndex].date;
-          const dbSteps = dbStepsByDate[dbIndex].steps;
-          const healthAppDate = new Date(healthAppDateString);
-          const dbDate = new Date(dbDateString);
-          if (healthAppDate < dbDate){
-            const date = healthAppDateString;
-            const steps = healthAppSteps;
-            totalStep += steps;
-            stepsByDate[i] = { date, steps };
-            healthAppIndex++;
-          } else if (healthAppDate > dbDate) {
-            const date = dbDateString;
-            const steps = dbSteps;
-            totalStep += steps;
-            stepsByDate[i] = { date, steps };
-            dbIndex++;
-          } else {
-            const steps = dbSteps > healthAppSteps ? dbSteps : healthAppSteps;
-            const date = dbDateString;
-            totalStep += steps;
-            stepsByDate[i] = { date, steps };
-            healthAppIndex++;
-            dbIndex++;
-          }
-          i++;
-          if (healthAppIndex >= healthAppData.length) {
-            flag = 0;
-          } else if (dbIndex >= dbStepsByDate.length) {
+          const stepsByDate = [];
+          let totalStep = 0;
+          let dbIndex = 0;
+          let healthAppIndex = 0;
+          let flag = -1;
+          let i = 0;
+          if (dbStepsByDate.length === 0) {
             flag = 1;
+          } else if (healthAppData.length === 0) {
+            flag = 0;
           }
-        }
-        if (flag === 0) {
-          for(; dbIndex < dbStepsByDate.length; dbIndex++) {
-            const date = dbStepsByDate[dbIndex].date;
-            const steps = dbStepsByDate[dbIndex].steps;
-            totalStep += steps;
-            stepsByDate[i] = { date, steps };
+          while (flag === -1) {
+            const healthAppDateString = healthAppData[healthAppIndex].date;
+            const healthAppSteps = healthAppData[healthAppIndex].steps;
+            const dbDateString = dbStepsByDate[dbIndex].date;
+            const dbSteps = dbStepsByDate[dbIndex].steps;
+            const healthAppDate = new Date(healthAppDateString);
+            const dbDate = new Date(dbDateString);
+            if (healthAppDate < dbDate) {
+              const date = healthAppDateString;
+              const steps = healthAppSteps;
+              totalStep += steps;
+              stepsByDate[i] = { date, steps };
+              healthAppIndex++;
+            } else if (healthAppDate > dbDate) {
+              const date = dbDateString;
+              const steps = dbSteps;
+              totalStep += steps;
+              stepsByDate[i] = { date, steps };
+              dbIndex++;
+            } else {
+              const steps = dbSteps > healthAppSteps ? dbSteps : healthAppSteps;
+              const date = dbDateString;
+              totalStep += steps;
+              stepsByDate[i] = { date, steps };
+              healthAppIndex++;
+              dbIndex++;
+            }
             i++;
+            if (healthAppIndex >= healthAppData.length) {
+              flag = 0;
+            } else if (dbIndex >= dbStepsByDate.length) {
+              flag = 1;
+            }
           }
-        } else if (flag === 1) {
-          for(; healthAppIndex < healthAppData.length; healthAppIndex++) {
-            const date = healthAppData[healthAppIndex].date;
-            const steps = healthAppData[healthAppIndex].steps;
-            totalStep += steps;
-            stepsByDate[i] = { date, steps };
+          if (flag === 0) {
+            for (; dbIndex < dbStepsByDate.length; dbIndex++) {
+              const date = dbStepsByDate[dbIndex].date;
+              const steps = dbStepsByDate[dbIndex].steps;
+              totalStep += steps;
+              stepsByDate[i] = { date, steps };
+              i++;
+            }
+          } else if (flag === 1) {
+            for (; healthAppIndex < healthAppData.length; healthAppIndex++) {
+              const date = healthAppData[healthAppIndex].date;
+              const steps = healthAppData[healthAppIndex].steps;
+              totalStep += steps;
+              stepsByDate[i] = { date, steps };
+              i++;
+            }
+          }
+          await updateCurrentUser(stepsByDate, totalStep);
+          presentToast('Steps Updated!');
+        })
+        .catch((error: any) => alert(error));
+    } else if (isPlatform('ios')) {
+      const date = new Date();
+      const stepOptions = {
+        startDate: new Date(date.getFullYear(), date.getMonth(), 1),
+        endDate: new Date(),
+        unit: 'count',
+        sampleType: 'HKQuantityTypeIdentifierStepCount',
+        ascending: true
+      };
+      await HealthKit.querySampleType(stepOptions)
+        .then(async (data: any) => {
+          console.log(data);
+          const dbRef = doc(
+            FirestoreDB,
+            'users',
+            auth.currentUser.email as string
+          );
+          const dbSnap = await getDoc(dbRef);
+          const dbStepsByDate: StepLog[] = dbSnap.data().stepsByDate;
+          if (dbStepsByDate.length > 0) {
+            dbStepsByDate.sort(
+              (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+            );
+          }
+          let dayCount = 0;
+          let prevIndex = 0;
+          const healthAppData: StepLog[] = [];
+          for (let i = 0; i < data.length; i++) {
+            const current = data[i];
+            const steps = current.quantity;
+            const date = current.startDate.toString().slice(0, 10);
+            const prevDate = data[prevIndex].startDate.toString().slice(0, 10);
+            if (date === prevDate && i != 0) {
+              healthAppData[dayCount - 1].steps += steps;
+            } else {
+              healthAppData[dayCount] = { date, steps };
+              dayCount++;
+            }
+            prevIndex = i;
+          }
+          const stepsByDate = [];
+          let totalStep = 0;
+          let dbIndex = 0;
+          let healthAppIndex = 0;
+          let flag = -1;
+          let i = 0;
+          if (dbStepsByDate.length === 0) {
+            flag = 1;
+          } else if (healthAppData.length === 0) {
+            flag = 0;
+          }
+          while (flag === -1) {
+            const healthAppDateString = healthAppData[healthAppIndex].date;
+            const healthAppSteps = healthAppData[healthAppIndex].steps;
+            const dbDateString = dbStepsByDate[dbIndex].date;
+            const dbSteps = dbStepsByDate[dbIndex].steps;
+            const healthAppDate = new Date(healthAppDateString);
+            const dbDate = new Date(dbDateString);
+            if (healthAppDate < dbDate) {
+              const date = healthAppDateString;
+              const steps = healthAppSteps;
+              totalStep += steps;
+              stepsByDate[i] = { date, steps };
+              healthAppIndex++;
+            } else if (healthAppDate > dbDate) {
+              const date = dbDateString;
+              const steps = dbSteps;
+              totalStep += steps;
+              stepsByDate[i] = { date, steps };
+              dbIndex++;
+            } else {
+              const steps = dbSteps > healthAppSteps ? dbSteps : healthAppSteps;
+              const date = dbDateString;
+              totalStep += steps;
+              stepsByDate[i] = { date, steps };
+              healthAppIndex++;
+              dbIndex++;
+            }
             i++;
+            if (healthAppIndex >= healthAppData.length) {
+              flag = 0;
+            } else if (dbIndex >= dbStepsByDate.length) {
+              flag = 1;
+            }
           }
-        }
-        await updateCurrentUser(stepsByDate, totalStep);
-        presentToast('Steps Updated!');
-      })
-      .catch((error: any) => alert(JSON.stringify(error) + 'query failed'));
+          if (flag === 0) {
+            for (; dbIndex < dbStepsByDate.length; dbIndex++) {
+              const date = dbStepsByDate[dbIndex].date;
+              const steps = dbStepsByDate[dbIndex].steps;
+              totalStep += steps;
+              stepsByDate[i] = { date, steps };
+              i++;
+            }
+          } else if (flag === 1) {
+            for (; healthAppIndex < healthAppData.length; healthAppIndex++) {
+              const date = healthAppData[healthAppIndex].date;
+              const steps = healthAppData[healthAppIndex].steps;
+              totalStep += steps;
+              stepsByDate[i] = { date, steps };
+              i++;
+            }
+          }
+          await updateCurrentUser(stepsByDate, totalStep);
+          presentToast('Steps Updated!');
+        })
+        .catch((error: any) => alert(error));
+    }
   };
 
   const updateCurrentUser = async (stepsByDate: any, totalStep: any) => {
@@ -395,7 +493,7 @@ const ManualSteps: React.FC = () => {
     setManualDate('');
     setUpdateTotalStep(true);
   };
-  
+
   return (
     <IonPage>
       <IonHeader>
@@ -422,10 +520,7 @@ const ManualSteps: React.FC = () => {
             ></IonInput>
           </IonItem>
           <a>
-            <IonRouterLink
-              slot="helper"
-              routerLink="/app/stepscalc"
-            >
+            <IonRouterLink slot="helper" routerLink="/app/stepscalc">
               Need help calculating steps?
             </IonRouterLink>
           </a>

@@ -36,7 +36,6 @@
     "firebase": "^9.14.0",
     "firebase-tools": "^11.16.1",
     "ionicons": "^6.0.3",
-    "ios-sim": "^9.0.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",

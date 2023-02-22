@@ -85,7 +85,8 @@ const HealthApp: React.FC = () => {
       startDate: new Date(date.getFullYear(), date.getMonth(), 1),
       endDate: new Date(),
       unit: 'count',
-      sampleType: 'HKQuantityTypeIdentifierStepCount'
+      sampleType: 'HKQuantityTypeIdentifierStepCount',
+      ascending: true
     };
     await HealthKit.querySampleType(stepOptions)
       .then(async (data: any) => {
