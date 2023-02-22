@@ -52,8 +52,15 @@ const Admin: React.FC = () => {
     steps: number;
   }
 
-  const [userLogs, setUserLogs] = useState<UserLog[]>([]);
+  const [userReportCheck, setUserReportCheck] = useState(false);
+  const [teamReportCheck, setTeamReportCheck] = useState(false);
+  const [preSurveryReportCheck, setpreSurveryReportCheck] = useState(false);
+  const [postSurveryReportCheck, setpostSurveryReportCheck] = useState(false);
+  const [analysisReportCheck, setAnalysisReportCheck] = useState(false);
+  const [devicesReportCheck, setDevicesReportCheck] = useState(false);
 
+  const [userLogs, setUserLogs] = useState<UserLog[]>([]);
+  
   const history = useHistory();
   const ctx = useContext(AuthContext);
   const isAdmin = ctx.admin;
@@ -63,7 +70,7 @@ const Admin: React.FC = () => {
     if (isAdmin === false) {
       history.push('/app');
       return;
-    }
+    }    
     const dbRef = collection(FirestoreDB, 'users');
     const dbSnap = await getDocs(dbRef);
     const userLogsData: UserLog[] = [];
@@ -166,10 +173,6 @@ const Admin: React.FC = () => {
                     {item.steps}
                   </IonCol>
                   <IonCol sizeMd="3" size="8" class="admin-col">
-                    <IonButton size="small">
-                      <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>
-                      Remove
-                    </IonButton>
                     <IonButton size="small">Edit Step Log</IonButton>
                   </IonCol>
                 </IonRow>
@@ -208,6 +211,36 @@ const Admin: React.FC = () => {
       );
     }
   }
+
+  const submitHandler = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if(userReportCheck){
+      console.log("Generating user report");
+    }
+
+    if(teamReportCheck){
+      console.log("Generating team report");
+    }
+
+    if(preSurveryReportCheck){
+      console.log("Generating intro survey report");
+    }
+
+    if(postSurveryReportCheck){
+      console.log("Generating exit survey report");
+    }
+
+    if(analysisReportCheck){
+      console.log("Generating survey alalysis report");
+    }
+
+    if(devicesReportCheck){
+      console.log("Generating device usage report");
+    }
+
+    console.log("Reports have been generated");
+  };
 
   return (
     <IonPage>
@@ -427,25 +460,40 @@ const Admin: React.FC = () => {
             <IonLabel>Select Reports to Generate</IonLabel>
           </IonItem>
           <IonContent className="ion-padding" class="modal-content">
+            <form
+            id="generateReports"
+            onSubmit={(event: React.FormEvent) => {
+              submitHandler(event);
+            }}
+            >
             <IonItem>
-              <IonCheckbox slot="start"></IonCheckbox>
-              <IonLabel>Report Type 1</IonLabel>
+              <IonCheckbox checked={userReportCheck} onIonChange={e => setUserReportCheck(e.detail.checked)} slot="start"></IonCheckbox>
+              <IonLabel>User Report</IonLabel>
             </IonItem>
             <IonItem>
-              <IonCheckbox slot="start"></IonCheckbox>
-              <IonLabel>Report Type 2</IonLabel>
+              <IonCheckbox checked={teamReportCheck} onIonChange={e => setTeamReportCheck(e.detail.checked)}  slot="start"></IonCheckbox>
+              <IonLabel>Team Report</IonLabel>
             </IonItem>
             <IonItem>
-              <IonCheckbox slot="start"></IonCheckbox>
-              <IonLabel>Report Type 3</IonLabel>
+              <IonCheckbox checked={preSurveryReportCheck} onIonChange={e => setpreSurveryReportCheck(e.detail.checked)}  slot="start"></IonCheckbox>
+              <IonLabel>Pre Survery Report</IonLabel>
             </IonItem>
             <IonItem>
-              <IonCheckbox slot="start"></IonCheckbox>
-              <IonLabel>Report Type 4</IonLabel>
+              <IonCheckbox checked={postSurveryReportCheck} onIonChange={e => setpostSurveryReportCheck(e.detail.checked)}  slot="start"></IonCheckbox>
+              <IonLabel>Post Survery Report</IonLabel>
             </IonItem>
-            <IonButton class="modal-button" size="large" expand="block">
+            <IonItem>
+              <IonCheckbox checked={analysisReportCheck} onIonChange={e => setAnalysisReportCheck(e.detail.checked)}  slot="start"></IonCheckbox>
+              <IonLabel>Survey Analysis Report</IonLabel>
+            </IonItem>
+            <IonItem>
+              <IonCheckbox checked={devicesReportCheck} onIonChange={e => setDevicesReportCheck(e.detail.checked)}  slot="start"></IonCheckbox>
+              <IonLabel>Device Usage Report</IonLabel>
+            </IonItem>
+            <IonButton type="submit" class="modal-button" size="large" expand="block">
               Generate Reports
             </IonButton>
+            </form>
           </IonContent>
         </IonModal>
       </IonContent>
