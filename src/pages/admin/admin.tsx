@@ -14,8 +14,6 @@ import {
   IonLabel,
   IonModal,
   IonPage,
-  IonRadio,
-  IonRadioGroup,
   IonRow,
   IonTextarea,
   IonTitle,
@@ -41,6 +39,7 @@ const Admin: React.FC = () => {
   const [newMaxTeamSize, setNewMaxTeamSize] = useState(10);
   const [newMinTeamSize, setNewMinTeamSize] = useState(10);
   const [newTeamCreationDate, setNewTeamCreationDate] = useState('');
+  const [newRegistrationDeadline, setNewRegistrationDeadline] = useState('');
 
   //used for dates for teams
   //const [teamDeadline, setTeamDeadline] = useState('');
@@ -90,15 +89,29 @@ const Admin: React.FC = () => {
     await updateDoc(dbRef, {
       min_team_size: newMinTeamSize,
       max_team_size: newMaxTeamSize,
-      team_creation_due: newTeamCreationDate
+      team_creation_due: newTeamCreationDate,
     })
       .then(() => {
-        console.log(newMinTeamSize, newMaxTeamSize, newTeamCreationDate);
         alert('Team Settings Updated!');
       })
       .catch((error: any) => {
         alert(error);
       });
+      setIsOpenTeam(false);
+  };
+
+  const sendNewUserSetting = async () => {
+    const dbRef = doc(FirestoreDB, 'admin', 'admin');
+    await updateDoc(dbRef, {
+      registration_deadline: newRegistrationDeadline
+    })
+      .then(() => {
+        alert('User Settings Updated!');
+      })
+      .catch((error: any) => {
+        alert(error);
+      });
+      setIsOpenUser(false);
   };
 
   useEffect(() => {
@@ -269,18 +282,19 @@ const Admin: React.FC = () => {
             </IonToolbar>
           </IonHeader>
           <IonContent className="ion-padding" class="modal-content">
-            <IonRadioGroup value={'User Sertings'}>
-              <IonItem>
-                <IonLabel>User Settings 1</IonLabel>
-                <IonRadio slot="start" value="user_settings_1"></IonRadio>
-              </IonItem>
-
-              <IonItem>
-                <IonLabel>User Settings 2</IonLabel>
-                <IonRadio slot="start" value="user_settings_2"></IonRadio>
-              </IonItem>
-            </IonRadioGroup>
-            <IonButton class="modal-button" size="large" expand="block">
+          <IonItem>
+              <IonLabel>Set Registration Deadline</IonLabel>
+              <IonInput
+                id="time"
+                type="date"
+                onInput={(event: any) => {
+                  setNewRegistrationDeadline(
+                    new Date(event.target.value).toISOString().slice(0, 10)
+                  );
+                }}
+              ></IonInput>
+            </IonItem>
+            <IonButton class="modal-button" size="large" expand="block" onClick={sendNewUserSetting}>
               Save Settings
             </IonButton>
           </IonContent>
@@ -319,13 +333,6 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
-              ></IonInput>
-            </IonItem>
-            <IonItem>
-              <IonLabel>Set Registration Deadline</IonLabel>
-              <IonInput
-                id="time"
-                type="date"
               ></IonInput>
             </IonItem>
             <IonButton class="modal-button" size="large" expand="block" onClick={sendNewTeamSetting}>
