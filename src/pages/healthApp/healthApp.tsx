@@ -11,7 +11,7 @@ import {
   IonButton,
   isPlatform
 } from '@ionic/react';
-import './HealthApp.css';
+import './healthApp.css';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
 import { auth, FirestoreDB } from '../../firebase';
 import { doc, getDoc } from 'firebase/firestore';

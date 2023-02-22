@@ -18,7 +18,6 @@ import {
   RefresherEventDetail,
   isPlatform,
   useIonToast,
-  IonToast
 } from '@ionic/react';
 import './manualLoggingSteps.css';
 import { auth, FirestoreDB } from '../../firebase';
@@ -29,7 +28,6 @@ import AuthContext from '../../store/auth-context';
 import NavBar from '../../components/NavBar';
 import { Health } from '@awesome-cordova-plugins/health';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
-import { present } from '@ionic/core/dist/types/utils/overlays';
 
 const ManualSteps: React.FC = () => {
   interface StepLog {
@@ -147,13 +145,11 @@ const ManualSteps: React.FC = () => {
     }
   }
 
-  function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
-    setTimeout(async () => {
-      // Any calls to load data go here
-      requestAuthorization();
-      event.detail.complete();
-    }, 2000);
-  }
+  async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
+    await new Promise(resolve => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
+    getRecordsFromDB();
+    event.detail.complete(); // Notify the refresher that loading is complete
+  }  
 
   const syncApp = async () => {
     if (isPlatform('android')) {
@@ -197,7 +193,8 @@ const ManualSteps: React.FC = () => {
               updateSteps();
             }
             else 
-              alert('Please Enable Permissions for Apple Health (need to deal with first time asking permisssions IOS Specific)');
+              // alert('Please Enable Permissions for Apple Health (need to deal with first time asking permisssions IOS Specific)');
+              requestAuthorization();
           })
           .catch((error: any) => alert(JSON.stringify(error)));
         return;
@@ -240,6 +237,7 @@ const ManualSteps: React.FC = () => {
       alert('Error: Unknown Platform');
     return;
   };
+
   const updateSteps = async () => {
     if (!isPlatform('android') && !isPlatform('ios')) {
       alert('Error: Unknown Platform');
@@ -347,6 +345,7 @@ const ManualSteps: React.FC = () => {
       })
       .catch((error: any) => alert(JSON.stringify(error) + 'query failed'));
   };
+
   const updateCurrentUser = async (stepsByDate: any, totalStep: any) => {
     if (ctx.user === null) {
       alert('You are not logged in!');
@@ -421,16 +420,15 @@ const ManualSteps: React.FC = () => {
                 setManualSteps(Number(event.target.value));
               }}
             ></IonInput>
+          </IonItem>
+          <a>
             <IonRouterLink
               slot="helper"
-              href="/app/stepscalc"
-              onClick={() => {
-                history.push('/app/stepscalc');
-              }}
+              routerLink="/app/stepscalc"
             >
               Need help calculating steps?
             </IonRouterLink>
-          </IonItem>
+          </a>
           <IonItem>
             <IonLabel position="floating"></IonLabel>
             <IonInput
