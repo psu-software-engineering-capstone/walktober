@@ -15,7 +15,7 @@ import { auth, FirestoreDB } from '../../firebase';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { useHistory } from 'react-router';
-import './TeamHome.scss';
+import './teamHome.scss';
 
 ChartJS.register(...registerables);
 
@@ -108,7 +108,7 @@ const TeamProfile: React.FC = () => {
       return (
         <>
           <IonGrid fixed={true}>
-            <IonRow align-items-stretch="true" class="top">
+            <IonRow class="top">
               <IonCol
                 sizeSm="12"
                 sizeLg="8"
@@ -194,7 +194,7 @@ const TeamProfile: React.FC = () => {
         <IonCol
           className="boxSize"
           sizeSm="12"
-          sizeLg="6"
+          sizeLg="5"
           sizeMd="6" 
           sizeXs="12"
         >
@@ -205,7 +205,7 @@ const TeamProfile: React.FC = () => {
             </IonContent>
           </IonContent>
         </IonCol>
-        <IonCol>
+        <IonCol sizeLg='11'>
           <IonItem>{DisplayTeams(data)}</IonItem>
         </IonCol>
       </IonRow>
