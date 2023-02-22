@@ -14,8 +14,6 @@ import {
   IonLabel,
   IonModal,
   IonPage,
-  IonRadio,
-  IonRadioGroup,
   IonRow,
   IonTextarea,
   IonTitle,
@@ -27,7 +25,7 @@ import { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../store/auth-context';
 import { useHistory } from 'react-router-dom';
 import { FirestoreDB } from '../../firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { doc, collection, getDocs, updateDoc } from 'firebase/firestore';
 import './admin.css';
 
 const Admin: React.FC = () => {
@@ -36,6 +34,12 @@ const Admin: React.FC = () => {
   const [isOpenTeam, setIsOpenTeam] = useState(false);
   const [isOpenAnnouncements, setIsOpenAnnouncements] = useState(false);
   const [isOpenReport, setIsOpenReport] = useState(false);
+
+  // used to send new team sizes and team creation date to database
+  const [newMaxTeamSize, setNewMaxTeamSize] = useState(10);
+  const [newMinTeamSize, setNewMinTeamSize] = useState(10);
+  const [newTeamCreationDate, setNewTeamCreationDate] = useState('');
+  const [newRegistrationDeadline, setNewRegistrationDeadline] = useState('');
 
   //used for dates for teams
   //const [teamDeadline, setTeamDeadline] = useState('');
@@ -56,8 +60,17 @@ const Admin: React.FC = () => {
   const [devicesReportCheck, setDevicesReportCheck] = useState(false);
 
   const [userLogs, setUserLogs] = useState<UserLog[]>([]);
+  
+  const history = useHistory();
+  const ctx = useContext(AuthContext);
+  const isAdmin = ctx.admin;
 
   const loadUserLogs = async () => {
+    // prevents the user from entering the admin page from the url if they are not an admin
+    if (isAdmin === false) {
+      history.push('/app');
+      return;
+    }    
     const dbRef = collection(FirestoreDB, 'users');
     const dbSnap = await getDocs(dbRef);
     const userLogsData: UserLog[] = [];
@@ -76,15 +89,36 @@ const Admin: React.FC = () => {
     setUserLogs(userLogsData);
   };
 
-  const history = useHistory();
-  const ctx = useContext(AuthContext);
-  const isAdmin = ctx.admin;
+  // in team setting module, when user presses save setting, sends the data to database.
+  const sendNewTeamSetting = async () => {
+    const dbRef = doc(FirestoreDB, 'admin', 'admin');
+    await updateDoc(dbRef, {
+      min_team_size: newMinTeamSize,
+      max_team_size: newMaxTeamSize,
+      team_creation_due: newTeamCreationDate,
+    })
+      .then(() => {
+        alert('Team Settings Updated!');
+      })
+      .catch((error: any) => {
+        alert(error);
+      });
+      setIsOpenTeam(false);
+  };
 
-  // prevents the user from entering the admin page from the url if they are not an admin
-  if (isAdmin === false) {
-    history.push('/app');
-    return;
-  }
+  const sendNewUserSetting = async () => {
+    const dbRef = doc(FirestoreDB, 'admin', 'admin');
+    await updateDoc(dbRef, {
+      registration_deadline: newRegistrationDeadline
+    })
+      .then(() => {
+        alert('User Settings Updated!');
+      })
+      .catch((error: any) => {
+        alert(error);
+      });
+      setIsOpenUser(false);
+  };
 
   useEffect(() => {
     loadUserLogs();
@@ -280,18 +314,19 @@ const Admin: React.FC = () => {
             </IonToolbar>
           </IonHeader>
           <IonContent className="ion-padding" class="modal-content">
-            <IonRadioGroup value={'User Sertings'}>
-              <IonItem>
-                <IonLabel>User Settings 1</IonLabel>
-                <IonRadio slot="start" value="user_settings_1"></IonRadio>
-              </IonItem>
-
-              <IonItem>
-                <IonLabel>User Settings 2</IonLabel>
-                <IonRadio slot="start" value="user_settings_2"></IonRadio>
-              </IonItem>
-            </IonRadioGroup>
-            <IonButton class="modal-button" size="large" expand="block">
+          <IonItem>
+              <IonLabel>Set Registration Deadline</IonLabel>
+              <IonInput
+                id="time"
+                type="date"
+                onInput={(event: any) => {
+                  setNewRegistrationDeadline(
+                    new Date(event.target.value).toISOString().slice(0, 10)
+                  );
+                }}
+              ></IonInput>
+            </IonItem>
+            <IonButton class="modal-button" size="large" expand="block" onClick={sendNewUserSetting}>
               Save Settings
             </IonButton>
           </IonContent>
@@ -314,27 +349,25 @@ const Admin: React.FC = () => {
           <IonContent className="ion-padding" class="modal-content">
             <IonItem>
               <IonLabel>Minimum Team Size</IonLabel>
-              <IonInput type="number"></IonInput>
+              <IonInput type="number" name="minTeamSize"onIonChange={(e) => setNewMinTeamSize(e.target.value as number)}></IonInput>
             </IonItem>
             <IonItem>
               <IonLabel>Maxiumum Team Size</IonLabel>
-              <IonInput type="number"></IonInput>
+              <IonInput type="number" name="maxTeamSize"onIonChange={(e) => setNewMaxTeamSize(e.target.value as number)}></IonInput>
             </IonItem>
             <IonItem>
               <IonLabel>Set Team Deadline</IonLabel>
               <IonInput
                 id="time"
                 type="date"
+                onInput={(event: any) => {
+                  setNewTeamCreationDate(
+                    new Date(event.target.value).toISOString().slice(0, 10)
+                  );
+                }}
               ></IonInput>
             </IonItem>
-            <IonItem>
-              <IonLabel>Set Registration Deadline</IonLabel>
-              <IonInput
-                id="time"
-                type="date"
-              ></IonInput>
-            </IonItem>
-            <IonButton class="modal-button" size="large" expand="block">
+            <IonButton class="modal-button" size="large" expand="block" onClick={sendNewTeamSetting}>
               Save Settings
             </IonButton>
 
