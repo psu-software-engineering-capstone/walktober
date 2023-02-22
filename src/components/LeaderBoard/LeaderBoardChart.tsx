@@ -2,9 +2,9 @@ import { IonButton, IonContent, IonHeader, IonSpinner } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import './LeaderBoardChart.scss';
 import { Chart as ChartJS, registerables } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Bar } from 'react-chartjs-2';
 import { TeamData } from '../../pages/SampleData';
-import placeholder from '../../assets/placeholder.png';
 import { collection, getDocs } from 'firebase/firestore';
 import { FirestoreDB } from '../../firebase';
 
@@ -27,6 +27,7 @@ const LeaderBoardChart: React.FC = () => {
     labels: data.map((row) => row.name),
     datasets: [
       {
+        minBarLength: 5,
         label: 'Steps',
         data: data.map((col) =>
           col.totalStep ? col.totalStep : col.avg_steps
@@ -51,7 +52,7 @@ const LeaderBoardChart: React.FC = () => {
 
       data.datasets[0].image.forEach((imageLink: string, index: number) => {
         const profilePic = new Image();
-        profilePic.src = placeholder;
+        profilePic.src = imageLink;
         ctx.drawImage(
           profilePic,
           0,
@@ -74,7 +75,28 @@ const LeaderBoardChart: React.FC = () => {
     },
     layout: {
       padding: {
-        left: 30
+        left: 40
+      }
+    },
+    plugins: {
+      datalabels: {
+        color: 'grey',
+        labels: {
+          title: {
+            font: {
+              weight: 'bold'
+            }
+          }
+        },
+        anchor: 'end',
+        align: 0,
+        formatter: function (value: number) {
+          if (value != null) {
+            if (value < 10000) return value;
+            if (value >= 455000) return 465 + 'k';
+            return Math.round(value / 1000) + 'k';
+          }
+        }
       }
     },
     scales: {
@@ -91,8 +113,7 @@ const LeaderBoardChart: React.FC = () => {
         },
         ticks: {
           autoSkip: false,
-          display: false,
-          stepSize: 500
+          display: false
         }
       },
       y: {
@@ -109,7 +130,10 @@ const LeaderBoardChart: React.FC = () => {
         },
         ticks: {
           autoSkip: false,
-          align: 'center'
+          align: 'center',
+          font: {
+            size: 15
+          }
         }
       }
     }
@@ -118,14 +142,11 @@ const LeaderBoardChart: React.FC = () => {
   //ajusts the size of the element containing the chart in order to correctly size the chart.
   const boxAjust = (labelLength: number) => {
     const box = document.querySelector('.box');
-    console.log('ran');
     if (box != null) {
       box.setAttribute('style', 'height: 500px');
-      console.log('test');
       if (labelLength > 10) {
         const newHeight = 500 + (labelLength - 10) * 50;
         box.setAttribute('style', 'height: ' + newHeight.toString() + 'px');
-        console.log('ran' + newHeight);
       }
     }
   };
@@ -137,7 +158,7 @@ const LeaderBoardChart: React.FC = () => {
       const indData: Array<Data> = [];
       const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
       querySnapshot.forEach((doc: any) => {
-        console.log(doc.id, ' => ', doc.data());
+        //console.log(doc.id, ' => ', doc.data());
         const person: Data = {
           name: doc.data().name as string,
           profile_pic: doc.data().profile_pic as string,
@@ -148,16 +169,17 @@ const LeaderBoardChart: React.FC = () => {
       setData(
         indData.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
       );
+      boxAjust(indData.length);
     }
     if (dataType == 'teams') {
       setData(
         TeamData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
       );
+      boxAjust(TeamData.length);
     }
-    boxAjust(data.length);
     setTimeout(() => {
       setLoading(false);
-    }, 500);
+    }, 600);
   }
 
   useEffect(() => {
@@ -167,7 +189,6 @@ const LeaderBoardChart: React.FC = () => {
   return (
     <IonContent>
       <IonHeader>LeaderBoard</IonHeader>
-
       <IonButton
         onClick={() => {
           dataType = 'individual';
@@ -186,14 +207,14 @@ const LeaderBoardChart: React.FC = () => {
       >
         Teams
       </IonButton>
-      <IonContent class="box">
+      <IonContent className="box">
         {loading ? (
           <IonSpinner />
         ) : (
           <Bar
             data={chartData}
             options={chartOptions}
-            plugins={[imgItems]}
+            plugins={[imgItems, ChartDataLabels]}
           ></Bar>
         )}
       </IonContent>

@@ -29,6 +29,7 @@
     "@types/react-router-dom": "^5.1.7",
     "@widgetbot/react-embed": "^1.6.1",
     "chart.js": "^4.2.0",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "com.telerik.plugins.healthkit": "^0.7.0",
     "cordova": "^11.0.0",
     "cordova-plugin-firebase-authentication": "^7.0.1",
