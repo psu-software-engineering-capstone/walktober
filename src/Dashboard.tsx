@@ -21,10 +21,12 @@ import TeamHome from './pages/TeamHome/TeamHome';
 import TeamJoin from './pages/TeamHome/TeamJoin';
 import NewTeamCreation from './pages/NewTeamCreation';
 import Admin from './pages/admin/admin';
+import StepsCalculator from './pages/stepsCalculator/stepsCalculator';
+import TeamProfile from './pages/TeamHome/TeamProfile';
 
 /* Theming */
 import './theme/app.scss';
-import StepsCalculator from './pages/stepsCalculator/stepsCalculator';
+
 
 const Dashboard: React.FC = () => {
   const tabsVisible = isPlatform('android') || isPlatform('ios');
@@ -44,6 +46,7 @@ const Dashboard: React.FC = () => {
         <Route exact path="/app/teamcreation" component={NewTeamCreation} />
         <Route exact path="/app/team" component={TeamHome} />
         <Route exact path="/app/team/join" component={TeamJoin} />
+        <Route exact path="/app/team/profile" component={TeamProfile} />
         <Route exact path="/app/admin" component={Admin} />
         <Route exact path="/app">
           <Redirect to="/app/home" />

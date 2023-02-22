@@ -69,7 +69,9 @@ const NavBar: React.FC<NavBarProps> = ({
           {children}
           <div slot="end">
             <NavLink id="nav-home" text="Home" href="/app/home" />
-            <NavLink id="nav-team" text="Team" href={addr} />
+            <NavLink id="nav-team" text="Team" href={addr}>
+              <NavLink id="nav-team-profile" text="Team Profile" href="/app/team/profile"/>
+            </NavLink>
             <NavLink id="nav-profile" text="Profile" href="/app/profile">
               <NavLink id="nav-logs" text="Logs" href="/app/manualsteps" />
               <NavLink

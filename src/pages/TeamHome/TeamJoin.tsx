@@ -18,7 +18,8 @@ import {
   collection,
   doc,
   updateDoc,
-  arrayUnion
+  arrayUnion, 
+  increment
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
@@ -26,7 +27,6 @@ import { auth, FirestoreDB } from '../../firebase';
 import { eyeOff, eye } from 'ionicons/icons';
 import { useHistory } from 'react-router';
 import './TeamHome.scss';
-import { increment } from 'firebase/firestore';
 
 const TeamJoin: React.FC = () => {
   interface teamData {
@@ -81,7 +81,7 @@ const TeamJoin: React.FC = () => {
         (teamData.members.length + 1)
     }); //update the teams members, their total steps, and the new average steps
     console.log(teamNames); // just need it in here for the moment
-    history.push('/app/team');
+    history.push('/app/team/profile');
   };
 
   const toJoin = () => {
@@ -172,8 +172,7 @@ const TeamJoin: React.FC = () => {
         <>
           <IonItem>
             {' '}
-            There are no teams that can be joined currently. Please go to your
-            profile and make a team
+            There are no teams that can be joined currently. Please make a team
           </IonItem>
         </>
       );
@@ -183,10 +182,13 @@ const TeamJoin: React.FC = () => {
   async function getData() {
     const indData: Array<teamData> = []; //temp array for the teams data
     const groupNames: Array<selectFormat> = []; //need the group names to look thorugh
+    const adminRef = doc(FirestoreDB, 'admin', 'admin'); //ref the admin doc
+    const adminSnapshot = await getDoc(adminRef); //get the admin docu
+    const adminData = adminSnapshot.data(); //get data
     const querySnapshot = await getDocs(collection(FirestoreDB, 'teams'));//grab all the team documents
     querySnapshot.forEach((doc: any) => {
       console.log(doc.id, ' => ', doc.data());//get the data from the doc
-      if (doc.data().members.length <= 9) {//this 9 can/will be changed but it checks to see if there too many in the group
+      if (doc.data().members.length <= adminData.max_team_size) {//this is deteremined by the admins
         const allNames: selectFormat = {//this was to create an array if we used the selection drop down method
           text: doc.data().name,
           value: doc.data().name
