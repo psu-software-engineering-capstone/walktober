@@ -54,7 +54,16 @@ const Admin: React.FC = () => {
 
   const [userLogs, setUserLogs] = useState<UserLog[]>([]);
 
+  const history = useHistory();
+  const ctx = useContext(AuthContext);
+  const isAdmin = ctx.admin;
+
   const loadUserLogs = async () => {
+    // prevents the user from entering the admin page from the url if they are not an admin
+    if (isAdmin === false) {
+      history.push('/app');
+      return;
+    }
     const dbRef = collection(FirestoreDB, 'users');
     const dbSnap = await getDocs(dbRef);
     const userLogsData: UserLog[] = [];
@@ -72,6 +81,7 @@ const Admin: React.FC = () => {
     });
     setUserLogs(userLogsData);
   };
+
 
   const history = useHistory();
   const ctx = useContext(AuthContext);
