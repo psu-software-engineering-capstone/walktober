@@ -11,7 +11,7 @@ import {
   IonButton,
   isPlatform
 } from '@ionic/react';
-import './HealthApp.css';
+import './healthApp.css';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
 import { auth, FirestoreDB } from '../../firebase';
 import { doc, getDoc } from 'firebase/firestore';
@@ -85,7 +85,8 @@ const HealthApp: React.FC = () => {
       startDate: new Date(date.getFullYear(), date.getMonth(), 1),
       endDate: new Date(),
       unit: 'count',
-      sampleType: 'HKQuantityTypeIdentifierStepCount'
+      sampleType: 'HKQuantityTypeIdentifierStepCount',
+      ascending: true
     };
     await HealthKit.querySampleType(stepOptions)
       .then(async (data: any) => {
@@ -211,27 +212,47 @@ const HealthApp: React.FC = () => {
 
   const GFavailable = async () => {
     if (!isPlatform('android')) {
-      alert('Google Fit is only available on android');
+      alert('Google Fit is only available on android.');
       return;
     }
     await Health.isAvailable()
-      .then((data: any) => alert(JSON.stringify(data)))
+      .then((data: any) => {
+        if (!data) {
+          alert('Please install Google Fit!');
+          if (isPlatform('android')) {
+            Health.promptInstallFit()
+              .then()
+              .catch((error: any) => alert(JSON.stringify(error)));
+          }
+        }
+        else
+          alert('Compatible Health App available!');
+        return;
+      })
       .catch((error: any) => alert(JSON.stringify(error)));
   };
 
   const GFrequestAuthorization = async () => {
     if (!isPlatform('android')) {
-      alert('Google Fit is only available on android');
+      alert('Google Fit is only available on android.');
       return;
     }
     await Health.requestAuthorization(supportedTypes)
-      .then((data: any) => alert(JSON.stringify(data)))
+      .then((data: any) => {
+        if (data)
+          alert('Authorized');
+        else
+          alert('Failed to Authorize');
+        return;
+      })
       .catch((error: any) => alert(JSON.stringify(error)));
+
+    return;
   };
 
   const GFcheckAuthStatus = async () => {
     if (!isPlatform('android')) {
-      alert('Google Fit is only available on android');
+      alert('Google Fit is only available on android.');
       return;
     }
     Health.isAuthorized(supportedTypes)
@@ -241,7 +262,7 @@ const HealthApp: React.FC = () => {
 
   const GFupdateSteps = async () => {
     if (!isPlatform('android')) {
-      alert('Google Fit is only available on android');
+      alert('Google Fit is only available on android.');
       return;
     }
     const date = new Date();
@@ -347,6 +368,17 @@ const HealthApp: React.FC = () => {
       .catch((error: any) => alert(JSON.stringify(error) + 'query failed'));
   };
 
+  const GFdisconnect = async () => {
+    if (!isPlatform('android'))
+      alert('Only available on Android.');
+
+    await Health.disconnect()
+      .then((data: any) => alert(JSON.stringify(data)))
+      .catch((error: any) => alert(JSON.stringify(error)));
+    
+    return;
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -381,8 +413,11 @@ const HealthApp: React.FC = () => {
         <IonButton expand="block" onClick={GFupdateSteps}>
           Update Step Count
         </IonButton>
+        <IonButton expand="block" onClick={GFdisconnect}>
+          Disconnect
+        </IonButton>
         <h2>Fitbit</h2>
-        <IonButton expand="block">Implementing...</IonButton>
+        <IonButton expand="block">Implementing..</IonButton>
         <h2>Samsung Health</h2>
         <IonButton expand="block">Implementing...</IonButton>
       </IonContent>

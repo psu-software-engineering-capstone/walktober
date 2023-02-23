@@ -10,15 +10,14 @@ import {
   IonLabel,
   IonRouterLink,
   IonTitle,
-  IonToolbar,
   IonGrid,
   IonRow,
   IonToggle,
   IonPage
 } from '@ionic/react';
 import './stepsCalculator.css';
-import Metric from './Metric';
-import { useHistory } from 'react-router';
+import Metric from './metric';
+import NavBar from '../../components/NavBar';
 
 const StepsCalculator: React.FC = () => {
   const [metric, setMetric] = useState(false);
@@ -32,7 +31,6 @@ const StepsCalculator: React.FC = () => {
   const stepsPerMile = 2250;
   let miles: number;
   const kmtom = 0.621371;
-  const history = useHistory();
 
   function calculate(ev: Event): number {
     miles = Number((ev.target as HTMLInputElement).value);
@@ -126,9 +124,9 @@ const StepsCalculator: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
+        <NavBar>
           <IonTitle>Steps Calculator</IonTitle>
-        </IonToolbar>
+        </NavBar>
       </IonHeader>
 
       <IonContent className="ion-padding">
@@ -159,10 +157,7 @@ const StepsCalculator: React.FC = () => {
               <a>
                 <IonRouterLink
                   slot="helper"
-                  href="/app/manualsteps"
-                  onClick={() => {
-                    history.push('/app/manualsteps');
-                  }}
+                  routerLink="/app/manualsteps"
                 >
                   Return to steps logging
                 </IonRouterLink>

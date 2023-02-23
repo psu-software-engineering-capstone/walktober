@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import { auth } from '../../firebase';
-import '../Tab1.css';
+import '../old/Tab1.css';
 
 const newPassword: React.FC = () => {
   const [newPassword, setNewPassword] = useState('');
@@ -28,6 +28,11 @@ const newPassword: React.FC = () => {
   };
 
   async function changePass() {
+    if (newPassword === '' || veriPassword === '') {
+      alert('Please enter a new password');
+      console.log("New password or verifying password is empty");
+      return;
+    }
     if (newPassword == veriPassword) {
       updatePassword(auth.currentUser, newPassword)
       .then(() => {
@@ -47,7 +52,10 @@ const newPassword: React.FC = () => {
       console.log("New password and verifying password doesn't match");
     }
   }
-  
+
+  const backToProfile = () => {
+    history.push('/app/profile');
+  };
 
   return (
     <IonPage>
@@ -85,6 +93,7 @@ const newPassword: React.FC = () => {
           ></IonIcon>
         </IonItem>
         <IonButton onClick={changePass}> Submit </IonButton>
+        <IonButton onClick={backToProfile}> Back to Profile </IonButton>
       </IonContent>
     </IonPage>
   );
