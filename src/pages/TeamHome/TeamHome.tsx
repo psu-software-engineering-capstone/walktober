@@ -41,8 +41,8 @@ const TeamHome: React.FC = () => {
           </IonRow>
           <IonRow>
             <IonCol
-              size="3"
-              sizeLg="3"
+              size="6"
+              sizeLg="6"
               sizeMd="6"
               sizeSm="12"
               sizeXs="12"
@@ -51,8 +51,8 @@ const TeamHome: React.FC = () => {
               Location for team chart: <LeaderBoardChart></LeaderBoardChart>
             </IonCol>
             <IonCol
-              size="7"
-              sizeLg="7"
+              size="6"
+              sizeLg="6"
               sizeMd="6"
               sizeSm="12"
               sizeXs="12"
@@ -72,10 +72,6 @@ const TeamHome: React.FC = () => {
                 server="1068966007886069841"
                 channel="1068966009106600110"
               />
-            </IonCol>
-            <IonCol size="2" sizeLg="2" sizeMd="12">
-              Location for members status
-              {}
             </IonCol>
           </IonRow>
         </IonGrid>
