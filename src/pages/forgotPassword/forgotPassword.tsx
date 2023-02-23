@@ -22,7 +22,7 @@ import { sendPasswordResetEmail } from 'firebase/auth';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { auth } from '../../firebase';
-import './forgotpassword.css';
+import './forgotPassword.css';
 
 const ForgotPassword: React.FC = () => {
   // for routing //

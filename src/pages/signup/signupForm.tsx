@@ -18,7 +18,7 @@ import {
   IonSelectOption
 } from '@ionic/react';
 import { useState } from 'react';
-import './Signup.css';
+import './signup.css';
 import logo from '../../assets/Walktober.png';
 import { useHistory } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';

@@ -15,7 +15,7 @@ import {
 } from '@ionic/react';
 import './TeamCreation.css';
 import { useState } from 'react';
-import { auth, FirestoreDB } from '../firebase';
+import { auth, FirestoreDB } from '../../firebase';
 import {
   collection,
   doc,

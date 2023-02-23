@@ -1,4 +1,24 @@
 .box {
-  height: 500px;
+  display: flex;
+  align-items: center;
 }
 
+.spinner {
+  width: 100%;
+  margin-top: 60%;
+}
+
+.leaderboard-container {
+  padding: 10px;
+  text-align: left;
+}
+
+.button-container{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 10px;
+}
