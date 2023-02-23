@@ -46,6 +46,7 @@ const TeamProfile: React.FC = () => {
       }
     ]
   };
+
   const chartOptions = {
     indexAxis: 'y',
     maintainAspectRatio: false,
@@ -92,16 +93,17 @@ const TeamProfile: React.FC = () => {
       }
     }
   };
-  const boxAjust = () => {
-    const box = document.querySelector('.box');
-    if (box != null) {
-      box.setAttribute('style', 'height: 1000px');
-      if (chartData.labels.length > 10) {
-        const newHeight = 500 + (chartData.labels.length - 10) * 50;
-        box.setAttribute('style', 'height: ' + newHeight.toString() + 'px');
-      }
-    }
-  };
+
+  // const boxAjust = () => {
+  //   const box = document.querySelector('.box');
+  //   if (box != null) {
+  //     box.setAttribute('style', 'height: 1000px');
+  //     if (chartData.labels.length > 10) {
+  //       const newHeight = 500 + (chartData.labels.length - 10) * 50;
+  //       box.setAttribute('style', 'height: ' + newHeight.toString() + 'px');
+  //     }
+  //   }
+  // };
 
   const DisplayTeams = (teams: memberData[]): any => {
     if (teams.length > 0) {
@@ -180,7 +182,7 @@ const TeamProfile: React.FC = () => {
 
   useEffect(() => {
     getData();
-    boxAjust();
+    // boxAjust();
   }, []);
 
   return (
@@ -194,8 +196,8 @@ const TeamProfile: React.FC = () => {
         <IonCol
           className="boxSize"
           sizeSm="12"
-          sizeLg="5"
-          sizeMd="6" 
+          sizeLg="4"
+          sizeMd="6"
           sizeXs="12"
         >
           <IonContent>
@@ -205,11 +207,10 @@ const TeamProfile: React.FC = () => {
             </IonContent>
           </IonContent>
         </IonCol>
-        <IonCol sizeLg='11'>
+        <IonCol sizeLg="11">
           <IonItem>{DisplayTeams(data)}</IonItem>
         </IonCol>
       </IonRow>
-      <IonContent fullscreen></IonContent>
     </IonPage>
   );
 };
