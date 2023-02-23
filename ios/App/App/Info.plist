@@ -38,6 +38,12 @@
 	<string>Walktober wants to access your health data in order to analyze your health and best advice</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Walktober wants to access your health data in order to analyze your health and best advice</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Walktober wants to access your camera to allow for profile pictures taken from your camera</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Walktober wants to access your photo gallery to update or change your profile picture</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Walktober wants to access your photo gallery to update or change your profile picture</string>	
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

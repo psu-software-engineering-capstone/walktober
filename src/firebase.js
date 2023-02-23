@@ -5,6 +5,7 @@ import { getDatabase } from 'firebase/database';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, indexedDBLocalPersistence, initializeAuth } from 'firebase/auth';
 import { isPlatform } from '@ionic/core';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCoKmeyLCWdjWgu5gXLFJjyLi1JsveYanQ',
@@ -31,3 +32,4 @@ const app = initializeApp(firebaseConfig);
 export const RealtimeDB = getDatabase(app);
 export const FirestoreDB = getFirestore(app);
 export const auth = provideAuth();
+export const storage = getStorage();

@@ -28,10 +28,24 @@ const NavLink: React.FC<NavLinkProps> = ({ id, text, href, children = null }) =>
   const dismissPopover = (e: React.MouseEvent) => {
     // get the element under the mouse pointer
     const elem = document.elementFromPoint(e.clientX, e.clientY);
+    // get the tag (type) of the element
+    const tag = elem?.nodeName.toLowerCase();
 
-    // if the mouse is not hovering in the popover, dismiss the popover
-    if(elem?.closest('ion-popover') === null) {
-      dismiss();
+    // using instanceof doesn't work here for some reason so just check the tag
+    if(tag !== 'ion-content' && tag !== 'ion-toolbar') {
+      setTimeout(() => {
+        dismiss();
+  
+        // since the above doesn't always seem to remove popovers...
+        // get all the remaining popovers in the document and delete them
+        const popovers = document.getElementsByTagName('ion-popover');
+  
+        if(popovers.length > 0) {
+          for(let i = 0; i < popovers.length; i++) {
+            popovers[i].parentNode?.removeChild(popovers[i]);
+          }
+        }
+      }, 500); // Delay in milliseconds
     }
   };
 
@@ -51,7 +65,7 @@ const NavLink: React.FC<NavLinkProps> = ({ id, text, href, children = null }) =>
 
   if (children) {
     return (
-      <div className="nav-link-container">
+      <div className="nav-link-container" onMouseLeave={dismissPopover}>
         <IonItem id={id} routerLink={href} onMouseEnter={(e: any) => {
           present({
             event: e,
@@ -66,7 +80,7 @@ const NavLink: React.FC<NavLinkProps> = ({ id, text, href, children = null }) =>
               }
             }
           });
-        }} onMouseLeave={dismissPopover}>
+        }}>
           <span>{text}</span>
           <IonIcon icon={chevronDown} />
         </IonItem>

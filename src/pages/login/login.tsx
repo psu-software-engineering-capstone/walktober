@@ -21,7 +21,7 @@ import {
   isPlatform
 } from '@ionic/react';
 import { eye, eyeOff, logoGoogle } from 'ionicons/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   GoogleAuthProvider,
@@ -48,6 +48,11 @@ const Login: React.FC = () => {
   const [isTouched, setIsTouched] = useState(false);
   const [isValid, setIsValid] = useState<boolean>();
   const [passwordShown, setPasswordShown] = useState(false);
+
+  // sign out when rendering //
+  useEffect(() => {
+    void auth.signOut();
+  }, []);
 
   // email validation functionality //
   const validateEmail = (email: string) => {

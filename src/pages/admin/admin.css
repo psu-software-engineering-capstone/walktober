@@ -1,0 +1,76 @@
+.admin-content{
+    --ion-background-color: #4d5123;
+}
+
+.admin-col {
+    background-color: #98a140;
+    border: solid 1px #000;
+    color: #000;
+    text-align: center;
+    vertical-align: middle;
+    --ion-grid-columns: 16;
+}
+
+.invis-announcements{
+    border: solid 0px #fff;
+    background-color: #98a140;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.header-col{
+    font-weight: bolder;
+}
+
+.full-grid{
+    --ion-grid-width: 100%;
+}
+
+.grid-title{
+    color: #fff;
+    font-weight: bold;
+}
+
+.admin-button{
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    --background: #e17e26;
+    font-weight: bold;
+}
+
+.modal-button{
+    --background: #e17e26;
+    position: fixed;
+    padding-left: 20px;
+    padding-right: 20px;
+    left: 0;
+    bottom: 10px;
+    right: 0;
+}
+
+.invis-grid-col{
+    border: solid 0px #fff;
+    background-color: #4d5123;
+}
+
+.header-col{
+    background-color: #98a140;
+}
+
+.modal-header{
+    --ion-background-color: #4d5123;
+}
+
+.admin-close-modal{
+    color: #fff;
+}
+
+.modal-title{
+    color: #fff;
+}
+
+.modal-content{
+    --ion-background-color: #98a140;
+}

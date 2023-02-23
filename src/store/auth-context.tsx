@@ -4,12 +4,13 @@ import { doc, getDoc } from 'firebase/firestore';
 import { createContext, SetStateAction, useContext, useEffect, useState } from 'react';
 import { auth, FirestoreDB } from '../firebase';
 
-const AuthContext = createContext({ user: null, admin: false });
+const AuthContext = createContext({ user: null, team: '', admin: false });
 
 export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) => {
   const [user, setUser] = useState(null);
+  const [team, setTeam] = useState('');
   const [admin, setAdmin] = useState(false);
   const [complete, setComplete] = useState(false);
 
@@ -31,12 +32,17 @@ export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) =
       const userData = dbSnap.data();
       if (userData.admin === true) {
         setAdmin(true);
+      } else {
+        setAdmin(false);
       }
+      setTeam(userData.team);
+    } else {
+      setAdmin(false);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user, admin }}>
+    <AuthContext.Provider value={{ user, team, admin }}>
       {complete && props.children}
     </AuthContext.Provider>
   );

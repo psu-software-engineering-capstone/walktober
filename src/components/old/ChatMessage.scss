@@ -9,12 +9,12 @@ $img-size: 36px + ($elem-margin * 2);
 }
 
 .chat-message {
-    width: 75%;
-    grid-column: 2;
+  width: 75%;
+  grid-column: 2;
 
-    &:not(.chat-message-sent) {
-        background-color: var(--ion-color-light-tint);
-    }
+  &:not(.chat-message-sent) {
+    background-color: var(--ion-color-light-tint);
+  }
 
     ion-card {
       margin: 0;
@@ -28,18 +28,18 @@ $img-size: 36px + ($elem-margin * 2);
         align-items: baseline;
     }
 
-    ion-card-title {
-        font-size: 0.9em;
-        margin-right: $elem-margin;
-    }
+  ion-card-title {
+    font-size: 0.9em;
+    margin-right: $elem-margin;
+  }
 
-    ion-card-subtitle {
-        font-size: 0.8em;
-    }
+  ion-card-subtitle {
+    font-size: 0.8em;
+  }
 }
 
 .chat-message-sent {
-    margin-left: calc(25% - 10px);
+  margin-left: calc(25% - 10px);
 }
 
 ion-img {
@@ -49,7 +49,7 @@ ion-img {
     max-height: $img-size;
     max-width: $img-size;
 
-    &::part(image) {
-        border-radius: 50%;
-    }
+  &::part(image) {
+    border-radius: 50%;
+  }
 }

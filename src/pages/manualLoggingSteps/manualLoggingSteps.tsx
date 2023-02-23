@@ -65,7 +65,7 @@ const ManualSteps: React.FC = () => {
   const getRecordsFromDB = async () => {
     if (ctx.user === null) {
       alert('You are not logged in!');
-      history.replace('/login');
+      history.push('/login');
       return;
     }
     let stepsByDate = [];
@@ -179,16 +179,15 @@ const ManualSteps: React.FC = () => {
                 setManualSteps(Number(event.target.value));
               }}
             ></IonInput>
+          </IonItem>
+          <a>
             <IonRouterLink
               slot="helper"
-              href="/app/stepscalc"
-              onClick={() => {
-                history.push('/app/stepscalc');
-              }}
+              routerLink="/app/stepscalc"
             >
               Need help calculating steps?
             </IonRouterLink>
-          </IonItem>
+          </a>
           <IonItem>
             <IonLabel position="floating"></IonLabel>
             <IonInput
