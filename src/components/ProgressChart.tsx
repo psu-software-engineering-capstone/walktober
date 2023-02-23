@@ -20,6 +20,33 @@ const ProgressChart: React.FC<{ data: Array<StepLog> }> = ({ data }) => {
         {currentSteps.toString() + '/' + goalSteps.toString() + ' steps'}
       </IonLabel>
       <Bar
+        options={{
+          scales: {
+            y: {
+              grid: {
+                drawBorder: false,
+                color: '#FFFFFF'
+              },
+              ticks: {
+                beginAtZero: true,
+                color: 'white',
+                fontSize: 12
+              }
+            },
+            x: {
+              grid: {
+                drawBorder: false,
+                color: '#FFFFFF'
+              },
+              ticks: {
+                beginAtZero: true,
+                color: 'white',
+                fontSize: 12
+              }
+            }
+          },
+          color: 'white'
+        }}
         data={{
           labels: data.map((item) => item.date),
           datasets: [

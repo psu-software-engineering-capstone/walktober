@@ -12,7 +12,7 @@ import {
   IonIcon,
   IonGrid,
   IonRow,
-  IonCol,
+  IonCol
   // useIonToast
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
