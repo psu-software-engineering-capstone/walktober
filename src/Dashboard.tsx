@@ -8,7 +8,14 @@ import {
   IonTabs,
   isPlatform
 } from '@ionic/react';
-import { ellipse, square, triangle } from 'ionicons/icons';
+import {
+  home,
+  person,
+  footsteps,
+  fitness,
+  people,
+  construct
+} from 'ionicons/icons';
 
 /* Pages */
 import HomePage from './pages/homePage/homePage';
@@ -29,9 +36,12 @@ import './theme/app.scss';
 import { auth, FirestoreDB } from './firebase';
 import { getDoc } from 'firebase/firestore';
 import { doc } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import AuthContext from './store/auth-context';
 
 const Dashboard: React.FC = () => {
+  const ctx = useContext(AuthContext);
+  const isAdmin = ctx.admin;
   const [addr, setAddr] = useState('');
 
   const tabsVisible = isPlatform('android') || isPlatform('ios');
@@ -74,25 +84,31 @@ const Dashboard: React.FC = () => {
       </IonRouterOutlet>
       <IonTabBar slot="bottom" className={tabsVisible ? '' : 'hidden'}>
         <IonTabButton tab="home" href="/app/home">
-          <IonIcon icon={triangle} />
+          <IonIcon icon={home} />
           <IonLabel>Home</IonLabel>
         </IonTabButton>
         <IonTabButton tab="profile" href="/app/profile">
-          <IonIcon icon={ellipse} />
+          <IonIcon icon={person} />
           <IonLabel>Profile</IonLabel>
         </IonTabButton>
         <IonTabButton tab="manualsteps" href="/app/manualsteps">
-          <IonIcon icon={square} />
+          <IonIcon icon={footsteps} />
           <IonLabel>Manual Steps</IonLabel>
         </IonTabButton>
         <IonTabButton tab="healthapp" href="/app/healthapp">
-          <IonIcon icon={triangle} />
+          <IonIcon icon={fitness} />
           <IonLabel>Health App</IonLabel>
         </IonTabButton>
         <IonTabButton tab="team" href={addr}>
-          <IonIcon icon={square} />
+          <IonIcon icon={people} />
           <IonLabel>Team</IonLabel>
         </IonTabButton>
+        {isAdmin && (
+          <IonTabButton tab="admin" href="/app/admin">
+            <IonIcon icon={construct} />
+            <IonLabel>Admin</IonLabel>
+          </IonTabButton>
+        )}
       </IonTabBar>
     </IonTabs>
   );
