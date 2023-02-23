@@ -150,7 +150,7 @@ const HomePage: React.FC = () => {
               className="personalProgress"
             >
               {pastSevenDaysSteps.length > 1 ? (
-                <ProgressChart data={pastSevenDaysSteps} />
+                <ProgressChart data={pastSevenDaysSteps.reverse()} />
               ) : (
                 ' '
               )}
