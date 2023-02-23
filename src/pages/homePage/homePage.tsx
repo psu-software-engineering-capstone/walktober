@@ -13,23 +13,23 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonInput,
-  IonText,
-  IonItem
+  // useIonToast
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
-import './HomePage.css';
+import './homePage.css';
 import ProgressChart from '../../components/ProgressChart';
 import AuthContext from '../../store/auth-context';
 import { getDoc } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
 import { doc } from 'firebase/firestore';
 //import ExitSurveyModal from '../exitQuestions/exitQuestionsModal';
+// import { Health } from '@awesome-cordova-plugins/health';
+// import { updateDoc } from 'firebase/firestore';
 
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
-import { library } from 'ionicons/icons';
+// import { library } from 'ionicons/icons';
 interface badgeOutline {
   name: string;
 }
@@ -44,13 +44,22 @@ const HomePage: React.FC = () => {
   const history = useHistory();
   const [badges, setBadges] = useState(Array<badgeOutline>);
   const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
-
+  // const [present] = useIonToast();
+  // const supportedTypes = [
+  //   'steps',
+  //   'distance', // Read and write permissions
+  //   {
+  //     read: ['steps'], // Read only permission
+  //     write: ['height', 'weight'] // Write only permission
+  //   }
+  // ];
   const ctx = useContext(AuthContext);
 
   useEffect(() => {
     if (ctx.user) {
       console.log('get past seven days steps');
       getPastSevenDaysSteps();
+      //GFrequestAuthorization();
     }
   }, [ctx.user]);
 
@@ -76,13 +85,13 @@ const HomePage: React.FC = () => {
     setPastSevenDaysSteps(pastSevenDays);
   };
 
-  const stepUpdateHandler = (event: any): void => {
-    const newValue = document.querySelector('#stepsUpdate') as HTMLInputElement;
-    const newSteps = Number(newValue.value);
-    if (newSteps > 0) {
-      setSteps(newSteps);
-    }
-  };
+  // const stepUpdateHandler = (event: any): void => {
+  //   const newValue = document.querySelector('#stepsUpdate') as HTMLInputElement;
+  //   const newSteps = Number(newValue.value);
+  //   if (newSteps > 0) {
+  //     setSteps(newSteps);
+  //   }
+  // };
 
   const moveToManualSteps = () => {
     history.push('/app/manualsteps');
@@ -98,7 +107,22 @@ const HomePage: React.FC = () => {
       <IonContent fullscreen={true} className="ion-padding testing">
         <IonGrid>
           <IonRow>
-            <IonCol size="9" sizeSm="6" sizeXs="12" sizeMd="6" sizeLg="9">
+            <IonCol
+              sizeSm="6"
+              sizeXs="12"
+              sizeMd="6"
+              sizeLg="4"
+              className="leaderBoard"
+            >
+              <LeaderBoardChart></LeaderBoardChart>
+            </IonCol>
+            <IonCol
+              sizeSm="6"
+              sizeXs="12"
+              sizeMd="6"
+              sizeLg="4"
+              className="todaysSteps"
+            >
               <IonLabel className="">
                 Todays Steps:{' '}
                 <div className="localStepsUpdater">{steps.toString()}</div>
@@ -119,47 +143,26 @@ const HomePage: React.FC = () => {
               to see previous logs
             </IonCol>
             <IonCol
-              size="3"
               sizeSm="6"
               sizeXs="12"
               sizeMd="6"
-              sizeLg="3"
-            ></IonCol>
-            <IonCol
-              size="9"
-              sizeSm="6"
-              sizeXs="12"
-              sizeMd="6"
-              sizeLg="9"
-            ></IonCol>
-            <IonCol
-              size="3"
-              sizeSm="6"
-              sizeXs="12"
-              sizeMd="6"
-              sizeLg="3"
-            ></IonCol>
-          </IonRow>
-        </IonGrid>
-
-        {/* below is only for development testing purposes */}
-        <IonGrid>
-          <IonRow>
-            <IonCol
-              className="boxSize"
-              sizeSm="12"
               sizeLg="4"
-              sizeMd="6"
-              sizeXs="12"
+              className="personalProgress"
             >
-              <LeaderBoardChart></LeaderBoardChart>
+              {pastSevenDaysSteps.length > 1 ? (
+                <ProgressChart data={pastSevenDaysSteps} />
+              ) : (
+                ' '
+              )}
             </IonCol>
             <IonCol
-              className="boxSize"
-              sizeSm="12"
-              sizeLg="4"
-              sizeMd="6"
+              size="3"
+              sizeSm="6"
               sizeXs="12"
+              sizeMd="6"
+              sizeLg="8"
+              offsetLg="4"
+              className="box-test"
             >
               <WidgetBot
                 className="discord-widget"
@@ -167,45 +170,20 @@ const HomePage: React.FC = () => {
                 channel="1068966009106600110"
               />
             </IonCol>
-            <IonCol sizeSm="12" sizeLg="4" sizeMd="6" sizeXs="12">
-              <IonGrid>
-                <IonCol className="boxSize">Location for announcements</IonCol>
-                <br />
-                <IonCol className="boxSize">
-                  {pastSevenDaysSteps.length > 1 ? (
-                    <ProgressChart data={pastSevenDaysSteps} />
-                  ) : (
-                    ' '
-                  )}
-                  {
-                    /* {pastSevenDaysSteps.length > 1 ? (
-                    <ProgressChart data={pastSevenDaysSteps} />
-                  ) : (
-                    ' '
-                  )} */
-                    // pastSevenDaysSteps.map((item) => (
-                    //   <IonItem key={Math.random()}>
-                    //     {item.date + ' ' + item.steps}
-                    //   </IonItem>
-                    // ))
-                  }
-                </IonCol>
-              </IonGrid>
-            </IonCol>
           </IonRow>
-          <IonRow>
-            <IonCol>
-              <IonLabel>
-                Badges Acquired:
-                <div>
-                  {badges.map((badge) => (
-                    <IonIcon name={badge.name} key={Math.random()}></IonIcon>
-                  ))}
-                </div>
-              </IonLabel>
-            </IonCol>
-          </IonRow>
+
+          <IonCol sizeMd="12">
+            <IonLabel>
+              Badges Acquired:
+              <div>
+                {badges.map((badge) => (
+                  <IonIcon name={badge.name} key={Math.random()}></IonIcon>
+                ))}
+              </div>
+            </IonLabel>
+          </IonCol>
         </IonGrid>
+        {/* below is only for development testing purposes */}
       </IonContent>
     </IonPage>
   );

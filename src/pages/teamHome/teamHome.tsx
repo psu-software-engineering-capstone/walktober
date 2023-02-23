@@ -11,7 +11,7 @@ import WidgetBot from '@widgetbot/react-embed';
 import { useState } from 'react';
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
 import NavBar from '../../components/NavBar';
-import './TeamHome.scss';
+import './teamHome.scss';
 
 const TeamHome: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
