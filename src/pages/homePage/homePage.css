@@ -22,7 +22,7 @@
 
 .boxSize {
   width: 500px;
-  height: 600px;
+  height: 80vh;
 }
 
 .testing {
@@ -44,4 +44,42 @@
   padding-top: 0.1em;
   text-align: center;
   padding-bottom: 0.1em;
+}
+
+.leaderBoard {
+  width: 100%;
+  height: 80vh;
+}
+
+.box-test {
+  height: 80vh;
+  margin-top: -60vh;
+}
+
+.personalProgress {
+  width: 100%;
+  height: 15vh;
+}
+
+.todaysSteps {
+  padding-left: 1em;
+}
+
+@media (max-width: 991px) {
+  .box-test {
+    margin-top: -75vh;
+  }
+  .personalProgress {
+    height: auto;
+  }
+}
+
+@media (max-width: 575px) {
+  .box-test {
+    margin-top: 0vh;
+    height: 80vh;
+  }
+  .personalProgress {
+    height: auto;
+  }
 }

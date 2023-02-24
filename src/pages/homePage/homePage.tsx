@@ -12,7 +12,7 @@ import {
   IonIcon,
   IonGrid,
   IonRow,
-  IonCol,
+  IonCol
   // useIonToast
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
@@ -63,25 +63,62 @@ const HomePage: React.FC = () => {
     }
   }, [ctx.user]);
 
+  // const getPastSevenDaysSteps = async () => {
+  //   if (ctx.user === null) {
+  //     alert('You are not logged in!');
+  //     history.push('/login');
+  //     return;
+  //   }
+  //   const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
+  //   const dbSnap = await getDoc(dbRef);
+  //   const userData = dbSnap.data();
+  //   const stepsByDate = userData.stepsByDate;
+  //   const today = new Date();
+  //   const pastSevenDays = [];
+  //   for (let i = 0; i < stepsByDate.length; i++) {
+  //     const date = new Date(stepsByDate[i].date);
+  //     const diff = (today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
+  //     if (diff < 8 && diff >= 0) {
+  //       pastSevenDays.push(stepsByDate[i]);
+  //     }
+  //   }
+  //   setPastSevenDaysSteps(pastSevenDays);
+  // };
+
+  // get past seven days of steps from firestore
+  // even though the user does not have seven days of steps
+  // the chart will still render with seven days of steps
+  // each day will have 0 steps
   const getPastSevenDaysSteps = async () => {
     if (ctx.user === null) {
       alert('You are not logged in!');
       history.push('/login');
       return;
     }
+  
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     const dbSnap = await getDoc(dbRef);
     const userData = dbSnap.data();
     const stepsByDate = userData.stepsByDate;
-    const today = new Date();
-    const pastSevenDays = [];
-    for (let i = 0; i < stepsByDate.length; i++) {
-      const date = new Date(stepsByDate[i].date);
-      const diff = (today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
-      if (diff < 8 && diff >= 0) {
-        pastSevenDays.push(stepsByDate[i]);
-      }
+  
+    // Create an array of the last seven dates (including today)
+    const pastSevenDaysDates = [];
+    for (let i = 1; i < 8; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      pastSevenDaysDates.push(date.toISOString().slice(0, 10));
     }
+  
+    // Populate pastSevenDays with step count or 0 for each date
+    const pastSevenDays = pastSevenDaysDates.map(date => {
+      const stepLog = stepsByDate.find((stepLog: StepLog) => stepLog.date === date);
+      if (stepLog) {
+        return stepLog;
+      } else {
+        return { date: date, steps: 0 };
+      }
+    });
+  
     setPastSevenDaysSteps(pastSevenDays);
   };
 
@@ -107,7 +144,22 @@ const HomePage: React.FC = () => {
       <IonContent fullscreen={true} className="ion-padding testing">
         <IonGrid>
           <IonRow>
-            <IonCol size="9" sizeSm="6" sizeXs="12" sizeMd="6" sizeLg="9">
+            <IonCol
+              sizeSm="6"
+              sizeXs="12"
+              sizeMd="6"
+              sizeLg="4"
+              className="leaderBoard"
+            >
+              <LeaderBoardChart></LeaderBoardChart>
+            </IonCol>
+            <IonCol
+              sizeSm="6"
+              sizeXs="12"
+              sizeMd="6"
+              sizeLg="4"
+              className="todaysSteps"
+            >
               <IonLabel className="">
                 Todays Steps:{' '}
                 <div className="localStepsUpdater">{steps.toString()}</div>
@@ -128,47 +180,26 @@ const HomePage: React.FC = () => {
               to see previous logs
             </IonCol>
             <IonCol
-              size="3"
               sizeSm="6"
               sizeXs="12"
               sizeMd="6"
-              sizeLg="3"
-            ></IonCol>
-            <IonCol
-              size="9"
-              sizeSm="6"
-              sizeXs="12"
-              sizeMd="6"
-              sizeLg="9"
-            ></IonCol>
-            <IonCol
-              size="3"
-              sizeSm="6"
-              sizeXs="12"
-              sizeMd="6"
-              sizeLg="3"
-            ></IonCol>
-          </IonRow>
-        </IonGrid>
-
-        {/* below is only for development testing purposes */}
-        <IonGrid>
-          <IonRow>
-            <IonCol
-              className="boxSize"
-              sizeSm="12"
               sizeLg="4"
-              sizeMd="6"
-              sizeXs="12"
+              className="personalProgress"
             >
-              <LeaderBoardChart></LeaderBoardChart>
+              {pastSevenDaysSteps.length > 1 ? (
+                <ProgressChart data={pastSevenDaysSteps.reverse()} />
+              ) : (
+                ' '
+              )}
             </IonCol>
             <IonCol
-              className="boxSize"
-              sizeSm="12"
-              sizeLg="4"
-              sizeMd="6"
+              size="3"
+              sizeSm="6"
               sizeXs="12"
+              sizeMd="6"
+              sizeLg="8"
+              offsetLg="4"
+              className="box-test"
             >
               <WidgetBot
                 className="discord-widget"
@@ -176,45 +207,20 @@ const HomePage: React.FC = () => {
                 channel="1068966009106600110"
               />
             </IonCol>
-            <IonCol sizeSm="12" sizeLg="4" sizeMd="6" sizeXs="12">
-              <IonGrid>
-                <IonCol className="boxSize">Location for announcements</IonCol>
-                <br />
-                <IonCol className="boxSize">
-                  {pastSevenDaysSteps.length > 1 ? (
-                    <ProgressChart data={pastSevenDaysSteps} />
-                  ) : (
-                    ' '
-                  )}
-                  {
-                    /* {pastSevenDaysSteps.length > 1 ? (
-                    <ProgressChart data={pastSevenDaysSteps} />
-                  ) : (
-                    ' '
-                  )} */
-                    // pastSevenDaysSteps.map((item) => (
-                    //   <IonItem key={Math.random()}>
-                    //     {item.date + ' ' + item.steps}
-                    //   </IonItem>
-                    // ))
-                  }
-                </IonCol>
-              </IonGrid>
-            </IonCol>
           </IonRow>
-          <IonRow>
-            <IonCol>
-              <IonLabel>
-                Badges Acquired:
-                <div>
-                  {badges.map((badge) => (
-                    <IonIcon name={badge.name} key={Math.random()}></IonIcon>
-                  ))}
-                </div>
-              </IonLabel>
-            </IonCol>
-          </IonRow>
+
+          <IonCol sizeMd="12">
+            <IonLabel>
+              Badges Acquired:
+              <div>
+                {badges.map((badge) => (
+                  <IonIcon name={badge.name} key={Math.random()}></IonIcon>
+                ))}
+              </div>
+            </IonLabel>
+          </IonCol>
         </IonGrid>
+        {/* below is only for development testing purposes */}
       </IonContent>
     </IonPage>
   );
