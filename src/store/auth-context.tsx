@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { onSnapshot } from 'firebase/firestore';
 import { doc, getDoc } from 'firebase/firestore';
 import { createContext, SetStateAction, useContext, useEffect, useState } from 'react';
 import { auth, FirestoreDB } from '../firebase';
@@ -14,6 +15,16 @@ export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) =
   const [admin, setAdmin] = useState(false);
   const [complete, setComplete] = useState(false);
 
+  // update team context whenever there is an update in firestore database
+  useEffect(() => {
+    if (auth.currentUser !== null) {
+      const unsub = onSnapshot(doc(FirestoreDB, "users", auth.currentUser.email as string), (doc: any) => {
+        setTeam(doc.data().team);
+      });
+      return () => unsub();
+    }
+  }, [auth.currentUser]);
+  
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(
       async (res: SetStateAction<null>) => {
