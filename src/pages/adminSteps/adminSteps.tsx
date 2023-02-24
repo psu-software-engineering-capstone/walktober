@@ -43,7 +43,7 @@ const AdminSteps: React.FC<{ name: string }> = ({ name }: Props) => {
 
   const ctx = useContext(AuthContext);
 
-  const [logsName, setLogsName] = useState(name);
+  const logsName = name;
   const [manualDate, setManualDate] = useState('');
   const [manualSteps, setManualSteps] = useState(0);
   const [stepLogs, setStepLogs] = useState<StepLog[]>([]);
