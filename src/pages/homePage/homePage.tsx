@@ -103,11 +103,10 @@ const HomePage: React.FC = () => {
   
     // Create an array of the last seven dates (including today)
     const pastSevenDaysDates = [];
-    for (let i = 0; i < 7; i++) {
+    for (let i = 1; i < 8; i++) {
       const date = new Date();
       date.setDate(date.getDate() - i);
       pastSevenDaysDates.push(date.toISOString().slice(0, 10));
-      console.log(date.toDateString());
     }
   
     // Populate pastSevenDays with step count or 0 for each date
