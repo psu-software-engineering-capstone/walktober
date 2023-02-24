@@ -15,6 +15,7 @@ import React, { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
 import { auth, FirestoreDB, storage } from '../../firebase';
 import { Chart as ChartJS, registerables } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Bar } from 'react-chartjs-2';
 import { useHistory } from 'react-router';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -35,6 +36,7 @@ const TeamProfile: React.FC = () => {
   const [groupName, setGroup] = useState('');
   const [profilePic, setProfilePic] = useState('');
   const [teamReference, setTeamRef] = useState('');
+  const [leadStat, setLeader] = useState(false);
   const [photo, setPhoto] = useState<any>(null);
   const history = useHistory();
 
@@ -42,15 +44,13 @@ const TeamProfile: React.FC = () => {
     /*Sorts the data of all users by the amount of steps taken. Labels formed from the names
      * of the user, and the bars are the number of steps the user took
      */
-    labels: data
-      .sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
-      .map((row) => row.name),
+    labels: data.map((row) => row.name),
     datasets: [
       {
         label: 'Steps',
         data: data
-          .sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
-          .map((col) => col.totalStep)
+          .map((col) => col.totalStep),
+        image: data.map((col) => (col.profile_pic ? col.profile_pic : null))
       }
     ]
   };
@@ -60,9 +60,38 @@ const TeamProfile: React.FC = () => {
     maintainAspectRatio: false,
     responive: true,
     scaleShowValues: true,
-    layout: {},
     elements: {
-      borderWidth: 2
+      borderWidth: 1
+    },
+    layout: {
+      padding: {
+        left: 50,
+        right: 10
+      }
+    },
+    plugins: {
+      legend: {
+        display: false
+      },
+      datalabels: {
+        color: 'grey',
+        labels: {
+          title: {
+            font: {
+              weight: 'bold'
+            }
+          }
+        },
+        anchor: 'end',
+        align: 0,
+        formatter: function (value: number) {
+          if (value != null) {
+            if (value < 10000) return value;
+            if (value >= 455000) return 465 + 'k';
+            return Math.round(value / 1000) + 'k';
+          }
+        }
+      }
     },
     scales: {
       x: {
@@ -78,8 +107,7 @@ const TeamProfile: React.FC = () => {
         },
         ticks: {
           autoSkip: false,
-          display: false,
-          stepSize: 500
+          display: false
         }
       },
       y: {
@@ -96,22 +124,52 @@ const TeamProfile: React.FC = () => {
         },
         ticks: {
           autoSkip: false,
-          align: 'center'
+          align: 'center',
+          font: {
+            size: 15
+          }
         }
       }
     }
   };
 
-  // const boxAjust = () => {
-  //   const box = document.querySelector('.box');
-  //   if (box != null) {
-  //     box.setAttribute('style', 'height: 1000px');
-  //     if (chartData.labels.length > 10) {
-  //       const newHeight = 500 + (chartData.labels.length - 10) * 50;
-  //       box.setAttribute('style', 'height: ' + newHeight.toString() + 'px');
-  //     }
-  //   }
-  // };
+  const imgItems = {
+    id: 'imgItems',
+    beforeDatasetsDraw(chart: any) {
+      const {
+        ctx,
+        data,
+        scales: { y }
+      } = chart;
+
+      ctx.save();
+      const imgSize =
+        chartOptions.layout.padding.left - chartOptions.layout.padding.right;
+
+      data.datasets[0].image.forEach((imageLink: string, index: number) => {
+        const profilePic = new Image();
+        profilePic.src = imageLink;
+        ctx.drawImage(
+          profilePic,
+          0,
+          y.getPixelForValue(index) - imgSize / 2,
+          imgSize,
+          imgSize
+        );
+      });
+    }
+  };
+
+  const boxAjust = (labelLength: number) => {
+    const box = document.querySelector('.box');
+    if (box != null) {
+      box.setAttribute('style', 'height: 500px');
+      if (labelLength > 10) {
+        const newHeight = 600 + (labelLength - 10) * 50;
+        box.setAttribute('style', 'height: ' + newHeight.toString() + 'px');
+      }
+    }
+  };
 
   const DisplayTeams = (teams: memberData[]): any => {
     if (teams.length > 0) {
@@ -169,6 +227,7 @@ const TeamProfile: React.FC = () => {
       history.push('/app/team/join');
     }
     setGroup(teamName);
+    setLeader(userData.team_leader);
     const teamRef = doc(FirestoreDB, 'teams', teamName); //reference team document
     setTeamRef(teamRef);
     const teamSnapshot = await getDoc(teamRef); //grab all the team document
@@ -188,7 +247,8 @@ const TeamProfile: React.FC = () => {
       groupData.push(tempMember); //send to array
     }
     console.log(groupData);
-    setMemDat(groupData); //set variable to the contents of the array
+    setMemDat(groupData.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))); //set variable to the contents of the array
+    boxAjust(groupData.length);
   }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -211,9 +271,29 @@ const TeamProfile: React.FC = () => {
       });
   };
 
+  function changePicture() {
+    if(leadStat === true){
+      return(
+        <>
+        <IonItem>
+        <input
+          type="file"
+          id="img"
+          name="img"
+          accept="image/*"
+          onChange={handleImageChange}
+        />
+      </IonItem>
+      <IonItem>
+        <IonButton onClick={handleSubmit}>Change Team Picture</IonButton>
+      </IonItem>
+      </>
+      );
+    }
+  }
+
   useEffect(() => {
     getData();
-    // boxAjust();
   }, []);
 
   return (
@@ -234,7 +314,7 @@ const TeamProfile: React.FC = () => {
           <IonContent>
             <IonHeader> Team Leaderboard </IonHeader>
             <IonContent class="box">
-              <Bar data={chartData} options={chartOptions}></Bar>
+              <Bar data={chartData} options={chartOptions} plugins={[imgItems, ChartDataLabels]}></Bar>
             </IonContent>
           </IonContent>
         </IonCol>
@@ -244,20 +324,11 @@ const TeamProfile: React.FC = () => {
               className="profile_pic"
               src={profilePic}
               alt="Profile picture for the team the user is a part of"
-            ></IonImg>
+            > </IonImg> 
           </IonItem>
-          <IonItem>
-            <input
-              type="file"
-              id="img"
-              name="img"
-              accept="image/*"
-              onChange={handleImageChange}
-            />
-          </IonItem>
-          <IonItem>
-            <IonButton onClick={handleSubmit}>Change Team Picture</IonButton>
-          </IonItem>
+          <IonItem> {groupName} Profile Picture </IonItem>
+          <IonItem> {changePicture()} </IonItem>
+
           <IonItem>{DisplayTeams(data)}</IonItem>
         </IonCol>
       </IonRow>
