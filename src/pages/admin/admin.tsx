@@ -134,8 +134,9 @@ const Admin: React.FC = () => {
         members: '',
         status: 0,
         password: '',
+        profile_pic: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
         team_size: 0, 
-        totalSteps: 0
+        totalStep: 0
       })
       .then(() => {
         alert('Team Created!');
