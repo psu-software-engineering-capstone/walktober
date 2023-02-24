@@ -38,6 +38,7 @@ import { getDoc } from 'firebase/firestore';
 import { doc } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from './store/auth-context';
+import AdminSteps from './pages/adminSteps/adminSteps';
 
 const Dashboard: React.FC = () => {
   const ctx = useContext(AuthContext);
@@ -78,6 +79,7 @@ const Dashboard: React.FC = () => {
         <Route exact path="/app/team" component={TeamHome} />
         <Route exact path="/app/team/join" component={TeamJoin} />
         <Route exact path="/app/admin" component={Admin} />
+        <Route exact path="/app/adminSteps" component={AdminSteps} />
         <Route exact path="/app">
           <Redirect to="/app/home" />
         </Route>
