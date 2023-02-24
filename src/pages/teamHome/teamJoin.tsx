@@ -85,7 +85,6 @@ const TeamJoin: React.FC = () => {
       await updateDoc(currentUserRef, {
         team: joinTeam
       });
-      console.log('not');
     } else {
       await updateDoc(teamRef, {
         members: arrayUnion(auth.currentUser.email),
@@ -99,10 +98,9 @@ const TeamJoin: React.FC = () => {
         team: joinTeam,
         team_leader: true
       });
-      console.log('Solo');
     }
     console.log(teamNames); // just need it in here for the moment
-    history.push('/app/team/profile');
+    history.push('/app/team');
   };
 
   const toJoin = () => {
