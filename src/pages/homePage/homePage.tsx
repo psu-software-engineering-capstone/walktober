@@ -12,7 +12,7 @@ import {
   IonIcon,
   IonGrid,
   IonRow,
-  IonCol,
+  IonCol
   // useIonToast
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
@@ -150,7 +150,7 @@ const HomePage: React.FC = () => {
               className="personalProgress"
             >
               {pastSevenDaysSteps.length > 1 ? (
-                <ProgressChart data={pastSevenDaysSteps} />
+                <ProgressChart data={pastSevenDaysSteps.reverse()} />
               ) : (
                 ' '
               )}
