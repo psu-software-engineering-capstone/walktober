@@ -28,9 +28,9 @@ export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) =
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(
       async (res: SetStateAction<null>) => {
-        res ? setUser(res) : setUser(null);
-        await getUserInfo();
-        setComplete(true);
+        res ? setUser(res) : setUser(null); // if user is logged in, set user to the user object, otherwise set user to null
+        await getUserInfo(); // get user info from firestore database
+        setComplete(true); // set complete to true to render the children
       }
     );
     return () => unsubscribe();
