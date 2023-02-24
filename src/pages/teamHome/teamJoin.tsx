@@ -18,7 +18,7 @@ import {
   collection,
   doc,
   updateDoc,
-  arrayUnion, 
+  arrayUnion,
   increment
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
@@ -73,13 +73,34 @@ const TeamJoin: React.FC = () => {
     const teamRef = doc(FirestoreDB, 'teams', joinTeam); //make a reference to the team document
     const teamSnap = await getDoc(teamRef); //get team document
     const teamData = teamSnap.data(); // get team data
-    await updateDoc(teamRef, {
-      members: arrayUnion(auth.currentUser.email),
-      totalStep: increment(userData.totalStep),
-      avg_steps:
-        (teamData.totalStep + userData.totalStep) /
-        (teamData.members.length + 1)
-    }); //update the teams members, their total steps, and the new average steps
+    console.log(teamData.members.lenth);
+    if (teamData.members.legnth >= 1) {
+      await updateDoc(teamRef, {
+        members: arrayUnion(auth.currentUser.email),
+        totalStep: increment(userData.totalStep),
+        avg_steps:
+          (teamData.totalStep + userData.totalStep) /
+          (teamData.members.length + 1)
+      }); //update the teams members, their total steps, and the new average steps
+      await updateDoc(currentUserRef, {
+        team: joinTeam
+      });
+      console.log('not');
+    } else {
+      await updateDoc(teamRef, {
+        members: arrayUnion(auth.currentUser.email),
+        totalStep: increment(userData.totalStep),
+        avg_steps:
+          (teamData.totalStep + userData.totalStep) /
+          (teamData.members.length + 1),
+        leader: userData.email
+      }); //update the teams members, their total steps, and the new average steps
+      await updateDoc(currentUserRef, {
+        team: joinTeam,
+        team_leader: true
+      });
+      console.log('Solo');
+    }
     console.log(teamNames); // just need it in here for the moment
     history.push('/app/team/profile');
   };
@@ -100,15 +121,17 @@ const TeamJoin: React.FC = () => {
               'A password needs to be entered as this team is private. Please enter the password and try again.'
             );
           } else if (allTeams[i].password === teamPass) {
-            joined();//we can join them
+            joined(); //we can join them
             return;
-          } else {//incorrect password
+          } else {
+            //incorrect password
             alert(
               'The password entered does not match the password for the team. Please try again'
             );
             return;
           }
-        } else {//public team aka no password required
+        } else {
+          //public team aka no password required
           joined();
           return;
         }
@@ -185,16 +208,19 @@ const TeamJoin: React.FC = () => {
     const adminRef = doc(FirestoreDB, 'admin', 'admin'); //ref the admin doc
     const adminSnapshot = await getDoc(adminRef); //get the admin docu
     const adminData = adminSnapshot.data(); //get data
-    const querySnapshot = await getDocs(collection(FirestoreDB, 'teams'));//grab all the team documents
+    const querySnapshot = await getDocs(collection(FirestoreDB, 'teams')); //grab all the team documents
     querySnapshot.forEach((doc: any) => {
-      console.log(doc.id, ' => ', doc.data());//get the data from the doc
-      if (doc.data().members.length <= adminData.max_team_size) {//this is deteremined by the admins
-        const allNames: selectFormat = {//this was to create an array if we used the selection drop down method
+      console.log(doc.id, ' => ', doc.data()); //get the data from the doc
+      if (doc.data().members.length <= adminData.max_team_size) {
+        //this is deteremined by the admins
+        const allNames: selectFormat = {
+          //this was to create an array if we used the selection drop down method
           text: doc.data().name,
           value: doc.data().name
         };
-        groupNames.push(allNames);//push it to the overall array
-        if (doc.data().status === '1') {//private team
+        groupNames.push(allNames); //push it to the overall array
+        if (doc.data().status === '1') {
+          //private team
           const tem: teamData = {
             name: doc.data().name as string,
             leader: doc.data().leader as string,
@@ -202,8 +228,9 @@ const TeamJoin: React.FC = () => {
             type: 'Private',
             password: doc.data().password
           };
-          indData.push(tem);//push the data to the array
-        } else {//public team
+          indData.push(tem); //push the data to the array
+        } else {
+          //public team
           const tem: teamData = {
             name: doc.data().name as string,
             leader: doc.data().leader as string,
@@ -218,6 +245,10 @@ const TeamJoin: React.FC = () => {
       }
     });
     setNames(groupNames);
+    indData.sort((a: any, b: any) =>
+      a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
+    );
+    console.log(indData);
     setTeams(indData);
   }
 

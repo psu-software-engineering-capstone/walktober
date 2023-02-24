@@ -1,8 +1,10 @@
 import {
+  IonButton,
   IonCol,
   IonContent,
   IonGrid,
   IonHeader,
+  IonImg,
   IonItem,
   IonPage,
   IonRow,
@@ -11,11 +13,13 @@ import {
 import { getDoc, doc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
-import { auth, FirestoreDB } from '../../firebase';
+import { auth, FirestoreDB, storage } from '../../firebase';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { useHistory } from 'react-router';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import './teamHome.scss';
+import { updateDoc } from 'firebase/firestore';
 
 ChartJS.register(...registerables);
 
@@ -23,11 +27,15 @@ const TeamProfile: React.FC = () => {
   interface memberData {
     name: string;
     email: string;
+    profile_pic: string;
     totalStep: number;
   }
 
   const [data, setMemDat] = useState(Array<memberData>);
   const [groupName, setGroup] = useState('');
+  const [profilePic, setProfilePic] = useState('');
+  const [teamReference, setTeamRef] = useState('');
+  const [photo, setPhoto] = useState<any>(null);
   const history = useHistory();
 
   const chartData = {
@@ -162,8 +170,10 @@ const TeamProfile: React.FC = () => {
     }
     setGroup(teamName);
     const teamRef = doc(FirestoreDB, 'teams', teamName); //reference team document
+    setTeamRef(teamRef);
     const teamSnapshot = await getDoc(teamRef); //grab all the team document
     const teamData = teamSnapshot.data(); //get team data
+    setProfilePic(teamData.profile_pic);
     const teammates: Array<string> = teamData.members; //get the teammembers
     for (let i = 0; i < teammates.length; i++) {
       const memberRef = doc(FirestoreDB, 'users', teammates[i]); //reference member
@@ -172,6 +182,7 @@ const TeamProfile: React.FC = () => {
       const tempMember: memberData = {
         name: personalData.name,
         email: personalData.email,
+        profile_pic: personalData.profile_pic,
         totalStep: personalData.totalStep
       };
       groupData.push(tempMember); //send to array
@@ -179,6 +190,26 @@ const TeamProfile: React.FC = () => {
     console.log(groupData);
     setMemDat(groupData); //set variable to the contents of the array
   }
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setPhoto(e.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async () => {
+    const imageRef = ref(storage, groupName + '.png');
+    await uploadBytes(imageRef, photo);
+    const photoURL = await getDownloadURL(imageRef);
+    await updateDoc(teamReference, { profile_pic: photoURL })
+      .then(() => {
+        alert('Team profile picture updated!');
+        history.go(0); //refresh page
+      })
+      .catch((error: any) => {
+        alert(error);
+      });
+  };
 
   useEffect(() => {
     getData();
@@ -207,7 +238,26 @@ const TeamProfile: React.FC = () => {
             </IonContent>
           </IonContent>
         </IonCol>
-        <IonCol sizeLg="11">
+        <IonCol sizeLg="8">
+          <IonItem>
+            <IonImg
+              className="profile_pic"
+              src={profilePic}
+              alt="Profile picture for the team the user is a part of"
+            ></IonImg>
+          </IonItem>
+          <IonItem>
+            <input
+              type="file"
+              id="img"
+              name="img"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          </IonItem>
+          <IonItem>
+            <IonButton onClick={handleSubmit}>Change Team Picture</IonButton>
+          </IonItem>
           <IonItem>{DisplayTeams(data)}</IonItem>
         </IonCol>
       </IonRow>

@@ -1,11 +1,15 @@
-import { IonButton, IonContent, IonHeader, IonSpinner, IonTitle } from '@ionic/react';
+import {
+  IonButton,
+  IonContent,
+  IonHeader,
+  IonSpinner,
+  IonTitle
+} from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import './LeaderBoardChart.scss';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Bar } from 'react-chartjs-2';
-import { TeamData } from '../../pages/sampleData';
-
 import { collection, getDocs } from 'firebase/firestore';
 import { FirestoreDB } from '../../firebase';
 
@@ -49,14 +53,15 @@ const LeaderBoardChart: React.FC = () => {
       } = chart;
 
       ctx.save();
-      const imgSize = chartOptions.layout.padding.left - chartOptions.layout.padding.right;
+      const imgSize =
+        chartOptions.layout.padding.left - chartOptions.layout.padding.right;
 
       data.datasets[0].image.forEach((imageLink: string, index: number) => {
         const profilePic = new Image();
         profilePic.src = imageLink;
         ctx.drawImage(
           profilePic,
-          0, 
+          0,
           y.getPixelForValue(index) - imgSize / 2,
           imgSize,
           imgSize
@@ -64,7 +69,7 @@ const LeaderBoardChart: React.FC = () => {
       });
     }
   };
-  
+
   //Changes the apearance of the chart
   const chartOptions = {
     indexAxis: 'y',
@@ -163,7 +168,6 @@ const LeaderBoardChart: React.FC = () => {
     if (dataType == 'individual') {
       const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
       querySnapshot.forEach((doc: any) => {
-        //console.log(doc.id, ' => ', doc.data());
         const person: Data = {
           name: doc.data().name as string,
           profile_pic: doc.data().profile_pic as string,
@@ -174,26 +178,22 @@ const LeaderBoardChart: React.FC = () => {
       setData(
         indData.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
       );
-      boxAjust(indData.length);
     }
     if (dataType == 'teams') {
-      /*
-      needs firebase calls here for teams instead of the sample data
-      const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
+      const querySnapshot = await getDocs(collection(FirestoreDB, 'teams'));
       querySnapshot.forEach((doc: any) => {
-        //console.log(doc.id, ' => ', doc.data());
         const person: Data = {
           name: doc.data().name as string,
           profile_pic: doc.data().profile_pic as string,
-          totalStep: doc.data().totalStep as number
+          avg_steps: doc.data().avg_steps as number
         };
         indData.push(person);
-      */
+      });
       setData(
-        TeamData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
+        indData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
       );
-      boxAjust(TeamData.length);
     }
+    boxAjust(indData.length);
     //need to find way to not hardcode time
     setTimeout(() => {
       setLoading(false);
@@ -206,10 +206,11 @@ const LeaderBoardChart: React.FC = () => {
 
   return (
     <IonContent>
-      <div className='leaderboard-container'>
-        <IonHeader className='title'>
-          <IonTitle>Leaderboard</IonTitle></IonHeader>
-        <div className='button-container'>
+      <div className="leaderboard-container">
+        <IonHeader className="title">
+          <IonTitle>Leaderboard</IonTitle>
+        </IonHeader>
+        <div className="button-container">
           <IonButton
             onClick={() => {
               dataType = 'individual';
@@ -229,9 +230,9 @@ const LeaderBoardChart: React.FC = () => {
             Teams
           </IonButton>
         </div>
-        <IonContent className='box'>
+        <IonContent className="box">
           {loading ? (
-            <IonSpinner className='spinner'/>
+            <IonSpinner className="spinner" />
           ) : (
             <Bar
               data={chartData}

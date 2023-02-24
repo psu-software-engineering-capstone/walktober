@@ -88,6 +88,7 @@ const TeamCreation: React.FC = () => {
       members: [userData.email],
       status: newTeamStatus,
       password: newTeamPassword,
+      profile_pic: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
       team_size: 1, 
       totalSteps: auth.currentUser?.totalStep
     })
