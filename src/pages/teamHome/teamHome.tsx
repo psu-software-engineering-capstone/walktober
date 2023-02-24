@@ -2,6 +2,7 @@ import {
   IonCol,
   IonContent,
   IonGrid,
+  IonHeader,
   IonLabel,
   IonPage,
   IonRow,
@@ -17,9 +18,11 @@ const TeamHome: React.FC = () => {
   const [steps, setSteps] = useState(0);
   return (
     <IonPage>
-      <NavBar>
-        <IonTitle>My Team</IonTitle>
-      </NavBar>
+      <IonHeader>
+        <NavBar>
+          <IonTitle>My Team</IonTitle>
+        </NavBar>
+      </IonHeader>
       <IonContent fullscreen>
         <IonGrid>
           <IonRow>

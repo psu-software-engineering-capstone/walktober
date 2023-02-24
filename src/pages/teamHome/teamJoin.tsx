@@ -121,23 +121,23 @@ const TeamJoin: React.FC = () => {
     if (teams.length > 0) {
       return (
         <>
-          <IonGrid fixed={true}>
+          <IonGrid>
             <IonRow align-items-stretch="true" class="top">
               <IonCol align-self-center="true" class="header-col admin-col">
                 Available Teams
               </IonCol>
             </IonRow>
             <IonRow class="header-row">
-              <IonCol sizeMd="4" size="5" class="header-col admin-col">
+              <IonCol sizeMd="4" size="4" class="header-col admin-col">
                 Team Name
               </IonCol>
-              <IonCol sizeMd="4" size="5" class="header-col admin-col">
+              <IonCol sizeMd="4" size="4" class="header-col admin-col">
                 Team Leader
               </IonCol>
-              <IonCol sizeMd="4" size="6" class="header-col admin-col">
+              <IonCol sizeMd="4" size="4" class="header-col admin-col">
                 Team Size
               </IonCol>
-              <IonCol sizeMd="4" size="8" class="header-col admin-col">
+              <IonCol sizeMd="4" size="4" class="header-col admin-col">
                 Team Privacy
               </IonCol>
             </IonRow>
@@ -149,16 +149,16 @@ const TeamJoin: React.FC = () => {
                 type: string;
               }) => (
                 <IonRow key={Math.random()}>
-                  <IonCol sizeMd="4" size="5" class="admin-col">
+                  <IonCol sizeMd="4" size="4" class="admin-col">
                     {item.name}
                   </IonCol>
-                  <IonCol sizeMd="4" size="5" class="admin-col">
+                  <IonCol sizeMd="4" size="4" class="admin-col">
                     {item.leader}
                   </IonCol>
-                  <IonCol sizeMd="4" size="5" class="admin-col">
+                  <IonCol sizeMd="4" size="4" class="admin-col">
                     {item.size}
                   </IonCol>
-                  <IonCol sizeMd="4" size="8" class="admin-col">
+                  <IonCol sizeMd="4" size="4" class="admin-col">
                     {item.type}
                   </IonCol>
                 </IonRow>
