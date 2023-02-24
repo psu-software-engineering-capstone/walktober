@@ -38,6 +38,7 @@ import { getDoc } from 'firebase/firestore';
 import { doc } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from './store/auth-context';
+import landing404 from './pages/404landing/landing404';
 
 const Dashboard: React.FC = () => {
   const ctx = useContext(AuthContext);
@@ -64,6 +65,7 @@ const Dashboard: React.FC = () => {
   return (
     <IonTabs>
       <IonRouterOutlet>
+        <Route path="/" component={landing404}></Route>
         <Route exact path="/app/home" component={HomePage} />
         <Route exact path="/app/profile" component={Profile} />
         <Route
