@@ -63,25 +63,63 @@ const HomePage: React.FC = () => {
     }
   }, [ctx.user]);
 
+  // const getPastSevenDaysSteps = async () => {
+  //   if (ctx.user === null) {
+  //     alert('You are not logged in!');
+  //     history.push('/login');
+  //     return;
+  //   }
+  //   const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
+  //   const dbSnap = await getDoc(dbRef);
+  //   const userData = dbSnap.data();
+  //   const stepsByDate = userData.stepsByDate;
+  //   const today = new Date();
+  //   const pastSevenDays = [];
+  //   for (let i = 0; i < stepsByDate.length; i++) {
+  //     const date = new Date(stepsByDate[i].date);
+  //     const diff = (today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
+  //     if (diff < 8 && diff >= 0) {
+  //       pastSevenDays.push(stepsByDate[i]);
+  //     }
+  //   }
+  //   setPastSevenDaysSteps(pastSevenDays);
+  // };
+
+  // get past seven days of steps from firestore
+  // even though the user does not have seven days of steps
+  // the chart will still render with seven days of steps
+  // each day will have 0 steps
   const getPastSevenDaysSteps = async () => {
     if (ctx.user === null) {
       alert('You are not logged in!');
       history.push('/login');
       return;
     }
+  
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     const dbSnap = await getDoc(dbRef);
     const userData = dbSnap.data();
     const stepsByDate = userData.stepsByDate;
-    const today = new Date();
-    const pastSevenDays = [];
-    for (let i = 0; i < stepsByDate.length; i++) {
-      const date = new Date(stepsByDate[i].date);
-      const diff = (today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
-      if (diff < 8 && diff >= 0) {
-        pastSevenDays.push(stepsByDate[i]);
-      }
+  
+    // Create an array of the last seven dates (including today)
+    const pastSevenDaysDates = [];
+    for (let i = 0; i < 7; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      pastSevenDaysDates.push(date.toISOString().slice(0, 10));
+      console.log(date.toDateString());
     }
+  
+    // Populate pastSevenDays with step count or 0 for each date
+    const pastSevenDays = pastSevenDaysDates.map(date => {
+      const stepLog = stepsByDate.find((stepLog: StepLog) => stepLog.date === date);
+      if (stepLog) {
+        return stepLog;
+      } else {
+        return { date: date, steps: 0 };
+      }
+    });
+  
     setPastSevenDaysSteps(pastSevenDays);
   };
 
