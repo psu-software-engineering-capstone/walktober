@@ -18,6 +18,7 @@ import { useState } from 'react';
 import { auth, FirestoreDB } from '../../firebase';
 import { doc, getDoc, setDoc, updateDoc, Timestamp } from 'firebase/firestore';
 import { useHistory } from 'react-router';
+import NavBar from '../../components/NavBar';
 
 interface Timestamp {
   seconds: number;
@@ -84,19 +85,18 @@ const TeamCreation: React.FC = () => {
     setDoc(doc(FirestoreDB, 'teams', newTeamName), {
       name: newTeamName,
       avg_steps: userData.totalStep,
-      leader: auth.currentUser?.email,
+      leader: userData.email,
       members: [userData.email],
       status: newTeamStatus,
       password: newTeamPassword,
       profile_pic: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
-      team_size: 1, 
-      totalSteps: auth.currentUser?.totalStep
+      totalStep: userData.totalStep
     })
       .then(async () => {
         console.log('Document written successfully');
         alert('Your team has been created!');
         await updateCurrentUser();
-        history.push('/app/profile');
+        history.push('/app/team');
       })
       .catch((error: unknown) => {
         console.error('Error writing document: ', error);
@@ -121,9 +121,9 @@ const TeamCreation: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
+        <NavBar>
           <IonTitle>Team Creation</IonTitle>
-        </IonToolbar>
+        </NavBar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">

@@ -76,7 +76,7 @@ const Dashboard: React.FC = () => {
         </IonTabButton>
         <IonTabButton tab="manualsteps" href="/app/manualsteps">
           <IonIcon icon={footsteps} />
-          <IonLabel>Manual Steps</IonLabel>
+          <IonLabel>Steps Log</IonLabel>
         </IonTabButton>
         <IonTabButton tab="healthapp" href="/app/healthapp">
           <IonIcon icon={fitness} />
