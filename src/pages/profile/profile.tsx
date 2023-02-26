@@ -154,11 +154,11 @@ const Profile: React.FC = () => {
                 <IonItem>
                   <p>{email}</p>
                 </IonItem>
+                {!isGoogleUser && (
                 <IonItem>
-                  <IonButton onClick={changePassword}>
-                    Change Password
-                  </IonButton>
+                  <IonButton onClick={changePassword}>Change Password</IonButton>
                 </IonItem>
+                )}
                 <IonItem>
                   <IonButton onClick={signOut}>Sign Out</IonButton>
                 </IonItem>
