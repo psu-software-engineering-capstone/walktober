@@ -11,9 +11,12 @@ import {
   IonItem,
   IonLabel,
   IonPage,
+  IonRefresher,
+  IonRefresherContent,
   IonRouterOutlet,
   IonRow,
-  IonTitle
+  IonTitle,
+  RefresherEventDetail
 } from '@ionic/react';
 import './profile.css';
 import { Route } from 'react-router-dom';
@@ -98,6 +101,13 @@ const Profile: React.FC = () => {
     }
   };
 
+  // handle refresher
+  async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
+    GetRecords(); // Refresh data
+    event.detail.complete(); // Notify the refresher that loading is complete
+  }
+
   return (
     <IonPage>
       <IonRouterOutlet>
@@ -175,6 +185,9 @@ const Profile: React.FC = () => {
             </IonRow>
           </IonGrid>
         </IonItem>
+        <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
       </IonContent>
     </IonPage>
   );

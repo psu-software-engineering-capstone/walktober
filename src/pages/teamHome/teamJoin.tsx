@@ -9,8 +9,11 @@ import {
   IonItem,
   IonLabel,
   IonPage,
+  IonRefresher,
+  IonRefresherContent,
   IonRow,
-  IonTitle
+  IonTitle,
+  RefresherEventDetail
 } from '@ionic/react';
 import {
   getDoc,
@@ -73,8 +76,7 @@ const TeamJoin: React.FC = () => {
     const teamRef = doc(FirestoreDB, 'teams', joinTeam); //make a reference to the team document
     const teamSnap = await getDoc(teamRef); //get team document
     const teamData = teamSnap.data(); // get team data
-    console.log(teamData.members.lenth);
-    if (teamData.members.legnth >= 1) {
+    if (teamData.members.length >= 1) {
       await updateDoc(teamRef, {
         members: arrayUnion(auth.currentUser.email),
         totalStep: increment(userData.totalStep),
@@ -137,6 +139,13 @@ const TeamJoin: React.FC = () => {
     }
     alert('No team was found that matched what was entered');
   };
+
+  // handle refresher
+  async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
+    getData(); //get the data from the database
+    event.detail.complete(); // Notify the refresher that loading is complete
+  }
 
   const DisplayTeams = (teams: teamData[]): any => {
     if (teams.length > 0) {
@@ -265,41 +274,46 @@ const TeamJoin: React.FC = () => {
           <IonTitle> Team Join </IonTitle>
         </NavBar>
       </IonHeader>
-      <IonRow>
-        <IonCol>
-          <IonItem>
-            <IonLabel position="floating">Team</IonLabel>
-            <IonInput
-              onIonChange={(e) => setJoin(e.target.value as string)}
-            ></IonInput>
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            <IonLabel position="floating">Team Password</IonLabel>
-            <IonInput
-              type={passwordShown ? 'text' : 'password'}
-              name="password"
-              onIonChange={(e) => setPass(e.target.value as string)}
-            ></IonInput>
-            <IonIcon
-              icon={passwordShown ? eyeOff : eye}
-              slot="end"
-              onClick={togglePasswordVisibility}
-            ></IonIcon>
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            <IonButton onClick={toJoin}> Join </IonButton>
-            <IonButton onClick={moveToCreateTeam}> Create a Team </IonButton>
-          </IonItem>
-        </IonCol>
-      </IonRow>
-      <IonItem>{DisplayTeams(allTeams)}</IonItem>
-      <IonContent fullscreen></IonContent>
+      <IonContent>
+        <IonRow>
+          <IonCol>
+            <IonItem>
+              <IonLabel position="floating">Team</IonLabel>
+              <IonInput
+                onIonChange={(e) => setJoin(e.target.value as string)}
+              ></IonInput>
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              <IonLabel position="floating">Team Password</IonLabel>
+              <IonInput
+                type={passwordShown ? 'text' : 'password'}
+                name="password"
+                onIonChange={(e) => setPass(e.target.value as string)}
+              ></IonInput>
+              <IonIcon
+                icon={passwordShown ? eyeOff : eye}
+                slot="end"
+                onClick={togglePasswordVisibility}
+              ></IonIcon>
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              <IonButton onClick={toJoin}> Join </IonButton>
+              <IonButton onClick={moveToCreateTeam}> Create a Team </IonButton>
+            </IonItem>
+          </IonCol>
+        </IonRow>
+        <IonItem>{DisplayTeams(allTeams)}</IonItem>
+        <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
+      </IonContent>
     </IonPage>
   );
 };
 
 export default TeamJoin;
+

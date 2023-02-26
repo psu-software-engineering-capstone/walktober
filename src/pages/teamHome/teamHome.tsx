@@ -7,8 +7,11 @@ import {
   IonImg,
   IonItem,
   IonPage,
+  IonRefresher,
+  IonRefresherContent,
   IonRow,
-  IonTitle
+  IonTitle,
+  RefresherEventDetail
 } from '@ionic/react';
 import { getDoc, doc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
@@ -292,6 +295,13 @@ const TeamHome: React.FC = () => {
     }
   }
 
+  // handle refresher
+  async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
+    getData(); // Refresh data
+    event.detail.complete(); // Notify the refresher that loading is complete
+  }
+
   useEffect(() => {
     getData();
   }, []);
@@ -303,37 +313,49 @@ const TeamHome: React.FC = () => {
           <IonTitle> {groupName} </IonTitle>
         </NavBar>
       </IonHeader>
-      <IonRow>
-        <IonCol
-          className="boxSize"
-          sizeSm="12"
-          sizeLg="4"
-          sizeMd="6"
-          sizeXs="12"
-        >
-          <IonContent>
-            <IonHeader> Team Leaderboard </IonHeader>
-            <IonContent class="box">
-              <Bar data={chartData} options={chartOptions} plugins={[imgItems, ChartDataLabels]}></Bar>
+      <IonContent>
+        <IonRow>
+          <IonCol
+            className="boxSize"
+            sizeSm="12"
+            sizeLg="4"
+            sizeMd="6"
+            sizeXs="12"
+          >
+            <IonContent>
+              <IonHeader> Team Leaderboard </IonHeader>
+              <IonContent class="box">
+                <Bar
+                  data={chartData}
+                  options={chartOptions}
+                  plugins={[imgItems, ChartDataLabels]}
+                ></Bar>
+              </IonContent>
             </IonContent>
-          </IonContent>
-        </IonCol>
-        <IonCol sizeLg="8">
-          <IonItem>
-            <IonImg
-              className="profile_pic"
-              src={profilePic}
-              alt="Profile picture for the team the user is a part of"
-            > </IonImg> 
-          </IonItem>
-          <IonItem> {groupName} Profile Picture </IonItem>
-          <IonItem> {changePicture()} </IonItem>
+          </IonCol>
+          <IonCol sizeLg="8">
+            <IonItem>
+              <IonImg
+                className="profile_pic"
+                src={profilePic}
+                alt="Profile picture for the team the user is a part of"
+              >
+                {' '}
+              </IonImg>
+            </IonItem>
+            <IonItem> {groupName} Profile Picture </IonItem>
+            <IonItem> {changePicture()} </IonItem>
 
-          <IonItem>{DisplayTeams(data)}</IonItem>
-        </IonCol>
-      </IonRow>
+            <IonItem>{DisplayTeams(data)}</IonItem>
+          </IonCol>
+        </IonRow>
+        <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
+      </IonContent>
     </IonPage>
   );
 };
 
 export default TeamHome;
+

@@ -464,11 +464,11 @@ const ManualSteps: React.FC = () => {
     getDoc(dbRef).then((doc: any) => {
       if (doc.exists()) {
         const teamData = doc.data();
-        const teamTotalSteps = teamData.totalSteps;
+        const teamTotalSteps = teamData.totalStep;
         const newTotalSteps = teamTotalSteps - currentTotalSteps + totalStep;
         const newAvgSteps = newTotalSteps / teamData.members.length;
         updateDoc(dbRef, {
-          totalSteps: newTotalSteps,
+          totalStep: newTotalSteps,
           avg_steps: newAvgSteps
         })
           .then(() => {
