@@ -24,6 +24,7 @@ import { useHistory } from 'react-router';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import './teamHome.scss';
 import { updateDoc } from 'firebase/firestore';
+import { deleteDoc } from 'firebase/firestore';
 
 ChartJS.register(...registerables);
 
@@ -312,7 +313,10 @@ const TeamHome: React.FC = () => {
     getData(); // Refresh data
     event.detail.complete(); // Notify the refresher that loading is complete
   }
-
+  /*
+else{
+          
+        }*/
   async function leaveTeam() {
     const newTotalStep = teamSteps - userTotStep; //new total step for team
     const newAvg = newTotalStep / (teammates.length - 1); //new average step for team
@@ -324,30 +328,34 @@ const TeamHome: React.FC = () => {
     }
     if (leadStat) {
       //The user has the true boolean set for the leader data field in the user's doc
-      let newLead = '';
-      if (teammates[0] == auth.currentUser.email) {
-        //get the new team leader
-        newLead = teammates[1];
+      if (newMembers.length == 0) {
+        await deleteDoc(doc, 'teams', groupName); //empty doc so might as well toss it overboard
       } else {
-        newLead = teammates[0];
+        let newLead = '';
+        if (teammates[0] == auth.currentUser.email) {
+          //get the new team leader
+          newLead = teammates[1];
+        } else {
+          newLead = teammates[0];
+        }
+        await updateDoc(teamReference, {
+          leader: newLead,
+          totalStep: newTotalStep,
+          avg_steps: newAvg,
+          members: newMembers
+        });
+        await updateDoc(userReference, {
+          team_leader: false,
+          team: ''
+        });
+        const otherUserRef = doc(
+          //make a reference to the user document
+          FirestoreDB,
+          'users',
+          newLead as string
+        );
+        await updateDoc(otherUserRef, { team_leader: true });
       }
-      await updateDoc(teamReference, {
-        leader: newLead,
-        totalStep: newTotalStep,
-        avg_steps: newAvg,
-        members: newMembers
-      });
-      await updateDoc(userReference, {
-        team_leader: false,
-        team: ''
-      });
-      const otherUserRef = doc(
-        //make a reference to the user document
-        FirestoreDB,
-        'users',
-        newLead as string
-      );
-      await updateDoc(otherUserRef, { team_leader: true });
     } else {
       await updateDoc(teamReference, {
         totalStep: newTotalStep,
