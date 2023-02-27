@@ -12,7 +12,6 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Bar } from 'react-chartjs-2';
 import { collection, getDocs } from 'firebase/firestore';
 import { FirestoreDB } from '../../firebase';
-import { callback } from 'chart.js/dist/helpers/helpers.core';
 
 ChartJS.register(...registerables);
 
@@ -58,7 +57,6 @@ const LeaderBoardChart: React.FC = () => {
 
       data.datasets[0].image.forEach((imageLink: string, index: number) => {
         const profilePic = new Image();
-        //console.log(ordinalNumbers(index +1));
         const place = (index + 1).toString() + ordinalNumbers(index +1);
         profilePic.src = imageLink;
 
