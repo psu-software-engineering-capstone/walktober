@@ -12,24 +12,21 @@ import {
   IonIcon,
   IonGrid,
   IonRow,
-  IonCol
-  // useIonToast
+  IonCol,
+  RefresherEventDetail,
+  IonRefresher,
+  IonRefresherContent
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
-import './homePage.css';
 import ProgressChart from '../../components/ProgressChart';
 import AuthContext from '../../store/auth-context';
-import { getDoc } from 'firebase/firestore';
+import { getDoc, doc } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
-import { doc } from 'firebase/firestore';
-//import ExitSurveyModal from '../exitQuestions/exitQuestionsModal';
-// import { Health } from '@awesome-cordova-plugins/health';
-// import { updateDoc } from 'firebase/firestore';
-
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
-// import { library } from 'ionicons/icons';
+import './homePage.css';
+
 interface badgeOutline {
   name: string;
 }
@@ -44,44 +41,50 @@ const HomePage: React.FC = () => {
   const history = useHistory();
   const [badges, setBadges] = useState(Array<badgeOutline>);
   const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
-  // const [present] = useIonToast();
-  // const supportedTypes = [
-  //   'steps',
-  //   'distance', // Read and write permissions
-  //   {
-  //     read: ['steps'], // Read only permission
-  //     write: ['height', 'weight'] // Write only permission
-  //   }
-  // ];
+
   const ctx = useContext(AuthContext);
 
   useEffect(() => {
     if (ctx.user) {
       console.log('get past seven days steps');
       getPastSevenDaysSteps();
-      //GFrequestAuthorization();
     }
   }, [ctx.user]);
 
+  // get past seven days of steps from firestore
+  // even though the user does not have seven days of steps
+  // the chart will still render with seven days of steps
+  // each day will have 0 steps
   const getPastSevenDaysSteps = async () => {
     if (ctx.user === null) {
       alert('You are not logged in!');
       history.push('/login');
       return;
     }
+  
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     const dbSnap = await getDoc(dbRef);
     const userData = dbSnap.data();
     const stepsByDate = userData.stepsByDate;
-    const today = new Date();
-    const pastSevenDays = [];
-    for (let i = 0; i < stepsByDate.length; i++) {
-      const date = new Date(stepsByDate[i].date);
-      const diff = (today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
-      if (diff < 8 && diff >= 0) {
-        pastSevenDays.push(stepsByDate[i]);
-      }
+  
+    // Create an array of the last seven dates (including today)
+    const pastSevenDaysDates = [];
+    for (let i = 1; i < 8; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      pastSevenDaysDates.push(date.toISOString().slice(0, 10));
     }
+  
+    // Populate pastSevenDays with step count or 0 for each date
+    const pastSevenDays = pastSevenDaysDates.map(date => {
+      const stepLog = stepsByDate.find((stepLog: StepLog) => stepLog.date === date);
+      if (stepLog) {
+        return stepLog;
+      } else {
+        return { date: date, steps: 0 };
+      }
+    });
+  
     setPastSevenDaysSteps(pastSevenDays);
   };
 
@@ -92,6 +95,13 @@ const HomePage: React.FC = () => {
   //     setSteps(newSteps);
   //   }
   // };
+
+  // handle refresher
+  async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
+    getPastSevenDaysSteps(); // Refresh data
+    event.detail.complete(); // Notify the refresher that loading is complete
+  }
 
   const moveToManualSteps = () => {
     history.push('/app/manualsteps');
@@ -183,7 +193,9 @@ const HomePage: React.FC = () => {
             </IonLabel>
           </IonCol>
         </IonGrid>
-        {/* below is only for development testing purposes */}
+        <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
       </IonContent>
     </IonPage>
   );

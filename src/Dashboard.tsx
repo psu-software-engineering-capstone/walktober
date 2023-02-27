@@ -32,35 +32,17 @@ import StepsCalculator from './pages/stepsCalculator/stepsCalculator';
 /* Theming */
 import './theme/app.scss';
 
-/* Firebase */
-import { auth, FirestoreDB } from './firebase';
-import { getDoc } from 'firebase/firestore';
-import { doc } from 'firebase/firestore';
-import { useContext, useEffect, useState } from 'react';
+/* Context */
+import { useContext } from 'react';
 import AuthContext from './store/auth-context';
 import landing404 from './pages/404landing/landing404';
+import AdminSteps from './pages/adminSteps/adminSteps';
 
 const Dashboard: React.FC = () => {
   const ctx = useContext(AuthContext);
   const isAdmin = ctx.admin;
-  const [addr, setAddr] = useState('');
 
   const tabsVisible = isPlatform('android') || isPlatform('ios');
-
-  async function checkUser() {
-    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-    const dbSnap = await getDoc(dbRef);
-    const userData = dbSnap.data();
-    if (userData.team === '') {
-      setAddr('/app/team/join');
-    } else {
-      setAddr('/app/team');
-    }
-  }
-
-  useEffect(() => {
-    checkUser();
-  }, []);
 
   return (
     <IonTabs>
@@ -80,6 +62,7 @@ const Dashboard: React.FC = () => {
         <Route exact path="/app/team" component={TeamHome} />
         <Route exact path="/app/team/join" component={TeamJoin} />
         <Route exact path="/app/admin" component={Admin} />
+        <Route exact path="/app/adminSteps" component={AdminSteps} />
         <Route exact path="/app">
           <Redirect to="/app/home" />
         </Route>
@@ -95,13 +78,16 @@ const Dashboard: React.FC = () => {
         </IonTabButton>
         <IonTabButton tab="manualsteps" href="/app/manualsteps">
           <IonIcon icon={footsteps} />
-          <IonLabel>Manual Steps</IonLabel>
+          <IonLabel>Steps Log</IonLabel>
         </IonTabButton>
         <IonTabButton tab="healthapp" href="/app/healthapp">
           <IonIcon icon={fitness} />
           <IonLabel>Health App</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="team" href={addr}>
+        <IonTabButton
+          tab="team"
+          href={ctx.team === '' ? '/app/team/join' : '/app/team'}
+        >
           <IonIcon icon={people} />
           <IonLabel>Team</IonLabel>
         </IonTabButton>
