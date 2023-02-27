@@ -230,6 +230,17 @@ const Admin: React.FC = () => {
         }
       console.log(str);
       
+      const blob = new Blob([str], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      if (link.download !== undefined) { // feature detection
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'usersReport.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     }
 
     if(teamReportCheck){
@@ -247,6 +258,17 @@ const Admin: React.FC = () => {
         }
       console.log(str);
 
+      const blob = new Blob([str], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      if (link.download !== undefined) { // feature detection
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'teamsReport.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     }
 
     if(preSurveryReportCheck){
@@ -266,6 +288,18 @@ const Admin: React.FC = () => {
             str += line + '\r\n';
         }
       console.log(str);
+
+      const blob = new Blob([str], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      if (link.download !== undefined) { // feature detection
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'preSurveyReport.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     }
 
     if(postSurveryReportCheck){
@@ -288,18 +322,42 @@ const Admin: React.FC = () => {
             str += line + '\r\n';
         }
       console.log(str);
+
+      const blob = new Blob([str], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      if (link.download !== undefined) { // feature detection
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'postSurveyReport.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     }
 
     if(devicesReportCheck){
       console.log("Generating device usage report");
 
       let str = '';
-      str += Devices.iPhone + '\r\n';
-      str += Devices.android + '\r\n';
-      str += Devices.apple_health + '\r\n';
-      str += Devices.fitbit + '\r\n';
-      str += Devices.google_health + '\r\n';
+      str += '"IPhone",' + Devices.iPhone + '\r\n';
+      str += '"Android",' + Devices.android + '\r\n';
+      str += '"Apple Health",' + Devices.apple_health + '\r\n';
+      str += '"FitBit",' + Devices.fitbit + '\r\n';
+      str += '"Google Health",' + Devices.google_health + '\r\n';
       console.log(str);
+
+      const blob = new Blob([str], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      if (link.download !== undefined) { // feature detection
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'devicesReport.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     }
 
     console.log("Reports have been generated");
