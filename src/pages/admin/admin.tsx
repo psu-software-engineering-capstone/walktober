@@ -27,6 +27,7 @@ import { useHistory } from 'react-router-dom';
 import { FirestoreDB } from '../../firebase';
 import { doc, collection, getDocs, updateDoc } from 'firebase/firestore';
 import './admin.css';
+import { TeamData, IndividualData, PreSurvey, PostSurvey, Devices } from '../sampleData';
 
 const Admin: React.FC = () => {
   //used to open and close modals
@@ -217,18 +218,77 @@ const Admin: React.FC = () => {
 
     if(userReportCheck){
       console.log("Generating user report");
+      
+      let str = '"Name","eMail","Team","TotalSteps"\n';
+
+        for (let i = 0; i < IndividualData.length; i++) {
+            let line = '';
+            line += '"' + IndividualData[i].name + '",';
+            line += '"' + IndividualData[i].email + '",';
+            line += '"' + IndividualData[i].team + '",';
+            line += IndividualData[i].totalStep;
+            str += line + '\r\n';
+        }
+      console.log(str);
+      
     }
 
     if(teamReportCheck){
       console.log("Generating team report");
+
+      let str = '"Team Name","Cumulative Steps","Number of Team Members","TotalSteps"\n';
+
+        for (let i = 0; i < TeamData.length; i++) {
+            let line = '';
+            line += '"' + TeamData[i].name + '",';
+            line += 0 + ',';
+            line += 0 + ',';
+            line += TeamData[i].avg_steps;
+            str += line + '\r\n';
+        }
+      console.log(str);
+
     }
 
     if(preSurveryReportCheck){
-      console.log("Generating intro survey report");
+      console.log("Generating pre survey report");
+
+      let str = '"Anonymous ID #","Hours of Physical Activity","Minutes of Physical Activity","TotalSteps"\n';
+
+        for (let i = 0; i < PreSurvey.length; i++) {
+            let line = '';
+            line += PreSurvey[i].anonymous_id + ',';
+            line += '"' + PreSurvey[i].psu_affiliation + '",';
+            line += '"' + PreSurvey[i].heard_about + '",';
+            line += PreSurvey[i].weekly_physical_activity_hours + ',';
+            line += PreSurvey[i].weekly_physical_activity_minutes + ',';
+            line += '"' + PreSurvey[i].distance_from_campus + '",';
+            line += '"' + PreSurvey[i].rec_center_frequency + '"';
+            str += line + '\r\n';
+        }
+      console.log(str);
     }
 
     if(postSurveryReportCheck){
-      console.log("Generating exit survey report");
+      console.log("Generating post survey report");
+
+      let str = '"Team Name","Cumulative Steps","Number of Team Members","TotalSteps"\n';
+
+        for (let i = 0; i < PostSurvey.length; i++) {
+            let line = '';
+            line += PostSurvey[i].anonymous_id + ',';
+            line += PostSurvey[i].weekly_physical_activity_hours + ',';
+            line += PostSurvey[i].weekly_physical_activity_minutes + ',';
+            line += '"' + PostSurvey[i].participated_events + '",';
+            line += '"' + PostSurvey[i].future_walk_ideas + '",';
+            line += PostSurvey[i].walktober_improved_health + ',';
+            line += PostSurvey[i].walktober_improved_community + ',';
+            line += PostSurvey[i].would_participate_again+ ',';
+            line += '"' + PostSurvey[i].if_not_why + '",';
+            line += '"' + PostSurvey[i].feedback + '"';
+            str += line + '\r\n';
+        }
+      console.log(str);
     }
 
     if(analysisReportCheck){
@@ -240,6 +300,14 @@ const Admin: React.FC = () => {
     }
 
     console.log("Reports have been generated");
+
+    let str = '';
+    str += Devices.iPhone + '\r\n';
+    str += Devices.android + '\r\n';
+    str += Devices.apple_health + '\r\n';
+    str += Devices.fitbit + '\r\n';
+    str += Devices.google_health + '\r\n';
+    console.log(str);
   };
 
   return (
