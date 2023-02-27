@@ -66,7 +66,7 @@ const Signup: React.FC = () => {
       team: '',
       team_leader: false,
       stepsByDate: [],
-      admin: false,
+      admin: true,
     });
   };
 
