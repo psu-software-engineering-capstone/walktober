@@ -57,7 +57,6 @@ const Admin: React.FC = () => {
   const [teamReportCheck, setTeamReportCheck] = useState(false);
   const [preSurveryReportCheck, setpreSurveryReportCheck] = useState(false);
   const [postSurveryReportCheck, setpostSurveryReportCheck] = useState(false);
-  const [analysisReportCheck, setAnalysisReportCheck] = useState(false);
   const [devicesReportCheck, setDevicesReportCheck] = useState(false);
 
   const [userLogs, setUserLogs] = useState<UserLog[]>([]);
@@ -289,10 +288,6 @@ const Admin: React.FC = () => {
             str += line + '\r\n';
         }
       console.log(str);
-    }
-
-    if(analysisReportCheck){
-      console.log("Generating survey alalysis report");
     }
 
     if(devicesReportCheck){
