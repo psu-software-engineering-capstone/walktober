@@ -33,11 +33,11 @@ import { updateDoc } from 'firebase/firestore';
 const Profile: React.FC = () => {
   const history = useHistory();
   const ctx = useContext(AuthContext);
-
   const [email, setEmail] = useState('');
   const [joinDate, setJoinDate] = useState('');
   const [name, setName] = useState('');
   const [profilePic, setProfilePic] = useState('');
+  const [team, setTeam] = useState('');
   const [totalDistance, setTotalDistance] = useState(0);
   const [photo, setPhoto] = useState<any>(null);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
@@ -58,6 +58,7 @@ const Profile: React.FC = () => {
     setProfilePic(userData.profile_pic);
     setName(userData.name);
     setEmail(userData.email);
+    setTeam(userData.team);
     setJoinDate(
       new Date(auth.currentUser.metadata.creationTime).toLocaleDateString()
     );
@@ -95,6 +96,26 @@ const Profile: React.FC = () => {
     }
     history.push('/app/profile/passwordChange');
   };
+
+  function teamDisplay(){
+    if(team === ''){
+      return (
+        <>
+          <IonItem>
+            You have not joined a team yet
+          </IonItem>
+        </>
+      );
+    }
+    else{
+      return(
+        <>
+        <IonItem>
+          Team: {team}  
+        </IonItem></>
+      );
+    }
+  }
 
   const signOut = async () => {
     try {
@@ -157,6 +178,9 @@ const Profile: React.FC = () => {
                 </IonItem>
                 <IonItem>
                   <p>{email}</p>
+                </IonItem>
+                <IonItem>
+                  {teamDisplay()}
                 </IonItem>
                 {!isGoogleUser && (
                 <IonItem>
