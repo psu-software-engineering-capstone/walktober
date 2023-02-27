@@ -297,17 +297,18 @@ const Admin: React.FC = () => {
 
     if(devicesReportCheck){
       console.log("Generating device usage report");
+
+      let str = '';
+      str += Devices.iPhone + '\r\n';
+      str += Devices.android + '\r\n';
+      str += Devices.apple_health + '\r\n';
+      str += Devices.fitbit + '\r\n';
+      str += Devices.google_health + '\r\n';
+      console.log(str);
     }
 
     console.log("Reports have been generated");
-
-    let str = '';
-    str += Devices.iPhone + '\r\n';
-    str += Devices.android + '\r\n';
-    str += Devices.apple_health + '\r\n';
-    str += Devices.fitbit + '\r\n';
-    str += Devices.google_health + '\r\n';
-    console.log(str);
+    
   };
 
   return (
@@ -549,10 +550,6 @@ const Admin: React.FC = () => {
             <IonItem>
               <IonCheckbox checked={postSurveryReportCheck} onIonChange={e => setpostSurveryReportCheck(e.detail.checked)}  slot="start"></IonCheckbox>
               <IonLabel>Post Survery Report</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonCheckbox checked={analysisReportCheck} onIonChange={e => setAnalysisReportCheck(e.detail.checked)}  slot="start"></IonCheckbox>
-              <IonLabel>Survey Analysis Report</IonLabel>
             </IonItem>
             <IonItem>
               <IonCheckbox checked={devicesReportCheck} onIonChange={e => setDevicesReportCheck(e.detail.checked)}  slot="start"></IonCheckbox>
