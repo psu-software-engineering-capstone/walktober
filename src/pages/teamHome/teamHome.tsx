@@ -313,62 +313,69 @@ const TeamHome: React.FC = () => {
     getData(); // Refresh data
     event.detail.complete(); // Notify the refresher that loading is complete
   }
-  /*
-else{
-          
-        }*/
+
+  // leave team
   async function leaveTeam() {
     const newTotalStep = teamSteps - userTotStep; //new total step for team
     const newAvg = newTotalStep / (teammates.length - 1); //new average step for team
     const newMembers: Array<string> = []; //array for members field
+    // set new members array
     for (let i = 0; i < teammates.length; i++) {
-      if (teammates[i] != auth.currentUser.email) {
+      if (teammates[i] !== auth.currentUser.email) {
         newMembers.push(teammates[i]);
       }
     }
+    // if the user is the leader
     if (leadStat) {
-      //The user has the true boolean set for the leader data field in the user's doc
-      if (newMembers.length == 0) {
-        await deleteDoc(doc, 'teams', groupName); //empty doc so might as well toss it overboard
+      // if the user is the only member of the team
+      if (teammates.length === 1) {
+        await deleteDoc(doc(FirestoreDB, 'teams', groupName)) // delete the team document
+          .then(() => {
+            console.log('Team deleted');
+          })
+          .catch((error: any) => {
+            console.log(error);
+          });
+        await updateDoc(userReference, { // update the user document
+          team_leader: false,
+          team: ''
+        });
+        // if the user is not the only member of the team
       } else {
-        let newLead = '';
-        if (teammates[0] == auth.currentUser.email) {
-          //get the new team leader
-          newLead = teammates[1];
-        } else {
-          newLead = teammates[0];
-        }
-        await updateDoc(teamReference, {
+        const newLead = teammates[1]; // get the new team leader
+        await updateDoc(teamReference, { // update the team document
           leader: newLead,
           totalStep: newTotalStep,
           avg_steps: newAvg,
           members: newMembers
         });
-        await updateDoc(userReference, {
+        await updateDoc(userReference, { // update the user document
           team_leader: false,
           team: ''
         });
         const otherUserRef = doc(
-          //make a reference to the user document
           FirestoreDB,
           'users',
           newLead as string
         );
-        await updateDoc(otherUserRef, { team_leader: true });
+        await updateDoc(otherUserRef, { team_leader: true }); // update the new team leader document
       }
+      // if the user is not the leader
     } else {
-      await updateDoc(teamReference, {
+      await updateDoc(teamReference, { // update the team document
         totalStep: newTotalStep,
         avg_steps: newAvg,
         members: newMembers
       });
-      await updateDoc(userReference, {
+      await updateDoc(userReference, { // update the user document
+        team_leader: false,
         team: ''
       });
     }
-    history.go(0);
+    history.push('/app/team/join'); // redirect to join team page
   }
 
+  // get data when page loads
   useEffect(() => {
     getData();
   }, []);
