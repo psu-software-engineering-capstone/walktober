@@ -31,8 +31,8 @@ const landing404: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen={true} className="ion-padding testing d-flex">
         <p className="error-info">
-          Whoa there! Looks like you where looking for a page that does not
-          exist
+          Whoa there! Looks like you were looking for a page that does not
+          exist.
         </p>
 
         <a onClick={HomePage} className="error-info">
