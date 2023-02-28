@@ -11,9 +11,12 @@ import {
   IonItem,
   IonLabel,
   IonPage,
+  IonRefresher,
+  IonRefresherContent,
   IonRouterOutlet,
   IonRow,
-  IonTitle
+  IonTitle,
+  RefresherEventDetail
 } from '@ionic/react';
 import './profile.css';
 import { Route } from 'react-router-dom';
@@ -37,6 +40,7 @@ const Profile: React.FC = () => {
   const [profilePic, setProfilePic] = useState('');
   const [totalDistance, setTotalDistance] = useState(0);
   const [photo, setPhoto] = useState<any>(null);
+  const [isGoogleUser, setIsGoogleUser] = useState(false);
 
   useEffect(() => {
     GetRecords();
@@ -51,19 +55,14 @@ const Profile: React.FC = () => {
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     const dbSnap = await getDoc(dbRef);
     const userData = dbSnap.data();
-    if (userData.profile_pic === '') {
-      setProfilePic(
-        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
-      ); //need to give credit to this image
-    } else {
-      setProfilePic(userData.profile_pic);
-    }
+    setProfilePic(userData.profile_pic);
     setName(userData.name);
     setEmail(userData.email);
     setJoinDate(
       new Date(auth.currentUser.metadata.creationTime).toLocaleDateString()
     );
     setTotalDistance(userData.totalStep / 2000);
+    setIsGoogleUser(auth.currentUser.providerData[0]?.providerId === 'google.com');
   }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,8 +90,10 @@ const Profile: React.FC = () => {
   };
 
   const changePassword = () => {
+    if (isGoogleUser) {
+      return;
+    }
     history.push('/app/profile/passwordChange');
-    return;
   };
 
   const signOut = async () => {
@@ -103,6 +104,13 @@ const Profile: React.FC = () => {
       console.log('Error signing out:', error);
     }
   };
+
+  // handle refresher
+  async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
+    GetRecords(); // Refresh data
+    event.detail.complete(); // Notify the refresher that loading is complete
+  }
 
   return (
     <IonPage>
@@ -150,11 +158,11 @@ const Profile: React.FC = () => {
                 <IonItem>
                   <p>{email}</p>
                 </IonItem>
+                {!isGoogleUser && (
                 <IonItem>
-                  <IonButton onClick={changePassword}>
-                    Change Password
-                  </IonButton>
+                  <IonButton onClick={changePassword}>Change Password</IonButton>
                 </IonItem>
+                )}
                 <IonItem>
                   <IonButton onClick={signOut}>Sign Out</IonButton>
                 </IonItem>
@@ -181,6 +189,9 @@ const Profile: React.FC = () => {
             </IonRow>
           </IonGrid>
         </IonItem>
+        <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
       </IonContent>
     </IonPage>
   );

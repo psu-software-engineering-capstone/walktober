@@ -14,8 +14,6 @@ import {
   IonLabel,
   IonModal,
   IonPage,
-  IonRadio,
-  IonRadioGroup,
   IonRow,
   IonTextarea,
   IonTitle,
@@ -27,7 +25,7 @@ import { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../store/auth-context';
 import { useHistory } from 'react-router-dom';
 import { FirestoreDB } from '../../firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { doc, collection, getDocs, updateDoc } from 'firebase/firestore';
 import './admin.css';
 
 const Admin: React.FC = () => {
@@ -36,6 +34,12 @@ const Admin: React.FC = () => {
   const [isOpenTeam, setIsOpenTeam] = useState(false);
   const [isOpenAnnouncements, setIsOpenAnnouncements] = useState(false);
   const [isOpenReport, setIsOpenReport] = useState(false);
+
+  // used to send new team sizes and team creation date to database
+  const [newMaxTeamSize, setNewMaxTeamSize] = useState(10);
+  const [newMinTeamSize, setNewMinTeamSize] = useState(10);
+  const [newTeamCreationDate, setNewTeamCreationDate] = useState('');
+  const [newRegistrationDeadline, setNewRegistrationDeadline] = useState('');
 
   //used for dates for teams
   //const [teamDeadline, setTeamDeadline] = useState('');
@@ -48,8 +52,15 @@ const Admin: React.FC = () => {
     steps: number;
   }
 
-  const [userLogs, setUserLogs] = useState<UserLog[]>([]);
+  const [userReportCheck, setUserReportCheck] = useState(false);
+  const [teamReportCheck, setTeamReportCheck] = useState(false);
+  const [preSurveryReportCheck, setpreSurveryReportCheck] = useState(false);
+  const [postSurveryReportCheck, setpostSurveryReportCheck] = useState(false);
+  const [analysisReportCheck, setAnalysisReportCheck] = useState(false);
+  const [devicesReportCheck, setDevicesReportCheck] = useState(false);
 
+  const [userLogs, setUserLogs] = useState<UserLog[]>([]);
+  
   const history = useHistory();
   const ctx = useContext(AuthContext);
   const isAdmin = ctx.admin;
@@ -59,7 +70,7 @@ const Admin: React.FC = () => {
     if (isAdmin === false) {
       history.push('/app');
       return;
-    }
+    }    
     const dbRef = collection(FirestoreDB, 'users');
     const dbSnap = await getDocs(dbRef);
     const userLogsData: UserLog[] = [];
@@ -76,6 +87,37 @@ const Admin: React.FC = () => {
       }
     });
     setUserLogs(userLogsData);
+  };
+
+  // in team setting module, when user presses save setting, sends the data to database.
+  const sendNewTeamSetting = async () => {
+    const dbRef = doc(FirestoreDB, 'admin', 'admin');
+    await updateDoc(dbRef, {
+      min_team_size: newMinTeamSize,
+      max_team_size: newMaxTeamSize,
+      team_creation_due: newTeamCreationDate,
+    })
+      .then(() => {
+        alert('Team Settings Updated!');
+      })
+      .catch((error: any) => {
+        alert(error);
+      });
+      setIsOpenTeam(false);
+  };
+
+  const sendNewUserSetting = async () => {
+    const dbRef = doc(FirestoreDB, 'admin', 'admin');
+    await updateDoc(dbRef, {
+      registration_deadline: newRegistrationDeadline
+    })
+      .then(() => {
+        alert('User Settings Updated!');
+      })
+      .catch((error: any) => {
+        alert(error);
+      });
+      setIsOpenUser(false);
   };
 
   useEffect(() => {
@@ -131,10 +173,6 @@ const Admin: React.FC = () => {
                     {item.steps}
                   </IonCol>
                   <IonCol sizeMd="3" size="8" class="admin-col">
-                    <IonButton size="small">
-                      <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>
-                      Remove
-                    </IonButton>
                     <IonButton size="small">Edit Step Log</IonButton>
                   </IonCol>
                 </IonRow>
@@ -173,6 +211,36 @@ const Admin: React.FC = () => {
       );
     }
   }
+
+  const submitHandler = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if(userReportCheck){
+      console.log("Generating user report");
+    }
+
+    if(teamReportCheck){
+      console.log("Generating team report");
+    }
+
+    if(preSurveryReportCheck){
+      console.log("Generating intro survey report");
+    }
+
+    if(postSurveryReportCheck){
+      console.log("Generating exit survey report");
+    }
+
+    if(analysisReportCheck){
+      console.log("Generating survey alalysis report");
+    }
+
+    if(devicesReportCheck){
+      console.log("Generating device usage report");
+    }
+
+    console.log("Reports have been generated");
+  };
 
   return (
     <IonPage>
@@ -246,18 +314,19 @@ const Admin: React.FC = () => {
             </IonToolbar>
           </IonHeader>
           <IonContent className="ion-padding" class="modal-content">
-            <IonRadioGroup value={'User Sertings'}>
-              <IonItem>
-                <IonLabel>User Settings 1</IonLabel>
-                <IonRadio slot="start" value="user_settings_1"></IonRadio>
-              </IonItem>
-
-              <IonItem>
-                <IonLabel>User Settings 2</IonLabel>
-                <IonRadio slot="start" value="user_settings_2"></IonRadio>
-              </IonItem>
-            </IonRadioGroup>
-            <IonButton class="modal-button" size="large" expand="block">
+          <IonItem>
+              <IonLabel>Set Registration Deadline</IonLabel>
+              <IonInput
+                id="time"
+                type="date"
+                onInput={(event: any) => {
+                  setNewRegistrationDeadline(
+                    new Date(event.target.value).toISOString().slice(0, 10)
+                  );
+                }}
+              ></IonInput>
+            </IonItem>
+            <IonButton class="modal-button" size="large" expand="block" onClick={sendNewUserSetting}>
               Save Settings
             </IonButton>
           </IonContent>
@@ -280,27 +349,25 @@ const Admin: React.FC = () => {
           <IonContent className="ion-padding" class="modal-content">
             <IonItem>
               <IonLabel>Minimum Team Size</IonLabel>
-              <IonInput type="number"></IonInput>
+              <IonInput type="number" name="minTeamSize"onIonChange={(e) => setNewMinTeamSize(e.target.value as number)}></IonInput>
             </IonItem>
             <IonItem>
               <IonLabel>Maxiumum Team Size</IonLabel>
-              <IonInput type="number"></IonInput>
+              <IonInput type="number" name="maxTeamSize"onIonChange={(e) => setNewMaxTeamSize(e.target.value as number)}></IonInput>
             </IonItem>
             <IonItem>
               <IonLabel>Set Team Deadline</IonLabel>
               <IonInput
                 id="time"
                 type="date"
+                onInput={(event: any) => {
+                  setNewTeamCreationDate(
+                    new Date(event.target.value).toISOString().slice(0, 10)
+                  );
+                }}
               ></IonInput>
             </IonItem>
-            <IonItem>
-              <IonLabel>Set Registration Deadline</IonLabel>
-              <IonInput
-                id="time"
-                type="date"
-              ></IonInput>
-            </IonItem>
-            <IonButton class="modal-button" size="large" expand="block">
+            <IonButton class="modal-button" size="large" expand="block" onClick={sendNewTeamSetting}>
               Save Settings
             </IonButton>
 
@@ -393,25 +460,40 @@ const Admin: React.FC = () => {
             <IonLabel>Select Reports to Generate</IonLabel>
           </IonItem>
           <IonContent className="ion-padding" class="modal-content">
+            <form
+            id="generateReports"
+            onSubmit={(event: React.FormEvent) => {
+              submitHandler(event);
+            }}
+            >
             <IonItem>
-              <IonCheckbox slot="start"></IonCheckbox>
-              <IonLabel>Report Type 1</IonLabel>
+              <IonCheckbox checked={userReportCheck} onIonChange={e => setUserReportCheck(e.detail.checked)} slot="start"></IonCheckbox>
+              <IonLabel>User Report</IonLabel>
             </IonItem>
             <IonItem>
-              <IonCheckbox slot="start"></IonCheckbox>
-              <IonLabel>Report Type 2</IonLabel>
+              <IonCheckbox checked={teamReportCheck} onIonChange={e => setTeamReportCheck(e.detail.checked)}  slot="start"></IonCheckbox>
+              <IonLabel>Team Report</IonLabel>
             </IonItem>
             <IonItem>
-              <IonCheckbox slot="start"></IonCheckbox>
-              <IonLabel>Report Type 3</IonLabel>
+              <IonCheckbox checked={preSurveryReportCheck} onIonChange={e => setpreSurveryReportCheck(e.detail.checked)}  slot="start"></IonCheckbox>
+              <IonLabel>Pre Survery Report</IonLabel>
             </IonItem>
             <IonItem>
-              <IonCheckbox slot="start"></IonCheckbox>
-              <IonLabel>Report Type 4</IonLabel>
+              <IonCheckbox checked={postSurveryReportCheck} onIonChange={e => setpostSurveryReportCheck(e.detail.checked)}  slot="start"></IonCheckbox>
+              <IonLabel>Post Survery Report</IonLabel>
             </IonItem>
-            <IonButton class="modal-button" size="large" expand="block">
+            <IonItem>
+              <IonCheckbox checked={analysisReportCheck} onIonChange={e => setAnalysisReportCheck(e.detail.checked)}  slot="start"></IonCheckbox>
+              <IonLabel>Survey Analysis Report</IonLabel>
+            </IonItem>
+            <IonItem>
+              <IonCheckbox checked={devicesReportCheck} onIonChange={e => setDevicesReportCheck(e.detail.checked)}  slot="start"></IonCheckbox>
+              <IonLabel>Device Usage Report</IonLabel>
+            </IonItem>
+            <IonButton type="submit" class="modal-button" size="large" expand="block">
               Generate Reports
             </IonButton>
+            </form>
           </IonContent>
         </IonModal>
       </IonContent>
