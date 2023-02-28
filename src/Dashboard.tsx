@@ -27,6 +27,7 @@ import TeamHome from './pages/teamHome/teamHome';
 import TeamJoin from './pages/teamHome/teamJoin';
 import TeamCreation from './pages/teamCreation/teamCreation';
 import Admin from './pages/admin/admin';
+import Announcements from './pages/admin/announcements';
 import StepsCalculator from './pages/stepsCalculator/stepsCalculator';
 
 /* Theming */
@@ -61,6 +62,7 @@ const Dashboard: React.FC = () => {
         <Route exact path="/app/team/join" component={TeamJoin} />
         <Route exact path="/app/admin" component={Admin} />
         <Route exact path="/app/adminSteps" component={AdminSteps} />
+        <Route exact path="/app/admin/announcements" component={Announcements} />
         <Route exact path="/app">
           <Redirect to="/app/home" />
         </Route>
