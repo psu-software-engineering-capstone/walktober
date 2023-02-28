@@ -148,7 +148,6 @@ const Profile: React.FC = () => {
         </NavBar>
       </IonHeader>
       <IonContent>
-        <IonItem>
           <IonGrid>
             <IonRow>
               <IonCol size="auto">
@@ -212,7 +211,6 @@ const Profile: React.FC = () => {
               </IonCol>
             </IonRow>
           </IonGrid>
-        </IonItem>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
