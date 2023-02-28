@@ -24,6 +24,7 @@ import { useHistory } from 'react-router';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import './teamHome.scss';
 import { updateDoc } from 'firebase/firestore';
+import { deleteDoc } from 'firebase/firestore';
 
 ChartJS.register(...registerables);
 
@@ -36,11 +37,15 @@ const TeamHome: React.FC = () => {
   }
 
   const [data, setMemDat] = useState(Array<memberData>);
+  const [teammates, setMates] = useState(Array<string>);
   const [groupName, setGroup] = useState('');
   const [profilePic, setProfilePic] = useState('');
+  const [userReference, setUserRef] = useState('');
   const [teamReference, setTeamRef] = useState('');
   const [leadStat, setLeader] = useState(false);
   const [photo, setPhoto] = useState<any>(null);
+  const [userTotStep, setUserTotStep] = useState(0);
+  const [teamSteps, setTeamSteps] = useState(0);
   const history = useHistory();
 
   const chartData = {
@@ -51,8 +56,7 @@ const TeamHome: React.FC = () => {
     datasets: [
       {
         label: 'Steps',
-        data: data
-          .map((col) => col.totalStep),
+        data: data.map((col) => col.totalStep),
         image: data.map((col) => (col.profile_pic ? col.profile_pic : null))
       }
     ]
@@ -217,15 +221,18 @@ const TeamHome: React.FC = () => {
 
   async function getData() {
     const groupData: Array<memberData> = [];
+    const mates: Array<string> = [];
     const currentUserRef = doc(
       //make a reference to the user document
       FirestoreDB,
       'users',
       auth.currentUser.email as string
     );
+    setUserRef(currentUserRef);
     const userSnap = await getDoc(currentUserRef); //get user document
     const userData = userSnap.data(); //get all the data of the user
     const teamName = userData.team; //get the team name
+    setUserTotStep(userData.totalStep);
     if (teamName === '') {
       history.push('/app/team/join');
     }
@@ -236,6 +243,7 @@ const TeamHome: React.FC = () => {
     const teamSnapshot = await getDoc(teamRef); //grab all the team document
     const teamData = teamSnapshot.data(); //get team data
     setProfilePic(teamData.profile_pic);
+    setTeamSteps(teamData.totalStep);
     const teammates: Array<string> = teamData.members; //get the teammembers
     for (let i = 0; i < teammates.length; i++) {
       const memberRef = doc(FirestoreDB, 'users', teammates[i]); //reference member
@@ -247,11 +255,15 @@ const TeamHome: React.FC = () => {
         profile_pic: personalData.profile_pic,
         totalStep: personalData.totalStep
       };
+      mates.push(tempMember.email);
       groupData.push(tempMember); //send to array
     }
     console.log(groupData);
-    setMemDat(groupData.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))); //set variable to the contents of the array
+    setMemDat(
+      groupData.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
+    ); //set variable to the contents of the array
     boxAjust(groupData.length);
+    setMates(mates);
   }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -275,22 +287,22 @@ const TeamHome: React.FC = () => {
   };
 
   function changePicture() {
-    if(leadStat === true){
-      return(
+    if (leadStat === true) {
+      return (
         <>
-        <IonItem>
-        <input
-          type="file"
-          id="img"
-          name="img"
-          accept="image/*"
-          onChange={handleImageChange}
-        />
-      </IonItem>
-      <IonItem>
-        <IonButton onClick={handleSubmit}>Change Team Picture</IonButton>
-      </IonItem>
-      </>
+          <IonItem>
+            <input
+              type="file"
+              id="img"
+              name="img"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          </IonItem>
+          <IonItem>
+            <IonButton onClick={handleSubmit}>Change Team Picture</IonButton>
+          </IonItem>
+        </>
       );
     }
   }
@@ -302,6 +314,68 @@ const TeamHome: React.FC = () => {
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 
+  // leave team
+  async function leaveTeam() {
+    const newTotalStep = teamSteps - userTotStep; //new total step for team
+    const newAvg = newTotalStep / (teammates.length - 1); //new average step for team
+    const newMembers: Array<string> = []; //array for members field
+    // set new members array
+    for (let i = 0; i < teammates.length; i++) {
+      if (teammates[i] !== auth.currentUser.email) {
+        newMembers.push(teammates[i]);
+      }
+    }
+    // if the user is the leader
+    if (leadStat) {
+      // if the user is the only member of the team
+      if (teammates.length === 1) {
+        await deleteDoc(doc(FirestoreDB, 'teams', groupName)) // delete the team document
+          .then(() => {
+            console.log('Team deleted');
+          })
+          .catch((error: any) => {
+            console.log(error);
+          });
+        await updateDoc(userReference, { // update the user document
+          team_leader: false,
+          team: ''
+        });
+        // if the user is not the only member of the team
+      } else {
+        const newLead = teammates[1]; // get the new team leader
+        await updateDoc(teamReference, { // update the team document
+          leader: newLead,
+          totalStep: newTotalStep,
+          avg_steps: newAvg,
+          members: newMembers
+        });
+        await updateDoc(userReference, { // update the user document
+          team_leader: false,
+          team: ''
+        });
+        const otherUserRef = doc(
+          FirestoreDB,
+          'users',
+          newLead as string
+        );
+        await updateDoc(otherUserRef, { team_leader: true }); // update the new team leader document
+      }
+      // if the user is not the leader
+    } else {
+      await updateDoc(teamReference, { // update the team document
+        totalStep: newTotalStep,
+        avg_steps: newAvg,
+        members: newMembers
+      });
+      await updateDoc(userReference, { // update the user document
+        team_leader: false,
+        team: ''
+      });
+    }
+    history.go(0); // redirect to join team page
+  }
+
+  // get data when page loads
   useEffect(() => {
     getData();
   }, []);
@@ -345,7 +419,9 @@ const TeamHome: React.FC = () => {
             </IonItem>
             <IonItem> {groupName} Profile Picture </IonItem>
             <IonItem> {changePicture()} </IonItem>
-
+            <IonItem>
+              <IonButton onClick={leaveTeam}> Leave team</IonButton>{' '}
+            </IonItem>
             <IonItem>{DisplayTeams(data)}</IonItem>
           </IonCol>
         </IonRow>
@@ -358,4 +434,3 @@ const TeamHome: React.FC = () => {
 };
 
 export default TeamHome;
-
