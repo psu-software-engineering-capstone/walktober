@@ -24,11 +24,12 @@ import {
   arrayUnion,
   increment
 } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
 import { auth, FirestoreDB } from '../../firebase';
 import { eyeOff, eye } from 'ionicons/icons';
 import { useHistory } from 'react-router';
+import AuthContext from '../../store/auth-context';
 import './teamHome.scss';
 
 const TeamJoin: React.FC = () => {
@@ -51,6 +52,8 @@ const TeamJoin: React.FC = () => {
   const [passwordShown, setPasswordShown] = useState(false); //enable visability to see password
   const [teamNames, setNames] = useState(Array<selectFormat>); //array of only team names for the drop down menu
   const [allTeams, setTeams] = useState(Array<teamData>); //array of teams from database
+
+  const ctx = useContext(AuthContext);
 
   const togglePasswordVisibility = () => {
     //can we see the password?
@@ -102,7 +105,7 @@ const TeamJoin: React.FC = () => {
       });
     }
     console.log(teamNames); // just need it in here for the moment
-    history.push('/app/team');
+    history.go(0); // redirect to the team home page
   };
 
   const toJoin = () => {
@@ -210,6 +213,11 @@ const TeamJoin: React.FC = () => {
   };
 
   async function getData() {
+    if (ctx.team !== '') {
+      //if they are already on a team
+      history.push('/app/team'); //redirect them to the team home page
+      return;
+    }
     const indData: Array<teamData> = []; //temp array for the teams data
     const groupNames: Array<selectFormat> = []; //need the group names to look thorugh
     const adminRef = doc(FirestoreDB, 'admin', 'admin'); //ref the admin doc
@@ -316,4 +324,3 @@ const TeamJoin: React.FC = () => {
 };
 
 export default TeamJoin;
-

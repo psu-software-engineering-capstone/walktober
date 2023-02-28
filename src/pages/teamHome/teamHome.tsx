@@ -372,7 +372,7 @@ const TeamHome: React.FC = () => {
         team: ''
       });
     }
-    history.push('/app/team/join'); // redirect to join team page
+    history.go(0); // redirect to join team page
   }
 
   // get data when page loads
