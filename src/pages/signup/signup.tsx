@@ -67,6 +67,7 @@ const Signup: React.FC = () => {
       team_leader: false,
       stepsByDate: [],
       admin: true,
+      step_goal: 0,
     });
   };
 
@@ -83,6 +84,7 @@ const Signup: React.FC = () => {
       team_leader: false,
       stepsByDate: [],
       admin: true,
+      step_goal: 0,
     });
   };
 
@@ -99,11 +101,22 @@ const Signup: React.FC = () => {
       team_leader: false,
       stepsByDate: [],
       admin: true,
+      step_goal: 0,
     });
   };
 
   // sign up with google //
   const googleAuth = async () => {
+    const currentDate: Date = new Date();
+    const adminRef = doc(FirestoreDB, 'admin', 'admin');
+    const adminSnap = await getDoc(adminRef);
+    const userCreationDeadline: Date = new Date(adminSnap.data().registration_deadline);
+    if (currentDate > userCreationDeadline) {
+      alert(
+        `The user sign-up deadline is: ${userCreationDeadline}. You cannot register for an account now.`
+      );
+      return;
+    }
     // web //
     if (!isPlatform('capacitor')) {
       signInWithPopup(auth, provider)
@@ -155,7 +168,17 @@ const Signup: React.FC = () => {
   };
 
   // sign up with email and password (web & ios & android) //
-  const signUpEmailPassword = () => {
+  const signUpEmailPassword = async () => {
+    const currentDate: Date = new Date();
+    const adminRef = doc(FirestoreDB, 'admin', 'admin');
+    const adminSnap = await getDoc(adminRef);
+    const userCreationDeadline: Date = new Date(adminSnap.data().registration_deadline);
+    if (currentDate > userCreationDeadline) {
+      alert(
+        `The user sign-up deadline is: ${userCreationDeadline}. You cannot register for an account now.`
+      );
+      return;
+    }
     if (newPassword === newConfirmPassword) {
       createUserWithEmailAndPassword(auth, newEmail, newPassword)
         .then((data: unknown) => {
