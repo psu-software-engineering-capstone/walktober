@@ -17,7 +17,8 @@ import {
   IonRow,
   IonTextarea,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  isPlatform
 } from '@ionic/react';
 import NavBar from '../../components/NavBar';
 import { closeCircleSharp } from 'ionicons/icons';
@@ -136,23 +137,23 @@ const Admin: React.FC = () => {
         <>
           <IonGrid fixed={true}>
             <IonRow class="header-row">
-              <IonCol sizeMd="3" size="5" class="header-col admin-col">
+              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="header-col admin-col">
                 Name
               </IonCol>
 
-              <IonCol sizeMd="3" size="5" class="header-col admin-col">
+              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="header-col admin-col">
                 Team
               </IonCol>
 
-              <IonCol sizeMd="4" size="6" class="header-col admin-col">
+              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "3" : "6"} class="header-col admin-col">
                 Email
               </IonCol>
 
-              <IonCol sizeMd="3" size="8" class="header-col admin-col">
+              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "8"} class="header-col admin-col">
                 Total Steps
               </IonCol>
 
-              <IonCol sizeMd="3" size="8" class="header-col admin-col">
+              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "4" : "8"} class="header-col admin-col">
                 Actions
               </IonCol>
             </IonRow>
@@ -160,20 +161,20 @@ const Admin: React.FC = () => {
             {userLogs.map(
               (item: { name: any; team: any; email: any; steps: any }) => (
                 <IonRow key={Math.random()}>
-                  <IonCol sizeMd="3" size="5" class="admin-col">
+                  <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="admin-col">
                     {item.name}
                   </IonCol>
-                  <IonCol sizeMd="3" size="5" class="admin-col">
+                  <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="admin-col">
                     {item.team}
                   </IonCol>
-                  <IonCol sizeMd="4" size="5" class="admin-col">
+                  <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="admin-col">
                     {item.email}
                   </IonCol>
-                  <IonCol sizeMd="3" size="8" class="admin-col">
+                  <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "8"} class="admin-col">
                     {item.steps}
                   </IonCol>
-                  <IonCol sizeMd="3" size="8" class="admin-col">
-                    <IonButton size="small">Edit Step Log</IonButton>
+                  <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "4" : "8"} class="admin-col">
+                    <IonButton size="small">{isPlatform('ios') || isPlatform('android') ? "Edit Log" : "Edit Step Log"}</IonButton>
                   </IonCol>
                 </IonRow>
               )
@@ -186,23 +187,23 @@ const Admin: React.FC = () => {
         <>
           <IonGrid fixed={true}>
             <IonRow class="header-row">
-              <IonCol sizeMd="3" size="5" class="header-col">
+              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="header-col">
                 Name
               </IonCol>
 
-              <IonCol sizeMd="3" size="5" class="header-col">
+              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="header-col">
                 Team
               </IonCol>
 
-              <IonCol sizeMd="4" size="6" class="header-col">
+              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "3" : "6"} class="header-col">
                 Email
               </IonCol>
 
-              <IonCol sizeMd="3" size="8" class="header-col">
+              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "8"} class="header-col">
                 Total Steps
               </IonCol>
 
-              <IonCol sizeMd="3" size="8" class="header-col">
+              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "4" : "8"} class="header-col">
                 Actions
               </IonCol>
             </IonRow>
@@ -379,7 +380,7 @@ const Admin: React.FC = () => {
               <IonButton
                 onClick={() => setIsOpenUser(true)}
                 class="admin-button"
-                size="large"
+                size={isPlatform('ios') || isPlatform('android') ? 'default' : 'large'}
                 expand="block"
               >
                 User Settings
@@ -389,7 +390,7 @@ const Admin: React.FC = () => {
               <IonButton
                 onClick={() => setIsOpenTeam(true)}
                 class="admin-button"
-                size="large"
+                size={isPlatform('ios') || isPlatform('android') ? 'default' : 'large'}
                 expand="block"
               >
                 Team Settings
@@ -399,7 +400,7 @@ const Admin: React.FC = () => {
               <IonButton
                 onClick={() => setIsOpenAnnouncements(true)}
                 class="admin-button"
-                size="large"
+                size={isPlatform('ios') || isPlatform('android') ? 'default' : 'large'}
                 expand="block"
               >
                 Announcements
@@ -409,7 +410,7 @@ const Admin: React.FC = () => {
               <IonButton
                 onClick={() => setIsOpenReport(true)}
                 class="admin-button"
-                size="large"
+                size={isPlatform('ios') || isPlatform('android') ? 'default' : 'large'}
                 expand="block"
               >
                 Generate Report
