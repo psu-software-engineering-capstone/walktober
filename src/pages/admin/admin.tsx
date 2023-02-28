@@ -27,6 +27,7 @@ import { useHistory } from 'react-router-dom';
 import { FirestoreDB } from '../../firebase';
 import { doc, collection, getDocs, updateDoc } from 'firebase/firestore';
 import './admin.css';
+import { TeamData, IndividualData, PreSurvey, PostSurvey, Devices } from '../sampleData';
 
 const Admin: React.FC = () => {
   //used to open and close modals
@@ -56,7 +57,6 @@ const Admin: React.FC = () => {
   const [teamReportCheck, setTeamReportCheck] = useState(false);
   const [preSurveryReportCheck, setpreSurveryReportCheck] = useState(false);
   const [postSurveryReportCheck, setpostSurveryReportCheck] = useState(false);
-  const [analysisReportCheck, setAnalysisReportCheck] = useState(false);
   const [devicesReportCheck, setDevicesReportCheck] = useState(false);
 
   const [userLogs, setUserLogs] = useState<UserLog[]>([]);
@@ -217,29 +217,151 @@ const Admin: React.FC = () => {
 
     if(userReportCheck){
       console.log("Generating user report");
+      
+      let str = '"Name","eMail","Team","TotalSteps"\n';
+
+        for (let i = 0; i < IndividualData.length; i++) {
+            let line = '';
+            line += '"' + IndividualData[i].name + '",';
+            line += '"' + IndividualData[i].email + '",';
+            line += '"' + IndividualData[i].team + '",';
+            line += IndividualData[i].totalStep;
+            str += line + '\r\n';
+        }
+      console.log(str);
+      
+      const blob = new Blob([str], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      if (link.download !== undefined) { // feature detection
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'usersReport.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     }
 
     if(teamReportCheck){
       console.log("Generating team report");
+
+      let str = '"Team Name","Cumulative Steps","Number of Team Members","TotalSteps"\n';
+
+        for (let i = 0; i < TeamData.length; i++) {
+            let line = '';
+            line += '"' + TeamData[i].name + '",';
+            line += 0 + ',';
+            line += 0 + ',';
+            line += TeamData[i].avg_steps;
+            str += line + '\r\n';
+        }
+      console.log(str);
+
+      const blob = new Blob([str], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      if (link.download !== undefined) { // feature detection
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'teamsReport.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     }
 
     if(preSurveryReportCheck){
-      console.log("Generating intro survey report");
+      console.log("Generating pre survey report");
+
+      let str = '"Anonymous ID #","Hours of Physical Activity","Minutes of Physical Activity","TotalSteps"\n';
+
+        for (let i = 0; i < PreSurvey.length; i++) {
+            let line = '';
+            line += PreSurvey[i].anonymous_id + ',';
+            line += '"' + PreSurvey[i].psu_affiliation + '",';
+            line += '"' + PreSurvey[i].heard_about + '",';
+            line += PreSurvey[i].weekly_physical_activity_hours + ',';
+            line += PreSurvey[i].weekly_physical_activity_minutes + ',';
+            line += '"' + PreSurvey[i].distance_from_campus + '",';
+            line += '"' + PreSurvey[i].rec_center_frequency + '"';
+            str += line + '\r\n';
+        }
+      console.log(str);
+
+      const blob = new Blob([str], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      if (link.download !== undefined) { // feature detection
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'preSurveyReport.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     }
 
     if(postSurveryReportCheck){
-      console.log("Generating exit survey report");
-    }
+      console.log("Generating post survey report");
 
-    if(analysisReportCheck){
-      console.log("Generating survey alalysis report");
+      let str = '"Team Name","Cumulative Steps","Number of Team Members","TotalSteps"\n';
+
+        for (let i = 0; i < PostSurvey.length; i++) {
+            let line = '';
+            line += PostSurvey[i].anonymous_id + ',';
+            line += PostSurvey[i].weekly_physical_activity_hours + ',';
+            line += PostSurvey[i].weekly_physical_activity_minutes + ',';
+            line += '"' + PostSurvey[i].participated_events + '",';
+            line += '"' + PostSurvey[i].future_walk_ideas + '",';
+            line += PostSurvey[i].walktober_improved_health + ',';
+            line += PostSurvey[i].walktober_improved_community + ',';
+            line += PostSurvey[i].would_participate_again+ ',';
+            line += '"' + PostSurvey[i].if_not_why + '",';
+            line += '"' + PostSurvey[i].feedback + '"';
+            str += line + '\r\n';
+        }
+      console.log(str);
+
+      const blob = new Blob([str], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      if (link.download !== undefined) { // feature detection
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'postSurveyReport.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     }
 
     if(devicesReportCheck){
       console.log("Generating device usage report");
+
+      let str = '';
+      str += '"IPhone",' + Devices.iPhone + '\r\n';
+      str += '"Android",' + Devices.android + '\r\n';
+      str += '"Apple Health",' + Devices.apple_health + '\r\n';
+      str += '"FitBit",' + Devices.fitbit + '\r\n';
+      str += '"Google Health",' + Devices.google_health + '\r\n';
+      console.log(str);
+
+      const blob = new Blob([str], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      if (link.download !== undefined) { // feature detection
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'devicesReport.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     }
 
     console.log("Reports have been generated");
+    
   };
 
   return (
@@ -481,10 +603,6 @@ const Admin: React.FC = () => {
             <IonItem>
               <IonCheckbox checked={postSurveryReportCheck} onIonChange={e => setpostSurveryReportCheck(e.detail.checked)}  slot="start"></IonCheckbox>
               <IonLabel>Post Survery Report</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonCheckbox checked={analysisReportCheck} onIonChange={e => setAnalysisReportCheck(e.detail.checked)}  slot="start"></IonCheckbox>
-              <IonLabel>Survey Analysis Report</IonLabel>
             </IonItem>
             <IonItem>
               <IonCheckbox checked={devicesReportCheck} onIonChange={e => setDevicesReportCheck(e.detail.checked)}  slot="start"></IonCheckbox>
