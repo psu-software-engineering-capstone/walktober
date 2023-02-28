@@ -30,6 +30,7 @@ import './theme/variables.css';
 
 import { useContext, useEffect } from 'react';
 import AuthContext from './store/auth-context';
+import ExitSurveyModal from './pages/exitQuestions/exitQuestionsModal';
 
 setupIonicReact();
 
@@ -57,6 +58,7 @@ function App() {
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/register" component={SignupForm} />
+          <Route exact path="/exit" component={ExitSurveyModal} />
           <Route exact path="/password/reset" component={ForgotPassword} />
           {/* Cannot have exact here */}
           <Route path="/app" component={Dashboard} />

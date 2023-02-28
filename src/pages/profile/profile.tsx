@@ -126,6 +126,10 @@ const Profile: React.FC = () => {
     }
   };
 
+  const exitSurvey = async() => {
+    history.push('/exit');
+  };
+
   // handle refresher
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
@@ -189,6 +193,9 @@ const Profile: React.FC = () => {
                 )}
                 <IonItem>
                   <IonButton onClick={signOut}>Sign Out</IonButton>
+                </IonItem>
+                <IonItem>
+                  <IonButton onClick={exitSurvey}>Exit Survey</IonButton>
                 </IonItem>
               </IonCol>
               <IonCol>

@@ -68,7 +68,6 @@ const SignupForm: React.FC = () => {
   const recCenterUsage = {
     header: 'Please select the most accurate frequency for your PSU Rec Center usage'
   };
-
   const distFromCampus = {
     header: 'Please select the most accurate distance you live from the PSU campus'
   };
