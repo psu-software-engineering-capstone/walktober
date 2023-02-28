@@ -145,6 +145,7 @@ const Admin: React.FC = () => {
         alert(error);
       });
       setOpenCreateTeam(false);
+      history.go(0);
     }
   };
 
