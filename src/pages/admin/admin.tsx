@@ -132,11 +132,10 @@ const Admin: React.FC = () => {
         name: newOpenTeam,
         avg_steps: 0,
         leader: '',
-        members: '',
+        members: [],
         status: 0,
         password: '',
         profile_pic: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
-        team_size: 0, 
         totalStep: 0,
         channel_id: '' // TODO: create discord channel
       })
