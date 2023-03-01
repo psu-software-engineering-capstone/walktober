@@ -7,17 +7,16 @@ interface StepLog {
   steps: number;
 }
 
-const stepsLeft = 500;
-const goalSteps = 1000;
-const currentSteps = 500;
+const ProgressChart: React.FC<{ data: Array<StepLog>, totalStep: number, stepGoal: number }> = ({ data, totalStep, stepGoal }) => {
 
-const ProgressChart: React.FC<{ data: Array<StepLog> }> = ({ data }) => {
+  const stepsLeft = stepGoal - totalStep;
+
   return (
     <>
-      <h1>Goal steps: 1000</h1>
+      <h1>Goal steps: {stepGoal}</h1>
       <IonLabel>
-        <IonProgressBar value={1 - stepsLeft / goalSteps / 1}></IonProgressBar>
-        {currentSteps.toString() + '/' + goalSteps.toString() + ' steps'}
+        <IonProgressBar value={1 - stepsLeft / stepGoal / 1}></IonProgressBar>
+        {totalStep.toString() + '/' + stepGoal.toString() + ' steps'}
       </IonLabel>
       <Bar
         options={{
