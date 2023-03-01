@@ -5,28 +5,24 @@ import {
   IonCol,
   IonContent,
   IonDatetime,
-  IonDatetimeButton,
   IonGrid,
   IonHeader,
-  IonIcon,
   IonInput,
   IonItem,
   IonLabel,
   IonModal,
   IonPage,
   IonRow,
-  IonTextarea,
   IonTitle,
   IonToolbar,
   isPlatform
 } from '@ionic/react';
 import NavBar from '../../components/NavBar';
-import { closeCircleSharp } from 'ionicons/icons';
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../store/auth-context';
 import { useHistory } from 'react-router-dom';
 import { FirestoreDB } from '../../firebase';
-import { doc, collection, getDocs, updateDoc } from 'firebase/firestore';
+import { doc, collection, getDocs, updateDoc, setDoc, getDoc } from 'firebase/firestore';
 import './admin.css';
 import { TeamData, IndividualData, PreSurvey, PostSurvey, Devices } from '../sampleData';
 
@@ -34,7 +30,7 @@ const Admin: React.FC = () => {
   //used to open and close modals
   const [isOpenUser, setIsOpenUser] = useState(false);
   const [isOpenTeam, setIsOpenTeam] = useState(false);
-  const [isOpenAnnouncements, setIsOpenAnnouncements] = useState(false);
+  const [isOpenCreateTeam, setOpenCreateTeam] = useState(false);
   const [isOpenReport, setIsOpenReport] = useState(false);
 
   // used to send new team sizes and team creation date to database
@@ -42,6 +38,10 @@ const Admin: React.FC = () => {
   const [newMinTeamSize, setNewMinTeamSize] = useState(10);
   const [newTeamCreationDate, setNewTeamCreationDate] = useState('');
   const [newRegistrationDeadline, setNewRegistrationDeadline] = useState('');
+
+  // used for Open Team Module
+
+  const [newOpenTeam, setOpenTeam] = useState('');
 
   //used for dates for teams
   //const [teamDeadline, setTeamDeadline] = useState('');
@@ -119,6 +119,35 @@ const Admin: React.FC = () => {
         alert(error);
       });
       setIsOpenUser(false);
+  };
+
+  const sendNewOpenTeam = async () => {
+    const dbRef = doc(FirestoreDB, 'teams', newOpenTeam);
+    const dbSnap = await getDoc(dbRef);
+    if (dbSnap.exists()) {
+      alert(`${newOpenTeam} already exists!`);
+    }
+    else {
+      setDoc(doc(FirestoreDB, 'teams', newOpenTeam), {
+        name: newOpenTeam,
+        avg_steps: 0,
+        leader: '',
+        members: '',
+        status: 0,
+        password: '',
+        profile_pic: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
+        team_size: 0, 
+        totalStep: 0
+      })
+      .then(() => {
+        alert('Team Created!');
+      })
+      .catch((error: any) => {
+        alert(error);
+      });
+      setOpenCreateTeam(false);
+      history.go(0);
+    }
   };
 
   useEffect(() => {
@@ -398,12 +427,12 @@ const Admin: React.FC = () => {
             </IonCol>
             <IonCol class="invis-grid-col">
               <IonButton
-                onClick={() => setIsOpenAnnouncements(true)}
+                onClick={() => setOpenCreateTeam(true)}
                 class="admin-button"
                 size={isPlatform('ios') || isPlatform('android') ? 'default' : 'large'}
                 expand="block"
               >
-                Announcements
+                Create Open Team
               </IonButton>
             </IonCol>
             <IonCol class="invis-grid-col">
@@ -499,14 +528,14 @@ const Admin: React.FC = () => {
             </IonModal>
           </IonContent>
         </IonModal>
-
-        <IonModal isOpen={isOpenAnnouncements} backdropDismiss={false}>
+        
+        <IonModal isOpen={isOpenCreateTeam} backdropDismiss={false}>
           <IonHeader class="modal-header">
             <IonToolbar>
-              <IonTitle class="modal-title">Announcements</IonTitle>
+              <IonTitle class="modal-title">Create Open Team</IonTitle>
               <IonButtons slot="end">
                 <IonButton
-                  onClick={() => setIsOpenAnnouncements(false)}
+                  onClick={() => setOpenCreateTeam(false)}
                   class="admin-close-modal"
                 >
                   Close
@@ -516,52 +545,15 @@ const Admin: React.FC = () => {
           </IonHeader>
           <IonContent className="ion-padding" class="modal-content">
             <IonItem>
-              <IonTextarea
-                placeholder="Type announcement message here"
-                autoGrow={true}
-              ></IonTextarea>
+            <IonLabel position="floating">Enter New Open Team Name:</IonLabel>
+              <IonInput
+                placeholder="Type here"
+                onIonChange={(e) => setOpenTeam(e.target.value as string)}
+              ></IonInput>
             </IonItem>
-            <IonGrid>
-              <IonRow>
-                <IonCol size="5" class="invis-announcements">
-                  <IonButton>Post Announcement</IonButton>
-                </IonCol>
-                <IonCol size="7" class="invis-announcements">
-                  <IonButton>Schedule Announcement</IonButton>
-                  <IonDatetimeButton datetime="datetime"></IonDatetimeButton>
-                </IonCol>
-              </IonRow>
-            </IonGrid>
-            <IonGrid>
-              <IonRow class="header-row">
-                <IonCol size="4" class="admin-col">
-                  Time Scheduled
-                </IonCol>
-                <IonCol size="8" class="admin-col">
-                  Announcement Contents
-                </IonCol>
-                <IonCol size="4" class="admin-col">
-                  Delete
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol size="4" class="admin-col">
-                  January 20, 2023 7:00PM
-                </IonCol>
-                <IonCol size="8" class="admin-col">
-                  Challenge #1
-                </IonCol>
-                <IonCol size="4" class="admin-col">
-                  <IonButton size="small">
-                    <IonIcon slot="start" icon={closeCircleSharp}></IonIcon>
-                    Remove
-                  </IonButton>
-                </IonCol>
-              </IonRow>
-            </IonGrid>
-            <IonModal keepContentsMounted={true} backdropDismiss={false}>
-              <IonDatetime id="datetime"></IonDatetime>
-            </IonModal>
+            <IonButton class="modal-button" size="large" expand="block" onClick={sendNewOpenTeam}>
+              Create Team
+            </IonButton>
           </IonContent>
         </IonModal>
 
