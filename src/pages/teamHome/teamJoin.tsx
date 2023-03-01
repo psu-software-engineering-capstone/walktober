@@ -31,6 +31,7 @@ import { eyeOff, eye } from 'ionicons/icons';
 import { useHistory } from 'react-router';
 import AuthContext from '../../store/auth-context';
 import './teamHome.scss';
+import { onSnapshot } from 'firebase/firestore';
 
 const TeamJoin: React.FC = () => {
   interface teamData {
@@ -50,7 +51,6 @@ const TeamJoin: React.FC = () => {
   const [joinTeam, setJoin] = useState(''); //variable to get the team that the user chooses from the drop down menu
   const [teamPass, setPass] = useState(''); //variable to collect team password
   const [passwordShown, setPasswordShown] = useState(false); //enable visability to see password
-  const [teamNames, setNames] = useState(Array<selectFormat>); //array of only team names for the drop down menu
   const [allTeams, setTeams] = useState(Array<teamData>); //array of teams from database
 
   const ctx = useContext(AuthContext);
@@ -104,8 +104,7 @@ const TeamJoin: React.FC = () => {
         team_leader: true
       });
     }
-    console.log(teamNames); // just need it in here for the moment
-    history.go(0); // redirect to the team home page
+    history.push('/app/team'); // move to the team page
   };
 
   const toJoin = () => {
@@ -225,7 +224,6 @@ const TeamJoin: React.FC = () => {
     const adminData = adminSnapshot.data(); //get data
     const querySnapshot = await getDocs(collection(FirestoreDB, 'teams')); //grab all the team documents
     querySnapshot.forEach((doc: any) => {
-      console.log(doc.id, ' => ', doc.data()); //get the data from the doc
       if (doc.data().members.length <= adminData.max_team_size) {
         //this is deteremined by the admins
         const allNames: selectFormat = {
@@ -256,19 +254,33 @@ const TeamJoin: React.FC = () => {
           indData.push(tem);
         }
       } else {
-        console.log(doc.data().name, ' not added to the list'); //too many members in team to join
+        console.log(doc.data().name, ' is full'); // if the team is full
       }
     });
-    setNames(groupNames);
     indData.sort((a: any, b: any) =>
       a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
     );
-    console.log(indData);
     setTeams(indData);
   }
 
+  // update the data when the page loads
+  // update the data when the teams are added, removed, or modified
   useEffect(() => {
-    getData();
+    const unsubscribe = onSnapshot(collection(FirestoreDB, 'teams'), (snapshot: any) => {
+      snapshot.docChanges().forEach((change: any) => {
+        if (change.type === 'added') {
+          console.log('New Team: ', change.doc.data());
+        }
+        if (change.type === 'modified') {
+          console.log('Modified Team: ', change.doc.data());
+        }
+        if (change.type === 'removed') {
+          console.log('Removed Team: ', change.doc.data());
+        }
+        getData();
+      });
+    });
+    return unsubscribe;
   }, []);
 
   const moveToCreateTeam = () => {

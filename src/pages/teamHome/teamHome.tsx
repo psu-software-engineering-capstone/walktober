@@ -14,7 +14,7 @@ import {
   RefresherEventDetail
 } from '@ionic/react';
 import { getDoc, doc } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
 import { auth, FirestoreDB, storage } from '../../firebase';
 import { Chart as ChartJS, registerables } from 'chart.js';
@@ -25,6 +25,8 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import './teamHome.scss';
 import { updateDoc } from 'firebase/firestore';
 import { deleteDoc } from 'firebase/firestore';
+import { onSnapshot } from 'firebase/firestore';
+import AuthContext from '../../store/auth-context';
 
 ChartJS.register(...registerables);
 
@@ -47,6 +49,8 @@ const TeamHome: React.FC = () => {
   const [userTotStep, setUserTotStep] = useState(0);
   const [teamSteps, setTeamSteps] = useState(0);
   const history = useHistory();
+
+  const ctx = useContext(AuthContext);
 
   const chartData = {
     /*Sorts the data of all users by the amount of steps taken. Labels formed from the names
@@ -233,9 +237,6 @@ const TeamHome: React.FC = () => {
     const userData = userSnap.data(); //get all the data of the user
     const teamName = userData.team; //get the team name
     setUserTotStep(userData.totalStep);
-    if (teamName === '') {
-      history.push('/app/team/join');
-    }
     setGroup(teamName);
     setLeader(userData.team_leader);
     const teamRef = doc(FirestoreDB, 'teams', teamName); //reference team document
@@ -258,7 +259,6 @@ const TeamHome: React.FC = () => {
       mates.push(tempMember.email);
       groupData.push(tempMember); //send to array
     }
-    console.log(groupData);
     setMemDat(
       groupData.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
     ); //set variable to the contents of the array
@@ -372,13 +372,20 @@ const TeamHome: React.FC = () => {
         team: ''
       });
     }
-    history.go(0); // redirect to join team page
+    history.push('/app/team/join'); // redirect to join team page
   }
 
-  // get data when page loads
+  // update the data when the page loads
+  // update the data when the team gets updated
   useEffect(() => {
-    getData();
-  }, []);
+    if (ctx.team !== '') {
+      const unsubscribe = onSnapshot(doc(FirestoreDB, 'teams', ctx.team), (doc: any) => {
+        console.log('Team data: ', doc.data());
+        getData();
+      });
+      return unsubscribe;
+    }
+  }, [ctx.team]);
 
   return (
     <IonPage>
@@ -420,7 +427,7 @@ const TeamHome: React.FC = () => {
             <IonItem> {groupName} Profile Picture </IonItem>
             <IonItem> {changePicture()} </IonItem>
             <IonItem>
-              <IonButton onClick={leaveTeam}> Leave team</IonButton>{' '}
+              <IonButton onClick={leaveTeam}> Leave team </IonButton>{' '}
             </IonItem>
             <IonItem>{DisplayTeams(data)}</IonItem>
           </IonCol>
