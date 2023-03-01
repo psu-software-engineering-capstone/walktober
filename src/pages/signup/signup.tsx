@@ -264,7 +264,7 @@ const Signup: React.FC = () => {
 
               <div>&nbsp;</div>
 
-              <IonButton expand="block" onClick={signUpEmailPassword}>
+              <IonButton expand="block" color="primary" onClick={signUpEmailPassword}>
                 Sign up
               </IonButton>
 
@@ -272,16 +272,16 @@ const Signup: React.FC = () => {
                 <span>OR</span>
               </h2>
 
-              <IonButton expand="block" onClick={googleAuth} color="tertiary">
+              <IonButton expand="block" onClick={googleAuth} color="secondary">
                 <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign up with Google
               </IonButton>
             </IonList>
           </IonCardContent>
         </IonCard>
 
-        <IonCard className={'signup-card ' + 'bottom'}>
+        <IonCard className="signup-card bottom">
           <IonCardContent>
-            <IonButton expand="block" onClick={moveToLogin} color="success">
+            <IonButton expand="block" onClick={moveToLogin} color="tertiary">
               Return to Login
             </IonButton>
           </IonCardContent>

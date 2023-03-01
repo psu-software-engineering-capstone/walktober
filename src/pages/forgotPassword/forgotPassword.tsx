@@ -97,21 +97,20 @@ const ForgotPassword: React.FC = () => {
               <IonNote slot="helper">Enter a valid email</IonNote>
               <IonNote slot="error">Invalid email</IonNote>
             </IonItem>
-
-          <IonButton expand="block" onClick={sendResetPassword}>
+          <IonButton expand="block" color="primary" onClick={sendResetPassword}>
             Reset Password
           </IonButton>
           <h2 className="or-divider">
             <span>OR</span>
           </h2>
-          <IonButton expand="block" onClick={moveToLogin} color="tertiary">
+          <IonButton expand="block" onClick={moveToLogin} color="secondary">
             Return to Login
           </IonButton>
         </IonCardContent>
       </IonCard>
-        <IonCard className={"signup-card " + "bottom"}>
+        <IonCard className="signup-card bottom">
           <IonCardContent className="no-account">Don&apos;t have an account?
-              <IonButton expand="block" onClick={moveToSignup} color="success">Create new account</IonButton>
+              <IonButton expand="block" onClick={moveToSignup} color="tertiary">Create new account</IonButton>
           </IonCardContent>
         </IonCard>
       </IonContent>
