@@ -458,6 +458,15 @@ const Admin: React.FC = () => {
                 Generate Report
               </IonButton>
             </IonCol>
+            <IonCol class="invis-grid-col">
+              <IonButton
+                class="admin-button"
+                size={isPlatform('ios') || isPlatform('android') ? 'default' : 'large'}
+                expand="block"
+              >
+                Announcements
+              </IonButton>
+            </IonCol>
           </IonRow>
         </IonGrid>
 
