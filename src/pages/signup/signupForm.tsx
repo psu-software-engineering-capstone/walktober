@@ -82,7 +82,7 @@ const SignupForm: React.FC = () => {
   return (
       <IonPage>
         <IonHeader></IonHeader>
-        <IonContent fullscreen className="signupForm">
+        <IonContent fullscreen className="signup-form">
           <IonCard className="signup-card">
             <IonCardHeader>
               <img alt="Walktober logo" src={logo} />

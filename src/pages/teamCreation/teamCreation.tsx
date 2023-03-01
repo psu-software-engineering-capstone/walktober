@@ -90,7 +90,8 @@ const TeamCreation: React.FC = () => {
       status: newTeamStatus,
       password: newTeamPassword,
       profile_pic: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
-      totalStep: userData.totalStep
+      totalStep: userData.totalStep,
+      channel_id: '' // TODO: create discord channel
     })
       .then(async () => {
         console.log('Document written successfully');

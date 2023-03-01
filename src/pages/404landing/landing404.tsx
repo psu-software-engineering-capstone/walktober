@@ -35,7 +35,7 @@ const landing404: React.FC = () => {
           exist.
         </p>
 
-        <a onClick={HomePage} className="error-info">
+        <a onClick={HomePage} className="error-info" href="/app/home">
           {' '}
           Click Here to return home.
         </a>
