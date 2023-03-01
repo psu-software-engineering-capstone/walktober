@@ -13,7 +13,7 @@ import {
   IonTitle,
   RefresherEventDetail
 } from '@ionic/react';
-import { getDoc, doc } from 'firebase/firestore';
+import { getDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
 import { auth, FirestoreDB, storage } from '../../firebase';
@@ -23,8 +23,6 @@ import { Bar } from 'react-chartjs-2';
 import { useHistory } from 'react-router';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import './teamHome.scss';
-import { updateDoc } from 'firebase/firestore';
-import { deleteDoc } from 'firebase/firestore';
 
 ChartJS.register(...registerables);
 
@@ -43,9 +41,11 @@ const TeamHome: React.FC = () => {
   const [userReference, setUserRef] = useState('');
   const [teamReference, setTeamRef] = useState('');
   const [leadStat, setLeader] = useState(false);
+  const [buttonValid, setValid] = useState(false);
   const [photo, setPhoto] = useState<any>(null);
   const [userTotStep, setUserTotStep] = useState(0);
   const [teamSteps, setTeamSteps] = useState(0);
+  const [minSize, setMinSize] = useState(0);
   const history = useHistory();
 
   const chartData = {
@@ -264,6 +264,19 @@ const TeamHome: React.FC = () => {
     ); //set variable to the contents of the array
     boxAjust(groupData.length);
     setMates(mates);
+    const adminRef = doc(FirestoreDB, 'admin', 'admin'); //ref the admin doc
+    const adminSnapshot = await getDoc(adminRef); //get the admin docu
+    const adminData = adminSnapshot.data(); //get data
+    setMinSize(adminData.min_team_size);
+    const today = new Date(Date());
+    const maxDate = new Date(adminData.team_creation_due);
+    if (maxDate < today) {
+      setValid(true);
+      console.log('true');
+    } else {
+      setValid(false);
+      console.log('false');
+    }
   }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -336,38 +349,39 @@ const TeamHome: React.FC = () => {
           .catch((error: any) => {
             console.log(error);
           });
-        await updateDoc(userReference, { // update the user document
+        await updateDoc(userReference, {
+          // update the user document
           team_leader: false,
           team: ''
         });
         // if the user is not the only member of the team
       } else {
         const newLead = teammates[1]; // get the new team leader
-        await updateDoc(teamReference, { // update the team document
+        await updateDoc(teamReference, {
+          // update the team document
           leader: newLead,
           totalStep: newTotalStep,
           avg_steps: newAvg,
           members: newMembers
         });
-        await updateDoc(userReference, { // update the user document
+        await updateDoc(userReference, {
+          // update the user document
           team_leader: false,
           team: ''
         });
-        const otherUserRef = doc(
-          FirestoreDB,
-          'users',
-          newLead as string
-        );
+        const otherUserRef = doc(FirestoreDB, 'users', newLead as string);
         await updateDoc(otherUserRef, { team_leader: true }); // update the new team leader document
       }
       // if the user is not the leader
     } else {
-      await updateDoc(teamReference, { // update the team document
+      await updateDoc(teamReference, {
+        // update the team document
         totalStep: newTotalStep,
         avg_steps: newAvg,
         members: newMembers
       });
-      await updateDoc(userReference, { // update the user document
+      await updateDoc(userReference, {
+        // update the user document
         team_leader: false,
         team: ''
       });
@@ -379,6 +393,19 @@ const TeamHome: React.FC = () => {
   useEffect(() => {
     getData();
   }, []);
+
+  function verifyCount() {
+    if (buttonValid) {
+      if (teammates.length < minSize) {
+        return (
+          <b>
+            Your team will not be particpating in the Walktober challenge due to not having
+            enough teammembers
+          </b>
+        );
+      }
+    }
+  }
 
   return (
     <IonPage>
@@ -422,7 +449,9 @@ const TeamHome: React.FC = () => {
             <IonItem>
               <IonButton onClick={leaveTeam}> Leave team</IonButton>{' '}
             </IonItem>
+            <IonItem>{verifyCount()}</IonItem>
             <IonItem>{DisplayTeams(data)}</IonItem>
+            
           </IonCol>
         </IonRow>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>

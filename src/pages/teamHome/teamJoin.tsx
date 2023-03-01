@@ -52,6 +52,8 @@ const TeamJoin: React.FC = () => {
   const [passwordShown, setPasswordShown] = useState(false); //enable visability to see password
   const [teamNames, setNames] = useState(Array<selectFormat>); //array of only team names for the drop down menu
   const [allTeams, setTeams] = useState(Array<teamData>); //array of teams from database
+  const [buttonValid, setValid] = useState(false);
+  const [deadline, setDeadline] = useState('');
 
   const ctx = useContext(AuthContext);
 
@@ -114,7 +116,7 @@ const TeamJoin: React.FC = () => {
       alert('No team name has been entered as of yet');
       return;
     }
-    for (let i = 0; i < allTeams.length + 1; i++) {
+    for (let i = 0; i < allTeams.length; i++) {
       if (allTeams[i].name === joinTeam) {
         //check if it is one of the team's that is available
         if (allTeams[i].type === 'Private') {
@@ -223,10 +225,21 @@ const TeamJoin: React.FC = () => {
     const adminRef = doc(FirestoreDB, 'admin', 'admin'); //ref the admin doc
     const adminSnapshot = await getDoc(adminRef); //get the admin docu
     const adminData = adminSnapshot.data(); //get data
+    setDeadline(adminData.team_creation_due);
+    const today = new Date(Date());
+    const maxDate = new Date(adminData.team_creation_due);
+    console.log(today < maxDate, today, maxDate);
+    if (maxDate < today) {
+      setValid(true);
+      console.log('true');
+    } else {
+      setValid(false);
+      console.log('false');
+    }
     const querySnapshot = await getDocs(collection(FirestoreDB, 'teams')); //grab all the team documents
     querySnapshot.forEach((doc: any) => {
       console.log(doc.id, ' => ', doc.data()); //get the data from the doc
-      if (doc.data().members.length <= adminData.max_team_size) {
+      if (doc.data().members.length < adminData.max_team_size) {
         //this is deteremined by the admins
         const allNames: selectFormat = {
           //this was to create an array if we used the selection drop down method
@@ -263,7 +276,6 @@ const TeamJoin: React.FC = () => {
     indData.sort((a: any, b: any) =>
       a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
     );
-    console.log(indData);
     setTeams(indData);
   }
 
@@ -274,6 +286,14 @@ const TeamJoin: React.FC = () => {
   const moveToCreateTeam = () => {
     history.push('/app/teamcreation');
   };
+
+  function displayPage() {
+    if (buttonValid === false) {
+      return (<>{DisplayTeams(allTeams)}</>);
+    } else {
+      return <h1>The deadline to join or create a team was {deadline}.</h1>;
+    }
+  }
 
   return (
     <IonPage>
@@ -309,12 +329,18 @@ const TeamJoin: React.FC = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              <IonButton onClick={toJoin}> Join </IonButton>
-              <IonButton onClick={moveToCreateTeam}> Create a Team </IonButton>
+              <IonButton disabled={buttonValid} onClick={toJoin}>
+                {' '}
+                Join{' '}
+              </IonButton>
+              <IonButton disabled={buttonValid} onClick={moveToCreateTeam}>
+                {' '}
+                Create a Team{' '}
+              </IonButton>
             </IonItem>
           </IonCol>
         </IonRow>
-        <IonItem>{DisplayTeams(allTeams)}</IonItem>
+        <>{displayPage()}</>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>

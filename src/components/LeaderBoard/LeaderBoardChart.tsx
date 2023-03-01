@@ -12,6 +12,8 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Bar } from 'react-chartjs-2';
 import { collection, getDocs } from 'firebase/firestore';
 import { FirestoreDB } from '../../firebase';
+import { getDoc } from 'firebase/firestore';
+import { doc } from 'firebase/firestore';
 
 ChartJS.register(...registerables);
 
@@ -181,13 +183,27 @@ const LeaderBoardChart: React.FC = () => {
     }
     if (dataType == 'teams') {
       const querySnapshot = await getDocs(collection(FirestoreDB, 'teams'));
+      const adminRef = doc(FirestoreDB, 'admin', 'admin'); //ref the admin doc
+      const adminSnapshot = await getDoc(adminRef); //get the admin docu
+      const adminData = adminSnapshot.data(); //get data
       querySnapshot.forEach((doc: any) => {
-        const person: Data = {
+        const team: Data = {
           name: doc.data().name as string,
           profile_pic: doc.data().profile_pic as string,
           avg_steps: doc.data().avg_steps as number
         };
-        indData.push(person);
+        const today = new Date(Date());
+        const maxDate = new Date(adminData.team_creation_due);
+        if (maxDate < today) {
+          const membersLength = doc.data().members.length;
+          console.log(membersLength, adminData.min_team_size);
+          if (adminData.min_team_size <= membersLength) {
+            indData.push(team);
+          }
+        }
+        else{
+          indData.push(team);
+        }
       });
       setData(
         indData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
