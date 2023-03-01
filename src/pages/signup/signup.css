@@ -1,21 +1,21 @@
 .signup,
-.signupForm {
+.signup-form {
     --background: url(../../assets/Walktober-graphic.png) center top;
 }
 
 .signup-card-field {
     --padding-start: 0;
 }
-  
+
 .signup-card {
   margin: 50px auto;
   max-width: 500px;
 }
-  
+
 ion-alert.center-alert {
   --backdrop-opacity: 0.7;
 }
-  
+
 ion-alert .alert-button-group {
   background-color: var(--ion-color-light);
 }

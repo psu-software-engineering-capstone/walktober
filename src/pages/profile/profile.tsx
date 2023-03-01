@@ -83,7 +83,7 @@ const Profile: React.FC = () => {
     await updateDoc(dbRef, { profile_pic: photoURL })
       .then(() => {
         alert('profile picture updated!');
-        history.go(0); //refresh page
+        setProfilePic(photoURL); // Refresh data
       })
       .catch((error: any) => {
         alert(error);
@@ -148,7 +148,6 @@ const Profile: React.FC = () => {
         </NavBar>
       </IonHeader>
       <IonContent>
-        <IonItem>
           <IonGrid>
             <IonRow>
               <IonCol size="auto">
@@ -212,7 +211,6 @@ const Profile: React.FC = () => {
               </IonCol>
             </IonRow>
           </IonGrid>
-        </IonItem>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
