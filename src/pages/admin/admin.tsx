@@ -141,12 +141,12 @@ const Admin: React.FC = () => {
       })
       .then(() => {
         alert('Team Created!');
+        history.go(0); // refreshes the page
       })
       .catch((error: any) => {
         alert(error);
       });
       setOpenCreateTeam(false);
-      history.go(0);
     }
   };
 

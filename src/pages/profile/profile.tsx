@@ -83,7 +83,7 @@ const Profile: React.FC = () => {
     await updateDoc(dbRef, { profile_pic: photoURL })
       .then(() => {
         alert('profile picture updated!');
-        history.go(0); //refresh page
+        setProfilePic(photoURL); // Refresh data
       })
       .catch((error: any) => {
         alert(error);
