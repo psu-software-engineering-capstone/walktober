@@ -137,7 +137,8 @@ const Admin: React.FC = () => {
         password: '',
         profile_pic: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
         team_size: 0, 
-        totalStep: 0
+        totalStep: 0,
+        channel_id: '' // TODO: create discord channel
       })
       .then(() => {
         alert('Team Created!');
