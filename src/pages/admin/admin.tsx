@@ -29,6 +29,7 @@ import { FirestoreDB } from '../../firebase';
 import { doc, collection, getDocs, updateDoc } from 'firebase/firestore';
 import './admin.css';
 import { TeamData, IndividualData, PreSurvey, PostSurvey, Devices } from '../sampleData';
+import AdminSteps from '../adminSteps/adminSteps';
 
 const Admin: React.FC = () => {
   //used to open and close modals
@@ -121,6 +122,12 @@ const Admin: React.FC = () => {
       setIsOpenUser(false);
   };
 
+  const goToAdminSteps = (email : string) => {
+    window.history.replaceState(null, '');
+    history.push('/app/adminSteps', { email: email });
+  };
+
+
   useEffect(() => {
     loadUserLogs();
   }, []);
@@ -160,7 +167,7 @@ const Admin: React.FC = () => {
 
             {userLogs.map(
               (item: { name: any; team: any; email: any; steps: any }) => (
-                <IonRow key={Math.random()}>
+                <IonRow key={item.email}>
                   <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="admin-col">
                     {item.name}
                   </IonCol>
@@ -174,7 +181,7 @@ const Admin: React.FC = () => {
                     {item.steps}
                   </IonCol>
                   <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "4" : "8"} class="admin-col">
-                    <IonButton size="small">{isPlatform('ios') || isPlatform('android') ? "Edit Log" : "Edit Step Log"}</IonButton>
+                    <IonButton size="small" onClick={() => goToAdminSteps(item.email)}>{isPlatform('ios') || isPlatform('android') ? "Edit Log" : "Edit Step Log"}</IonButton>
                   </IonCol>
                 </IonRow>
               )
