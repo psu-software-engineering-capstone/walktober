@@ -53,19 +53,35 @@ const LeaderBoardChart: React.FC = () => {
       } = chart;
 
       ctx.save();
-      const imgSize =
-        chartOptions.layout.padding.left - chartOptions.layout.padding.right;
+      const imgSize = (chartOptions.layout.padding.left / 2);
 
       data.datasets[0].image.forEach((imageLink: string, index: number) => {
         const profilePic = new Image();
+        const place = (index + 1).toString() + ordinalNumbers(index +1);
         profilePic.src = imageLink;
+
+        //sets the stylingfor the place of users, '1st, 2nd, 3rd ect.'
+        ctx.font = 'bold 15px Helvetica';
+        ctx.textBaseline = 'bottom';
+        ctx.fillStyle = ChartJS.defaults.color;
+
+        //draws the numbers for each place
+        ctx.fillText(
+          place,
+          0,
+          y.getPixelForValue(index) + (imgSize / 2)/2,
+          imgSize -5
+        );
+
+        //draws the image of the user's profile picture
         ctx.drawImage(
           profilePic,
-          0,
+          imgSize,
           y.getPixelForValue(index) - imgSize / 2,
           imgSize,
-          imgSize
+          imgSize 
         );
+        
       });
     }
   };
@@ -81,9 +97,9 @@ const LeaderBoardChart: React.FC = () => {
     },
     layout: {
       padding: {
-        left: 50,
+        left: 90,
         right: 10
-      }
+      },
     },
     plugins: {
       legend: {
@@ -128,6 +144,7 @@ const LeaderBoardChart: React.FC = () => {
       },
       y: {
         beginAtZero: true,
+        position: 'left',
         title: {
           display: false
         },
@@ -143,9 +160,11 @@ const LeaderBoardChart: React.FC = () => {
           align: 'center',
           font: {
             size: 15
-          }
+          },
+          stepSize: 50000,
+          max: chartData.datasets[0].data
         }
-      }
+      },
     }
   };
 
@@ -153,12 +172,14 @@ const LeaderBoardChart: React.FC = () => {
   const boxAjust = (labelLength: number) => {
     const box = document.querySelector('.box');
     if (box != null) {
-      box.setAttribute('style', 'height: 500px');
-      if (labelLength > 10) {
-        const newHeight = 600 + (labelLength - 10) * 50;
+        const newHeight = labelLength * 60;
         box.setAttribute('style', 'height: ' + newHeight.toString() + 'px');
       }
-    }
+  };
+
+  //gives leaderboard placement numbers a suffix
+  const ordinalNumbers = (n: number) => {
+    return n > 0 ? ["th", "st", "nd", "rd"][(n > 3 && n < 21) || n % 10 > 3 ? 0 : n % 10]: "";
   };
 
   //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
