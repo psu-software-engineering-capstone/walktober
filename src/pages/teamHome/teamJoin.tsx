@@ -80,17 +80,21 @@ const TeamJoin: React.FC = () => {
     const teamSnap = await getDoc(teamRef); //get team document
     const teamData = teamSnap.data(); // get team data
     if (teamData.members.length >= 1) {
+      await updateDoc(currentUserRef, {
+        team: joinTeam
+      }); // update the user's document
       await updateDoc(teamRef, {
         members: arrayUnion(auth.currentUser.email),
         totalStep: increment(userData.totalStep),
         avg_steps:
           (teamData.totalStep + userData.totalStep) /
           (teamData.members.length + 1)
-      }); //update the teams members, their total steps, and the new average steps
-      await updateDoc(currentUserRef, {
-        team: joinTeam
-      });
+      }); // update the teams members, their total steps, and the new average steps
     } else {
+      await updateDoc(currentUserRef, {
+        team: joinTeam,
+        team_leader: true
+      }); // update the user's document and set them as the team leader
       await updateDoc(teamRef, {
         members: arrayUnion(auth.currentUser.email),
         totalStep: increment(userData.totalStep),
@@ -98,17 +102,12 @@ const TeamJoin: React.FC = () => {
           (teamData.totalStep + userData.totalStep) /
           (teamData.members.length + 1),
         leader: userData.email
-      }); //update the teams members, their total steps, and the new average steps
-      await updateDoc(currentUserRef, {
-        team: joinTeam,
-        team_leader: true
-      });
+      }); // update the teams members, their total steps, and the new average steps
     }
     history.push('/app/team'); // move to the team page
   };
 
   const toJoin = () => {
-    //
     if (joinTeam === '') {
       alert('No team name has been entered as of yet');
       return;
