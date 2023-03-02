@@ -29,6 +29,7 @@ import AuthContext from '../../store/auth-context';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
 import { updateDoc } from 'firebase/firestore';
+import { onSnapshot } from 'firebase/firestore';
 
 const Profile: React.FC = () => {
   const history = useHistory();
@@ -42,9 +43,19 @@ const Profile: React.FC = () => {
   const [photo, setPhoto] = useState<any>(null);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
 
+  // update profile data when the page loads
+  // update profile data when the profile data changes
   useEffect(() => {
-    GetRecords();
-  }, []);
+    if (ctx.user !== null) {
+      const unsubscribe = onSnapshot(doc(FirestoreDB, 'users', auth.currentUser.email as string), (doc: any) => {
+        if (doc.exists()) {
+          console.log('Current data: ', doc.data());
+          GetRecords();
+        }
+      });
+      return unsubscribe;
+    }
+  }, [ctx.user]);
 
   async function GetRecords(): Promise<void> {
     if (ctx.user === null) {
@@ -83,7 +94,6 @@ const Profile: React.FC = () => {
     await updateDoc(dbRef, { profile_pic: photoURL })
       .then(() => {
         alert('profile picture updated!');
-        setProfilePic(photoURL); // Refresh data
       })
       .catch((error: any) => {
         alert(error);

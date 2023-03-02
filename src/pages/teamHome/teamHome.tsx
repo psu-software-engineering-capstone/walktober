@@ -280,7 +280,6 @@ const TeamHome: React.FC = () => {
     await updateDoc(teamReference, { profile_pic: photoURL })
       .then(() => {
         alert('Team profile picture updated!');
-        setProfilePic(photoURL); // Refresh data
       })
       .catch((error: any) => {
         alert(error);
