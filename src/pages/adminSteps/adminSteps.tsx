@@ -22,16 +22,20 @@ import { FirestoreDB } from '../../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { updateDoc } from 'firebase/firestore';
 import NavBar from '../../components/NavBar';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
-const AdminSteps: React.FC<{ email: string }> = () => {
+interface AdminStepsParams {
+  email: string;
+}
+
+const AdminSteps: React.FC<{ email: string }> = ( ) => {
   interface StepLog {
     date: string;
     steps: number;
   }
-
-  const history = useHistory();
-  const [email, setEmail] = useState((history.location.state as any)?.email);
+  
+  // const history = useHistory();
+  // const [email, setEmail] = useState((history.location.state as any)?.email);
 
   // const email = 'capstonewinter2023@gmail.com';
   // const name = 'Nora and Yelena';
@@ -44,7 +48,23 @@ const AdminSteps: React.FC<{ email: string }> = () => {
   const [updateTotalStep, setUpdateTotalStep] = useState(false);
   const [updateDB, setUpdateDB] = useState(false);
 
+  const [email, setEmail] = useState('');
+  const { email: emailParam } = useParams<AdminStepsParams>();
   console.log(email);
+
+  // console.log((history.location.state as any)?.email);
+  //console.log((history.location.state));
+
+  // useEffect(() => {
+  //   if((history.location.state as any)?.email != email){
+  //     setEmail((history.location.state));
+  //   }
+  // },[]);
+
+  useEffect(() => {
+    setEmail(emailParam);
+  }, [emailParam]);
+
   useEffect(() => {
     getRecordsFromDB();
   }, []);
@@ -69,8 +89,9 @@ const AdminSteps: React.FC<{ email: string }> = () => {
   }, [updateDB]);
 
   const getRecordsFromDB = async () => {
+    console.log("bruh");
     let stepsByDate = [];
-    const dbRef = doc(FirestoreDB, 'users', email as string);
+    const dbRef = doc(FirestoreDB, 'users', emailParam);
     const dbSnap = await getDoc(dbRef);
     stepsByDate = dbSnap.data().stepsByDate;
     const name = dbSnap.data().name;
@@ -79,7 +100,7 @@ const AdminSteps: React.FC<{ email: string }> = () => {
   };
 
   const sendNewLog = async () => {
-    const dbRef = doc(FirestoreDB, 'users', email as string);
+    const dbRef = doc(FirestoreDB, 'users', email);
     await updateDoc(dbRef, {
       stepsByDate: stepLogs,
       totalStep: totalStep
@@ -130,6 +151,7 @@ const AdminSteps: React.FC<{ email: string }> = () => {
   }
 
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
+    console.log("handlerec");
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
     getRecordsFromDB();
     event.detail.complete(); // Notify the refresher that loading is complete

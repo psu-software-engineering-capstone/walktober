@@ -123,8 +123,10 @@ const Admin: React.FC = () => {
   };
 
   const goToAdminSteps = (email : string) => {
-    window.history.replaceState(null, '');
-    history.push('/app/adminSteps', { email: email });
+    //console.log(email);
+    history.push(`/app/adminSteps/${email}`);
+    // window.history.replaceState(null, '');
+    // history.push('/app/adminSteps', { email: email });
   };
 
 

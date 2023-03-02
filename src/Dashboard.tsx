@@ -62,7 +62,7 @@ const Dashboard: React.FC = () => {
         <Route exact path="/app/team" component={TeamHome} />
         <Route exact path="/app/team/join" component={TeamJoin} />
         <Route exact path="/app/admin" component={Admin} />
-        <Route exact path="/app/adminSteps" component={AdminSteps} />
+        <Route path="/app/adminSteps/:email" component={AdminSteps} />
         <Route exact path="/app">
           <Redirect to="/app/home" />
         </Route>
