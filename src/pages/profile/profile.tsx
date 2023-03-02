@@ -29,6 +29,7 @@ import AuthContext from '../../store/auth-context';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
 import { updateDoc } from 'firebase/firestore';
+import CalendarLeafs from '../../components/CalendarLeafs';
 
 const Profile: React.FC = () => {
   const history = useHistory();
@@ -63,7 +64,9 @@ const Profile: React.FC = () => {
       new Date(auth.currentUser.metadata.creationTime).toLocaleDateString()
     );
     setTotalDistance(userData.totalStep / 2000);
-    setIsGoogleUser(auth.currentUser.providerData[0]?.providerId === 'google.com');
+    setIsGoogleUser(
+      auth.currentUser.providerData[0]?.providerId === 'google.com'
+    );
   }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,22 +100,18 @@ const Profile: React.FC = () => {
     history.push('/app/profile/passwordChange');
   };
 
-  function teamDisplay(){
-    if(team === ''){
+  function teamDisplay() {
+    if (team === '') {
       return (
         <>
-          <IonItem>
-            You have not joined a team yet
-          </IonItem>
+          <IonItem>You have not joined a team yet</IonItem>
         </>
       );
-    }
-    else{
-      return(
+    } else {
+      return (
         <>
-        <IonItem>
-          Team: {team}  
-        </IonItem></>
+          <IonItem>Team: {team}</IonItem>
+        </>
       );
     }
   }
@@ -148,69 +147,74 @@ const Profile: React.FC = () => {
         </NavBar>
       </IonHeader>
       <IonContent>
-          <IonGrid>
-            <IonRow>
-              <IonCol size="auto">
+        <IonGrid>
+          <IonRow>
+            <IonCol size="auto">
+              <IonItem>
+                <IonImg
+                  className="profile_pic"
+                  src={profilePic}
+                  alt="Profile picture for the user signed in"
+                ></IonImg>
+              </IonItem>
+              <IonItem>
+                <input
+                  type="file"
+                  id="img"
+                  name="img"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonButton onClick={handleSubmit}>
+                  Change Profile Picture
+                </IonButton>
+              </IonItem>
+              <IonItem>
+                <h2>{name}</h2>
+              </IonItem>
+              <IonItem>
+                <p>{email}</p>
+              </IonItem>
+              <IonItem>{teamDisplay()}</IonItem>
+              {!isGoogleUser && (
                 <IonItem>
-                  <IonImg
-                    className="profile_pic"
-                    src={profilePic}
-                    alt="Profile picture for the user signed in"
-                  ></IonImg>
-                </IonItem>
-                <IonItem>
-                  <input
-                    type="file"
-                    id="img"
-                    name="img"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                  />
-                </IonItem>
-                <IonItem>
-                  <IonButton onClick={handleSubmit}>
-                    Change Profile Picture
+                  <IonButton onClick={changePassword}>
+                    Change Password
                   </IonButton>
                 </IonItem>
-                <IonItem>
-                  <h2>{name}</h2>
-                </IonItem>
-                <IonItem>
-                  <p>{email}</p>
-                </IonItem>
-                <IonItem>
-                  {teamDisplay()}
-                </IonItem>
-                {!isGoogleUser && (
-                <IonItem>
-                  <IonButton onClick={changePassword}>Change Password</IonButton>
-                </IonItem>
-                )}
-                <IonItem>
-                  <IonButton onClick={signOut}>Sign Out</IonButton>
-                </IonItem>
-              </IonCol>
-              <IonCol>
-                <IonItem>
-                  <p>Joined on {joinDate}</p>
-                </IonItem>
-                <IonItem>
-                  <p>{totalDistance} miles walked in total</p>
-                </IonItem>
-                <IonItem fill="outline">
-                  <IonLabel position="floating">Step Goal</IonLabel>
-                  <IonInput
-                    id="steps"
-                    type="number"
-                    placeholder="10,000"
-                  ></IonInput>
-                </IonItem>
-                <IonItem>
-                  <h6>Badges:</h6>
-                </IonItem>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
+              )}
+              <IonItem>
+                <IonButton onClick={signOut}>Sign Out</IonButton>
+              </IonItem>
+            </IonCol>
+            <IonCol>
+              <IonItem>
+                <p>Joined on {joinDate}</p>
+              </IonItem>
+              <IonItem>
+                <p>{totalDistance} miles walked in total</p>
+              </IonItem>
+              <IonItem fill="outline">
+                <IonLabel position="floating">Step Goal</IonLabel>
+                <IonInput
+                  id="steps"
+                  type="number"
+                  placeholder="10,000"
+                ></IonInput>
+              </IonItem>
+              <IonItem>
+                <h6>Badges:</h6>
+              </IonItem>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <CalendarLeafs></CalendarLeafs>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
