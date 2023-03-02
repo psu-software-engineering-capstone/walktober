@@ -381,7 +381,7 @@ const TeamHome: React.FC = () => {
     if (ctx.team !== '') {
       const unsubscribe = onSnapshot(doc(FirestoreDB, 'teams', ctx.team), (doc: any) => {
         if (doc.data() !== undefined) {
-          console.log('Team data: ', doc.data());
+          console.log('Team home page updated');
           getData();
         }
       });

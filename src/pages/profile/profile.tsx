@@ -49,7 +49,7 @@ const Profile: React.FC = () => {
     if (ctx.user !== null) {
       const unsubscribe = onSnapshot(doc(FirestoreDB, 'users', auth.currentUser.email as string), (doc: any) => {
         if (doc.exists()) {
-          console.log('Current data: ', doc.data());
+          console.log('Profile page updated');
           GetRecords();
         }
       });
