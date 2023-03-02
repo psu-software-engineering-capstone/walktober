@@ -1,7 +1,7 @@
 // Purpose of this file is to create a React custom element to display a user's current progress in terms of past 7 days steps and or goal steps
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-import { IonItem, IonLabel, IonProgressBar } from '@ionic/react';
+import { IonLabel, IonProgressBar } from '@ionic/react';
 import './progChart.css';
 
 // below is the interface for the steps log. It reflects the values expected for displaying
@@ -73,3 +73,6 @@ const ProgressChart: React.FC<{ data: Array<StepLog> }> = ({ data }) => {
 };
 
 export default ProgressChart;
+// <div> Icons made by <a href="https://www.flaticon.com/authors/good-ware" title="Good Ware"> Good Ware </a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com'</a></div>
+// <div> Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik"> Freepik </a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com'</a></div>
+// <div> Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect"> Pixel perfect </a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com'</a></div>
