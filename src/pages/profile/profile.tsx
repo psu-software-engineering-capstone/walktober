@@ -210,7 +210,7 @@ const Profile: React.FC = () => {
             </IonCol>
           </IonRow>
           <IonRow>
-            <IonCol>
+            <IonCol sizeLg="6" sizeMd="8" sizeSm="12">
               <CalendarLeafs></CalendarLeafs>
             </IonCol>
           </IonRow>
