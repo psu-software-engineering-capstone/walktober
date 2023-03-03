@@ -25,8 +25,8 @@ import AuthContext from '../../store/auth-context';
 import { getDoc, doc } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
-import './homePage.css';
 import { onSnapshot } from 'firebase/firestore';
+import './homePage.css';
 
 interface badgeOutline {
   name: string;
@@ -93,7 +93,7 @@ const HomePage: React.FC = () => {
       }
     });
   
-    setPastSevenDaysSteps(pastSevenDays);
+    setPastSevenDaysSteps(pastSevenDays.reverse());
   };
 
   // const stepUpdateHandler = (event: any): void => {
@@ -168,7 +168,7 @@ const HomePage: React.FC = () => {
               className="personalProgress"
             >
               {pastSevenDaysSteps.length > 1 ? (
-                <ProgressChart data={pastSevenDaysSteps.reverse()} />
+                <ProgressChart data={pastSevenDaysSteps} />
               ) : (
                 ' '
               )}

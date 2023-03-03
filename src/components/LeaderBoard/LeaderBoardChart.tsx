@@ -169,7 +169,7 @@ const LeaderBoardChart: React.FC = () => {
   };
 
   //ajusts the size of the element containing the chart in order to correctly size the chart.
-  const boxAjust = (labelLength: number) => {
+  const boxAdjust = (labelLength: number) => {
     const box = document.querySelector('.box');
     if (box != null) {
         const newHeight = labelLength * 60;
@@ -214,7 +214,7 @@ const LeaderBoardChart: React.FC = () => {
         indData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
       );
     }
-    boxAjust(indData.length);
+    boxAdjust(indData.length);
     //need to find way to not hardcode time
     setTimeout(() => {
       setLoading(false);
