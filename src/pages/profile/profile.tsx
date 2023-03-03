@@ -4,6 +4,7 @@ import {
   IonButton,
   IonCol,
   IonContent,
+  IonFooter,
   IonGrid,
   IonHeader,
   IonImg,
@@ -133,93 +134,125 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <IonPage>
-      <IonRouterOutlet>
-        <Route
-          exact
-          path="/app/profile/passwordChange"
-          component={newPassword}
-        />
-      </IonRouterOutlet>
-      <IonHeader>
-        <NavBar>
-          <IonTitle>Profile</IonTitle>
-        </NavBar>
-      </IonHeader>
-      <IonContent>
-        <IonGrid>
-          <IonRow>
-            <IonCol size="auto">
-              <IonItem>
-                <IonImg
-                  className="profile_pic"
-                  src={profilePic}
-                  alt="Profile picture for the user signed in"
-                ></IonImg>
-              </IonItem>
-              <IonItem>
-                <input
-                  type="file"
-                  id="img"
-                  name="img"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                />
-              </IonItem>
-              <IonItem>
-                <IonButton onClick={handleSubmit}>
-                  Change Profile Picture
-                </IonButton>
-              </IonItem>
-              <IonItem>
-                <h2>{name}</h2>
-              </IonItem>
-              <IonItem>
-                <p>{email}</p>
-              </IonItem>
-              <IonItem>{teamDisplay()}</IonItem>
-              {!isGoogleUser && (
+    <>
+      <IonPage>
+        <IonRouterOutlet>
+          <Route
+            exact
+            path="/app/profile/passwordChange"
+            component={newPassword}
+          />
+        </IonRouterOutlet>
+        <IonHeader>
+          <NavBar>
+            <IonTitle>Profile</IonTitle>
+          </NavBar>
+        </IonHeader>
+        <IonContent>
+          <IonGrid>
+            <IonRow>
+              <IonCol size="auto">
                 <IonItem>
-                  <IonButton onClick={changePassword}>
-                    Change Password
+                  <IonImg
+                    className="profile_pic"
+                    src={profilePic}
+                    alt="Profile picture for the user signed in"
+                  ></IonImg>
+                </IonItem>
+                <IonItem>
+                  <input
+                    type="file"
+                    id="img"
+                    name="img"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonButton onClick={handleSubmit}>
+                    Change Profile Picture
                   </IonButton>
                 </IonItem>
-              )}
-              <IonItem>
-                <IonButton onClick={signOut}>Sign Out</IonButton>
-              </IonItem>
-            </IonCol>
-            <IonCol>
-              <IonItem>
-                <p>Joined on {joinDate}</p>
-              </IonItem>
-              <IonItem>
-                <p>{totalDistance} miles walked in total</p>
-              </IonItem>
-              <IonItem fill="outline">
-                <IonLabel position="floating">Step Goal</IonLabel>
-                <IonInput
-                  id="steps"
-                  type="number"
-                  placeholder="10,000"
-                ></IonInput>
-              </IonItem>
-              <IonItem>
-                <h6>Badges:</h6>
-              </IonItem>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol sizeLg="6" sizeMd="8" sizeSm="12">
-              <CalendarLeafs></CalendarLeafs>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
-        <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
-          <IonRefresherContent></IonRefresherContent>
-        </IonRefresher>
-      </IonContent>
-    </IonPage>
+                <IonItem>
+                  <h2>{name}</h2>
+                </IonItem>
+                <IonItem>
+                  <p>{email}</p>
+                </IonItem>
+                <IonItem>{teamDisplay()}</IonItem>
+                {!isGoogleUser && (
+                  <IonItem>
+                    <IonButton onClick={changePassword}>
+                      Change Password
+                    </IonButton>
+                  </IonItem>
+                )}
+                <IonItem>
+                  <IonButton onClick={signOut}>Sign Out</IonButton>
+                </IonItem>
+              </IonCol>
+              <IonCol>
+                <IonItem>
+                  <p>Joined on {joinDate}</p>
+                </IonItem>
+                <IonItem>
+                  <p>{totalDistance} miles walked in total</p>
+                </IonItem>
+                <IonItem fill="outline">
+                  <IonLabel position="floating">Step Goal</IonLabel>
+                  <IonInput
+                    id="steps"
+                    type="number"
+                    placeholder="10,000"
+                  ></IonInput>
+                </IonItem>
+                <IonItem>
+                  <h6>Badges:</h6>
+                </IonItem>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol sizeLg="6" sizeMd="8" sizeSm="12">
+                <CalendarLeafs></CalendarLeafs>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+          <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+            <IonRefresherContent></IonRefresherContent>
+          </IonRefresher>
+        </IonContent>
+        <IonFooter>
+          <ul>
+            <li>
+              <a
+                href="https://www.flaticon.com/free-icons/leaf"
+                title="leaf icons"
+              >
+                Leaf icons created by Freepik - Flaticon
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="https://www.flaticon.com/free-icons/leaf"
+                title="leaf icons"
+              >
+                Leaf icons created by Pixel perfect - Flaticon
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="https://www.flaticon.com/free-icons/leaf"
+                title="leaf icons"
+              >
+                Leaf icons created by Good Ware - Flaticon
+              </a>
+            </li>
+          </ul>
+        </IonFooter>
+      </IonPage>
+    </>
   );
 };
 

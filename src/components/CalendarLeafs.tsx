@@ -1,4 +1,4 @@
-import { IonCol, IonGrid, IonItem, IonRow } from '@ionic/react';
+import { IonCol, IonFooter, IonGrid, IonItem, IonRow } from '@ionic/react';
 import React from 'react';
 import OrangeLeaf from '../assets/OrangeLeaf.png';
 import YellowLeaf from '../assets/yellowLeaf.png';
@@ -30,511 +30,513 @@ const populateCalendar = () => {
   dummyLeafsAlt[10] = 'orange leaf3';
 
   return (
-    <IonGrid>
-      <IonRow>
-        <IonCol>{'October'}</IonCol>
-      </IonRow>
-      <IonRow>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {monthStart.getDay() == 0 ? number++ : ''}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {monthStart.getDay() == 1 || number > 1 ? number++ : ''}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {monthStart.getDay() == 2 || number > 1 ? number++ : ''}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {monthStart.getDay() == 3 || number > 1 ? number++ : ''}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {monthStart.getDay() == 4 || number > 1 ? number++ : ''}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {monthStart.getDay() == 5 || number > 1 ? number++ : ''}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {monthStart.getDay() == 6 || number > 1 ? number++ : ''}
-          </IonItem>
-        </IonCol>
-      </IonRow>
-      <IonRow>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-      </IonRow>
-      <IonRow>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-      </IonRow>
-      <IonRow>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number++}
-          </IonItem>
-        </IonCol>
-      </IonRow>
-      <IonRow>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number <= 31 ? number++ : ''}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number <= 31 ? number++ : ''}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number <= 31 ? number++ : ''}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number <= 31 ? number++ : ''}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number <= 31 ? number++ : ''}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number <= 31 ? number++ : ''}
-          </IonItem>
-        </IonCol>
-        <IonCol>
-          <IonItem>
-            {dummyLeafs[number] !== null ? (
-              <img
-                alt={dummyLeafsAlt[number]}
-                src={dummyLeafs[number]}
-                className="leafImg"
-              ></img>
-            ) : (
-              ''
-            )}
-            {number <= 31 ? number++ : ''}
-          </IonItem>
-        </IonCol>
-      </IonRow>
-    </IonGrid>
+    <>
+      <IonGrid>
+        <IonRow>
+          <IonCol>{'October'}</IonCol>
+        </IonRow>
+        <IonRow>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {monthStart.getDay() == 0 ? number++ : ''}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {monthStart.getDay() == 1 || number > 1 ? number++ : ''}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {monthStart.getDay() == 2 || number > 1 ? number++ : ''}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {monthStart.getDay() == 3 || number > 1 ? number++ : ''}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {monthStart.getDay() == 4 || number > 1 ? number++ : ''}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {monthStart.getDay() == 5 || number > 1 ? number++ : ''}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {monthStart.getDay() == 6 || number > 1 ? number++ : ''}
+            </IonItem>
+          </IonCol>
+        </IonRow>
+        <IonRow>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+        </IonRow>
+        <IonRow>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+        </IonRow>
+        <IonRow>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+        </IonRow>
+        <IonRow>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number <= 31 ? number++ : ''}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number <= 31 ? number++ : ''}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number <= 31 ? number++ : ''}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number <= 31 ? number++ : ''}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number <= 31 ? number++ : ''}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number <= 31 ? number++ : ''}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {dummyLeafs[number] !== null ? (
+                <img
+                  alt={dummyLeafsAlt[number]}
+                  src={dummyLeafs[number]}
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number <= 31 ? number++ : ''}
+            </IonItem>
+          </IonCol>
+        </IonRow>
+      </IonGrid>
+    </>
   );
 };
 
