@@ -12,7 +12,10 @@ import {
   IonIcon,
   IonGrid,
   IonRow,
-  IonCol
+  IonCol,
+  IonCard,
+  IonCardHeader,
+  IonCardContent
   // useIonToast
 } from '@ionic/react';
 import { useHistory } from 'react-router';
@@ -30,15 +33,20 @@ const landing404: React.FC = () => {
         </NavBar>
       </IonHeader>
       <IonContent fullscreen={true} className="ion-padding testing d-flex">
-        <p className="error-info">
-          Whoa there! Looks like you were looking for a page that does not
-          exist.
-        </p>
-
-        <a onClick={HomePage} className="error-info" href="/app/home">
-          {' '}
-          Click Here to return home.
-        </a>
+        <IonCard className="card">
+          <IonCardHeader className="card-header">
+            <p className="error-info">
+              Whoa there! Looks like you were looking for a page that does not
+              exist.
+            </p>
+          </IonCardHeader>
+          <IonCardContent>
+            <a onClick={HomePage} className="error-info" href="/app/home">
+              {' '}
+              Click Here to return home.
+            </a>
+          </IonCardContent>
+        </IonCard>
       </IonContent>
     </IonPage>
   );
