@@ -20,7 +20,11 @@ const populateCalendar = () => {
   dummyLeafs[9] = OrangeLeaf;
   dummyLeafs[10] = GreenLeaf;
   dummyLeafs[11] = YellowLeaf;
-  dummyLeafs[10] = null;
+  dummyLeafs[12] = OrangeLeaf;
+  dummyLeafs[13] = OrangeLeaf;
+  dummyLeafs[14] = GreenLeaf;
+  dummyLeafs[16] = YellowLeaf;
+  dummyLeafs[17] = null;
   dummyLeafsAlt[8] = 'orange leaf';
   dummyLeafsAlt[9] = 'orange leaf2';
   dummyLeafsAlt[10] = 'orange leaf3';
