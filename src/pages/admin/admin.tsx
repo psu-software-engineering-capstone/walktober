@@ -159,10 +159,6 @@ const Admin: React.FC = () => {
     loadUserLogs();
   }, []);
 
-  useEffect(() => {
-    console.log(userLogs);
-  }, [userLogs]);
-
   //creates the grid, if the sample data has users in the individual data collection, it pulls the relevant information
   //and adds it into rows
   function DisplayUsers(userLogs: UserLog[]): any {
