@@ -14,7 +14,7 @@ import {
   RefresherEventDetail
 } from '@ionic/react';
 import { getDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
 import { auth, FirestoreDB, storage } from '../../firebase';
 import { Chart as ChartJS, registerables } from 'chart.js';
@@ -22,6 +22,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Bar } from 'react-chartjs-2';
 import { useHistory } from 'react-router';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import AdminContext from '../../store/admin-context';
 import './teamHome.scss';
 
 ChartJS.register(...registerables);
@@ -45,7 +46,9 @@ const TeamHome: React.FC = () => {
   const [photo, setPhoto] = useState<any>(null);
   const [userTotStep, setUserTotStep] = useState(0);
   const [teamSteps, setTeamSteps] = useState(0);
-  const [minSize, setMinSize] = useState(0);
+  const adData = useContext(AdminContext);
+  //const [minSize, setMinSize] = useState(0);
+
   const history = useHistory();
 
   const chartData = {
@@ -258,18 +261,15 @@ const TeamHome: React.FC = () => {
       mates.push(tempMember.email);
       groupData.push(tempMember); //send to array
     }
+    
     console.log(groupData);
     setMemDat(
       groupData.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
     ); //set variable to the contents of the array
     boxAjust(groupData.length);
     setMates(mates);
-    const adminRef = doc(FirestoreDB, 'admin', 'admin'); //ref the admin doc
-    const adminSnapshot = await getDoc(adminRef); //get the admin docu
-    const adminData = adminSnapshot.data(); //get data
-    setMinSize(adminData.min_team_size);
     const today = new Date(Date());
-    const maxDate = new Date(adminData.team_creation_due);
+    const maxDate = new Date(adData.teamDate);
     if (maxDate < today) {
       setValid(true);
       console.log('true');
@@ -278,6 +278,7 @@ const TeamHome: React.FC = () => {
       console.log('false');
     }
   }
+
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -396,11 +397,11 @@ const TeamHome: React.FC = () => {
 
   function verifyCount() {
     if (buttonValid) {
-      if (teammates.length < minSize) {
+      if (teammates.length < adData.minSize) {
         return (
           <b>
-            Your team will not be particpating in the Walktober challenge due to not having
-            enough teammembers
+            Your team will not be particpating in the Walktober challenge due to
+            not having enough teammembers
           </b>
         );
       }
@@ -451,7 +452,6 @@ const TeamHome: React.FC = () => {
             </IonItem>
             <IonItem>{verifyCount()}</IonItem>
             <IonItem>{DisplayTeams(data)}</IonItem>
-            
           </IonCol>
         </IonRow>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>

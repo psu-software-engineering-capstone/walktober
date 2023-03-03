@@ -30,6 +30,7 @@ import { auth, FirestoreDB } from '../../firebase';
 import { eyeOff, eye } from 'ionicons/icons';
 import { useHistory } from 'react-router';
 import AuthContext from '../../store/auth-context';
+import AdminContext from '../../store/admin-context';
 import './teamHome.scss';
 
 const TeamJoin: React.FC = () => {
@@ -53,8 +54,7 @@ const TeamJoin: React.FC = () => {
   const [teamNames, setNames] = useState(Array<selectFormat>); //array of only team names for the drop down menu
   const [allTeams, setTeams] = useState(Array<teamData>); //array of teams from database
   const [buttonValid, setValid] = useState(false);
-  const [deadline, setDeadline] = useState('');
-
+  const adData = useContext(AdminContext);
   const ctx = useContext(AuthContext);
 
   const togglePasswordVisibility = () => {
@@ -222,13 +222,9 @@ const TeamJoin: React.FC = () => {
     }
     const indData: Array<teamData> = []; //temp array for the teams data
     const groupNames: Array<selectFormat> = []; //need the group names to look thorugh
-    const adminRef = doc(FirestoreDB, 'admin', 'admin'); //ref the admin doc
-    const adminSnapshot = await getDoc(adminRef); //get the admin docu
-    const adminData = adminSnapshot.data(); //get data
-    setDeadline(adminData.team_creation_due);
     const today = new Date(Date());
-    const maxDate = new Date(adminData.team_creation_due);
-    console.log(today < maxDate, today, maxDate);
+    const maxDate = new Date(adData.teamDate);
+    console.log(today < maxDate, today, maxDate, adData.teamDate);
     if (maxDate < today) {
       setValid(true);
       console.log('true');
@@ -239,7 +235,8 @@ const TeamJoin: React.FC = () => {
     const querySnapshot = await getDocs(collection(FirestoreDB, 'teams')); //grab all the team documents
     querySnapshot.forEach((doc: any) => {
       console.log(doc.id, ' => ', doc.data()); //get the data from the doc
-      if (doc.data().members.length < adminData.max_team_size) {
+      console.log(adData.maxSize, doc.data().members.length);
+      if (doc.data().members.length < adData.maxSize) {
         //this is deteremined by the admins
         const allNames: selectFormat = {
           //this was to create an array if we used the selection drop down method
@@ -291,7 +288,7 @@ const TeamJoin: React.FC = () => {
     if (buttonValid === false) {
       return (<>{DisplayTeams(allTeams)}</>);
     } else {
-      return <h1>The deadline to join or create a team was {deadline}.</h1>;
+      return <h1>The deadline to join or create a team was {adData.teamDate}.</h1>;
     }
   }
 

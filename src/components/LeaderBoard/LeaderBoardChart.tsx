@@ -5,15 +5,14 @@ import {
   IonSpinner,
   IonTitle
 } from '@ionic/react';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './LeaderBoardChart.scss';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import AdminContext from '../../store/admin-context';
 import { Bar } from 'react-chartjs-2';
 import { collection, getDocs } from 'firebase/firestore';
 import { FirestoreDB } from '../../firebase';
-import { getDoc } from 'firebase/firestore';
-import { doc } from 'firebase/firestore';
 
 ChartJS.register(...registerables);
 
@@ -27,6 +26,7 @@ interface Data {
 const LeaderBoardChart: React.FC = () => {
   const [data, setData] = useState(Array<Data>);
   const [loading, setLoading] = useState(false);
+  const adData = useContext(AdminContext);
   let dataType = 'individual';
 
   //Formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
@@ -55,11 +55,11 @@ const LeaderBoardChart: React.FC = () => {
       } = chart;
 
       ctx.save();
-      const imgSize = (chartOptions.layout.padding.left / 2);
+      const imgSize = chartOptions.layout.padding.left / 2;
 
       data.datasets[0].image.forEach((imageLink: string, index: number) => {
         const profilePic = new Image();
-        const place = (index + 1).toString() + ordinalNumbers(index +1);
+        const place = (index + 1).toString() + ordinalNumbers(index + 1);
         profilePic.src = imageLink;
 
         //sets the stylingfor the place of users, '1st, 2nd, 3rd ect.'
@@ -71,8 +71,8 @@ const LeaderBoardChart: React.FC = () => {
         ctx.fillText(
           place,
           0,
-          y.getPixelForValue(index) + (imgSize / 2)/2,
-          imgSize -5
+          y.getPixelForValue(index) + imgSize / 2 / 2,
+          imgSize - 5
         );
 
         //draws the image of the user's profile picture
@@ -81,9 +81,8 @@ const LeaderBoardChart: React.FC = () => {
           imgSize,
           y.getPixelForValue(index) - imgSize / 2,
           imgSize,
-          imgSize 
+          imgSize
         );
-        
       });
     }
   };
@@ -101,7 +100,7 @@ const LeaderBoardChart: React.FC = () => {
       padding: {
         left: 90,
         right: 10
-      },
+      }
     },
     plugins: {
       legend: {
@@ -166,7 +165,7 @@ const LeaderBoardChart: React.FC = () => {
           stepSize: 50000,
           max: chartData.datasets[0].data
         }
-      },
+      }
     }
   };
 
@@ -174,14 +173,16 @@ const LeaderBoardChart: React.FC = () => {
   const boxAjust = (labelLength: number) => {
     const box = document.querySelector('.box');
     if (box != null) {
-        const newHeight = labelLength * 60;
-        box.setAttribute('style', 'height: ' + newHeight.toString() + 'px');
-      }
+      const newHeight = labelLength * 60;
+      box.setAttribute('style', 'height: ' + newHeight.toString() + 'px');
+    }
   };
 
   //gives leaderboard placement numbers a suffix
   const ordinalNumbers = (n: number) => {
-    return n > 0 ? ["th", "st", "nd", "rd"][(n > 3 && n < 21) || n % 10 > 3 ? 0 : n % 10]: "";
+    return n > 0
+      ? ['th', 'st', 'nd', 'rd'][(n > 3 && n < 21) || n % 10 > 3 ? 0 : n % 10]
+      : '';
   };
 
   //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
@@ -204,9 +205,6 @@ const LeaderBoardChart: React.FC = () => {
     }
     if (dataType == 'teams') {
       const querySnapshot = await getDocs(collection(FirestoreDB, 'teams'));
-      const adminRef = doc(FirestoreDB, 'admin', 'admin'); //ref the admin doc
-      const adminSnapshot = await getDoc(adminRef); //get the admin docu
-      const adminData = adminSnapshot.data(); //get data
       querySnapshot.forEach((doc: any) => {
         const team: Data = {
           name: doc.data().name as string,
@@ -214,15 +212,20 @@ const LeaderBoardChart: React.FC = () => {
           avg_steps: doc.data().avg_steps as number
         };
         const today = new Date(Date());
-        const maxDate = new Date(adminData.team_creation_due);
+        const maxDate = new Date(adData.teamDate);
+        console.log(
+          adData.maxSize,
+          adData.minSize,
+          adData.regDate,
+          adData.teamDate
+        );
         if (maxDate < today) {
           const membersLength = doc.data().members.length;
-          console.log(membersLength, adminData.min_team_size);
-          if (adminData.min_team_size <= membersLength) {
+          console.log(membersLength, adData.minSize);
+          if (adData.minSize <= membersLength) {
             indData.push(team);
           }
-        }
-        else{
+        } else {
           indData.push(team);
         }
       });
