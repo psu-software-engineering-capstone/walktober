@@ -31,6 +31,7 @@ import { eyeOff, eye } from 'ionicons/icons';
 import { useHistory } from 'react-router';
 import AuthContext from '../../store/auth-context';
 import './teamHome.scss';
+import { onSnapshot } from 'firebase/firestore';
 
 const TeamJoin: React.FC = () => {
   interface teamData {
@@ -46,51 +47,50 @@ const TeamJoin: React.FC = () => {
     value: string;
   }
 
-  const history = useHistory(); //used to move to different pages
-  const [joinTeam, setJoin] = useState(''); //variable to get the team that the user chooses from the drop down menu
-  const [teamPass, setPass] = useState(''); //variable to collect team password
-  const [passwordShown, setPasswordShown] = useState(false); //enable visability to see password
-  const [teamNames, setNames] = useState(Array<selectFormat>); //array of only team names for the drop down menu
-  const [allTeams, setTeams] = useState(Array<teamData>); //array of teams from database
+  const history = useHistory(); // used to move to different pages
+  const [joinTeam, setJoin] = useState(''); // variable to get the team that the user chooses from the drop down menu
+  const [teamPass, setPass] = useState(''); // variable to collect team password
+  const [passwordShown, setPasswordShown] = useState(false); // enable visability to see password
+  const [allTeams, setTeams] = useState(Array<teamData>); // array of teams from database
 
   const ctx = useContext(AuthContext);
 
   const togglePasswordVisibility = () => {
-    //can we see the password?
+    // can we see the password?
     setPasswordShown(!passwordShown);
   };
 
   const joined = async () => {
-    if (auth.currentUser == null) {
-      //is there a user logged on? Should be yes but might as well check
+    if (ctx.user === null) { // if the user is not logged in
+      history.push('/login');
       return;
     }
-    const currentUserRef = doc(
-      //make a reference to the user document
+    const currentUserRef = doc( // make a reference to the user's document
       FirestoreDB,
       'users',
       auth.currentUser.email as string
     );
-    await updateDoc(currentUserRef, {
-      team: joinTeam
-    }); //add the team to the user's documet
-    const userSnap = await getDoc(currentUserRef); //get user document
-    const userData = userSnap.data(); //get all the data of the user
-    const teamRef = doc(FirestoreDB, 'teams', joinTeam); //make a reference to the team document
-    const teamSnap = await getDoc(teamRef); //get team document
+    const userSnap = await getDoc(currentUserRef); // get user document
+    const userData = userSnap.data(); // get all the data of the user
+    const teamRef = doc(FirestoreDB, 'teams', joinTeam); // make a reference to the team document
+    const teamSnap = await getDoc(teamRef); // get team document
     const teamData = teamSnap.data(); // get team data
     if (teamData.members.length >= 1) {
+      await updateDoc(currentUserRef, {
+        team: joinTeam
+      }); // update the user's document
       await updateDoc(teamRef, {
         members: arrayUnion(auth.currentUser.email),
         totalStep: increment(userData.totalStep),
         avg_steps:
           (teamData.totalStep + userData.totalStep) /
           (teamData.members.length + 1)
-      }); //update the teams members, their total steps, and the new average steps
-      await updateDoc(currentUserRef, {
-        team: joinTeam
-      });
+      }); // update the teams members, their total steps, and the new average steps
     } else {
+      await updateDoc(currentUserRef, {
+        team: joinTeam,
+        team_leader: true
+      }); // update the user's document and set them as the team leader
       await updateDoc(teamRef, {
         members: arrayUnion(auth.currentUser.email),
         totalStep: increment(userData.totalStep),
@@ -98,55 +98,51 @@ const TeamJoin: React.FC = () => {
           (teamData.totalStep + userData.totalStep) /
           (teamData.members.length + 1),
         leader: userData.email
-      }); //update the teams members, their total steps, and the new average steps
-      await updateDoc(currentUserRef, {
-        team: joinTeam,
-        team_leader: true
-      });
+      }); // update the teams members, their total steps, and the new average steps
     }
-    console.log(teamNames); // just need it in here for the moment
-    history.go(0); // redirect to the team home page
+    history.push('/app/team'); // move to the team page
   };
 
   const toJoin = () => {
-    //
     if (joinTeam === '') {
       alert('No team name has been entered as of yet');
       return;
     }
-    for (let i = 0; i < allTeams.length + 1; i++) {
+    for (let i = 0; i < allTeams.length; i++) {
       if (allTeams[i].name === joinTeam) {
-        //check if it is one of the team's that is available
+        // check if it is one of the team's that is available
         if (allTeams[i].type === 'Private') {
-          //okay we are gonna need a password
+          // okay we are gonna need a password
           if (teamPass === '') {
             alert(
               'A password needs to be entered as this team is private. Please enter the password and try again.'
             );
+            return;
           } else if (allTeams[i].password === teamPass) {
-            joined(); //we can join them
+            joined(); // we can join them
             return;
           } else {
-            //incorrect password
+            // incorrect password
             alert(
               'The password entered does not match the password for the team. Please try again'
             );
             return;
           }
         } else {
-          //public team aka no password required
+          // public team aka no password required
           joined();
           return;
         }
       }
     }
     alert('No team was found that matched what was entered');
+    return;
   };
 
   // handle refresher
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
-    getData(); //get the data from the database
+    getData(); // get the data from the database
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 
@@ -214,28 +210,27 @@ const TeamJoin: React.FC = () => {
 
   async function getData() {
     if (ctx.team !== '') {
-      //if they are already on a team
-      history.push('/app/team'); //redirect them to the team home page
+      // if they are already on a team
+      history.push('/app/team'); // redirect them to the team home page
       return;
     }
-    const indData: Array<teamData> = []; //temp array for the teams data
-    const groupNames: Array<selectFormat> = []; //need the group names to look thorugh
-    const adminRef = doc(FirestoreDB, 'admin', 'admin'); //ref the admin doc
-    const adminSnapshot = await getDoc(adminRef); //get the admin docu
-    const adminData = adminSnapshot.data(); //get data
-    const querySnapshot = await getDocs(collection(FirestoreDB, 'teams')); //grab all the team documents
+    const indData: Array<teamData> = []; // temp array for the teams data
+    const groupNames: Array<selectFormat> = []; // need the group names to look thorugh
+    const adminRef = doc(FirestoreDB, 'admin', 'admin'); // ref the admin doc
+    const adminSnapshot = await getDoc(adminRef); // get the admin docu
+    const adminData = adminSnapshot.data(); // get data
+    const querySnapshot = await getDocs(collection(FirestoreDB, 'teams')); // grab all the team documents
     querySnapshot.forEach((doc: any) => {
-      console.log(doc.id, ' => ', doc.data()); //get the data from the doc
       if (doc.data().members.length <= adminData.max_team_size) {
-        //this is deteremined by the admins
+        // this is deteremined by the admins
         const allNames: selectFormat = {
-          //this was to create an array if we used the selection drop down method
+          // this was to create an array if we used the selection drop down method
           text: doc.data().name,
           value: doc.data().name
         };
-        groupNames.push(allNames); //push it to the overall array
+        groupNames.push(allNames); // push it to the overall array
         if (doc.data().status === '1') {
-          //private team
+          // private team
           const tem: teamData = {
             name: doc.data().name as string,
             leader: doc.data().leader as string,
@@ -243,9 +238,9 @@ const TeamJoin: React.FC = () => {
             type: 'Private',
             password: doc.data().password
           };
-          indData.push(tem); //push the data to the array
+          indData.push(tem); // push the data to the array
         } else {
-          //public team
+          // public team
           const tem: teamData = {
             name: doc.data().name as string,
             leader: doc.data().leader as string,
@@ -256,19 +251,33 @@ const TeamJoin: React.FC = () => {
           indData.push(tem);
         }
       } else {
-        console.log(doc.data().name, ' not added to the list'); //too many members in team to join
+        console.log(doc.data().name, ' is full'); // if the team is full
       }
     });
-    setNames(groupNames);
     indData.sort((a: any, b: any) =>
       a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
     );
-    console.log(indData);
     setTeams(indData);
   }
 
+  // update the data when the page loads
+  // update the data when the teams are added, removed, or modified
   useEffect(() => {
-    getData();
+    const unsubscribe = onSnapshot(collection(FirestoreDB, 'teams'), (snapshot: any) => {
+      snapshot.docChanges().forEach((change: any) => {
+        if (change.type === 'added') {
+          console.log('New Team: ', change.doc.data());
+        }
+        if (change.type === 'modified') {
+          console.log('Modified Team: ', change.doc.data());
+        }
+        if (change.type === 'removed') {
+          console.log('Removed Team: ', change.doc.data());
+        }
+        getData();
+      });
+    });
+    return unsubscribe;
   }, []);
 
   const moveToCreateTeam = () => {

@@ -146,8 +146,7 @@ const Admin: React.FC = () => {
         channel_id: '' // TODO: create discord channel
       })
       .then(() => {
-        alert('Team Created!');
-        history.go(0); // refreshes the page
+        alert('Open Team Created!');
       })
       .catch((error: any) => {
         alert(error);
