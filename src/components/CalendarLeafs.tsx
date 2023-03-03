@@ -1,4 +1,4 @@
-import { IonCol, IonFooter, IonGrid, IonItem, IonRow } from '@ionic/react';
+import { IonCol, IonGrid, IonItem, IonRow } from '@ionic/react';
 import React from 'react';
 import OrangeLeaf from '../assets/OrangeLeaf.png';
 import YellowLeaf from '../assets/yellowLeaf.png';
