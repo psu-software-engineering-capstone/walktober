@@ -146,8 +146,7 @@ const Admin: React.FC = () => {
         channel_id: '' // TODO: create discord channel
       })
       .then(() => {
-        alert('Team Created!');
-        history.go(0); // refreshes the page
+        alert('Open Team Created!');
       })
       .catch((error: any) => {
         alert(error);
@@ -159,10 +158,6 @@ const Admin: React.FC = () => {
   useEffect(() => {
     loadUserLogs();
   }, []);
-
-  useEffect(() => {
-    console.log(userLogs);
-  }, [userLogs]);
 
   //creates the grid, if the sample data has users in the individual data collection, it pulls the relevant information
   //and adds it into rows

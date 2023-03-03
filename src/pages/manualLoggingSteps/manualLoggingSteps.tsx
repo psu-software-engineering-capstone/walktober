@@ -27,6 +27,7 @@ import NavBar from '../../components/NavBar';
 import { Health } from '@awesome-cordova-plugins/health';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
 import './manualLoggingSteps.css';
+import { onSnapshot } from 'firebase/firestore';
 
 const ManualSteps: React.FC = () => {
   interface StepLog {
@@ -54,9 +55,20 @@ const ManualSteps: React.FC = () => {
     }
   ];
 
+  // update the data when the page loads
+  // update the data when the data is updated
   useEffect(() => {
-    getRecordsFromDB(); // get records from database
-  }, []);
+    if (ctx.user !== null) {
+      const unsubscribe = onSnapshot(doc(FirestoreDB, 'users', auth.currentUser.email as string), (doc: any) => {
+          if (doc.exists()) {
+            console.log('Manual logging page updated');
+            getRecordsFromDB(); // get records from database
+          }
+        }
+      );
+      return unsubscribe;
+    }
+  }, [ctx.user]);
 
   useEffect(() => {
     if (updateTotalStep === true) {
@@ -107,7 +119,6 @@ const ManualSteps: React.FC = () => {
       totalStep: totalStep
     })
       .then(() => {
-        console.log(stepLogs, totalStep);
         alert('Steps Updated!');
       })
       .catch((error: any) => {
@@ -322,7 +333,6 @@ const ManualSteps: React.FC = () => {
       };
       await HealthKit.querySampleType(stepOptions)
         .then(async (data: any) => {
-          console.log(data);
           const dbRef = doc(
             FirestoreDB,
             'users',
