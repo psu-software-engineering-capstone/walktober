@@ -50,7 +50,9 @@ const AdminSteps: React.FC<{ email: string }> = ( ) => {
 
   const [email, setEmail] = useState('');
   const { email: emailParam } = useParams<AdminStepsParams>();
-  console.log(email);
+
+  console.log("email is: " + email);
+  console.log("param is: " + emailParam);
 
   // console.log((history.location.state as any)?.email);
   //console.log((history.location.state));
@@ -116,6 +118,10 @@ const AdminSteps: React.FC<{ email: string }> = ( ) => {
 
   function DisplayRecords(): any {
     if (stepLogs.length > 0) {
+      if(email !== emailParam)
+      {
+        window.location.reload();
+      }
       stepLogs.sort(
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
       );
