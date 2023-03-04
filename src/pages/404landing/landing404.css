@@ -1,0 +1,19 @@
+.error-info {
+  display: flex;
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.card-header {
+  text-align: center;
+}
+
+.card {
+  width: auto;
+  margin: auto;
+}

@@ -4,6 +4,7 @@ import {
   IonButton,
   IonCol,
   IonContent,
+  IonFooter,
   IonGrid,
   IonHeader,
   IonImg,
@@ -11,9 +12,12 @@ import {
   IonItem,
   IonLabel,
   IonPage,
+  IonRefresher,
+  IonRefresherContent,
   IonRouterOutlet,
   IonRow,
-  IonTitle
+  IonTitle,
+  RefresherEventDetail
 } from '@ionic/react';
 import './profile.css';
 import { Route } from 'react-router-dom';
@@ -26,21 +30,37 @@ import AuthContext from '../../store/auth-context';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
 import { updateDoc } from 'firebase/firestore';
+import CalendarLeafs from '../../components/CalendarLeafs';
+import { onSnapshot } from 'firebase/firestore';
 
 const Profile: React.FC = () => {
   const history = useHistory();
   const ctx = useContext(AuthContext);
-
   const [email, setEmail] = useState('');
   const [joinDate, setJoinDate] = useState('');
   const [name, setName] = useState('');
   const [profilePic, setProfilePic] = useState('');
+  const [team, setTeam] = useState('');
   const [totalDistance, setTotalDistance] = useState(0);
   const [photo, setPhoto] = useState<any>(null);
+  const [isGoogleUser, setIsGoogleUser] = useState(false);
 
+  // update profile data when the page loads
+  // update profile data when the profile data changes
   useEffect(() => {
-    GetRecords();
-  }, []);
+    if (ctx.user !== null) {
+      const unsubscribe = onSnapshot(
+        doc(FirestoreDB, 'users', auth.currentUser.email as string),
+        (doc: any) => {
+          if (doc.exists()) {
+            console.log('Profile page updated');
+            GetRecords();
+          }
+        }
+      );
+      return unsubscribe;
+    }
+  }, [ctx.user]);
 
   async function GetRecords(): Promise<void> {
     if (ctx.user === null) {
@@ -54,10 +74,14 @@ const Profile: React.FC = () => {
     setProfilePic(userData.profile_pic);
     setName(userData.name);
     setEmail(userData.email);
+    setTeam(userData.team);
     setJoinDate(
       new Date(auth.currentUser.metadata.creationTime).toLocaleDateString()
     );
     setTotalDistance(userData.totalStep / 2000);
+    setIsGoogleUser(
+      auth.currentUser.providerData[0]?.providerId === 'google.com'
+    );
   }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,7 +101,6 @@ const Profile: React.FC = () => {
     await updateDoc(dbRef, { profile_pic: photoURL })
       .then(() => {
         alert('profile picture updated!');
-        history.go(0); //refresh page
       })
       .catch((error: any) => {
         alert(error);
@@ -85,9 +108,27 @@ const Profile: React.FC = () => {
   };
 
   const changePassword = () => {
+    if (isGoogleUser) {
+      return;
+    }
     history.push('/app/profile/passwordChange');
-    return;
   };
+
+  function teamDisplay() {
+    if (team === '') {
+      return (
+        <>
+          <IonItem>You have not joined a team yet</IonItem>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <IonItem>Team: {team}</IonItem>
+        </>
+      );
+    }
+  }
 
   const signOut = async () => {
     try {
@@ -98,22 +139,29 @@ const Profile: React.FC = () => {
     }
   };
 
+  // handle refresher
+  async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
+    GetRecords(); // Refresh data
+    event.detail.complete(); // Notify the refresher that loading is complete
+  }
+
   return (
-    <IonPage>
-      <IonRouterOutlet>
-        <Route
-          exact
-          path="/app/profile/passwordChange"
-          component={newPassword}
-        />
-      </IonRouterOutlet>
-      <IonHeader>
-        <NavBar>
-          <IonTitle>Profile</IonTitle>
-        </NavBar>
-      </IonHeader>
-      <IonContent>
-        <IonItem>
+    <>
+      <IonPage>
+        <IonRouterOutlet>
+          <Route
+            exact
+            path="/app/profile/passwordChange"
+            component={newPassword}
+          />
+        </IonRouterOutlet>
+        <IonHeader>
+          <NavBar>
+            <IonTitle>Profile</IonTitle>
+          </NavBar>
+        </IonHeader>
+        <IonContent>
           <IonGrid>
             <IonRow>
               <IonCol size="auto">
@@ -144,11 +192,14 @@ const Profile: React.FC = () => {
                 <IonItem>
                   <p>{email}</p>
                 </IonItem>
-                <IonItem>
-                  <IonButton onClick={changePassword}>
-                    Change Password
-                  </IonButton>
-                </IonItem>
+                <IonItem>{teamDisplay()}</IonItem>
+                {!isGoogleUser && (
+                  <IonItem>
+                    <IonButton onClick={changePassword}>
+                      Change Password
+                    </IonButton>
+                  </IonItem>
+                )}
                 <IonItem>
                   <IonButton onClick={signOut}>Sign Out</IonButton>
                 </IonItem>
@@ -173,10 +224,48 @@ const Profile: React.FC = () => {
                 </IonItem>
               </IonCol>
             </IonRow>
+            <IonRow>
+              <IonCol sizeLg="6" sizeMd="8" sizeSm="12">
+                <CalendarLeafs></CalendarLeafs>
+              </IonCol>
+            </IonRow>
           </IonGrid>
-        </IonItem>
-      </IonContent>
-    </IonPage>
+          <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+            <IonRefresherContent></IonRefresherContent>
+          </IonRefresher>
+        </IonContent>
+        <IonFooter>
+          <ul>
+            <li>
+              <a
+                href="https://www.flaticon.com/free-icons/leaf"
+                title="leaf icons"
+              >
+                Leaf icons created by Freepik - Flaticon
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="https://www.flaticon.com/free-icons/leaf"
+                title="leaf icons"
+              >
+                Leaf icons created by Pixel perfect - Flaticon
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="https://www.flaticon.com/free-icons/leaf"
+                title="leaf icons"
+              >
+                Leaf icons created by Good Ware - Flaticon
+              </a>
+            </li>
+          </ul>
+        </IonFooter>
+      </IonPage>
+    </>
   );
 };
 

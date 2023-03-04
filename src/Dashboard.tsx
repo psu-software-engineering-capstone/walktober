@@ -36,6 +36,8 @@ import './theme/app.scss';
 /* Context */
 import { useContext } from 'react';
 import AuthContext from './store/auth-context';
+import landing404 from './pages/404landing/landing404';
+import AdminSteps from './pages/adminSteps/adminSteps';
 
 const Dashboard: React.FC = () => {
   const ctx = useContext(AuthContext);
@@ -46,6 +48,7 @@ const Dashboard: React.FC = () => {
   return (
     <IonTabs>
       <IonRouterOutlet>
+        <Route path="/" component={landing404}></Route>
         <Route exact path="/app/home" component={HomePage} />
         <Route exact path="/app/profile" component={Profile} />
         <Route
@@ -76,13 +79,16 @@ const Dashboard: React.FC = () => {
         </IonTabButton>
         <IonTabButton tab="manualsteps" href="/app/manualsteps">
           <IonIcon icon={footsteps} />
-          <IonLabel>Manual Steps</IonLabel>
+          <IonLabel>Steps Log</IonLabel>
         </IonTabButton>
         <IonTabButton tab="healthapp" href="/app/healthapp">
           <IonIcon icon={fitness} />
           <IonLabel>Health App</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="team" href={ctx.team === '' ? '/app/team/join' : '/app/team'}>
+        <IonTabButton
+          tab="team"
+          href={ctx.team === '' ? '/app/team/join' : '/app/team'}
+        >
           <IonIcon icon={people} />
           <IonLabel>Team</IonLabel>
         </IonTabButton>

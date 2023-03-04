@@ -19,17 +19,21 @@ import {
   isPlatform,
   useIonToast
 } from '@ionic/react';
+import './adminSteps.css';
 import { auth, FirestoreDB } from '../../firebase';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
+import { updateDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import AuthContext from '../../store/auth-context';
 import NavBar from '../../components/NavBar';
 import { Health } from '@awesome-cordova-plugins/health';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
-import './manualLoggingSteps.css';
-import { onSnapshot } from 'firebase/firestore';
 
-const ManualSteps: React.FC = () => {
+interface Props {
+  name: string;
+}
+
+const AdminSteps: React.FC<{ name: string }> = ({ name }: Props) => {
   interface StepLog {
     date: string;
     steps: number;
@@ -39,6 +43,7 @@ const ManualSteps: React.FC = () => {
 
   const ctx = useContext(AuthContext);
 
+  const logsName = name;
   const [manualDate, setManualDate] = useState('');
   const [manualSteps, setManualSteps] = useState(0);
   const [stepLogs, setStepLogs] = useState<StepLog[]>([]);
@@ -54,21 +59,9 @@ const ManualSteps: React.FC = () => {
       write: ['height', 'weight'] // Write only permission
     }
   ];
-
-  // update the data when the page loads
-  // update the data when the data is updated
   useEffect(() => {
-    if (ctx.user !== null) {
-      const unsubscribe = onSnapshot(doc(FirestoreDB, 'users', auth.currentUser.email as string), (doc: any) => {
-          if (doc.exists()) {
-            console.log('Manual logging page updated');
-            getRecordsFromDB(); // get records from database
-          }
-        }
-      );
-      return unsubscribe;
-    }
-  }, [ctx.user]);
+    getRecordsFromDB();
+  }, []);
 
   useEffect(() => {
     if (updateTotalStep === true) {
@@ -84,12 +77,11 @@ const ManualSteps: React.FC = () => {
 
   useEffect(() => {
     if (updateDB === true) {
-      sendNewLog(); // update database
+      sendNewLog();
     }
     setUpdateDB(false);
   }, [updateDB]);
 
-  // get records from database
   const getRecordsFromDB = async () => {
     if (ctx.user === null) {
       alert('You are not logged in!');
@@ -103,39 +95,67 @@ const ManualSteps: React.FC = () => {
     setStepLogs(stepsByDate);
   };
 
-  // send new log to database (manual logging)
   const sendNewLog = async () => {
     if (auth.currentUser === null) {
       alert('You are not logged in!');
       return;
     }
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-    // get current total steps
-    const dbSnap = await getDoc(dbRef);
-    const currentTotalSteps = dbSnap.data().totalStep;
-    // update total steps
     await updateDoc(dbRef, {
       stepsByDate: stepLogs,
       totalStep: totalStep
     })
       .then(() => {
+        console.log(stepLogs, totalStep);
         alert('Steps Updated!');
       })
       .catch((error: any) => {
         alert(error);
       });
-    // update team total steps and team average steps
-    await updateTeam(currentTotalSteps, totalStep);
   };
 
-  // handle refresher
+  function DisplayRecords(): any {
+    if (stepLogs.length > 0) {
+      stepLogs.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
+      return (
+        <>
+          <IonGrid>
+            <IonRow>
+              <IonCol>Date:</IonCol>
+              <IonCol>Steps:</IonCol>
+            </IonRow>
+
+            {stepLogs.map((item) => (
+              <IonRow key={Math.random()}>
+                <IonCol>{item.date}</IonCol>
+                <IonCol>{item.steps}</IonCol>
+              </IonRow>
+            ))}
+          </IonGrid>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <IonGrid>
+            <IonRow>
+              <IonCol>Date:</IonCol>
+              <IonCol>Steps:</IonCol>
+            </IonRow>
+          </IonGrid>
+        </>
+      );
+    }
+  }
+
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
     getRecordsFromDB();
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 
-  // load data from google fit/apple health
   const syncApp = async () => {
     if (isPlatform('android')) {
       await Health.isAvailable()
@@ -183,7 +203,6 @@ const ManualSteps: React.FC = () => {
     return;
   };
 
-  // request authorization for google fit/apple health
   const requestAuthorization = async () => {
     if (isPlatform('android')) {
       await Health.requestAuthorization(supportedTypes)
@@ -210,7 +229,6 @@ const ManualSteps: React.FC = () => {
     return;
   };
 
-  // update steps from google fit/apple health
   const updateSteps = async () => {
     if (!isPlatform('android') && !isPlatform('ios')) {
       alert('Error: Unknown Platform');
@@ -333,6 +351,7 @@ const ManualSteps: React.FC = () => {
       };
       await HealthKit.querySampleType(stepOptions)
         .then(async (data: any) => {
+          console.log(data);
           const dbRef = doc(
             FirestoreDB,
             'users',
@@ -430,7 +449,6 @@ const ManualSteps: React.FC = () => {
     }
   };
 
-  // update current user's total steps and steps by date
   const updateCurrentUser = async (stepsByDate: any, totalStep: any) => {
     if (ctx.user === null) {
       alert('You are not logged in!');
@@ -442,56 +460,12 @@ const ManualSteps: React.FC = () => {
       'users',
       auth.currentUser.email as string
     );
-    // get current total steps
-    const dbSnap = await getDoc(currentUserRef);
-    const currentTotalSteps = dbSnap.data().totalStep;
-    // update total steps
     await updateDoc(currentUserRef, {
       stepsByDate: stepsByDate,
       totalStep: totalStep
-    })
-      .then(() => {
-        console.log('Steps updated!');
-      })
-      .catch((error: any) => {
-        console.error('Error updating document: ', error);
-      });
-    // update team total steps and average steps
-    await updateTeam(currentTotalSteps, totalStep);
-  };
-
-  // update team total steps and average steps
-  const updateTeam = async (currentTotalSteps: any, totalStep: any) => {
-    if (ctx.user === null) {
-      alert('You are not logged in!');
-      history.push('/login');
-      return;
-    }
-    if (ctx.team === '') {
-      return; // user is not in a team
-    }
-    const dbRef = doc(FirestoreDB, 'teams', ctx.team);
-    getDoc(dbRef).then((doc: any) => {
-      if (doc.exists()) {
-        const teamData = doc.data();
-        const teamTotalSteps = teamData.totalStep;
-        const newTotalSteps = teamTotalSteps - currentTotalSteps + totalStep;
-        const newAvgSteps = newTotalSteps / teamData.members.length;
-        updateDoc(dbRef, {
-          totalStep: newTotalSteps,
-          avg_steps: newAvgSteps
-        })
-          .then(() => {
-            console.log('Team total steps and average steps updated!');
-          })
-          .catch((error: any) => {
-            console.log('Error updating document: ', error);
-          });
-      }      
     });
   };
 
-  // present toast message
   const presentToast = (message: any) => {
     present({
       message: message,
@@ -500,7 +474,6 @@ const ManualSteps: React.FC = () => {
     });
   };
 
-  // update steps logs when user manually enters steps
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!manualSteps || !manualDate) {
@@ -526,43 +499,6 @@ const ManualSteps: React.FC = () => {
     setUpdateTotalStep(true);
   };
 
-  // display steps logs
-  function DisplayRecords(): any {
-    if (stepLogs.length > 0) {
-      stepLogs.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
-      return (
-        <>
-          <IonGrid>
-            <IonRow>
-              <IonCol>Date:</IonCol>
-              <IonCol>Steps:</IonCol>
-            </IonRow>
-
-            {stepLogs.map((item) => (
-              <IonRow key={Math.random()}>
-                <IonCol>{item.date}</IonCol>
-                <IonCol>{item.steps}</IonCol>
-              </IonRow>
-            ))}
-          </IonGrid>
-        </>
-      );
-    } else {
-      return (
-        <>
-          <IonGrid>
-            <IonRow>
-              <IonCol>Date:</IonCol>
-              <IonCol>Steps:</IonCol>
-            </IonRow>
-          </IonGrid>
-        </>
-      );
-    }
-  }
-
   return (
     <IonPage>
       <IonHeader>
@@ -577,6 +513,7 @@ const ManualSteps: React.FC = () => {
             submitHandler(event);
           }}
         >
+          <div className="steps-name">Viewing Steps Log for:{logsName}</div>
           <IonItem>
             <IonLabel position="floating">Number of steps</IonLabel>
             <IonInput
@@ -619,4 +556,4 @@ const ManualSteps: React.FC = () => {
   );
 };
 
-export default ManualSteps;
+export default AdminSteps;
