@@ -122,6 +122,7 @@ const TeamHome: React.FC = () => {
     setIsLeader(userData.team_leader);
     const teamRef = doc(FirestoreDB, 'teams', teamName); // reference team document
     setTeamRef(teamRef);
+    
     const teamSnapshot = await getDoc(teamRef); // grab the team document
     const teamData = teamSnapshot.data(); // get the team data
     setProfilePic(teamData.profile_pic);
@@ -146,9 +147,10 @@ const TeamHome: React.FC = () => {
       members.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
     ); // sort the array
     setTeamMembers(emailList); // set the mates array
-    const today = new Date(Date());
-    const maxDate = new Date(adData.teamDate);
-    if (maxDate < today) {
+    const today = new Date();
+    today.setDate(today.getDate() - 1);
+    console.log(today, adData.teamDate, today.toISOString().slice(0, 10), adData);
+    if (adData.teamDate < today.toISOString().slice(0, 10)) {
       setValid(true);
       console.log('true');
     } else {

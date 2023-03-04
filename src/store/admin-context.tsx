@@ -3,7 +3,7 @@
 
 import { doc, onSnapshot } from 'firebase/firestore';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { FirestoreDB } from '../firebase';
+import { auth, FirestoreDB } from '../firebase';
 
 const AdminContext = createContext({
   maxSize: 0,
@@ -29,7 +29,7 @@ export const AdminContextProvider: React.FC<{ children: any }> = ( props: any ) 
       setTeamDate(doc.data().team_creation_due);
     });
     return () => unsub();
-  });
+  }, [auth]);
 
   return (
     <AdminContext.Provider value={{ maxSize, minSize, regDate, teamDate }}>
