@@ -29,6 +29,7 @@ import { query } from 'firebase/firestore';
 import { getDocs } from 'firebase/firestore';
 import TeamLeaderBoardChart from '../../components/LeaderBoard/TeamLeaderboardChart';
 import './teamHome.scss';
+import WidgetBot from '@widgetbot/react-embed';
 
 const TeamHome: React.FC = () => {
   interface memberData {
@@ -57,7 +58,7 @@ const TeamHome: React.FC = () => {
     if (team.length > 0) {
       return (
         <>
-          <IonGrid fixed={true}>
+          <IonGrid>
             <IonRow class="top">
               <IonCol
                 sizeSm="12"
@@ -275,34 +276,48 @@ const TeamHome: React.FC = () => {
         </NavBar>
       </IonHeader>
       <IonContent>
-        <IonRow>
-          <IonCol
-            className="boxSize"
-            sizeSm="12"
-            sizeLg="4"
-            sizeMd="6"
-            sizeXs="12"
-          >
-            <TeamLeaderBoardChart data={leaderboardData}></TeamLeaderBoardChart>
-          </IonCol>
-          <IonCol sizeLg="8">
-            <IonItem>
-              <IonImg
-                className="profile_pic"
-                src={profilePic}
-                alt="Profile picture for the team the user is a part of"
-              >
-                {' '}
-              </IonImg>
-            </IonItem>
-            <IonItem> {teamName} Profile Picture </IonItem>
-            <IonItem> {changePicture()} </IonItem>
-            <IonItem>
-              <IonButton onClick={leaveTeam}> Leave team </IonButton>{' '}
-            </IonItem>
-            <IonItem>{DisplayTeam(leaderboardData)}</IonItem>
-          </IonCol>
-        </IonRow>
+        <IonGrid>
+          <IonRow>
+            <IonCol
+              className="boxSize"
+              sizeSm="12"
+              sizeLg="4"
+              sizeMd="6"
+              sizeXs="12"
+            >
+              <TeamLeaderBoardChart data={leaderboardData}></TeamLeaderBoardChart>
+            </IonCol>
+            <IonCol
+              sizeSm="12"
+              sizeLg="4"
+              sizeMd="6"
+              sizeXs="12"
+            >
+              <WidgetBot
+                className="discord-widget"
+                server="1068966007886069841"
+                channel="1068966009106600110"
+              />
+            </IonCol>
+            <IonCol>
+              <IonItem>
+                <IonImg
+                  className="profile_pic"
+                  src={profilePic}
+                  alt="Profile picture for the team the user is a part of"
+                >
+                  {' '}
+                </IonImg>
+              </IonItem>
+              <IonItem> {teamName} Profile Picture </IonItem>
+              <IonItem> {changePicture()} </IonItem>
+              <IonItem>
+                <IonButton onClick={leaveTeam}> Leave team </IonButton>{' '}
+              </IonItem>
+              <IonItem>{DisplayTeam(leaderboardData)}</IonItem>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
