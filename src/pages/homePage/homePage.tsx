@@ -15,14 +15,15 @@ import {
   IonCol,
   RefresherEventDetail,
   IonRefresher,
-  IonRefresherContent
+  IonRefresherContent,
+  IonItem
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import ProgressChart from '../../components/ProgressChart';
 import AuthContext from '../../store/auth-context';
-import { getDoc, doc } from 'firebase/firestore';
+import { getDoc, doc, onSnapshot } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
 import './homePage.css';
@@ -44,10 +45,21 @@ const HomePage: React.FC = () => {
 
   const ctx = useContext(AuthContext);
 
+  // update profile data when the page loads
+  // update profile data when the profile data changes
   useEffect(() => {
-    if (ctx.user) {
-      console.log('get past seven days steps');
-      getPastSevenDaysSteps();
+    if (ctx.user !== null) {
+      const unsubscribe = onSnapshot(
+        doc(FirestoreDB, 'users', auth.currentUser.email as string),
+        (doc: any) => {
+          if (doc.exists()) {
+            console.log('Home page updated');
+            getPastSevenDaysSteps();
+          }
+        }
+      );
+
+      return unsubscribe;
     }
   }, [ctx.user]);
 
@@ -61,12 +73,20 @@ const HomePage: React.FC = () => {
       history.push('/login');
       return;
     }
-  
+
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     const dbSnap = await getDoc(dbRef);
     const userData = dbSnap.data();
     const stepsByDate = userData.stepsByDate;
-  
+
+    //Add today's step count
+    const today = new Date();
+    today.setDate(today.getDate() - 1);
+    if (stepsByDate[0].date == today.toISOString().slice(0, 10)) {
+      setSteps(stepsByDate[0].steps);
+      console.log(today, stepsByDate[0]);
+    }
+
     // Create an array of the last seven dates (including today)
     const pastSevenDaysDates = [];
     for (let i = 1; i < 8; i++) {
@@ -74,27 +94,21 @@ const HomePage: React.FC = () => {
       date.setDate(date.getDate() - i);
       pastSevenDaysDates.push(date.toISOString().slice(0, 10));
     }
-  
+
     // Populate pastSevenDays with step count or 0 for each date
-    const pastSevenDays = pastSevenDaysDates.map(date => {
-      const stepLog = stepsByDate.find((stepLog: StepLog) => stepLog.date === date);
+    const pastSevenDays = pastSevenDaysDates.map((date) => {
+      const stepLog = stepsByDate.find(
+        (stepLog: StepLog) => stepLog.date === date
+      );
       if (stepLog) {
         return stepLog;
       } else {
         return { date: date, steps: 0 };
       }
     });
-  
-    setPastSevenDaysSteps(pastSevenDays);
-  };
 
-  // const stepUpdateHandler = (event: any): void => {
-  //   const newValue = document.querySelector('#stepsUpdate') as HTMLInputElement;
-  //   const newSteps = Number(newValue.value);
-  //   if (newSteps > 0) {
-  //     setSteps(newSteps);
-  //   }
-  // };
+    setPastSevenDaysSteps(pastSevenDays.reverse());
+  };
 
   // handle refresher
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
@@ -134,19 +148,8 @@ const HomePage: React.FC = () => {
               className="todaysSteps"
             >
               <IonLabel className="">
-                Todays Steps:{' '}
-                <div className="localStepsUpdater">{steps.toString()}</div>
+                Todays Steps: <div className="localStepsUpdater">{steps}</div>
               </IonLabel>
-              {/* <IonItem
-                className="localStepsUpdater"
-                id="stepsUpdate"
-                placeholder={steps.toString()}
-                onInput={(event: any) => {
-                  stepUpdateHandler(event);
-                }}
-              >
-                sad
-              </IonItem> */}
               <br />
               click
               <a onClick={moveToManualSteps}> here </a>
@@ -160,7 +163,7 @@ const HomePage: React.FC = () => {
               className="personalProgress"
             >
               {pastSevenDaysSteps.length > 1 ? (
-                <ProgressChart data={pastSevenDaysSteps.reverse()} />
+                <ProgressChart data={pastSevenDaysSteps} />
               ) : (
                 ' '
               )}

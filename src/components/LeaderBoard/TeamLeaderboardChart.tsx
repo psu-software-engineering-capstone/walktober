@@ -1,34 +1,20 @@
-import {
-  IonButton,
-  IonContent,
-  IonHeader,
-  IonSpinner,
-  IonTitle
-} from '@ionic/react';
-import React, { useContext, useEffect, useState } from 'react';
+import { IonContent, IonHeader, IonTitle } from '@ionic/react';
+import React, { useEffect } from 'react';
 import './LeaderBoardChart.scss';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import AdminContext from '../../store/admin-context';
 import { Bar } from 'react-chartjs-2';
-import { collection, getDocs } from 'firebase/firestore';
-import { FirestoreDB } from '../../firebase';
 
 ChartJS.register(...registerables);
 
 interface Data {
   name: string;
+  email: string;
   profile_pic?: string;
   totalStep?: number;
-  avg_steps?: number;
 }
 
-const LeaderBoardChart: React.FC = () => {
-  const [data, setData] = useState(Array<Data>);
-  const [loading, setLoading] = useState(false);
-  const adData = useContext(AdminContext);
-  let dataType = 'individual';
-
+const TeamLeaderBoardChart: React.FC<{ data: Array<Data> }> = ({ data }) => {
   //Formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
   const chartData = {
     labels: data.map((row) => row.name),
@@ -36,9 +22,7 @@ const LeaderBoardChart: React.FC = () => {
       {
         minBarLength: 5,
         label: 'Steps',
-        data: data.map((col) =>
-          col.totalStep ? col.totalStep : col.avg_steps
-        ),
+        data: data.map((col) => col.totalStep),
         image: data.map((col) => (col.profile_pic ? col.profile_pic : null))
       }
     ]
@@ -169,15 +153,6 @@ const LeaderBoardChart: React.FC = () => {
     }
   };
 
-  //ajusts the size of the element containing the chart in order to correctly size the chart.
-  const boxAdjust = (labelLength: number) => {
-    const box = document.querySelector('.box');
-    if (box != null) {
-      const newHeight = labelLength * 60;
-      box.setAttribute('style', 'height: ' + newHeight.toString() + 'px');
-    }
-  };
-
   //gives leaderboard placement numbers a suffix
   const ordinalNumbers = (n: number) => {
     return n > 0
@@ -185,64 +160,18 @@ const LeaderBoardChart: React.FC = () => {
       : '';
   };
 
-  //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
-  async function getData(dataType: string) {
-    setLoading(true);
-    const indData: Array<Data> = [];
-    if (dataType == 'individual') {
-      const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
-      querySnapshot.forEach((doc: any) => {
-        const person: Data = {
-          name: doc.data().name as string,
-          profile_pic: doc.data().profile_pic as string,
-          totalStep: doc.data().totalStep as number
-        };
-        indData.push(person);
-      });
-      setData(
-        indData.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
-      );
+  //ajusts the size of the element containing the chart in order to correctly size the chart.
+  const boxAdjust = (labelLength: number) => {
+    const box = document.querySelector('.box-team-leaderboard');
+    if (box != null) {
+      const newHeight = labelLength * 60;
+      box.setAttribute('style', 'height: ' + newHeight.toString() + 'px');
     }
-    if (dataType == 'teams') {
-      const querySnapshot = await getDocs(collection(FirestoreDB, 'teams'));
-      querySnapshot.forEach((doc: any) => {
-        const team: Data = {
-          name: doc.data().name as string,
-          profile_pic: doc.data().profile_pic as string,
-          avg_steps: doc.data().avg_steps as number
-        };
-        const today = new Date(Date());
-        const maxDate = new Date(adData.teamDate);
-        console.log(
-          adData.maxSize,
-          adData.minSize,
-          adData.regDate,
-          adData.teamDate
-        );
-        if (maxDate < today) {
-          const membersLength = doc.data().members.length;
-          console.log(membersLength, adData.minSize);
-          if (adData.minSize <= membersLength) {
-            indData.push(team);
-          }
-        } else {
-          indData.push(team);
-        }
-      });
-      setData(
-        indData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
-      );
-    }
-    boxAdjust(indData.length);
-    //need to find way to not hardcode time
-    setTimeout(() => {
-      setLoading(false);
-    }, 0);
-  }
+  };
 
   useEffect(() => {
-    getData(dataType); //go into the firestore and get all the users' names, pictures, and then totalStep
-  }, []);
+    boxAdjust(data.length);
+  }, [data]);
 
   return (
     <IonContent>
@@ -250,40 +179,16 @@ const LeaderBoardChart: React.FC = () => {
         <IonHeader className="title">
           <IonTitle>Leaderboard</IonTitle>
         </IonHeader>
-        <div className="button-container">
-          <IonButton
-            onClick={() => {
-              dataType = 'individual';
-              getData(dataType);
-            }}
-            disabled={loading}
-          >
-            Individual
-          </IonButton>
-          <IonButton
-            onClick={() => {
-              dataType = 'teams';
-              getData(dataType);
-            }}
-            disabled={loading}
-          >
-            Teams
-          </IonButton>
-        </div>
-        <IonContent className="box">
-          {loading ? (
-            <IonSpinner className="spinner" />
-          ) : (
-            <Bar
-              data={chartData}
-              options={chartOptions}
-              plugins={[imgItems, ChartDataLabels]}
-            ></Bar>
-          )}
+        <IonContent className="box-team-leaderboard">
+          <Bar
+            data={chartData}
+            options={chartOptions}
+            plugins={[imgItems, ChartDataLabels]}
+          ></Bar>
         </IonContent>
       </div>
     </IonContent>
   );
 };
 
-export default LeaderBoardChart;
+export default TeamLeaderBoardChart;
