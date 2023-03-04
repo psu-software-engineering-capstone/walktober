@@ -1,4 +1,4 @@
-import { Redirect, Route } from 'react-router-dom';
+/* Ionic */
 import {
   IonIcon,
   IonLabel,
@@ -28,19 +28,22 @@ import TeamJoin from './pages/teamHome/teamJoin';
 import TeamCreation from './pages/teamCreation/teamCreation';
 import Admin from './pages/admin/admin';
 import StepsCalculator from './pages/stepsCalculator/stepsCalculator';
+import landing404 from './pages/404landing/landing404';
+import AdminSteps from './pages/adminSteps/adminSteps';
 
 /* Theming */
 import './theme/app.scss';
 
-/* Context */
+/* React */
 import { useContext, useEffect, useState } from 'react';
+import { Redirect, Route } from 'react-router-dom';
+
+/* Context */
 import AuthContext from './store/auth-context';
-import landing404 from './pages/404landing/landing404';
-import AdminSteps from './pages/adminSteps/adminSteps';
-import { onSnapshot } from 'firebase/firestore';
+
+/* Firebase */
 import { auth, FirestoreDB } from './firebase';
-import { doc } from 'firebase/firestore';
-import { collection } from 'firebase/firestore';
+import { doc, collection, onSnapshot } from 'firebase/firestore';
 
 interface StepLog {
   date: string;

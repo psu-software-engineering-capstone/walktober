@@ -36,6 +36,7 @@ interface StepLog {
   date: string;
   steps: number;
 }
+
 interface userData {
   email: string;
   name: string;

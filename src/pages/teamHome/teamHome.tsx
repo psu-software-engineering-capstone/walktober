@@ -134,10 +134,8 @@ const TeamHome: React.FC<{ TeamHomeTeam: teamData | null, TeamHomeUser: userData
       history.push('/app/team/join'); // if the user is not in a team, redirect them to the team join page
       return;
     }
-
     const members: Array<memberData> = [];
     const emailList: Array<string> = [];
-
     const currentUserRef = doc(
       FirestoreDB,
       'users',
@@ -146,13 +144,11 @@ const TeamHome: React.FC<{ TeamHomeTeam: teamData | null, TeamHomeUser: userData
     setUserRef(currentUserRef);
     const teamRef = doc(FirestoreDB, 'teams', ctx.team); // reference team document
     setTeamRef(teamRef);
-
     setUserTotalSteps(TeamHomeUser.totalStep);
     setIsLeader(TeamHomeUser.team_leader);
     setTeamName(TeamHomeTeam.name);
     setProfilePic(TeamHomeTeam.profile_pic);
     setTeamTotalSteps(TeamHomeTeam.totalStep);
-
     // get all the users in the team
     const usersRef = collection(FirestoreDB, 'users');
     const q = query(usersRef, where('team', '==', ctx.team));
@@ -167,7 +163,6 @@ const TeamHome: React.FC<{ TeamHomeTeam: teamData | null, TeamHomeUser: userData
       emailList.push(member.email);
       members.push(member);
     });
-
     // set the data
     setLeaderboardData(
       members.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))

@@ -74,8 +74,7 @@ interface selectFormat {
   value: string;
 }
 
-const TeamJoin: React.FC<{ TeamJoinTeamList: Array<teamData> | null, TeamJoinUser: userData | null }> = ({ TeamJoinTeamList, TeamJoinUser }) => {
-
+const TeamJoin: React.FC<{ TeamJoinTeamList: Array<teamData> | null; TeamJoinUser: userData | null; }> = ({ TeamJoinTeamList, TeamJoinUser }) => {
   const [joinTeam, setJoin] = useState(''); // team to join
   const [teamPass, setPass] = useState(''); // team password
   const [passwordShown, setPasswordShown] = useState(false); // password visability
@@ -92,13 +91,14 @@ const TeamJoin: React.FC<{ TeamJoinTeamList: Array<teamData> | null, TeamJoinUse
 
   // join the team
   const joined = async () => {
-    if (ctx.user === null || TeamJoinUser === null) { // if the user is not logged in
+    if (ctx.user === null || TeamJoinUser === null) {
+      // if the user is not logged in
       alert('You are not logged-in!');
       history.push('/login');
       return;
     }
-
-    const currentUserRef = doc( // user reference
+    const currentUserRef = doc(
+      // user reference
       FirestoreDB,
       'users',
       auth.currentUser.email as string
@@ -106,8 +106,8 @@ const TeamJoin: React.FC<{ TeamJoinTeamList: Array<teamData> | null, TeamJoinUse
     const teamRef = doc(FirestoreDB, 'teams', joinTeam); // team reference
     const teamSnap = await getDoc(teamRef); // team snapshot
     const teamData = teamSnap.data(); // team data
-
-    if (teamData.members.length >= 1) { // if there are already members in the team
+    if (teamData.members.length >= 1) {
+      // if there are already members in the team
       await updateDoc(currentUserRef, {
         team: joinTeam
       }); // update the user's document
@@ -118,7 +118,8 @@ const TeamJoin: React.FC<{ TeamJoinTeamList: Array<teamData> | null, TeamJoinUse
           (teamData.totalStep + TeamJoinUser.totalStep) /
           (teamData.members.length + 1)
       }); // update the teams members, their total steps, and the new average steps
-    } else { // if there are no members in the team
+    } else {
+      // if there are no members in the team
       await updateDoc(currentUserRef, {
         team: joinTeam,
         team_leader: true
@@ -142,14 +143,18 @@ const TeamJoin: React.FC<{ TeamJoinTeamList: Array<teamData> | null, TeamJoinUse
       return;
     }
     for (let i = 0; i < allTeams.length; i++) {
-      if (allTeams[i].name === joinTeam) { // if the team is found
-        if (allTeams[i].type === 'Private') { // if the team is private
-          if (teamPass === '') { // if no password is entered
+      if (allTeams[i].name === joinTeam) {
+        // if the team is found
+        if (allTeams[i].type === 'Private') {
+          // if the team is private
+          if (teamPass === '') {
+            // if no password is entered
             alert(
               'A password needs to be entered as this team is private. Please enter the password and try again.'
             );
             return;
-          } else if (allTeams[i].password === teamPass) { // if the password is correct
+          } else if (allTeams[i].password === teamPass) {
+            // if the password is correct
             joined(); // join the team
             return;
           } else {
@@ -240,34 +245,33 @@ const TeamJoin: React.FC<{ TeamJoinTeamList: Array<teamData> | null, TeamJoinUse
 
   // get data from props
   async function getData() {
-    if (ctx.user === null && TeamJoinUser === null) { // check if the user is logged in
+    if (ctx.user === null && TeamJoinUser === null) {
+      // check if the user is logged in
       alert('You are not logged in');
       history.push('/app/login');
       return;
     }
-
-    if (ctx.team !== '') { // check if the user is already in a team
+    if (ctx.team !== '') {
+      // check if the user is already in a team
       history.push('/app/team');
       return;
     }
-
     const indData: Array<tempData> = []; // temp array for the team list
     const teamNames: Array<selectFormat> = []; // temp array for the team names
-
     const adminRef = doc(FirestoreDB, 'admin', 'admin'); // admin reference
     const adminSnapshot = await getDoc(adminRef); // admin snapshot
     const adminData = adminSnapshot.data(); // admin data
-
     TeamJoinTeamList?.forEach((data: teamData) => {
-      if (data.members.length <= adminData.max_team_size) { // check if the team is full
-
-        const allNames: selectFormat = { // for selection dropdown method
+      if (data.members.length <= adminData.max_team_size) {
+        // check if the team is full
+        const allNames: selectFormat = {
+          // for selection dropdown method
           text: data.name,
           value: data.name
         };
         teamNames.push(allNames);
-
-        if (data.status === '1') { // private team
+        if (data.status === '1') {
+          // private team
           const temp: tempData = {
             name: data.name as string,
             leader: data.leader as string,
@@ -276,7 +280,8 @@ const TeamJoin: React.FC<{ TeamJoinTeamList: Array<teamData> | null, TeamJoinUse
             password: data.password
           };
           indData.push(temp); // push the data to the array
-        } else { // public team
+        } else {
+          // public team
           const temp: tempData = {
             name: data.name as string,
             leader: data.leader as string,
