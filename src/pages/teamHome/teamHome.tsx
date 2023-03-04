@@ -54,7 +54,7 @@ interface teamData {
   avg_steps: number;
   leader: string;
   members: string[];
-  status: number;
+  status: string;
   password: string;
   profile_pic: string;
   totalStep: number;

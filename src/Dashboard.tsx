@@ -40,6 +40,7 @@ import AdminSteps from './pages/adminSteps/adminSteps';
 import { onSnapshot } from 'firebase/firestore';
 import { auth, FirestoreDB } from './firebase';
 import { doc } from 'firebase/firestore';
+import { collection } from 'firebase/firestore';
 
 interface StepLog {
   date: string;
@@ -64,7 +65,7 @@ interface teamData {
   avg_steps: number;
   leader: string;
   members: string[];
-  status: number;
+  status: string;
   password: string;
   profile_pic: string;
   totalStep: number;
@@ -74,6 +75,7 @@ interface teamData {
 const Dashboard: React.FC = () => {
   const [userData, setUserData] = useState<userData | null>(null); // user data
   const [teamData, setTeamData] = useState<teamData | null>(null); // team data
+  const [teamListData, setTeamListData] = useState<Array<teamData> | null>(null); // team list data
 
   const ctx = useContext(AuthContext); // auth context
 
@@ -94,9 +96,9 @@ const Dashboard: React.FC = () => {
 
   // get a team data from firestore
   useEffect(() => {
-    if (userData && userData.team !== '') {
+    if (userData && ctx.team !== '') {
       const unsubscribe = onSnapshot(
-        doc(FirestoreDB, 'teams', userData.team),
+        doc(FirestoreDB, 'teams', ctx.team),
         (doc: any) => {
           if (doc.exists()) {
             setTeamData(doc.data());
@@ -107,7 +109,20 @@ const Dashboard: React.FC = () => {
     }
   }, [userData]);
 
-  const tabsVisible = isPlatform('android') || isPlatform('ios');
+  // get a team list from firestore
+  useEffect(() => {
+    if (userData) {
+      const unsubscribe = onSnapshot(
+        collection(FirestoreDB, 'teams'),
+        (querySnapshot: any) => {
+          setTeamListData(querySnapshot.docs.map((doc: any) => doc.data()));
+        }
+      );
+      return unsubscribe;
+    }
+  }, [userData]);
+
+  const tabsVisible = isPlatform('android') || isPlatform('ios'); // check if platform is android or ios
 
   return (
     <IonTabs>
@@ -145,7 +160,11 @@ const Dashboard: React.FC = () => {
           path="/app/team"
           render={(props) => <TeamHome {...props} TeamHomeTeam={teamData} TeamHomeUser={userData} />}
         />
-        <Route exact path="/app/team/join" component={TeamJoin} />
+        <Route
+          exact
+          path="/app/team/join"
+          render={(props) => <TeamJoin {...props} TeamJoinTeamList={teamListData} TeamJoinUser={userData} />}
+        />
         <Route exact path="/app/admin" component={Admin} />
         <Route exact path="/app/adminSteps" component={AdminSteps} />
         <Route exact path="/app">
