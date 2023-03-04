@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/space-before-function-paren */
 import { useContext, useEffect, useState } from 'react';
 import {
@@ -19,23 +20,41 @@ import {
   IonTitle,
   RefresherEventDetail
 } from '@ionic/react';
-import './profile.css';
 import { Route } from 'react-router-dom';
 import { auth, FirestoreDB, storage } from '../../firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import newPassword from './newPassword';
 import AuthContext from '../../store/auth-context';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
-import { updateDoc } from 'firebase/firestore';
 import CalendarLeafs from '../../components/CalendarLeafs';
-import { onSnapshot } from 'firebase/firestore';
+import './profile.css';
 
-const Profile: React.FC = () => {
-  const history = useHistory();
-  const ctx = useContext(AuthContext);
+interface StepLog {
+  date: string;
+  steps: number;
+}
+interface userData {
+  email: string;
+  name: string;
+  badges: string[];
+  device: string;
+  totalStep: number;
+  profile_pic: string;
+  team: string;
+  team_leader: boolean;
+  stepsByDate: StepLog[];
+  admin: boolean;
+}
+
+const Profile: React.FC<{ data: userData | null }> = ({ data }) => {
+  const history = useHistory(); // for routing
+
+  const ctx = useContext(AuthContext); // auth context
+
+  // profile data
   const [email, setEmail] = useState('');
   const [joinDate, setJoinDate] = useState('');
   const [name, setName] = useState('');
@@ -45,51 +64,41 @@ const Profile: React.FC = () => {
   const [photo, setPhoto] = useState<any>(null);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
 
-  // update profile data when the page loads
-  // update profile data when the profile data changes
+  // set profile data
   useEffect(() => {
-    if (ctx.user !== null) {
-      const unsubscribe = onSnapshot(
-        doc(FirestoreDB, 'users', auth.currentUser.email as string),
-        (doc: any) => {
-          if (doc.exists()) {
-            console.log('Profile page updated');
-            GetRecords();
-          }
-        }
-      );
-      return unsubscribe;
+    if (ctx.user !== null || data !== null) {
+      GetRecords();
     }
-  }, [ctx.user]);
+  }, [ctx.user, data]);
 
+  // get profile data from props data
   async function GetRecords(): Promise<void> {
-    if (ctx.user === null) {
+    if (ctx.user === null || data === null) {
       alert('You are not logged in!');
       history.push('/login');
       return;
     }
-    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-    const dbSnap = await getDoc(dbRef);
-    const userData = dbSnap.data();
-    setProfilePic(userData.profile_pic);
-    setName(userData.name);
-    setEmail(userData.email);
-    setTeam(userData.team);
+    setProfilePic(data.profile_pic);
+    setName(data.name);
+    setEmail(data.email);
+    setTeam(data.team);
     setJoinDate(
       new Date(auth.currentUser.metadata.creationTime).toLocaleDateString()
     );
-    setTotalDistance(userData.totalStep / 2000);
+    setTotalDistance(data.totalStep / 2000);
     setIsGoogleUser(
       auth.currentUser.providerData[0]?.providerId === 'google.com'
     );
   }
 
+  // handle image change
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setPhoto(e.target.files[0]);
     }
   };
 
+  // handle image upload
   const handleSubmit = async () => {
     const imageRef = ref(storage, auth.currentUser.email + '.png');
     await uploadBytes(imageRef, photo);
@@ -107,6 +116,7 @@ const Profile: React.FC = () => {
       });
   };
 
+  // change password
   const changePassword = () => {
     if (isGoogleUser) {
       return;
@@ -114,6 +124,7 @@ const Profile: React.FC = () => {
     history.push('/app/profile/passwordChange');
   };
 
+  // display team
   function teamDisplay() {
     if (team === '') {
       return (
@@ -130,6 +141,7 @@ const Profile: React.FC = () => {
     }
   }
 
+  // sign out
   const signOut = async () => {
     try {
       await auth.signOut();

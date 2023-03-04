@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-types */
@@ -22,10 +23,7 @@ import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import ProgressChart from '../../components/ProgressChart';
 import AuthContext from '../../store/auth-context';
-import { getDoc, doc } from 'firebase/firestore';
-import { auth, FirestoreDB } from '../../firebase';
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
-import { onSnapshot } from 'firebase/firestore';
 import './homePage.css';
 
 interface badgeOutline {
@@ -37,43 +35,44 @@ interface StepLog {
   steps: number;
 }
 
-const HomePage: React.FC = () => {
+interface userData {
+  email: string;
+  name: string;
+  badges: string[];
+  device: string;
+  totalStep: number;
+  profile_pic: string;
+  team: string;
+  team_leader: boolean;
+  stepsByDate: StepLog[];
+  admin: boolean;
+}
+
+const HomePage: React.FC<{ data: userData | null }> = ({ data }) => {
   const [steps, setSteps] = useState(0);
-  const history = useHistory();
   const [badges, setBadges] = useState(Array<badgeOutline>);
   const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
 
-  const ctx = useContext(AuthContext);
+  const history = useHistory(); // used to redirect to other pages
 
-  // update profile data when the page loads
-  // update profile data when the profile data changes
+  const ctx = useContext(AuthContext); // auth context
+
+  // set past seven days of steps
   useEffect(() => {
-    if (ctx.user !== null) {
-      const unsubscribe = onSnapshot(doc(FirestoreDB, 'users', auth.currentUser.email as string), (doc: any) => {
-        if (doc.exists()) {
-          console.log('Home page updated');
-          getPastSevenDaysSteps();
-        }
-      });
-      return unsubscribe;
+    if (ctx.user && data) {
+      getPastSevenDaysSteps();
     }
-  }, [ctx.user]);
+  }, [ctx.user, data]);
 
   // get past seven days of steps from firestore
-  // even though the user does not have seven days of steps
-  // the chart will still render with seven days of steps
-  // each day will have 0 steps
   const getPastSevenDaysSteps = async () => {
-    if (ctx.user === null) {
+    if (ctx.user === null || data === null) {
       alert('You are not logged in!');
       history.push('/login');
       return;
     }
-  
-    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-    const dbSnap = await getDoc(dbRef);
-    const userData = dbSnap.data();
-    const stepsByDate = userData.stepsByDate;
+    // set steps by date from props data
+    const stepsByDate = data.stepsByDate;
   
     // Create an array of the last seven dates (including today)
     const pastSevenDaysDates = [];
@@ -111,6 +110,7 @@ const HomePage: React.FC = () => {
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 
+  // move to manual steps page
   const moveToManualSteps = () => {
     history.push('/app/manualsteps');
   };

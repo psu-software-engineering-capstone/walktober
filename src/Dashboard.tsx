@@ -33,14 +33,51 @@ import StepsCalculator from './pages/stepsCalculator/stepsCalculator';
 import './theme/app.scss';
 
 /* Context */
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import AuthContext from './store/auth-context';
 import landing404 from './pages/404landing/landing404';
 import AdminSteps from './pages/adminSteps/adminSteps';
+import { onSnapshot } from 'firebase/firestore';
+import { auth, FirestoreDB } from './firebase';
+import { doc } from 'firebase/firestore';
+
+interface StepLog {
+  date: string;
+  steps: number;
+}
+interface userData {
+  email: string;
+  name: string;
+  badges: string[];
+  device: string;
+  totalStep: number;
+  profile_pic: string;
+  team: string;
+  team_leader: boolean;
+  stepsByDate: StepLog[];
+  admin: boolean;
+}
+
 
 const Dashboard: React.FC = () => {
-  const ctx = useContext(AuthContext);
-  const isAdmin = ctx.admin;
+  const [userData, setUserData] = useState<userData | null>(null);
+
+  const ctx = useContext(AuthContext); // auth context
+
+  // get user data from firestore
+  useEffect(() => {
+    if (ctx.user) {
+      const unsubscribe = onSnapshot(
+        doc(FirestoreDB, 'users', auth.currentUser.email as string),
+        (doc: any) => {
+          if (doc.exists()) {
+            setUserData(doc.data());
+          }
+        }
+      );
+      return unsubscribe;
+    }
+  }, [ctx.user]);
 
   const tabsVisible = isPlatform('android') || isPlatform('ios');
 
@@ -48,8 +85,16 @@ const Dashboard: React.FC = () => {
     <IonTabs>
       <IonRouterOutlet>
         <Route path="/" component={landing404}></Route>
-        <Route exact path="/app/home" component={HomePage} />
-        <Route exact path="/app/profile" component={Profile} />
+        <Route
+          exact
+          path="/app/home"
+          render={(props) => <HomePage {...props} data={userData} />}
+        />
+        <Route
+          exact
+          path="/app/profile"
+          render={(props) => <Profile {...props} data={userData} />}
+        />
         <Route
           exact
           path="/app/profile/passwordChange"
@@ -91,7 +136,7 @@ const Dashboard: React.FC = () => {
           <IonIcon icon={people} />
           <IonLabel>Team</IonLabel>
         </IonTabButton>
-        {isAdmin && (
+        {ctx.admin && (
           <IonTabButton tab="admin" href="/app/admin">
             <IonIcon icon={construct} />
             <IonLabel>Admin</IonLabel>
