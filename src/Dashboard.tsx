@@ -149,7 +149,7 @@ const Dashboard: React.FC = () => {
         <Route
           exact
           path="/app/manualsteps"
-          render={(props) => <ManualSteps {...props} StepsLogData={userData} />}
+          render={(props) => <ManualSteps {...props} StepsLogTeam={teamData} StepsLogUser={userData} />}
         />
         <Route exact path="/app/stepscalc" component={StepsCalculator} />
         <Route exact path="/app/healthapp" component={HealthApp} />
