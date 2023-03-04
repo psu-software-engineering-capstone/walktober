@@ -226,7 +226,7 @@ const TeamHome: React.FC<{ TeamHomeTeam: teamData | null, TeamHomeUser: userData
 
   // leave team
   async function leaveTeam() {
-    if (ctx.team === '') {
+    if (ctx.team === '' || TeamHomeTeam === null) {
       history.push('/app/team/join');
       return;
     }
