@@ -107,7 +107,11 @@ const Dashboard: React.FC = () => {
         />
         <Route exact path="/app/stepscalc" component={StepsCalculator} />
         <Route exact path="/app/healthapp" component={HealthApp} />
-        <Route exact path="/app/teamcreation" component={TeamCreation} />
+        <Route
+          exact
+          path="/app/teamcreation"
+          render={(props) => <TeamCreation {...props} TeamCreationData={userData} />}
+        />
         <Route exact path="/app/team" component={TeamHome} />
         <Route exact path="/app/team/join" component={TeamJoin} />
         <Route exact path="/app/admin" component={Admin} />

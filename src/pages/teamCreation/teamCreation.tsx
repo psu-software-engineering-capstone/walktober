@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
@@ -13,12 +14,12 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/react';
-import './teamCreation.css';
 import { useState } from 'react';
 import { auth, FirestoreDB } from '../../firebase';
 import { doc, getDoc, setDoc, updateDoc, Timestamp } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
+import './teamCreation.css';
 
 interface Timestamp {
   seconds: number;
@@ -35,22 +36,38 @@ Timestamp.prototype.compareTo = function (other: Timestamp): number {
   }
 };
 
-const TeamCreation: React.FC = () => {
+interface StepLog {
+  date: string;
+  steps: number;
+}
+interface userData {
+  email: string;
+  name: string;
+  badges: string[];
+  device: string;
+  totalStep: number;
+  profile_pic: string;
+  team: string;
+  team_leader: boolean;
+  stepsByDate: StepLog[];
+  admin: boolean;
+}
+
+const TeamCreation: React.FC<{ TeamCreationData: userData | null }> = ({ TeamCreationData }) => {
+  // team creation data
   const [newTeamName, setNewTeamName] = useState('');
   const [newTeamStatus, setNewTeamStatus] = useState(0);
   const [newTeamPassword, setNewTeamPassword] = useState('');
-  const history = useHistory();
+
+  const history = useHistory(); // for routing
 
   const createTeam = async () => {
-    if (auth.currentUser == null) {
-      alert('You are not signed-in!');
+    if (auth.currentUser == null || TeamCreationData == null) {
+      alert('You are not logged-in!');
       return;
     }
-    const userRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-    const userSnap = await getDoc(userRef);
-    const userData = userSnap.data();
-    if (userData.team !== '') {
-      alert('You are already in a team! You cannot create a team.');
+    if (TeamCreationData.team !== '') {
+      alert('You are already in a team!');
       return;
     }
     if (newTeamName === '') {
@@ -84,13 +101,13 @@ const TeamCreation: React.FC = () => {
     }
     setDoc(doc(FirestoreDB, 'teams', newTeamName), {
       name: newTeamName,
-      avg_steps: userData.totalStep,
-      leader: userData.email,
-      members: [userData.email],
+      avg_steps: TeamCreationData.totalStep,
+      leader: TeamCreationData.email,
+      members: [TeamCreationData.email],
       status: newTeamStatus,
       password: newTeamPassword,
       profile_pic: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
-      totalStep: userData.totalStep,
+      totalStep: TeamCreationData.totalStep,
       channel_id: '' // TODO: create discord channel
     })
       .then(async () => {
