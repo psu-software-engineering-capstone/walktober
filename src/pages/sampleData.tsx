@@ -1,7 +1,14 @@
+const ChannelData = [
+  { id: "1068983906872868914", team: "Butter!" },   // team-1
+  { id: "1068983997272690748", team: "Open Team" }, // team-2
+  { id: "1068983926317654168", team: "VIP Team" },  // team-3
+  { id: "1076336334488211566", team: "" }           // team-4
+];
+
 const TeamData = [
-  { name: 'Team 1', avg_steps: 8000 },
-  { name: 'Team 2', avg_steps: 6000 },
-  { name: 'Team 3', avg_steps: 7000 },
+  { name: 'Butter!', avg_steps: 8000 },
+  { name: 'Open Team', avg_steps: 6000 },
+  { name: 'VIP Team', avg_steps: 7000 },
   { name: 'Team 4', avg_steps: 9000 },
   { name: 'Team 5', avg_steps: 5500 },
   { name: 'Team 6', avg_steps: 7200 },
@@ -202,4 +209,4 @@ const Devices = {
   google_health:	36
 };
 
-export { TeamData, IndividualData, PreSurvey, PostSurvey, Devices };
+export { ChannelData, TeamData, IndividualData, PreSurvey, PostSurvey, Devices };
