@@ -57,12 +57,12 @@ const HomePage: React.FC<{ HomeData: userData | null }> = ({ HomeData }) => {
 
   const ctx = useContext(AuthContext); // auth context
 
-  // set past seven days of steps
+  // get data from props
   useEffect(() => {
-    if (ctx.user && HomeData) {
+    if (HomeData !== null) {
       getPastSevenDaysSteps();
     }
-  }, [ctx.user, HomeData]);
+  }, [HomeData]);
 
   // get past seven days of steps from firestore
   const getPastSevenDaysSteps = async () => {

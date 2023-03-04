@@ -71,12 +71,12 @@ const ManualSteps: React.FC<{ StepsLogData: userData | null }> = ({ StepsLogData
     }
   ];
 
-  // set steps log data
+  // get data from props
   useEffect(() => {
-    if (ctx.user !== null && StepsLogData !== null) {
+    if (StepsLogData !== null) {
       getRecordsFromDB();
     }
-  }, [ctx.user, StepsLogData]);
+  }, [StepsLogData]);
 
   useEffect(() => {
     if (updateTotalStep === true) {

@@ -64,12 +64,12 @@ const Profile: React.FC<{ ProfileData: userData | null }> = ({ ProfileData }) =>
   const [photo, setPhoto] = useState<any>(null);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
 
-  // set profile data
+  // get data from props
   useEffect(() => {
-    if (ctx.user !== null || ProfileData !== null) {
+    if (ProfileData !== null) {
       GetRecords();
     }
-  }, [ctx.user, ProfileData]);
+  }, [ProfileData]);
 
   // get profile data from props data
   async function GetRecords(): Promise<void> {

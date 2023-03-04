@@ -45,6 +45,7 @@ interface StepLog {
   date: string;
   steps: number;
 }
+
 interface userData {
   email: string;
   name: string;
@@ -58,9 +59,21 @@ interface userData {
   admin: boolean;
 }
 
+interface teamData {
+  name: string;
+  avg_steps: number;
+  leader: string;
+  members: string[];
+  status: number;
+  password: string;
+  profile_pic: string;
+  totalStep: number;
+  channel_id: string;
+}
 
 const Dashboard: React.FC = () => {
-  const [userData, setUserData] = useState<userData | null>(null);
+  const [userData, setUserData] = useState<userData | null>(null); // user data
+  const [teamData, setTeamData] = useState<teamData | null>(null); // team data
 
   const ctx = useContext(AuthContext); // auth context
 
@@ -78,6 +91,21 @@ const Dashboard: React.FC = () => {
       return unsubscribe;
     }
   }, [ctx.user]);
+
+  // get a team data from firestore
+  useEffect(() => {
+    if (userData && userData.team !== '') {
+      const unsubscribe = onSnapshot(
+        doc(FirestoreDB, 'teams', userData.team),
+        (doc: any) => {
+          if (doc.exists()) {
+            setTeamData(doc.data());
+          }
+        }
+      );
+      return unsubscribe;
+    }
+  }, [userData]);
 
   const tabsVisible = isPlatform('android') || isPlatform('ios');
 
@@ -112,7 +140,11 @@ const Dashboard: React.FC = () => {
           path="/app/teamcreation"
           render={(props) => <TeamCreation {...props} TeamCreationData={userData} />}
         />
-        <Route exact path="/app/team" component={TeamHome} />
+        <Route
+          exact
+          path="/app/team"
+          render={(props) => <TeamHome {...props} TeamHomeTeam={teamData} TeamHomeUser={userData} />}
+        />
         <Route exact path="/app/team/join" component={TeamJoin} />
         <Route exact path="/app/admin" component={Admin} />
         <Route exact path="/app/adminSteps" component={AdminSteps} />

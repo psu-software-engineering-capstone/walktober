@@ -14,11 +14,9 @@ import {
   RefresherEventDetail
 } from '@ionic/react';
 import {
-  getDoc,
   doc,
   updateDoc,
   deleteDoc,
-  onSnapshot,
   collection,
   where,
   query,
@@ -33,7 +31,37 @@ import AuthContext from '../../store/auth-context';
 import TeamLeaderBoardChart from '../../components/LeaderBoard/TeamLeaderboardChart';
 import './teamHome.scss';
 
-const TeamHome: React.FC = () => {
+interface StepLog {
+  date: string;
+  steps: number;
+}
+
+interface userData {
+  email: string;
+  name: string;
+  badges: string[];
+  device: string;
+  totalStep: number;
+  profile_pic: string;
+  team: string;
+  team_leader: boolean;
+  stepsByDate: StepLog[];
+  admin: boolean;
+}
+
+interface teamData {
+  name: string;
+  avg_steps: number;
+  leader: string;
+  members: string[];
+  status: number;
+  password: string;
+  profile_pic: string;
+  totalStep: number;
+  channel_id: string;
+}
+
+const TeamHome: React.FC<{ TeamHomeTeam: teamData | null, TeamHomeUser: userData | null }> = ({ TeamHomeTeam, TeamHomeUser }) => {
   interface memberData {
     name: string;
     email: string;
@@ -41,6 +69,7 @@ const TeamHome: React.FC = () => {
     totalStep: number;
   }
 
+  // team home data
   const [leaderboardData, setLeaderboardData] = useState(Array<memberData>);
   const [teamMembers, setTeamMembers] = useState(Array<string>);
   const [teamName, setTeamName] = useState('');
@@ -52,10 +81,11 @@ const TeamHome: React.FC = () => {
   const [userTotalSteps, setUserTotalSteps] = useState(0);
   const [teamTotalSteps, setTeamTotalSteps] = useState(0);
 
-  const history = useHistory();
+  const history = useHistory(); // for routing
 
-  const ctx = useContext(AuthContext);
+  const ctx = useContext(AuthContext); // auth context
 
+  // display team members
   const DisplayTeam = (team: memberData[]): any => {
     if (team.length > 0) {
       return (
@@ -94,32 +124,35 @@ const TeamHome: React.FC = () => {
     }
   };
 
+  // get data from props and firebase
   async function getData() {
-    if (ctx.team === '') {
+    if (ctx.user === null || TeamHomeUser === null) {
+      history.push('/login'); // if the user is not logged in, redirect them to the login page
+      return;
+    }
+    if (TeamHomeTeam === null) {
       history.push('/app/team/join'); // if the user is not in a team, redirect them to the team join page
       return;
     }
+
     const members: Array<memberData> = [];
     const emailList: Array<string> = [];
+
     const currentUserRef = doc(
-      // reference the current user document
       FirestoreDB,
       'users',
       auth.currentUser.email as string
-    );
+    ); // reference user document
     setUserRef(currentUserRef);
-    const userSnap = await getDoc(currentUserRef); // grab the user document
-    const userData = userSnap.data(); // get the user data
-    const teamName = userData.team; // get the team name
-    setUserTotalSteps(userData.totalStep);
-    setTeamName(teamName);
-    setIsLeader(userData.team_leader);
     const teamRef = doc(FirestoreDB, 'teams', teamName); // reference team document
     setTeamRef(teamRef);
-    const teamSnapshot = await getDoc(teamRef); // grab the team document
-    const teamData = teamSnapshot.data(); // get the team data
-    setProfilePic(teamData.profile_pic);
-    setTeamTotalSteps(teamData.totalStep);
+
+    setUserTotalSteps(TeamHomeUser.totalStep);
+    setIsLeader(TeamHomeUser.team_leader);
+    setTeamName(TeamHomeTeam.name);
+    setProfilePic(TeamHomeTeam.profile_pic);
+    setTeamTotalSteps(TeamHomeTeam.totalStep);
+
     // get all the users in the team
     const usersRef = collection(FirestoreDB, 'users');
     const q = query(usersRef, where('team', '==', ctx.team));
@@ -134,19 +167,22 @@ const TeamHome: React.FC = () => {
       emailList.push(member.email);
       members.push(member);
     });
+
     // set the data
     setLeaderboardData(
       members.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
-    ); // sort the array
-    setTeamMembers(emailList); // set the mates array
+    ); // for leaderboard
+    setTeamMembers(emailList); // members email list
   }
 
+  // handle image change
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setPhoto(e.target.files[0]);
     }
   };
 
+  // upload image to firebase storage
   const handleSubmit = async () => {
     const imageRef = ref(storage, teamName + '.png');
     await uploadBytes(imageRef, photo);
@@ -160,6 +196,7 @@ const TeamHome: React.FC = () => {
       });
   };
 
+  // change team picture
   function changePicture() {
     if (isLeader === true) {
       return (
@@ -250,22 +287,12 @@ const TeamHome: React.FC = () => {
     history.push('/app/team/join'); // redirect to join team page
   }
 
-  // update the data when the page loads
-  // update the data when the team gets updated
+  // get data from props
   useEffect(() => {
-    if (ctx.team !== '') {
-      const unsubscribe = onSnapshot(
-        doc(FirestoreDB, 'teams', ctx.team),
-        (doc: any) => {
-          if (doc.data() !== undefined) {
-            console.log('Team home page updated');
-            getData();
-          }
-        }
-      );
-      return unsubscribe;
+    if (TeamHomeTeam !== null && TeamHomeUser !== null) {
+      getData();
     }
-  }, [ctx.team]);
+  }, [TeamHomeTeam, TeamHomeUser]);
 
   return (
     <IonPage>
