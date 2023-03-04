@@ -1,6 +1,13 @@
 .box {
   display: flex;
   align-items: center;
+  max-width: 100%;
+}
+
+.box-team-leaderboard {
+  display: flex;
+  align-items: center;
+  max-width: 100%;
 }
 
 .spinner {

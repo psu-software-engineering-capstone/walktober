@@ -25,6 +25,7 @@ import AuthContext from '../../store/auth-context';
 import { getDoc, doc } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
+import { onSnapshot } from 'firebase/firestore';
 import './homePage.css';
 
 interface badgeOutline {
@@ -46,10 +47,17 @@ const HomePage: React.FC = () => {
 
   const ctx = useContext(AuthContext);
 
+  // update profile data when the page loads
+  // update profile data when the profile data changes
   useEffect(() => {
-    if (ctx.user) {
-      console.log('get past seven days steps');
-      getPastSevenDaysSteps();
+    if (ctx.user !== null) {
+      const unsubscribe = onSnapshot(doc(FirestoreDB, 'users', auth.currentUser.email as string), (doc: any) => {
+        if (doc.exists()) {
+          console.log('Home page updated');
+          getPastSevenDaysSteps();
+        }
+      });
+      return unsubscribe;
     }
   }, [ctx.user]);
 
@@ -89,7 +97,7 @@ const HomePage: React.FC = () => {
       }
     });
   
-    setPastSevenDaysSteps(pastSevenDays);
+    setPastSevenDaysSteps(pastSevenDays.reverse());
     setTotalStep(totalStep);
     setStepGoal(stepGoal);
   };
@@ -166,7 +174,7 @@ const HomePage: React.FC = () => {
               className="personalProgress"
             >
               {pastSevenDaysSteps.length > 1 ? (
-                <ProgressChart data={pastSevenDaysSteps.reverse()} totalStep = {totalStep} stepGoal = {stepGoal} />
+                <ProgressChart data={pastSevenDaysSteps} totalStep = {totalStep} stepGoal = {stepGoal} />
               ) : (
                 ' '
               )}
