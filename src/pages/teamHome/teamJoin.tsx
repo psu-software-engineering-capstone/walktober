@@ -138,6 +138,12 @@ const TeamJoin: React.FC<{ TeamJoinTeamList: Array<teamData> | null; TeamJoinUse
 
   // team join precheck
   const toJoin = () => {
+    if (ctx.team !== '') {
+      // if the user is already in a team
+      alert('You are already in a team!');
+      history.push('/app/team');
+      return;
+    }
     if (joinTeam === '') {
       alert('No team name has been entered as of yet');
       return;
@@ -245,16 +251,14 @@ const TeamJoin: React.FC<{ TeamJoinTeamList: Array<teamData> | null; TeamJoinUse
 
   // get data from props
   async function getData() {
-    if (ctx.user === null && TeamJoinUser === null) {
+    if (ctx.user === null || TeamJoinUser === null) {
       // check if the user is logged in
       alert('You are not logged in');
       history.push('/app/login');
       return;
     }
     if (ctx.team !== '') {
-      // check if the user is already in a team
-      history.push('/app/team');
-      return;
+      return; // if the user is already in a team then don't get the data
     }
     const indData: Array<tempData> = []; // temp array for the team list
     const teamNames: Array<selectFormat> = []; // temp array for the team names
@@ -310,6 +314,11 @@ const TeamJoin: React.FC<{ TeamJoinTeamList: Array<teamData> | null; TeamJoinUse
 
   // move to the create team page
   const moveToCreateTeam = () => {
+    if (ctx.team !== '') {
+      alert('You are already in a team');
+      history.push('/app/team');
+      return;
+    }
     history.push('/app/teamcreation');
   };
 

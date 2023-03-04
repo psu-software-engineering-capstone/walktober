@@ -130,9 +130,8 @@ const TeamHome: React.FC<{ TeamHomeTeam: teamData | null, TeamHomeUser: userData
       history.push('/login'); // if the user is not logged in, redirect them to the login page
       return;
     }
-    if (TeamHomeTeam === null) {
-      history.push('/app/team/join'); // if the user is not in a team, redirect them to the team join page
-      return;
+    if (ctx.team === '' || TeamHomeTeam === null) {
+      return; // if the user is not in a team, don't get the data
     }
     const members: Array<memberData> = [];
     const emailList: Array<string> = [];
@@ -179,6 +178,11 @@ const TeamHome: React.FC<{ TeamHomeTeam: teamData | null, TeamHomeUser: userData
 
   // upload image to firebase storage
   const handleSubmit = async () => {
+    if (ctx.team === '' || TeamHomeTeam === null) {
+      alert('You are not in a team!');
+      history.push('/app/team/join');
+      return;
+    }
     const imageRef = ref(storage, teamName + '.png');
     await uploadBytes(imageRef, photo);
     const photoURL = await getDownloadURL(imageRef);
@@ -222,6 +226,10 @@ const TeamHome: React.FC<{ TeamHomeTeam: teamData | null, TeamHomeUser: userData
 
   // leave team
   async function leaveTeam() {
+    if (ctx.team === '') {
+      history.push('/app/team/join');
+      return;
+    }
     const newTotalStep = teamTotalSteps - userTotalSteps; //new total step for team
     const newAvg = newTotalStep / (teamMembers.length - 1); //new average step for team
     const newMembers: Array<string> = []; //array for members field
