@@ -3,7 +3,7 @@
 
 import { doc, onSnapshot } from 'firebase/firestore';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { auth, FirestoreDB } from '../firebase';
+import { FirestoreDB } from '../firebase';
 
 const AdminContext = createContext({
   maxSize: 0,
@@ -19,21 +19,23 @@ export const AdminContextProvider: React.FC<{ children: any }> = ( props: any ) 
   const [minSize, setMin] = useState(0);
   const [regDate, setRegDate] = useState("");
   const [teamDate, setTeamDate] = useState("");
+  const [complete, setComplete] = useState(false);
 
   // update admin team settings whenever there is an update in firestore database
   useEffect(() => {
-    const unsub = onSnapshot(doc(FirestoreDB, "admin", "admin"), (doc: any) => {
+    const unsubcribe = onSnapshot(doc(FirestoreDB, "admin", "admin"), (doc: any) => {
       setMax(doc.data().max_team_size as number);
       setMin(doc.data().min_team_size as number);
       setRegDate(doc.data().registration_deadline);
       setTeamDate(doc.data().team_creation_due);
+      setComplete(true);
     });
-    return () => unsub();
-  }, [auth]);
+    return unsubcribe;
+  }, []);
 
   return (
     <AdminContext.Provider value={{ maxSize, minSize, regDate, teamDate }}>
-      {props.children}
+      {complete && props.children}
     </AdminContext.Provider>
   );
 };
