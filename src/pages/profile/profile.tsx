@@ -192,7 +192,7 @@ const Profile: React.FC = () => {
                 <IonItem>
                   <p>{email}</p>
                 </IonItem>
-                <IonItem>{teamDisplay()}</IonItem>
+                {teamDisplay()}
                 {!isGoogleUser && (
                   <IonItem>
                     <IonButton onClick={changePassword}>

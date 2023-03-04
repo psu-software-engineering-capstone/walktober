@@ -126,8 +126,8 @@ const HomePage: React.FC = () => {
         <IonGrid>
           <IonRow>
             <IonCol
-              sizeSm="6"
               sizeXs="12"
+              sizeSm="6"
               sizeMd="6"
               sizeLg="4"
               className="leaderBoard"
@@ -135,8 +135,8 @@ const HomePage: React.FC = () => {
               <LeaderBoardChart></LeaderBoardChart>
             </IonCol>
             <IonCol
-              sizeSm="6"
               sizeXs="12"
+              sizeSm="6"
               sizeMd="6"
               sizeLg="4"
               className="todaysSteps"
@@ -161,8 +161,8 @@ const HomePage: React.FC = () => {
               to see previous logs
             </IonCol>
             <IonCol
-              sizeSm="6"
               sizeXs="12"
+              sizeSm="6"
               sizeMd="6"
               sizeLg="4"
               className="personalProgress"
@@ -175,8 +175,8 @@ const HomePage: React.FC = () => {
             </IonCol>
             <IonCol
               size="3"
-              sizeSm="6"
               sizeXs="12"
+              sizeSm="6"
               sizeMd="6"
               sizeLg="8"
               offsetLg="4"
