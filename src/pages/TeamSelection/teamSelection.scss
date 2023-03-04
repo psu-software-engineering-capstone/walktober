@@ -1,0 +1,26 @@
+.team-selection-col {
+    display: flex;
+    flex-wrap: nowrap;
+    border: solid 1px #000;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: bold;
+}
+
+.header-row{
+    display: flex;
+    flex-wrap: nowrap;
+    font-weight: bolder;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.full-grid{
+    --ion-grid-width: 100%;
+}
+
+.grid-title{
+    color: #fff;
+    font-weight: bold;
+}

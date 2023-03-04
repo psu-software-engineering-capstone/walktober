@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonHeader, IonSpinner, IonTitle } from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonContent, IonHeader, IonSpinner, IonTitle } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import './LeaderBoardChart.scss';
 import { Chart as ChartJS, registerables } from 'chart.js';
@@ -205,7 +205,8 @@ const LeaderBoardChart: React.FC = () => {
   }, []);
 
   return (
-    <IonContent>
+    <IonCard>
+      <IonCardContent>
       <div className='leaderboard-container'>
         <IonHeader className='title'>
           <IonTitle>Leaderboard</IonTitle></IonHeader>
@@ -241,7 +242,8 @@ const LeaderBoardChart: React.FC = () => {
           )}
         </IonContent>
       </div>
-    </IonContent>
+    </IonCardContent>
+    </IonCard>
   );
 };
 
