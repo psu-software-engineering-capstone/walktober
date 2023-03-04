@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useContext } from 'react';
 import {
@@ -27,25 +28,40 @@ import NavBar from '../../components/NavBar';
 import { Health } from '@awesome-cordova-plugins/health';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
 import './manualLoggingSteps.css';
-import { onSnapshot } from 'firebase/firestore';
 
-const ManualSteps: React.FC = () => {
-  interface StepLog {
-    date: string;
-    steps: number;
-  }
+interface StepLog {
+  date: string;
+  steps: number;
+}
 
-  const history = useHistory();
+interface userData {
+  email: string;
+  name: string;
+  badges: string[];
+  device: string;
+  totalStep: number;
+  profile_pic: string;
+  team: string;
+  team_leader: boolean;
+  stepsByDate: StepLog[];
+  admin: boolean;
+}
 
-  const ctx = useContext(AuthContext);
+const ManualSteps: React.FC<{ StepsLogData: userData | null }> = ({ StepsLogData }) => {
+  const history = useHistory(); // for routing
 
+  const ctx = useContext(AuthContext); // auth context
+
+  // state variables for manual logging
   const [manualDate, setManualDate] = useState('');
   const [manualSteps, setManualSteps] = useState(0);
   const [stepLogs, setStepLogs] = useState<StepLog[]>([]);
   const [totalStep, setTotalStep] = useState(0);
   const [updateTotalStep, setUpdateTotalStep] = useState(false);
   const [updateDB, setUpdateDB] = useState(false);
-  const [present] = useIonToast();
+
+  const [present] = useIonToast(); // for toast
+
   const supportedTypes = [
     'steps',
     'distance', // Read and write permissions
@@ -55,20 +71,12 @@ const ManualSteps: React.FC = () => {
     }
   ];
 
-  // update the data when the page loads
-  // update the data when the data is updated
+  // set steps log data
   useEffect(() => {
-    if (ctx.user !== null) {
-      const unsubscribe = onSnapshot(doc(FirestoreDB, 'users', auth.currentUser.email as string), (doc: any) => {
-          if (doc.exists()) {
-            console.log('Manual logging page updated');
-            getRecordsFromDB(); // get records from database
-          }
-        }
-      );
-      return unsubscribe;
+    if (ctx.user !== null && StepsLogData !== null) {
+      getRecordsFromDB();
     }
-  }, [ctx.user]);
+  }, [ctx.user, StepsLogData]);
 
   useEffect(() => {
     if (updateTotalStep === true) {
@@ -89,30 +97,26 @@ const ManualSteps: React.FC = () => {
     setUpdateDB(false);
   }, [updateDB]);
 
-  // get records from database
+  // get steps log data from props data
   const getRecordsFromDB = async () => {
-    if (ctx.user === null) {
+    if (ctx.user === null || StepsLogData === null) {
       alert('You are not logged in!');
       history.push('/login');
       return;
     }
-    let stepsByDate = [];
-    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-    const dbSnap = await getDoc(dbRef);
-    stepsByDate = dbSnap.data().stepsByDate;
+    const stepsByDate = StepsLogData.stepsByDate;
     setStepLogs(stepsByDate);
   };
 
   // send new log to database (manual logging)
   const sendNewLog = async () => {
-    if (auth.currentUser === null) {
+    if (auth.currentUser === null || StepsLogData === null) {
       alert('You are not logged in!');
       return;
     }
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     // get current total steps
-    const dbSnap = await getDoc(dbRef);
-    const currentTotalSteps = dbSnap.data().totalStep;
+    const currentTotalSteps = StepsLogData.totalStep;
     // update total steps
     await updateDoc(dbRef, {
       stepsByDate: stepLogs,
@@ -216,6 +220,11 @@ const ManualSteps: React.FC = () => {
       alert('Error: Unknown Platform');
       return;
     }
+    if (auth.currentUser === null || StepsLogData === null) {
+      alert('You are not logged in!');
+      history.push('/login');
+      return;
+    }
     if (isPlatform('android')) {
       const date = new Date();
       const stepOptions: object = {
@@ -226,13 +235,7 @@ const ManualSteps: React.FC = () => {
       };
       await Health.query(stepOptions)
         .then(async (data: any) => {
-          const dbRef = doc(
-            FirestoreDB,
-            'users',
-            auth.currentUser.email as string
-          );
-          const dbSnap = await getDoc(dbRef);
-          const dbStepsByDate: StepLog[] = dbSnap.data().stepsByDate;
+          const dbStepsByDate: StepLog[] = StepsLogData.stepsByDate;
           if (dbStepsByDate.length > 0) {
             dbStepsByDate.sort(
               (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
@@ -333,13 +336,7 @@ const ManualSteps: React.FC = () => {
       };
       await HealthKit.querySampleType(stepOptions)
         .then(async (data: any) => {
-          const dbRef = doc(
-            FirestoreDB,
-            'users',
-            auth.currentUser.email as string
-          );
-          const dbSnap = await getDoc(dbRef);
-          const dbStepsByDate: StepLog[] = dbSnap.data().stepsByDate;
+          const dbStepsByDate: StepLog[] = StepsLogData.stepsByDate;
           if (dbStepsByDate.length > 0) {
             dbStepsByDate.sort(
               (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
@@ -432,7 +429,7 @@ const ManualSteps: React.FC = () => {
 
   // update current user's total steps and steps by date
   const updateCurrentUser = async (stepsByDate: any, totalStep: any) => {
-    if (ctx.user === null) {
+    if (ctx.user === null || StepsLogData === null) {
       alert('You are not logged in!');
       history.push('/login');
       return;
@@ -443,8 +440,7 @@ const ManualSteps: React.FC = () => {
       auth.currentUser.email as string
     );
     // get current total steps
-    const dbSnap = await getDoc(currentUserRef);
-    const currentTotalSteps = dbSnap.data().totalStep;
+    const currentTotalSteps = StepsLogData.totalStep;
     // update total steps
     await updateDoc(currentUserRef, {
       stepsByDate: stepsByDate,

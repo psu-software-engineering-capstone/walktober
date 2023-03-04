@@ -88,19 +88,23 @@ const Dashboard: React.FC = () => {
         <Route
           exact
           path="/app/home"
-          render={(props) => <HomePage {...props} data={userData} />}
+          render={(props) => <HomePage {...props} HomeData={userData} />}
         />
         <Route
           exact
           path="/app/profile"
-          render={(props) => <Profile {...props} data={userData} />}
+          render={(props) => <Profile {...props} ProfileData={userData} />}
         />
         <Route
           exact
           path="/app/profile/passwordChange"
           component={newPassword}
         />
-        <Route exact path="/app/manualsteps" component={ManualSteps} />
+        <Route
+          exact
+          path="/app/manualsteps"
+          render={(props) => <ManualSteps {...props} StepsLogData={userData} />}
+        />
         <Route exact path="/app/stepscalc" component={StepsCalculator} />
         <Route exact path="/app/healthapp" component={HealthApp} />
         <Route exact path="/app/teamcreation" component={TeamCreation} />

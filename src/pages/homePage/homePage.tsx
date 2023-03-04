@@ -48,7 +48,7 @@ interface userData {
   admin: boolean;
 }
 
-const HomePage: React.FC<{ data: userData | null }> = ({ data }) => {
+const HomePage: React.FC<{ HomeData: userData | null }> = ({ HomeData }) => {
   const [steps, setSteps] = useState(0);
   const [badges, setBadges] = useState(Array<badgeOutline>);
   const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
@@ -59,20 +59,20 @@ const HomePage: React.FC<{ data: userData | null }> = ({ data }) => {
 
   // set past seven days of steps
   useEffect(() => {
-    if (ctx.user && data) {
+    if (ctx.user && HomeData) {
       getPastSevenDaysSteps();
     }
-  }, [ctx.user, data]);
+  }, [ctx.user, HomeData]);
 
   // get past seven days of steps from firestore
   const getPastSevenDaysSteps = async () => {
-    if (ctx.user === null || data === null) {
+    if (ctx.user === null || HomeData === null) {
       alert('You are not logged in!');
       history.push('/login');
       return;
     }
     // set steps by date from props data
-    const stepsByDate = data.stepsByDate;
+    const stepsByDate = HomeData.stepsByDate;
   
     // Create an array of the last seven dates (including today)
     const pastSevenDaysDates = [];

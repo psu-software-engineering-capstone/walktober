@@ -49,7 +49,7 @@ interface userData {
   admin: boolean;
 }
 
-const Profile: React.FC<{ data: userData | null }> = ({ data }) => {
+const Profile: React.FC<{ ProfileData: userData | null }> = ({ ProfileData }) => {
   const history = useHistory(); // for routing
 
   const ctx = useContext(AuthContext); // auth context
@@ -66,26 +66,26 @@ const Profile: React.FC<{ data: userData | null }> = ({ data }) => {
 
   // set profile data
   useEffect(() => {
-    if (ctx.user !== null || data !== null) {
+    if (ctx.user !== null || ProfileData !== null) {
       GetRecords();
     }
-  }, [ctx.user, data]);
+  }, [ctx.user, ProfileData]);
 
   // get profile data from props data
   async function GetRecords(): Promise<void> {
-    if (ctx.user === null || data === null) {
+    if (ctx.user === null || ProfileData === null) {
       alert('You are not logged in!');
       history.push('/login');
       return;
     }
-    setProfilePic(data.profile_pic);
-    setName(data.name);
-    setEmail(data.email);
-    setTeam(data.team);
+    setProfilePic(ProfileData.profile_pic);
+    setName(ProfileData.name);
+    setEmail(ProfileData.email);
+    setTeam(ProfileData.team);
     setJoinDate(
       new Date(auth.currentUser.metadata.creationTime).toLocaleDateString()
     );
-    setTotalDistance(data.totalStep / 2000);
+    setTotalDistance(ProfileData.totalStep / 2000);
     setIsGoogleUser(
       auth.currentUser.providerData[0]?.providerId === 'google.com'
     );
