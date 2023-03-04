@@ -144,7 +144,7 @@ const TeamHome: React.FC<{ TeamHomeTeam: teamData | null, TeamHomeUser: userData
       auth.currentUser.email as string
     ); // reference user document
     setUserRef(currentUserRef);
-    const teamRef = doc(FirestoreDB, 'teams', teamName); // reference team document
+    const teamRef = doc(FirestoreDB, 'teams', ctx.team); // reference team document
     setTeamRef(teamRef);
 
     setUserTotalSteps(TeamHomeUser.totalStep);
