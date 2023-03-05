@@ -1,4 +1,4 @@
-import { Redirect, Route } from 'react-router-dom';
+/* Ionic */
 import {
   IonIcon,
   IonLabel,
@@ -28,39 +28,146 @@ import TeamJoin from './pages/teamHome/teamJoin';
 import TeamCreation from './pages/teamCreation/teamCreation';
 import Admin from './pages/admin/admin';
 import StepsCalculator from './pages/stepsCalculator/stepsCalculator';
+import landing404 from './pages/404landing/landing404';
+import AdminSteps from './pages/adminSteps/adminSteps';
 
 /* Theming */
 import './theme/app.scss';
 
+/* React */
+import { useContext, useEffect, useState } from 'react';
+import { Redirect, Route } from 'react-router-dom';
+
 /* Context */
-import { useContext } from 'react';
 import AuthContext from './store/auth-context';
-import landing404 from './pages/404landing/landing404';
-import AdminSteps from './pages/adminSteps/adminSteps';
+
+/* Firebase */
+import { auth, FirestoreDB } from './firebase';
+import { doc, collection, onSnapshot } from 'firebase/firestore';
+
+interface StepLog {
+  date: string;
+  steps: number;
+}
+
+interface userData {
+  email: string;
+  name: string;
+  badges: string[];
+  device: string;
+  totalStep: number;
+  profile_pic: string;
+  team: string;
+  team_leader: boolean;
+  stepsByDate: StepLog[];
+  admin: boolean;
+}
+
+interface teamData {
+  name: string;
+  avg_steps: number;
+  leader: string;
+  members: string[];
+  status: string;
+  password: string;
+  profile_pic: string;
+  totalStep: number;
+  channel_id: string;
+}
 
 const Dashboard: React.FC = () => {
-  const ctx = useContext(AuthContext);
-  const isAdmin = ctx.admin;
+  const [userData, setUserData] = useState<userData | null>(null); // user data
+  const [teamData, setTeamData] = useState<teamData | null>(null); // team data
+  const [teamListData, setTeamListData] = useState<Array<teamData> | null>(null); // team list data
 
-  const tabsVisible = isPlatform('android') || isPlatform('ios');
+  const ctx = useContext(AuthContext); // auth context
+
+  // get user data from firestore
+  useEffect(() => {
+    if (ctx.user) {
+      const unsubscribe = onSnapshot(
+        doc(FirestoreDB, 'users', auth.currentUser.email as string),
+        (doc: any) => {
+          if (doc.exists()) {
+            setUserData(doc.data());
+          }
+        }
+      );
+      return unsubscribe;
+    }
+  }, [ctx.user]);
+
+  // get a team data from firestore
+  useEffect(() => {
+    if (userData && ctx.team !== '') {
+      const unsubscribe = onSnapshot(
+        doc(FirestoreDB, 'teams', ctx.team),
+        (doc: any) => {
+          if (doc.exists()) {
+            setTeamData(doc.data());
+          }
+        }
+      );
+      return unsubscribe;
+    }
+  }, [userData]);
+
+  // get a team list from firestore
+  useEffect(() => {
+    if (userData) {
+      const unsubscribe = onSnapshot(
+        collection(FirestoreDB, 'teams'),
+        (querySnapshot: any) => {
+          setTeamListData(querySnapshot.docs.map((doc: any) => doc.data()));
+        }
+      );
+      return unsubscribe;
+    }
+  }, [userData]);
+
+  const tabsVisible = isPlatform('android') || isPlatform('ios'); // check if platform is android or ios
 
   return (
     <IonTabs>
       <IonRouterOutlet>
         <Route path="/" component={landing404}></Route>
-        <Route exact path="/app/home" component={HomePage} />
-        <Route exact path="/app/profile" component={Profile} />
+        <Route
+          exact
+          path="/app/home"
+          render={(props) => <HomePage {...props} HomeData={userData} />}
+        />
+        <Route
+          exact
+          path="/app/profile"
+          render={(props) => <Profile {...props} ProfileData={userData} />}
+        />
         <Route
           exact
           path="/app/profile/passwordChange"
           component={newPassword}
         />
-        <Route exact path="/app/manualsteps" component={ManualSteps} />
+        <Route
+          exact
+          path="/app/manualsteps"
+          render={(props) => <ManualSteps {...props} StepsLogTeam={teamData} StepsLogUser={userData} />}
+        />
         <Route exact path="/app/stepscalc" component={StepsCalculator} />
         <Route exact path="/app/healthapp" component={HealthApp} />
-        <Route exact path="/app/teamcreation" component={TeamCreation} />
-        <Route exact path="/app/team" component={TeamHome} />
-        <Route exact path="/app/team/join" component={TeamJoin} />
+        <Route
+          exact
+          path="/app/teamcreation"
+          render={(props) => <TeamCreation {...props} TeamCreationData={userData} />}
+        />
+        <Route
+          exact
+          path="/app/team"
+          render={(props) => <TeamHome {...props} TeamHomeTeam={teamData} TeamHomeUser={userData} />}
+        />
+        <Route
+          exact
+          path="/app/team/join"
+          render={(props) => <TeamJoin {...props} TeamJoinTeamList={teamListData} TeamJoinUser={userData} />}
+        />
         <Route exact path="/app/admin" component={Admin} />
         <Route exact path="/app/adminSteps" component={AdminSteps} />
         <Route exact path="/app">
@@ -91,7 +198,7 @@ const Dashboard: React.FC = () => {
           <IonIcon icon={people} />
           <IonLabel>Team</IonLabel>
         </IonTabButton>
-        {isAdmin && (
+        {ctx.admin && (
           <IonTabButton tab="admin" href="/app/admin">
             <IonIcon icon={construct} />
             <IonLabel>Admin</IonLabel>

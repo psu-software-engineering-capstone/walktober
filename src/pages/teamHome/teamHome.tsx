@@ -13,24 +13,55 @@ import {
   IonTitle,
   RefresherEventDetail
 } from '@ionic/react';
-import { getDoc, doc } from 'firebase/firestore';
+import {
+  doc,
+  updateDoc,
+  deleteDoc,
+  collection,
+  where,
+  query,
+  getDocs
+} from 'firebase/firestore';
 import React, { useContext, useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
 import { auth, FirestoreDB, storage } from '../../firebase';
 import { useHistory } from 'react-router';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { updateDoc } from 'firebase/firestore';
-import { deleteDoc } from 'firebase/firestore';
-import { onSnapshot } from 'firebase/firestore';
 import AuthContext from '../../store/auth-context';
-import { collection } from 'firebase/firestore';
-import { where } from 'firebase/firestore';
-import { query } from 'firebase/firestore';
-import { getDocs } from 'firebase/firestore';
 import TeamLeaderBoardChart from '../../components/LeaderBoard/TeamLeaderboardChart';
 import './teamHome.scss';
 
-const TeamHome: React.FC = () => {
+interface StepLog {
+  date: string;
+  steps: number;
+}
+
+interface userData {
+  email: string;
+  name: string;
+  badges: string[];
+  device: string;
+  totalStep: number;
+  profile_pic: string;
+  team: string;
+  team_leader: boolean;
+  stepsByDate: StepLog[];
+  admin: boolean;
+}
+
+interface teamData {
+  name: string;
+  avg_steps: number;
+  leader: string;
+  members: string[];
+  status: string;
+  password: string;
+  profile_pic: string;
+  totalStep: number;
+  channel_id: string;
+}
+
+const TeamHome: React.FC<{ TeamHomeTeam: teamData | null, TeamHomeUser: userData | null }> = ({ TeamHomeTeam, TeamHomeUser }) => {
   interface memberData {
     name: string;
     email: string;
@@ -38,6 +69,7 @@ const TeamHome: React.FC = () => {
     totalStep: number;
   }
 
+  // team home data
   const [leaderboardData, setLeaderboardData] = useState(Array<memberData>);
   const [teamMembers, setTeamMembers] = useState(Array<string>);
   const [teamName, setTeamName] = useState('');
@@ -49,10 +81,11 @@ const TeamHome: React.FC = () => {
   const [userTotalSteps, setUserTotalSteps] = useState(0);
   const [teamTotalSteps, setTeamTotalSteps] = useState(0);
 
-  const history = useHistory();
+  const history = useHistory(); // for routing
 
-  const ctx = useContext(AuthContext);
+  const ctx = useContext(AuthContext); // auth context
 
+  // display team members
   const DisplayTeam = (team: memberData[]): any => {
     if (team.length > 0) {
       return (
@@ -60,10 +93,7 @@ const TeamHome: React.FC = () => {
           <IonGrid fixed={true}>
             <IonRow class="top">
               <IonCol
-                sizeSm="12"
-                sizeLg="8"
-                sizeMd="6"
-                sizeXs="12"
+                size="12"
                 align-self-center="true"
                 class="header-col admin-col"
               >
@@ -71,19 +101,19 @@ const TeamHome: React.FC = () => {
               </IonCol>
             </IonRow>
             <IonRow class="header-row">
-              <IonCol sizeMd="4" size="5" class="header-col admin-col">
+              <IonCol size="6" class="header-col admin-col">
                 Members Name
               </IonCol>
-              <IonCol sizeMd="4" size="5" class="header-col admin-col">
+              <IonCol size="6" class="header-col admin-col">
                 Members email
               </IonCol>
             </IonRow>
             {team.map((item: { name: string; email: string }) => (
               <IonRow key={Math.random()}>
-                <IonCol sizeMd="4" size="5" class="admin-col">
+                <IonCol size="6" class="admin-col">
                   {item.name}
                 </IonCol>
-                <IonCol sizeMd="4" size="5" class="admin-col">
+                <IonCol size="6" class="admin-col">
                   {item.email}
                 </IonCol>
               </IonRow>
@@ -94,33 +124,31 @@ const TeamHome: React.FC = () => {
     }
   };
 
+  // get data from props and firebase
   async function getData() {
-    if (ctx.team === '') {
-      history.push('/app/team/join'); // if the user is not in a team, redirect them to the team join page
+    if (ctx.user === null || TeamHomeUser === null) {
+      history.push('/login'); // if the user is not logged in, redirect them to the login page
       return;
+    }
+    if (ctx.team === '' || TeamHomeTeam === null) {
+      return; // if the user is not in a team, don't get the data
     }
     const members: Array<memberData> = [];
     const emailList: Array<string> = [];
     const currentUserRef = doc(
-      // reference the current user document
       FirestoreDB,
       'users',
       auth.currentUser.email as string
-    );
+    ); // reference user document
     setUserRef(currentUserRef);
-    const userSnap = await getDoc(currentUserRef); // grab the user document
-    const userData = userSnap.data(); // get the user data
-    const teamName = userData.team; // get the team name
-    setUserTotalSteps(userData.totalStep);
-    setTeamName(teamName);
-    setIsLeader(userData.team_leader);
-    const teamRef = doc(FirestoreDB, 'teams', teamName); // reference team document
+    const teamRef = doc(FirestoreDB, 'teams', ctx.team); // reference team document
     setTeamRef(teamRef);
-    const teamSnapshot = await getDoc(teamRef); // grab the team document
-    const teamData = teamSnapshot.data(); // get the team data
-    setProfilePic(teamData.profile_pic);
-    setTeamTotalSteps(teamData.totalStep);
-    // get all the users in the team    
+    setUserTotalSteps(TeamHomeUser.totalStep);
+    setIsLeader(TeamHomeUser.team_leader);
+    setTeamName(TeamHomeTeam.name);
+    setProfilePic(TeamHomeTeam.profile_pic);
+    setTeamTotalSteps(TeamHomeTeam.totalStep);
+    // get all the users in the team
     const usersRef = collection(FirestoreDB, 'users');
     const q = query(usersRef, where('team', '==', ctx.team));
     const querySnapshot = await getDocs(q);
@@ -137,17 +165,24 @@ const TeamHome: React.FC = () => {
     // set the data
     setLeaderboardData(
       members.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
-    ); // sort the array
-    setTeamMembers(emailList); // set the mates array
+    ); // for leaderboard
+    setTeamMembers(emailList); // members email list
   }
 
+  // handle image change
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setPhoto(e.target.files[0]);
     }
   };
 
+  // upload image to firebase storage
   const handleSubmit = async () => {
+    if (ctx.team === '' || TeamHomeTeam === null) {
+      alert('You are not in a team!');
+      history.push('/app/team/join');
+      return;
+    }
     const imageRef = ref(storage, teamName + '.png');
     await uploadBytes(imageRef, photo);
     const photoURL = await getDownloadURL(imageRef);
@@ -160,6 +195,7 @@ const TeamHome: React.FC = () => {
       });
   };
 
+  // change team picture
   function changePicture() {
     if (isLeader === true) {
       return (
@@ -190,6 +226,10 @@ const TeamHome: React.FC = () => {
 
   // leave team
   async function leaveTeam() {
+    if (ctx.team === '' || TeamHomeTeam === null) {
+      history.push('/app/team/join');
+      return;
+    }
     const newTotalStep = teamTotalSteps - userTotalSteps; //new total step for team
     const newAvg = newTotalStep / (teamMembers.length - 1); //new average step for team
     const newMembers: Array<string> = []; //array for members field
@@ -250,22 +290,12 @@ const TeamHome: React.FC = () => {
     history.push('/app/team/join'); // redirect to join team page
   }
 
-  // update the data when the page loads
-  // update the data when the team gets updated
+  // get data from props
   useEffect(() => {
-    if (ctx.team !== '') {
-      const unsubscribe = onSnapshot(
-        doc(FirestoreDB, 'teams', ctx.team),
-        (doc: any) => {
-          if (doc.data() !== undefined) {
-            console.log('Team home page updated');
-            getData();
-          }
-        }
-      );
-      return unsubscribe;
+    if (TeamHomeTeam !== null && TeamHomeUser !== null) {
+      getData();
     }
-  }, [ctx.team]);
+  }, [TeamHomeTeam, TeamHomeUser]);
 
   return (
     <IonPage>
@@ -275,34 +305,43 @@ const TeamHome: React.FC = () => {
         </NavBar>
       </IonHeader>
       <IonContent>
-        <IonRow>
-          <IonCol
-            className="boxSize"
-            sizeSm="12"
-            sizeLg="4"
-            sizeMd="6"
-            sizeXs="12"
-          >
-            <TeamLeaderBoardChart data={leaderboardData}></TeamLeaderBoardChart>
-          </IonCol>
-          <IonCol sizeLg="8">
-            <IonItem>
-              <IonImg
-                className="profile_pic"
-                src={profilePic}
-                alt="Profile picture for the team the user is a part of"
-              >
-                {' '}
-              </IonImg>
-            </IonItem>
-            <IonItem> {teamName} Profile Picture </IonItem>
-            <IonItem> {changePicture()} </IonItem>
-            <IonItem>
-              <IonButton onClick={leaveTeam}> Leave team </IonButton>{' '}
-            </IonItem>
-            <IonItem>{DisplayTeam(leaderboardData)}</IonItem>
-          </IonCol>
-        </IonRow>
+        <IonGrid>
+          <IonRow>
+            <IonCol
+              sizeXs="12"
+              sizeSm="6"
+              sizeMd="6"
+              sizeLg="4"
+              className="leaderBoard"
+            >
+              <TeamLeaderBoardChart
+                data={leaderboardData}
+              ></TeamLeaderBoardChart>
+            </IonCol>
+            <IonCol
+              sizeXs="12"
+              sizeSm="6"
+              sizeMd="6"
+              sizeLg="8"
+            >
+              <IonItem>
+                <IonImg
+                  className="profile_pic"
+                  src={profilePic}
+                  alt="Profile picture for the team the user is a part of"
+                >
+                  {' '}
+                </IonImg>
+              </IonItem>
+              <IonItem> {teamName} Profile Picture </IonItem>
+              {changePicture()}
+              <IonItem>
+                <IonButton onClick={leaveTeam}> Leave team </IonButton>{' '}
+              </IonItem>
+              <IonItem>{DisplayTeam(leaderboardData)}</IonItem>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
