@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useContext } from 'react';
 import {
@@ -21,59 +20,32 @@ import {
   useIonToast
 } from '@ionic/react';
 import { auth, FirestoreDB } from '../../firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import AuthContext from '../../store/auth-context';
 import NavBar from '../../components/NavBar';
 import { Health } from '@awesome-cordova-plugins/health';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
 import './manualLoggingSteps.css';
+import { onSnapshot } from 'firebase/firestore';
 
-interface StepLog {
-  date: string;
-  steps: number;
-}
+const ManualSteps: React.FC = () => {
+  interface StepLog {
+    date: string;
+    steps: number;
+  }
 
-interface userData {
-  email: string;
-  name: string;
-  badges: string[];
-  device: string;
-  totalStep: number;
-  profile_pic: string;
-  team: string;
-  team_leader: boolean;
-  stepsByDate: StepLog[];
-  admin: boolean;
-}
+  const history = useHistory();
 
-interface teamData {
-  name: string;
-  avg_steps: number;
-  leader: string;
-  members: string[];
-  status: string;
-  password: string;
-  profile_pic: string;
-  totalStep: number;
-  channel_id: string;
-}
+  const ctx = useContext(AuthContext);
 
-const ManualSteps: React.FC<{ StepsLogTeam: teamData | null, StepsLogUser: userData | null }> = ({ StepsLogTeam, StepsLogUser }) => {
-  const history = useHistory(); // for routing
-
-  const ctx = useContext(AuthContext); // auth context
-
-  // state variables for manual logging
   const [manualDate, setManualDate] = useState('');
   const [manualSteps, setManualSteps] = useState(0);
   const [stepLogs, setStepLogs] = useState<StepLog[]>([]);
   const [totalStep, setTotalStep] = useState(0);
   const [updateTotalStep, setUpdateTotalStep] = useState(false);
   const [updateDB, setUpdateDB] = useState(false);
-
-  const [present] = useIonToast(); // for toast
-
+  const [present] = useIonToast();
   const supportedTypes = [
     'steps',
     'distance', // Read and write permissions
@@ -83,12 +55,20 @@ const ManualSteps: React.FC<{ StepsLogTeam: teamData | null, StepsLogUser: userD
     }
   ];
 
-  // get data from props
+  // update the data when the page loads
+  // update the data when the data is updated
   useEffect(() => {
-    if (StepsLogUser !== null) {
-      getRecordsFromDB();
+    if (ctx.user !== null) {
+      const unsubscribe = onSnapshot(doc(FirestoreDB, 'users', auth.currentUser.email as string), (doc: any) => {
+          if (doc.exists()) {
+            console.log('Manual logging page updated');
+            getRecordsFromDB(); // get records from database
+          }
+        }
+      );
+      return unsubscribe;
     }
-  }, [StepsLogUser]);
+  }, [ctx.user]);
 
   useEffect(() => {
     if (updateTotalStep === true) {
@@ -109,26 +89,30 @@ const ManualSteps: React.FC<{ StepsLogTeam: teamData | null, StepsLogUser: userD
     setUpdateDB(false);
   }, [updateDB]);
 
-  // get steps log data from props data
+  // get records from database
   const getRecordsFromDB = async () => {
-    if (ctx.user === null || StepsLogUser === null) {
+    if (ctx.user === null) {
       alert('You are not logged in!');
       history.push('/login');
       return;
     }
-    const stepsByDate = StepsLogUser.stepsByDate;
+    let stepsByDate = [];
+    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
+    const dbSnap = await getDoc(dbRef);
+    stepsByDate = dbSnap.data().stepsByDate;
     setStepLogs(stepsByDate);
   };
 
   // send new log to database (manual logging)
   const sendNewLog = async () => {
-    if (auth.currentUser === null || StepsLogUser === null) {
+    if (auth.currentUser === null) {
       alert('You are not logged in!');
       return;
     }
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     // get current total steps
-    const currentTotalSteps = StepsLogUser.totalStep;
+    const dbSnap = await getDoc(dbRef);
+    const currentTotalSteps = dbSnap.data().totalStep;
     // update total steps
     await updateDoc(dbRef, {
       stepsByDate: stepLogs,
@@ -232,11 +216,6 @@ const ManualSteps: React.FC<{ StepsLogTeam: teamData | null, StepsLogUser: userD
       alert('Error: Unknown Platform');
       return;
     }
-    if (auth.currentUser === null || StepsLogUser === null) {
-      alert('You are not logged in!');
-      history.push('/login');
-      return;
-    }
     if (isPlatform('android')) {
       const date = new Date();
       const stepOptions: object = {
@@ -247,7 +226,13 @@ const ManualSteps: React.FC<{ StepsLogTeam: teamData | null, StepsLogUser: userD
       };
       await Health.query(stepOptions)
         .then(async (data: any) => {
-          const dbStepsByDate: StepLog[] = StepsLogUser.stepsByDate;
+          const dbRef = doc(
+            FirestoreDB,
+            'users',
+            auth.currentUser.email as string
+          );
+          const dbSnap = await getDoc(dbRef);
+          const dbStepsByDate: StepLog[] = dbSnap.data().stepsByDate;
           if (dbStepsByDate.length > 0) {
             dbStepsByDate.sort(
               (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
@@ -348,7 +333,13 @@ const ManualSteps: React.FC<{ StepsLogTeam: teamData | null, StepsLogUser: userD
       };
       await HealthKit.querySampleType(stepOptions)
         .then(async (data: any) => {
-          const dbStepsByDate: StepLog[] = StepsLogUser.stepsByDate;
+          const dbRef = doc(
+            FirestoreDB,
+            'users',
+            auth.currentUser.email as string
+          );
+          const dbSnap = await getDoc(dbRef);
+          const dbStepsByDate: StepLog[] = dbSnap.data().stepsByDate;
           if (dbStepsByDate.length > 0) {
             dbStepsByDate.sort(
               (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
@@ -441,7 +432,7 @@ const ManualSteps: React.FC<{ StepsLogTeam: teamData | null, StepsLogUser: userD
 
   // update current user's total steps and steps by date
   const updateCurrentUser = async (stepsByDate: any, totalStep: any) => {
-    if (ctx.user === null || StepsLogUser === null) {
+    if (ctx.user === null) {
       alert('You are not logged in!');
       history.push('/login');
       return;
@@ -452,7 +443,8 @@ const ManualSteps: React.FC<{ StepsLogTeam: teamData | null, StepsLogUser: userD
       auth.currentUser.email as string
     );
     // get current total steps
-    const currentTotalSteps = StepsLogUser.totalStep;
+    const dbSnap = await getDoc(currentUserRef);
+    const currentTotalSteps = dbSnap.data().totalStep;
     // update total steps
     await updateDoc(currentUserRef, {
       stepsByDate: stepsByDate,
@@ -470,28 +462,33 @@ const ManualSteps: React.FC<{ StepsLogTeam: teamData | null, StepsLogUser: userD
 
   // update team total steps and average steps
   const updateTeam = async (currentTotalSteps: any, totalStep: any) => {
-    if (ctx.user === null || StepsLogUser === null) {
+    if (ctx.user === null) {
       alert('You are not logged in!');
       history.push('/login');
       return;
     }
-    if (ctx.team === '' || StepsLogTeam === null) {
+    if (ctx.team === '') {
       return; // user is not in a team
     }
     const dbRef = doc(FirestoreDB, 'teams', ctx.team);
-    const teamTotalSteps = StepsLogTeam.totalStep;
-    const newTotalSteps = teamTotalSteps - currentTotalSteps + totalStep;
-    const newAvgSteps = newTotalSteps / StepsLogTeam.members.length;
-    updateDoc(dbRef, {
-      totalStep: newTotalSteps,
-      avg_steps: newAvgSteps
-    })
-      .then(() => {
-        console.log('Team total steps and average steps updated!');
-      })
-      .catch((error: any) => {
-        console.log('Error updating document: ', error);
-      });
+    getDoc(dbRef).then((doc: any) => {
+      if (doc.exists()) {
+        const teamData = doc.data();
+        const teamTotalSteps = teamData.totalStep;
+        const newTotalSteps = teamTotalSteps - currentTotalSteps + totalStep;
+        const newAvgSteps = newTotalSteps / teamData.members.length;
+        updateDoc(dbRef, {
+          totalStep: newTotalSteps,
+          avg_steps: newAvgSteps
+        })
+          .then(() => {
+            console.log('Team total steps and average steps updated!');
+          })
+          .catch((error: any) => {
+            console.log('Error updating document: ', error);
+          });
+      }      
+    });
   };
 
   // present toast message

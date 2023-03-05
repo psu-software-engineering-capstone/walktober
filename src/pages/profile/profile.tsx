@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/space-before-function-paren */
 import { useContext, useEffect, useState } from 'react';
 import {
@@ -20,42 +19,23 @@ import {
   IonTitle,
   RefresherEventDetail
 } from '@ionic/react';
+import './profile.css';
 import { Route } from 'react-router-dom';
 import { auth, FirestoreDB, storage } from '../../firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import newPassword from './newPassword';
 import AuthContext from '../../store/auth-context';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
+import { updateDoc } from 'firebase/firestore';
 import CalendarLeafs from '../../components/CalendarLeafs';
-import './profile.css';
+import { onSnapshot } from 'firebase/firestore';
 
-interface StepLog {
-  date: string;
-  steps: number;
-}
-
-interface userData {
-  email: string;
-  name: string;
-  badges: string[];
-  device: string;
-  totalStep: number;
-  profile_pic: string;
-  team: string;
-  team_leader: boolean;
-  stepsByDate: StepLog[];
-  admin: boolean;
-}
-
-const Profile: React.FC<{ ProfileData: userData | null }> = ({ ProfileData }) => {
-  const history = useHistory(); // for routing
-
-  const ctx = useContext(AuthContext); // auth context
-
-  // profile data
+const Profile: React.FC = () => {
+  const history = useHistory();
+  const ctx = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [joinDate, setJoinDate] = useState('');
   const [name, setName] = useState('');
@@ -65,41 +45,51 @@ const Profile: React.FC<{ ProfileData: userData | null }> = ({ ProfileData }) =>
   const [photo, setPhoto] = useState<any>(null);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
 
-  // get data from props
+  // update profile data when the page loads
+  // update profile data when the profile data changes
   useEffect(() => {
-    if (ProfileData !== null) {
-      GetRecords();
+    if (ctx.user !== null) {
+      const unsubscribe = onSnapshot(
+        doc(FirestoreDB, 'users', auth.currentUser.email as string),
+        (doc: any) => {
+          if (doc.exists()) {
+            console.log('Profile page updated');
+            GetRecords();
+          }
+        }
+      );
+      return unsubscribe;
     }
-  }, [ProfileData]);
+  }, [ctx.user]);
 
-  // get profile data from props data
   async function GetRecords(): Promise<void> {
-    if (ctx.user === null || ProfileData === null) {
+    if (ctx.user === null) {
       alert('You are not logged in!');
       history.push('/login');
       return;
     }
-    setProfilePic(ProfileData.profile_pic);
-    setName(ProfileData.name);
-    setEmail(ProfileData.email);
-    setTeam(ProfileData.team);
+    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
+    const dbSnap = await getDoc(dbRef);
+    const userData = dbSnap.data();
+    setProfilePic(userData.profile_pic);
+    setName(userData.name);
+    setEmail(userData.email);
+    setTeam(userData.team);
     setJoinDate(
       new Date(auth.currentUser.metadata.creationTime).toLocaleDateString()
     );
-    setTotalDistance(ProfileData.totalStep / 2000);
+    setTotalDistance(userData.totalStep / 2000);
     setIsGoogleUser(
       auth.currentUser.providerData[0]?.providerId === 'google.com'
     );
   }
 
-  // handle image change
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setPhoto(e.target.files[0]);
     }
   };
 
-  // handle image upload
   const handleSubmit = async () => {
     const imageRef = ref(storage, auth.currentUser.email + '.png');
     await uploadBytes(imageRef, photo);
@@ -117,7 +107,6 @@ const Profile: React.FC<{ ProfileData: userData | null }> = ({ ProfileData }) =>
       });
   };
 
-  // change password
   const changePassword = () => {
     if (isGoogleUser) {
       return;
@@ -125,7 +114,6 @@ const Profile: React.FC<{ ProfileData: userData | null }> = ({ ProfileData }) =>
     history.push('/app/profile/passwordChange');
   };
 
-  // display team
   function teamDisplay() {
     if (team === '') {
       return (
@@ -142,7 +130,6 @@ const Profile: React.FC<{ ProfileData: userData | null }> = ({ ProfileData }) =>
     }
   }
 
-  // sign out
   const signOut = async () => {
     try {
       await auth.signOut();
@@ -205,7 +192,7 @@ const Profile: React.FC<{ ProfileData: userData | null }> = ({ ProfileData }) =>
                 <IonItem>
                   <p>{email}</p>
                 </IonItem>
-                {teamDisplay()}
+                <IonItem>{teamDisplay()}</IonItem>
                 {!isGoogleUser && (
                   <IonItem>
                     <IonButton onClick={changePassword}>
