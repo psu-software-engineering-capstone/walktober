@@ -147,6 +147,14 @@ const Login: React.FC = () => {
       });
   };
 
+  useEffect(() => {
+    window.addEventListener('keydown', e => {
+     if(e.key === 'Enter'){
+      signInEmailPassword();
+     }
+    });
+  }, []);
+  
   // move to signup button
   const moveToSignup = () => {
     history.push('/signup');
@@ -211,7 +219,7 @@ const Login: React.FC = () => {
               <u>Forgot Password?</u>
             </IonRouterLink>
 
-            <IonButton expand="block" color="primary" onClick={signInEmailPassword}>
+            <IonButton expand="block" onClick={signInEmailPassword}>
               Login
             </IonButton>
             <h2 className="or-divider">
@@ -220,17 +228,17 @@ const Login: React.FC = () => {
             <IonButton
               expand="block"
               onClick={signInWithGoogle}
-              color="secondary"
+              color="tertiary"
             >
               <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign in with Google
             </IonButton>
           </IonCardContent>
         </IonCard>
 
-        <IonCard className="signup-card bottom">
+        <IonCard className={'signup-card' + ' bottom'}>
           <IonCardContent className="no-account">
             Don&apos;t have an account?
-            <IonButton expand="block" onClick={moveToSignup} color="tertiary">
+            <IonButton expand="block" onClick={moveToSignup} color="success">
               Create new account
             </IonButton>
           </IonCardContent>
