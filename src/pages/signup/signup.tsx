@@ -19,7 +19,7 @@ import {
   isPlatform
 } from '@ionic/react';
 import { eye, eyeOff, logoGoogle } from 'ionicons/icons';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FirestoreDB, auth } from '../../firebase';
 import {
@@ -31,6 +31,7 @@ import {
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import AdminContext from '../../store/admin-context';
 import './signup.css';
 import logo from '../../assets/Walktober.png';
 
@@ -48,6 +49,9 @@ const Signup: React.FC = () => {
 
   // google auth provider //
   const provider = new GoogleAuthProvider();
+
+  // Admin settings context //
+  const adData = useContext(AdminContext);
 
   // toggle password visibility
   const togglePasswordVisibility = () => {
@@ -67,6 +71,7 @@ const Signup: React.FC = () => {
       team_leader: false,
       stepsByDate: [],
       admin: true,
+      step_goal: 0,
     });
   };
 
@@ -83,6 +88,7 @@ const Signup: React.FC = () => {
       team_leader: false,
       stepsByDate: [],
       admin: true,
+      step_goal: 0,
     });
   };
 
@@ -99,11 +105,20 @@ const Signup: React.FC = () => {
       team_leader: false,
       stepsByDate: [],
       admin: true,
+      step_goal: 0,
     });
   };
 
   // sign up with google //
   const googleAuth = async () => {
+    const currentDate: Date = new Date();
+    const userCreationDeadline: Date = new Date(adData.regDate);
+    if (currentDate > userCreationDeadline) {
+      alert(
+        `The user sign-up deadline is: ${userCreationDeadline}. You cannot register for an account now.`
+      );
+      return;
+    }
     // web //
     if (!isPlatform('capacitor')) {
       signInWithPopup(auth, provider)
@@ -156,6 +171,14 @@ const Signup: React.FC = () => {
 
   // sign up with email and password (web & ios & android) //
   const signUpEmailPassword = () => {
+    const currentDate: Date = new Date();
+    const userCreationDeadline: Date = new Date(adData.regDate);
+    if (currentDate > userCreationDeadline) {
+      alert(
+        `The user sign-up deadline is: ${userCreationDeadline}. You cannot register for an account now.`
+      );
+      return;
+    }
     if (newPassword === newConfirmPassword) {
       createUserWithEmailAndPassword(auth, newEmail, newPassword)
         .then((data: unknown) => {

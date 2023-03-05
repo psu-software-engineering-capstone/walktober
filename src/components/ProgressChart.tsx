@@ -10,21 +10,20 @@ interface StepLog {
   steps: number;
 }
 
-// below vars are self documenting
-const stepsLeft = 500;
-const goalSteps = 1000;
-const currentSteps = 500;
+const ProgressChart: React.FC<{ data: Array<StepLog>, todayStep: number, stepGoal: number }> = ({ data, todayStep, stepGoal }) => {
 
-// below is the react element.
-// input/props is an array of step logs
-// output is a react element
-const ProgressChart: React.FC<{ data: Array<StepLog> }> = ({ data }) => {
+  // below vars are self documenting
+  const stepsLeft = stepGoal - todayStep;
+
+  // below is the react element.
+  // input/props is an array of step logs
+  // output is a react element
   return (
     <>
-      <h1>Goal steps: 1000</h1> {/*goal steps display here*/}
+      <h1>Goal steps: {stepGoal}</h1>
       <IonLabel>
-        <IonProgressBar value={1 - stepsLeft / goalSteps / 1}></IonProgressBar>
-        {currentSteps.toString() + '/' + goalSteps.toString() + ' steps'}
+        <IonProgressBar value={1 - stepsLeft / stepGoal / 1}></IonProgressBar>
+        {todayStep.toString() + '/' + stepGoal.toString() + ' steps'}
       </IonLabel>
       <Bar
         className="box"
