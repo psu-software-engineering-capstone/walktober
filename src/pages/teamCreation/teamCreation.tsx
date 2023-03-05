@@ -13,12 +13,13 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/react';
-import './teamCreation.css';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { auth, FirestoreDB } from '../../firebase';
 import { doc, getDoc, setDoc, updateDoc, Timestamp } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
+import AuthContext from '../../store/auth-context';
+import './teamCreation.css';
 
 interface Timestamp {
   seconds: number;
@@ -39,20 +40,26 @@ const TeamCreation: React.FC = () => {
   const [newTeamName, setNewTeamName] = useState('');
   const [newTeamStatus, setNewTeamStatus] = useState(0);
   const [newTeamPassword, setNewTeamPassword] = useState('');
-  const history = useHistory();
 
+  const ctx = useContext(AuthContext); // auth context
+
+  const history = useHistory(); // for routing
+
+  // create a team
   const createTeam = async () => {
-    if (auth.currentUser == null) {
-      alert('You are not signed-in!');
+    if (ctx.user == null) {
+      alert('You are not logged in');
+      history.push('/login'); // if the user is not logged in, redirect to login page
+      return;
+    }
+    if (ctx.team !== '') {
+      alert('You are already in a team');
+      history.push('/app/team'); // if the user is already in a team, redirect to team page
       return;
     }
     const userRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     const userSnap = await getDoc(userRef);
     const userData = userSnap.data();
-    if (userData.team !== '') {
-      alert('You are already in a team! You cannot create a team.');
-      return;
-    }
     if (newTeamName === '') {
       alert('Team name cannot be an empty string!');
       return;
@@ -104,8 +111,9 @@ const TeamCreation: React.FC = () => {
       });
   };
 
+  // update the current user's data
   const updateCurrentUser = async () => {
-    if (auth.currentUser == null) {
+    if (ctx.user == null) {
       return;
     }
     const currentUserRef = doc(
