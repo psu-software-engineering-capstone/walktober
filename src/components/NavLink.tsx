@@ -32,20 +32,19 @@ const NavLink: React.FC<NavLinkProps> = ({ id, text, href, children = null }) =>
     const tag = elem?.nodeName.toLowerCase();
 
     // using instanceof doesn't work here for some reason so just check the tag
-    if(tag !== 'ion-content' && tag !== 'ion-toolbar') {
-      setTimeout(() => {
-        dismiss();
-  
-        // since the above doesn't always seem to remove popovers...
-        // get all the remaining popovers in the document and delete them
-        const popovers = document.getElementsByTagName('ion-popover');
-  
-        if(popovers.length > 0) {
-          for(let i = 0; i < popovers.length; i++) {
-            popovers[i].parentNode?.removeChild(popovers[i]);
-          }
+    if(!elem?.classList.contains('nav-link-container') && tag !== 'ion-content'
+        && tag !== 'ion-toolbar') {
+      dismiss();
+
+      // since the above doesn't always seem to remove popovers...
+      // get all the remaining popovers in the document and delete them
+      const popovers = document.getElementsByTagName('ion-popover');
+
+      if(popovers.length > 0) {
+        for(let i = 0; i < popovers.length; i++) {
+          popovers[i].parentNode?.removeChild(popovers[i]);
         }
-      }, 500); // Delay in milliseconds
+      }
     }
   };
 
