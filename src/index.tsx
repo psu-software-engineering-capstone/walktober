@@ -4,12 +4,15 @@ import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { AuthContextProvider } from './store/auth-context';
+import { AdminContextProvider } from './store/admin-context';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
 root.render(
   <AuthContextProvider>
-    <App />
+    <AdminContextProvider>
+      <App />
+    </AdminContextProvider>
   </AuthContextProvider>
 );
 
@@ -22,4 +25,3 @@ serviceWorkerRegistration.unregister();
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-
