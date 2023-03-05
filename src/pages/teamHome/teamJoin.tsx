@@ -307,8 +307,8 @@ const TeamJoin: React.FC = () => {
         if (change.type === 'removed') {
           console.log('Removed Team: ', change.doc.data());
         }
-        getData();
       });
+      getData();
     });
     return () => {
       unsubscribe();
