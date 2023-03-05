@@ -19,7 +19,7 @@ import {
   isPlatform
 } from '@ionic/react';
 import { eye, eyeOff, logoGoogle } from 'ionicons/icons';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FirestoreDB, auth } from '../../firebase';
 import {
@@ -31,6 +31,7 @@ import {
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import AdminContext from '../../store/admin-context';
 import './signup.css';
 import logo from '../../assets/Walktober.png';
 
@@ -48,6 +49,9 @@ const Signup: React.FC = () => {
 
   // google auth provider //
   const provider = new GoogleAuthProvider();
+
+  // Admin settings context //
+  const adData = useContext(AdminContext);
 
   // toggle password visibility
   const togglePasswordVisibility = () => {
@@ -108,9 +112,7 @@ const Signup: React.FC = () => {
   // sign up with google //
   const googleAuth = async () => {
     const currentDate: Date = new Date();
-    const adminRef = doc(FirestoreDB, 'admin', 'admin');
-    const adminSnap = await getDoc(adminRef);
-    const userCreationDeadline: Date = new Date(adminSnap.data().registration_deadline);
+    const userCreationDeadline: Date = new Date(adData.regDate);
     if (currentDate > userCreationDeadline) {
       alert(
         `The user sign-up deadline is: ${userCreationDeadline}. You cannot register for an account now.`
@@ -168,11 +170,9 @@ const Signup: React.FC = () => {
   };
 
   // sign up with email and password (web & ios & android) //
-  const signUpEmailPassword = async () => {
+  const signUpEmailPassword = () => {
     const currentDate: Date = new Date();
-    const adminRef = doc(FirestoreDB, 'admin', 'admin');
-    const adminSnap = await getDoc(adminRef);
-    const userCreationDeadline: Date = new Date(adminSnap.data().registration_deadline);
+    const userCreationDeadline: Date = new Date(adData.regDate);
     if (currentDate > userCreationDeadline) {
       alert(
         `The user sign-up deadline is: ${userCreationDeadline}. You cannot register for an account now.`

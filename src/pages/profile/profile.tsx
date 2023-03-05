@@ -154,7 +154,6 @@ const Profile: React.FC = () => {
     await updateDoc(dbRef, { step_goal: stepGoal })
       .then(() => {
         alert('Step Goal updated!');
-        history.go(0); //refresh page
       })
       .catch((error: any) => {
         alert(error);

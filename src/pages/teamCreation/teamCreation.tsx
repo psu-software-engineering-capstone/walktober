@@ -14,8 +14,9 @@ import {
   IonToolbar
 } from '@ionic/react';
 import './teamCreation.css';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { auth, FirestoreDB } from '../../firebase';
+import AdminContext from '../../store/admin-context';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
@@ -25,6 +26,9 @@ const TeamCreation: React.FC = () => {
   const [newTeamStatus, setNewTeamStatus] = useState(0);
   const [newTeamPassword, setNewTeamPassword] = useState('');
   const history = useHistory();
+
+  // Admin settings context //
+  const adData = useContext(AdminContext);
 
   const createTeam = async () => {
     if (auth.currentUser == null) {
@@ -58,9 +62,7 @@ const TeamCreation: React.FC = () => {
       return;
     }
     const currentDate: Date = new Date();
-    const adminRef = doc(FirestoreDB, 'admin', 'admin');
-    const adminSnap = await getDoc(adminRef);
-    const teamCreationDeadline: Date = new Date(adminSnap.data().team_creation_due);
+    const teamCreationDeadline: Date = new Date(adData.teamDate);
     if (currentDate > teamCreationDeadline) {
       alert(
         `The team creation deadline is: ${teamCreationDeadline}. You cannot create a team now.`
