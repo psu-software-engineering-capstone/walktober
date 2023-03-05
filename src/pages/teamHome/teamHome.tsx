@@ -100,6 +100,11 @@ const TeamHome: React.FC = () => {
 
   // get the data from the database
   async function getData() {
+    if (ctx.user === null) {
+      alert('You are not logged in');
+      history.push('/login'); // if the user is not logged in, redirect them to the login page
+      return;
+    }
     if (ctx.team === '') {
       history.push('/app/team/join'); // if the user is not in a team, redirect them to the team join page
       return;
@@ -207,6 +212,15 @@ const TeamHome: React.FC = () => {
 
   // leave team
   async function leaveTeam() {
+    if (ctx.user === null) {
+      alert('You are not logged in');
+      history.push('/login'); // if the user is not logged in, redirect them to the login page
+      return;
+    }
+    if (ctx.team === '') {
+      history.push('/app/team/join'); // if the user is not in a team, redirect them to the team join page
+      return;
+    }
     const newTotalStep = teamTotalSteps - userTotalSteps; //new total step for team
     const newAvg = newTotalStep / (teamMembers.length - 1); //new average step for team
     const newMembers: Array<string> = []; //array for members field

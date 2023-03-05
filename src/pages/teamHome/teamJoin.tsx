@@ -232,8 +232,8 @@ const TeamJoin: React.FC = () => {
       history.push('/app/team'); // if the user is already in a team, move them to the team page
       return;
     }
-    const indData: Array<teamData> = []; //temp array for the teams data
-    const groupNames: Array<selectFormat> = []; //need the group names to look thorugh
+    const indData: Array<teamData> = []; // temp array for the teams data
+    const groupNames: Array<selectFormat> = []; // need the group names to look thorugh
     const today = new Date(Date());
     const maxDate = new Date(adData.teamDate);
     console.log(today < maxDate, today, maxDate, adData.teamDate);
