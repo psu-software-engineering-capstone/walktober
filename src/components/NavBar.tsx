@@ -60,7 +60,6 @@ const NavBar: React.FC<NavBarProps> = ({
                 href="/app/stepscalc"
               />
             </NavLink>
-            <NavLink id="nav-about" text="About" href="https://www.pdx.edu/recreation/walktober" />
             {isAdmin && (
               <NavLink id="nav-admin" text="Admin" href="/app/admin">
                 <NavLink
@@ -70,6 +69,7 @@ const NavBar: React.FC<NavBarProps> = ({
                 />
               </NavLink>
             )}
+            <NavLink id="nav-about" text="About" href="https://www.pdx.edu/recreation/walktober" />
           </div>
         </IonToolbar>
       </IonHeader>
