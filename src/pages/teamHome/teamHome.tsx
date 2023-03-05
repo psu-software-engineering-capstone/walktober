@@ -53,11 +53,11 @@ const TeamHome: React.FC = () => {
   const [photo, setPhoto] = useState<any>(null);
   const [userTotalSteps, setUserTotalSteps] = useState(0);
   const [teamTotalSteps, setTeamTotalSteps] = useState(0);
-  const adData = useContext(AdminContext);
 
   const history = useHistory();
 
   const ctx = useContext(AuthContext);
+  const adData = useContext(AdminContext);
 
   const DisplayTeam = (team: memberData[]): any => {
     if (team.length > 0) {
@@ -66,10 +66,7 @@ const TeamHome: React.FC = () => {
           <IonGrid fixed={true}>
             <IonRow class="top">
               <IonCol
-                sizeSm="12"
-                sizeLg="8"
-                sizeMd="6"
-                sizeXs="12"
+                size="12"
                 align-self-center="true"
                 class="header-col admin-col"
               >
@@ -77,19 +74,19 @@ const TeamHome: React.FC = () => {
               </IonCol>
             </IonRow>
             <IonRow class="header-row">
-              <IonCol sizeMd="4" size="5" class="header-col admin-col">
+              <IonCol size="6" class="header-col admin-col">
                 Members Name
               </IonCol>
-              <IonCol sizeMd="4" size="5" class="header-col admin-col">
+              <IonCol size="6" class="header-col admin-col">
                 Members email
               </IonCol>
             </IonRow>
             {team.map((item: { name: string; email: string }) => (
               <IonRow key={Math.random()}>
-                <IonCol sizeMd="4" size="5" class="admin-col">
+                <IonCol size="6" class="admin-col">
                   {item.name}
                 </IonCol>
-                <IonCol sizeMd="4" size="5" class="admin-col">
+                <IonCol size="6" class="admin-col">
                   {item.email}
                 </IonCol>
               </IonRow>
@@ -306,35 +303,37 @@ const TeamHome: React.FC = () => {
         </NavBar>
       </IonHeader>
       <IonContent>
-        <IonRow>
-          <IonCol
-            className="boxSize"
-            sizeSm="12"
-            sizeLg="4"
-            sizeMd="6"
-            sizeXs="12"
-          >
-            <TeamLeaderBoardChart data={leaderboardData}></TeamLeaderBoardChart>
-          </IonCol>
-          <IonCol sizeLg="8">
-            <IonItem>
-              <IonImg
-                className="profile_pic"
-                src={profilePic}
-                alt="Profile picture for the team the user is a part of"
-              >
-                {' '}
-              </IonImg>
-            </IonItem>
-            <IonItem> {teamName} Profile Picture </IonItem>
-            <IonItem> {changePicture()} </IonItem>
-            <IonItem>
-              <IonButton onClick={leaveTeam}> Leave team </IonButton>{' '}
-            </IonItem>
-            <IonItem>{verifyCount()}</IonItem>
-            <IonItem>{DisplayTeam(leaderboardData)}</IonItem>
-          </IonCol>
-        </IonRow>
+        <IonGrid>
+          <IonRow>
+            <IonCol
+              className="boxSize"
+              sizeSm="12"
+              sizeLg="4"
+              sizeMd="6"
+              sizeXs="12"
+            >
+              <TeamLeaderBoardChart data={leaderboardData}></TeamLeaderBoardChart>
+            </IonCol>
+            <IonCol sizeLg="8">
+              <IonItem>
+                <IonImg
+                  className="profile_pic"
+                  src={profilePic}
+                  alt="Profile picture for the team the user is a part of"
+                >
+                  {' '}
+                </IonImg>
+              </IonItem>
+              <IonItem> {teamName} Profile Picture </IonItem>
+              {changePicture()}
+              <IonItem>
+                <IonButton onClick={leaveTeam}> Leave team </IonButton>{' '}
+              </IonItem>
+              <IonItem>{verifyCount()}</IonItem>
+              <IonItem>{DisplayTeam(leaderboardData)}</IonItem>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
