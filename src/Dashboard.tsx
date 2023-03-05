@@ -28,15 +28,16 @@ import TeamJoin from './pages/teamHome/teamJoin';
 import TeamCreation from './pages/teamCreation/teamCreation';
 import Admin from './pages/admin/admin';
 import StepsCalculator from './pages/stepsCalculator/stepsCalculator';
+import AuthContext from './store/auth-context';
+import landing404 from './pages/404landing/landing404';
+import AdminSteps from './pages/adminSteps/adminSteps';
 
 /* Theming */
 import './theme/app.scss';
 
 /* Context */
 import { useContext } from 'react';
-import AuthContext from './store/auth-context';
-import landing404 from './pages/404landing/landing404';
-import AdminSteps from './pages/adminSteps/adminSteps';
+
 
 const Dashboard: React.FC = () => {
   const ctx = useContext(AuthContext);

@@ -15,8 +15,7 @@ import {
   IonCol,
   RefresherEventDetail,
   IonRefresher,
-  IonRefresherContent,
-  IonItem
+  IonRefresherContent
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
 import { useHistory } from 'react-router';
@@ -43,7 +42,7 @@ const HomePage: React.FC = () => {
   const [badges, setBadges] = useState(Array<badgeOutline>);
   const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
 
-  const ctx = useContext(AuthContext);
+  const ctx = useContext(AuthContext); // auth context
 
   // update profile data when the page loads
   // update profile data when the profile data changes
@@ -64,28 +63,22 @@ const HomePage: React.FC = () => {
   }, [ctx.user]);
 
   // get past seven days of steps from firestore
-  // even though the user does not have seven days of steps
-  // the chart will still render with seven days of steps
-  // each day will have 0 steps
   const getPastSevenDaysSteps = async () => {
     if (ctx.user === null) {
       alert('You are not logged in!');
-      history.push('/login');
+      history.push('/login'); // if the user is not logged in, redirect them to the login page
       return;
     }
-
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     const dbSnap = await getDoc(dbRef);
     const userData = dbSnap.data();
     const stepsByDate = userData.stepsByDate;
-
     //Add today's step count
     const today = new Date();
     if (stepsByDate[0].date === today.toISOString().slice(0, 10)) {
       setSteps(stepsByDate[0].steps);
       console.log(today, stepsByDate[0]);
     }
-
     // Create an array of the last seven dates (including today)
     const pastSevenDaysDates = [];
     for (let i = 1; i < 8; i++) {
@@ -93,7 +86,6 @@ const HomePage: React.FC = () => {
       date.setDate(date.getDate() - i);
       pastSevenDaysDates.push(date.toISOString().slice(0, 10));
     }
-
     // Populate pastSevenDays with step count or 0 for each date
     const pastSevenDays = pastSevenDaysDates.map((date) => {
       const stepLog = stepsByDate.find(
@@ -105,7 +97,6 @@ const HomePage: React.FC = () => {
         return { date: date, steps: 0 };
       }
     });
-
     setPastSevenDaysSteps(pastSevenDays.reverse());
   };
 
@@ -116,6 +107,7 @@ const HomePage: React.FC = () => {
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 
+  // move to manual steps page
   const moveToManualSteps = () => {
     history.push('/app/manualsteps');
   };
