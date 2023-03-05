@@ -81,8 +81,7 @@ const HomePage: React.FC = () => {
 
     //Add today's step count
     const today = new Date();
-    today.setDate(today.getDate() - 1);
-    if (stepsByDate[0].date == today.toISOString().slice(0, 10)) {
+    if (stepsByDate[0].date === today.toISOString().slice(0, 10)) {
       setSteps(stepsByDate[0].steps);
       console.log(today, stepsByDate[0]);
     }
