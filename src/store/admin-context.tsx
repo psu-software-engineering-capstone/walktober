@@ -30,7 +30,9 @@ export const AdminContextProvider: React.FC<{ children: any }> = ( props: any ) 
       setTeamDate(doc.data().team_creation_due);
       setComplete(true);
     });
-    return unsubcribe;
+    return () => {
+      unsubcribe();
+    };
   }, []);
 
   return (

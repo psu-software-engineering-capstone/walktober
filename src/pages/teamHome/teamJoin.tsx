@@ -310,7 +310,9 @@ const TeamJoin: React.FC = () => {
         getData();
       });
     });
-    return unsubscribe;
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   // move to the team creation page

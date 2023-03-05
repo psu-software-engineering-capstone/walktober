@@ -292,7 +292,9 @@ const TeamHome: React.FC = () => {
           }
         }
       );
-      return unsubscribe;
+      return () => {
+        unsubscribe();
+      };
     }
   }, [ctx.team]);
 

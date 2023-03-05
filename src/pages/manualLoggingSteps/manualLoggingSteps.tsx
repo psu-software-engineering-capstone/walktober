@@ -66,7 +66,9 @@ const ManualSteps: React.FC = () => {
           }
         }
       );
-      return unsubscribe;
+      return () => {
+        unsubscribe();
+      };
     }
   }, [ctx.user]);
 

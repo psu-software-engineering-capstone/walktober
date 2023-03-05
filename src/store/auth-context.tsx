@@ -18,10 +18,12 @@ export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) =
   // update team context whenever there is an update in firestore database
   useEffect(() => {
     if (auth.currentUser !== null) {
-      const unsub = onSnapshot(doc(FirestoreDB, "users", auth.currentUser.email as string), (doc: any) => {
+      const unsubscribe = onSnapshot(doc(FirestoreDB, "users", auth.currentUser.email as string), (doc: any) => {
         setTeam(doc.data().team);
       });
-      return () => unsub();
+      return () => {
+        unsubscribe();
+      };
     }
   }, [auth.currentUser]);
   
@@ -33,7 +35,9 @@ export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) =
         setComplete(true); // set complete to true to render the children
       }
     );
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+    };
   }, [auth]);
 
   const getUserInfo = async () => {
