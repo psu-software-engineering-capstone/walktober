@@ -254,7 +254,6 @@ const TeamJoin: React.FC = () => {
     }
     const querySnapshot = await getDocs(collection(FirestoreDB, 'teams')); //grab all the team documents
     querySnapshot.forEach((doc: any) => {
-      console.log(adData.maxSize, doc.data().members.length);
       if (doc.data().members.length < adData.maxSize) {
         // this is deteremined by the admins
         const allNames: selectFormat = {

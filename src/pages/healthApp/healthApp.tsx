@@ -90,7 +90,6 @@ const HealthApp: React.FC = () => {
     };
     await HealthKit.querySampleType(stepOptions)
       .then(async (data: any) => {
-        console.log(data);
         const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
         const dbSnap = await getDoc(dbRef);
         const dbStepsByDate: StepLog[] = dbSnap.data().stepsByDate;

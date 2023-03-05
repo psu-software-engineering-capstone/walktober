@@ -351,7 +351,6 @@ const AdminSteps: React.FC<{ name: string }> = ({ name }: Props) => {
       };
       await HealthKit.querySampleType(stepOptions)
         .then(async (data: any) => {
-          console.log(data);
           const dbRef = doc(
             FirestoreDB,
             'users',

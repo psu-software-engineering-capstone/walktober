@@ -77,7 +77,6 @@ const HomePage: React.FC = () => {
     const today = new Date();
     if (stepsByDate[0].date === today.toISOString().slice(0, 10)) {
       setSteps(stepsByDate[0].steps);
-      console.log(today, stepsByDate[0]);
     }
     // Create an array of the last seven dates (including today)
     const pastSevenDaysDates = [];
