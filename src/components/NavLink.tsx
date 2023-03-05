@@ -7,6 +7,7 @@ import {
 import { chevronDown } from 'ionicons/icons';
 import React from 'react';
 import { useHistory } from 'react-router';
+import { Browser } from '@capacitor/browser';
 import './NavLink.scss';
 
 interface NavLinkProps {
@@ -48,6 +49,10 @@ const NavLink: React.FC<NavLinkProps> = ({ id, text, href, children = null }) =>
     }
   };
 
+  const navigateExternal = async(url: string) => {
+    await Browser.open({ url: url });
+  };
+
   const navigate = (e: React.MouseEvent) => {
     const popover = e.currentTarget.closest('ion-popover') as HTMLIonPopoverElement;
 
@@ -55,6 +60,9 @@ const NavLink: React.FC<NavLinkProps> = ({ id, text, href, children = null }) =>
     // pass their current 'href' to the dismiss() event
     if(popover !== null) {
       popover.dismiss(href);
+    }
+    else if(href.startsWith("http")) {
+      navigateExternal(href);
     }
     // links outside popovers can navigate directly
     else {
