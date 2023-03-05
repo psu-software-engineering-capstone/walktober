@@ -20,6 +20,7 @@ import {
 import NavBar from '../../components/NavBar';
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../store/auth-context';
+import AdminContext from '../../store/admin-context';
 import { useHistory } from 'react-router-dom';
 import { FirestoreDB } from '../../firebase';
 import { doc, collection, getDocs, updateDoc, setDoc, getDoc } from 'firebase/firestore';
@@ -39,11 +40,16 @@ const Admin: React.FC = () => {
   const [isOpenCreateTeam, setOpenCreateTeam] = useState(false);
   const [isOpenReport, setIsOpenReport] = useState(false);
 
-  // used to send new team sizes and team creation date to database
-  const [newMaxTeamSize, setNewMaxTeamSize] = useState(10);
-  const [newMinTeamSize, setNewMinTeamSize] = useState(10);
-  const [newTeamCreationDate, setNewTeamCreationDate] = useState('');
-  const [newRegistrationDeadline, setNewRegistrationDeadline] = useState('');
+  //Data gathered from the Admin document
+  const adData = useContext(AdminContext);
+
+  // used to send new team sizes and team creation date to database (set to data that was previously in the database)
+  const [newMaxTeamSize, setNewMaxTeamSize] = useState(adData.maxSize);
+  const [newMinTeamSize, setNewMinTeamSize] = useState(adData.minSize);
+  const [newTeamCreationDate, setNewTeamCreationDate] = useState(adData.teamDate);
+  const [newRegistrationDeadline, setNewRegistrationDeadline] = useState(adData.regDate);
+  const [newStartDate, setNewStart] = useState(adData.startDate);
+  const [newEndDate, setNewEnd] = useState(adData.endDate);
 
   // used for Open Team Module
 
@@ -106,6 +112,7 @@ const Admin: React.FC = () => {
     })
       .then(() => {
         alert('Team Settings Updated!');
+        console.log(newMaxTeamSize, newMinTeamSize, newTeamCreationDate);
       })
       .catch((error: any) => {
         alert(error);
@@ -116,10 +123,13 @@ const Admin: React.FC = () => {
   const sendNewUserSetting = async () => {
     const dbRef = doc(FirestoreDB, 'admin', 'admin');
     await updateDoc(dbRef, {
-      registration_deadline: newRegistrationDeadline
+      registration_deadline: newRegistrationDeadline, 
+      event_start_date: newStartDate, 
+      event_end_date: newEndDate
     })
       .then(() => {
         alert('User Settings Updated!');
+        console.log(newRegistrationDeadline, newStartDate, newEndDate);
       })
       .catch((error: any) => {
         alert(error);
@@ -145,12 +155,12 @@ const Admin: React.FC = () => {
         totalStep: 0,
         channel_id: '' // TODO: create discord channel
       })
-      .then(() => {
-        alert('Open Team Created!');
-      })
-      .catch((error: any) => {
-        alert(error);
-      });
+        .then(() => {
+          alert('Open Team Created!');
+        })
+        .catch((error: any) => {
+          alert(error);
+        });
       setOpenCreateTeam(false);
     }
   };
@@ -235,6 +245,58 @@ const Admin: React.FC = () => {
 
               <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "4" : "8"} class="header-col">
                 Actions
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </>
+      );
+    }
+  }
+
+  function DisplayTeams(): any {
+    if (TeamData.length > 0) {
+      return (
+        <>
+          <IonGrid fixed={true}>
+            <IonRow class="header-row">
+              <IonCol sizeMd="6" size={isPlatform('ios') || isPlatform('android') ? "6" : "6"} class="header-col admin-col">
+                Team Name
+              </IonCol>
+
+              <IonCol sizeMd="5" size={isPlatform('ios') || isPlatform('android') ? "5" : "5"} class="header-col admin-col">
+                Number of Members
+              </IonCol>
+
+              <IonCol sizeMd="5" size={isPlatform('ios') || isPlatform('android') ? "5" : "5"} class="header-col admin-col">
+                Total Steps
+              </IonCol>
+            </IonRow>
+
+            {TeamData.map((item) => (
+              <IonRow key={Math.random()}>
+                <IonCol sizeMd="6" size={isPlatform('ios') || isPlatform('android') ? "6" : "6"} class="admin-col">{item.name}</IonCol>
+                <IonCol sizeMd="5" size={isPlatform('ios') || isPlatform('android') ? "5" : "5"} class="admin-col">insert number of members here</IonCol>
+                <IonCol sizeMd="5" size={isPlatform('ios') || isPlatform('android') ? "5" : "5"} class="admin-col">{item.avg_steps}</IonCol>
+              </IonRow>
+            ))}
+          </IonGrid>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <IonGrid fixed={true}>
+            <IonRow class="header-row">
+              <IonCol sizeMd="6" size={isPlatform('ios') || isPlatform('android') ? "6" : "6"} class="header-col admin-col">
+                Team Name
+              </IonCol>
+
+              <IonCol sizeMd="5" size={isPlatform('ios') || isPlatform('android') ? "5" : "5"} class="header-col admin-col">
+                Number of Members
+              </IonCol>
+
+              <IonCol sizeMd="5" size={isPlatform('ios') || isPlatform('android') ? "5" : "5"} class="header-col admin-col">
+                Total Steps
               </IonCol>
             </IonRow>
           </IonGrid>
@@ -467,6 +529,8 @@ const Admin: React.FC = () => {
 
         <IonItem class="grid-title">Users</IonItem>
         <IonItem>{DisplayUsers(userLogs)}</IonItem>
+        <IonItem class="grid-title">Teams</IonItem>
+        <IonItem>{DisplayTeams()}</IonItem>
 
         <IonModal isOpen={isOpenUser} backdropDismiss={false}>
           <IonHeader class="modal-header">
@@ -498,6 +562,30 @@ const Admin: React.FC = () => {
             <IonItem>
               <IonLabel>Retroactive Editting Limit</IonLabel>
               <IonInput type="number"></IonInput>
+            </IonItem>
+            <IonItem>
+              <IonLabel>Walktober Event Start Date</IonLabel>
+              <IonInput
+                id="time"
+                type="date"
+                onInput={(event:any) => {
+                  setNewStart(
+                    new Date(event.target.value).toISOString().slice(0, 10)
+                  );
+                }}
+              ></IonInput>
+            </IonItem>
+            <IonItem>
+              <IonLabel>Walktober Event End Date</IonLabel>
+              <IonInput
+                id="time"
+                type="date"
+                onInput={(event:any) => {
+                  setNewEnd(
+                    new Date(event.target.value).toISOString().slice(0, 10)
+                  );
+                }}
+              ></IonInput>
             </IonItem>
             <IonButton
               class="modal-button"
@@ -567,7 +655,7 @@ const Admin: React.FC = () => {
             </IonModal>
           </IonContent>
         </IonModal>
-        
+
         <IonModal isOpen={isOpenCreateTeam} backdropDismiss={false}>
           <IonHeader class="modal-header">
             <IonToolbar>
@@ -584,7 +672,7 @@ const Admin: React.FC = () => {
           </IonHeader>
           <IonContent className="ion-padding" class="modal-content">
             <IonItem>
-            <IonLabel position="floating">Enter New Open Team Name:</IonLabel>
+              <IonLabel position="floating">Enter New Open Team Name:</IonLabel>
               <IonInput
                 placeholder="Type here"
                 onIonChange={(e) => setOpenTeam(e.target.value as string)}
