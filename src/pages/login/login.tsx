@@ -219,7 +219,7 @@ const Login: React.FC = () => {
               <u>Forgot Password?</u>
             </IonRouterLink>
 
-            <IonButton expand="block" onClick={signInEmailPassword}>
+            <IonButton expand="block" color="primary" onClick={signInEmailPassword}>
               Login
             </IonButton>
             <h2 className="or-divider">
@@ -228,17 +228,17 @@ const Login: React.FC = () => {
             <IonButton
               expand="block"
               onClick={signInWithGoogle}
-              color="tertiary"
+              color="secondary"
             >
               <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign in with Google
             </IonButton>
           </IonCardContent>
         </IonCard>
 
-        <IonCard className={'signup-card' + ' bottom'}>
+        <IonCard className={'signup-card bottom'}>
           <IonCardContent className="no-account">
             Don&apos;t have an account?
-            <IonButton expand="block" onClick={moveToSignup} color="success">
+            <IonButton expand="block" onClick={moveToSignup} color="tertiary">
               Create new account
             </IonButton>
           </IonCardContent>
