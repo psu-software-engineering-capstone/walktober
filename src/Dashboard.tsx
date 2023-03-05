@@ -37,7 +37,7 @@ import './theme/app.scss';
 import { useContext } from 'react';
 import AuthContext from './store/auth-context';
 import landing404 from './pages/404landing/landing404';
-import AdminSteps from './pages/adminSteps/adminSteps';
+//import AdminSteps from './pages/adminSteps/adminSteps';
 
 const Dashboard: React.FC = () => {
   const ctx = useContext(AuthContext);
