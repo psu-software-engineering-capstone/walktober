@@ -54,11 +54,12 @@ const TeamHome: React.FC = () => {
   const [userTotalSteps, setUserTotalSteps] = useState(0);
   const [teamTotalSteps, setTeamTotalSteps] = useState(0);
 
-  const history = useHistory();
+  const history = useHistory(); // for routing
 
-  const ctx = useContext(AuthContext);
-  const adData = useContext(AdminContext);
+  const ctx = useContext(AuthContext); // auth context
+  const adData = useContext(AdminContext); // admin context
 
+  // display team members
   const DisplayTeam = (team: memberData[]): any => {
     if (team.length > 0) {
       return (
@@ -97,6 +98,7 @@ const TeamHome: React.FC = () => {
     }
   };
 
+  // get the data from the database
   async function getData() {
     if (ctx.team === '') {
       history.push('/app/team/join'); // if the user is not in a team, redirect them to the team join page
@@ -119,7 +121,6 @@ const TeamHome: React.FC = () => {
     setIsLeader(userData.team_leader);
     const teamRef = doc(FirestoreDB, 'teams', teamName); // reference team document
     setTeamRef(teamRef);
-    
     const teamSnapshot = await getDoc(teamRef); // grab the team document
     const teamData = teamSnapshot.data(); // get the team data
     setProfilePic(teamData.profile_pic);
@@ -138,12 +139,10 @@ const TeamHome: React.FC = () => {
       emailList.push(member.email);
       members.push(member);
     });
-
-    // set the data
     setLeaderboardData(
       members.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
-    ); // sort the array
-    setTeamMembers(emailList); // set the mates array
+    ); // set the leaderboard data
+    setTeamMembers(emailList); // set the team members
     const today = new Date();
     today.setDate(today.getDate() - 1);
     console.log(today, adData.teamDate, today.toISOString().slice(0, 10), adData);
@@ -156,12 +155,14 @@ const TeamHome: React.FC = () => {
     }
   }
 
+  // handle image change
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setPhoto(e.target.files[0]);
     }
   };
 
+  // handle image upload
   const handleSubmit = async () => {
     const imageRef = ref(storage, teamName + '.png');
     await uploadBytes(imageRef, photo);
@@ -175,6 +176,7 @@ const TeamHome: React.FC = () => {
       });
   };
 
+  // display the change picture button if the user is the leader
   function changePicture() {
     if (isLeader === true) {
       return (
@@ -282,6 +284,7 @@ const TeamHome: React.FC = () => {
     }
   }, [ctx.team]);
 
+  // team deadline verification
   function verifyCount() {
     if (buttonValid) {
       if (teamMembers.length < adData.minSize) {

@@ -22,7 +22,8 @@ import {
   doc,
   updateDoc,
   arrayUnion,
-  increment
+  increment,
+  onSnapshot
 } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
@@ -32,7 +33,6 @@ import { useHistory } from 'react-router';
 import AuthContext from '../../store/auth-context';
 import AdminContext from '../../store/admin-context';
 import './teamHome.scss';
-import { onSnapshot } from 'firebase/firestore';
 
 const TeamJoin: React.FC = () => {
   interface teamData {
@@ -53,18 +53,26 @@ const TeamJoin: React.FC = () => {
   const [teamPass, setPass] = useState(''); // variable to collect team password
   const [passwordShown, setPasswordShown] = useState(false); // enable visability to see password
   const [allTeams, setTeams] = useState(Array<teamData>); // array of teams from database
-  const [buttonValid, setValid] = useState(false);
-  const adData = useContext(AdminContext);
-  const ctx = useContext(AuthContext);
+  const [buttonValid, setValid] = useState(false); // to check if the button should be enabled or not
+  
+  const adData = useContext(AdminContext); // admin context
+  const ctx = useContext(AuthContext); // auth context
 
+  // toggle password visability
   const togglePasswordVisibility = () => {
-    // can we see the password?
     setPasswordShown(!passwordShown);
   };
 
+  // join the team
   const joined = async () => {
     if (ctx.user === null) { // if the user is not logged in
+      alert('You need to be logged in to join a team');
       history.push('/login');
+      return;
+    }
+    if (ctx.team !== '') { // if the user is already in a team
+      alert('You are already in a team');
+      history.push('/app/team');
       return;
     }
     const currentUserRef = doc( // make a reference to the user's document
@@ -105,23 +113,30 @@ const TeamJoin: React.FC = () => {
     history.push('/app/team'); // move to the team page
   };
 
+  // join the team
   const toJoin = () => {
+    if (ctx.team !== '') {
+      alert('You are already in a team');
+      history.push('/app/team'); // if the user is already in a team, move them to the team page
+      return;
+    }
     if (joinTeam === '') {
       alert('No team name has been entered as of yet');
-      return;
+      return; // team name cannot be empty
     }
     for (let i = 0; i < allTeams.length; i++) {
       if (allTeams[i].name === joinTeam) {
-        // check if it is one of the team's that is available
+        // check if the team name entered matches a team in the database
         if (allTeams[i].type === 'Private') {
-          // okay we are gonna need a password
+          // check if the team is private
           if (teamPass === '') {
+            // private team but no password entered
             alert(
               'A password needs to be entered as this team is private. Please enter the password and try again.'
             );
             return;
           } else if (allTeams[i].password === teamPass) {
-            joined(); // we can join them
+            joined(); // password is correct
             return;
           } else {
             // incorrect password
@@ -131,13 +146,13 @@ const TeamJoin: React.FC = () => {
             return;
           }
         } else {
-          // public team aka no password required
+          // public team
           joined();
           return;
         }
       }
     }
-    alert('No team was found that matched what was entered');
+    alert('No team was found that matched what was entered'); // no team was found
     return;
   };
 
@@ -148,8 +163,9 @@ const TeamJoin: React.FC = () => {
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 
+  // display the teams
   const DisplayTeams = (teams: teamData[]): any => {
-    if (teams.length > 0) {
+    if (teams.length > 0) { // if there are teams
       return (
         <>
           <IonGrid>
@@ -198,7 +214,7 @@ const TeamJoin: React.FC = () => {
           </IonGrid>
         </>
       );
-    } else {
+    } else { // if there are no teams
       return (
         <>
           <IonItem>
@@ -210,10 +226,10 @@ const TeamJoin: React.FC = () => {
     }
   };
 
+  // get the data from the database
   async function getData() {
     if (ctx.team !== '') {
-      // if they are already on a team
-      history.push('/app/team'); // redirect them to the team home page
+      history.push('/app/team'); // if the user is already in a team, move them to the team page
       return;
     }
     const indData: Array<teamData> = []; //temp array for the teams data
@@ -290,10 +306,12 @@ const TeamJoin: React.FC = () => {
     return unsubscribe;
   }, []);
 
+  // move to the team creation page
   const moveToCreateTeam = () => {
     history.push('/app/teamcreation');
   };
 
+  // check team deadline
   function displayPage() {
     if (buttonValid === false) {
       return (<>{DisplayTeams(allTeams)}</>);
