@@ -20,6 +20,7 @@ import {
 import NavBar from '../../components/NavBar';
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../store/auth-context';
+import AdminContext from '../../store/admin-context';
 import { useHistory } from 'react-router-dom';
 import { FirestoreDB } from '../../firebase';
 import { doc, collection, getDocs, updateDoc, setDoc, getDoc } from 'firebase/firestore';
@@ -39,11 +40,16 @@ const Admin: React.FC = () => {
   const [isOpenCreateTeam, setOpenCreateTeam] = useState(false);
   const [isOpenReport, setIsOpenReport] = useState(false);
 
-  // used to send new team sizes and team creation date to database
-  const [newMaxTeamSize, setNewMaxTeamSize] = useState(10);
-  const [newMinTeamSize, setNewMinTeamSize] = useState(10);
-  const [newTeamCreationDate, setNewTeamCreationDate] = useState('');
-  const [newRegistrationDeadline, setNewRegistrationDeadline] = useState('');
+  //Data gathered from the Admin document
+  const adData = useContext(AdminContext);
+
+  // used to send new team sizes and team creation date to database (set to data that was previously in the database)
+  const [newMaxTeamSize, setNewMaxTeamSize] = useState(adData.maxSize);
+  const [newMinTeamSize, setNewMinTeamSize] = useState(adData.minSize);
+  const [newTeamCreationDate, setNewTeamCreationDate] = useState(adData.teamDate);
+  const [newRegistrationDeadline, setNewRegistrationDeadline] = useState(adData.regDate);
+  const [newStartDate, setNewStart] = useState(adData.startDate);
+  const [newEndDate, setNewEnd] = useState(adData.endDate);
 
   // used for Open Team Module
 
@@ -106,6 +112,7 @@ const Admin: React.FC = () => {
     })
       .then(() => {
         alert('Team Settings Updated!');
+        console.log(newMaxTeamSize, newMinTeamSize, newTeamCreationDate);
       })
       .catch((error: any) => {
         alert(error);
@@ -116,10 +123,13 @@ const Admin: React.FC = () => {
   const sendNewUserSetting = async () => {
     const dbRef = doc(FirestoreDB, 'admin', 'admin');
     await updateDoc(dbRef, {
-      registration_deadline: newRegistrationDeadline
+      registration_deadline: newRegistrationDeadline, 
+      event_start_date: newStartDate, 
+      event_end_date: newEndDate
     })
       .then(() => {
         alert('User Settings Updated!');
+        console.log(newRegistrationDeadline, newStartDate, newEndDate);
       })
       .catch((error: any) => {
         alert(error);
@@ -558,6 +568,11 @@ const Admin: React.FC = () => {
               <IonInput
                 id="time"
                 type="date"
+                onInput={(event:any) => {
+                  setNewStart(
+                    new Date(event.target.value).toISOString().slice(0, 10)
+                  );
+                }}
               ></IonInput>
             </IonItem>
             <IonItem>
@@ -565,6 +580,11 @@ const Admin: React.FC = () => {
               <IonInput
                 id="time"
                 type="date"
+                onInput={(event:any) => {
+                  setNewEnd(
+                    new Date(event.target.value).toISOString().slice(0, 10)
+                  );
+                }}
               ></IonInput>
             </IonItem>
             <IonButton
