@@ -13,18 +13,15 @@ import {
   IonPage,
   IonTitle,
   IonThumbnail,
-  IonIcon,
   IonGrid,
   IonRow,
   IonCol
 } from '@ionic/react';
-import { useHistory } from 'react-router';
+//import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import './results.scss';
 import AuthContext from '../../store/auth-context';
-import { getDoc } from 'firebase/firestore';
-import { auth, FirestoreDB } from '../../firebase';
-import { doc } from 'firebase/firestore';
+import { FirestoreDB } from '../../firebase';
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
 import { collection, getDocs } from 'firebase/firestore';
 import trophy from '../../assets/trophy.png';
@@ -33,9 +30,11 @@ import personalrecord from '../../assets/personalrecord.png';
 import recorddate from '../../assets/recorddate.png';
 import walking from '../../assets/walking.png';
 
+/*
 interface badgeOutline {
   name: string;
 }
+*/
 
 interface StepLog {
   date: string;
@@ -50,8 +49,8 @@ interface Data {
 }
 
 const Results: React.FC = () => {
-  const history = useHistory();
-  const [badges, setBadges] = useState(Array<badgeOutline>);
+  //const history = useHistory();
+  //const [badges, setBadges] = useState(Array<badgeOutline>);
   const [data, setData] = useState<Data>();
   const ctx = useContext(AuthContext);
   const user = ctx.user as any;
