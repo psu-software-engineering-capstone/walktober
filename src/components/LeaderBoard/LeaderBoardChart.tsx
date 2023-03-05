@@ -211,7 +211,7 @@ const LeaderBoardChart: React.FC = () => {
           profile_pic: doc.data().profile_pic as string,
           avg_steps: doc.data().avg_steps as number
         };
-        const today = new Date(Date());
+        const today = new Date();
         const maxDate = new Date(adData.teamDate);
         console.log(
           adData.maxSize,

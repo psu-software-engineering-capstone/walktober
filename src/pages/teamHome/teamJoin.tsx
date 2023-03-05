@@ -245,15 +245,12 @@ const TeamJoin: React.FC = () => {
     }
     const indData: Array<teamData> = []; // temp array for the teams data
     const groupNames: Array<selectFormat> = []; // need the group names to look thorugh
-    const today = new Date(Date());
-    const maxDate = new Date(adData.teamDate);
-    console.log(today < maxDate, today, maxDate, adData.teamDate);
-    if (maxDate < today) {
+    const today = new Date();
+    const deadline = new Date(adData.teamDate);
+    if (deadline < today) {
       setValid(true);
-      console.log('true');
     } else {
       setValid(false);
-      console.log('false');
     }
     const querySnapshot = await getDocs(collection(FirestoreDB, 'teams')); //grab all the team documents
     querySnapshot.forEach((doc: any) => {

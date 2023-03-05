@@ -150,14 +150,11 @@ const TeamHome: React.FC = () => {
     ); // set the leaderboard data
     setTeamMembers(emailList); // set the team members
     const today = new Date();
-    today.setDate(today.getDate() - 1);
-    console.log(today, adData.teamDate, today.toISOString().slice(0, 10), adData);
-    if (adData.teamDate < today.toISOString().slice(0, 10)) {
+    const deadline = new Date(adData.teamDate);
+    if (deadline < today) {
       setValid(true);
-      console.log('true');
     } else {
       setValid(false);
-      console.log('false');
     }
   }
 
