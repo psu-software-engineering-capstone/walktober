@@ -1,24 +1,34 @@
-import React, { useRef } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   IonButton,
   IonModal,
-  IonHeader,
-  IonContent,
-  IonToolbar,
+  IonCard,
+  IonCardTitle,
   IonTitle,
-  IonPage,
   IonList,
   IonItem,
   IonLabel,
   IonSelectOption,
   IonSelect,
   IonInput,
+  IonCardSubtitle,
 } from '@ionic/react';
-import './exitQuestionsModal.scss';
+import './postEventSurvey.scss';
+import { useHistory } from 'react-router';
 import smallLogo from '../../assets/Walktober.png';
+import AdminContext from '../../store/admin-context';
 
-function ExitSurveyModal() {
-  const modal = useRef<HTMLIonModalElement>(null);
+function PostEventSurvey() {
+  const history = useHistory();
+  const [showPostSurvey, setShowPostSurvey] = useState(false);
+  const adminInfo = useContext(AdminContext);
+
+  useEffect(() => {
+    const today = new Date();
+    const eventEnd = new Date(adminInfo.teamDate);
+    setShowPostSurvey(today < eventEnd);
+  }, []);
+
   const hoursPhysicallyActive = {
     header: 'Please select the approximate hours per week you are currently physically active'
   };
@@ -35,18 +45,18 @@ function ExitSurveyModal() {
     header: 'Please select the response that most accurately depicts your thoughts to the statement: I would participate in Walktober again!'
   };
   const submitExitForm = () => {
-    console.log('hello');
+    // Backend take info
+    setShowPostSurvey(false);
+    history.push('/app/results');
   };
 
   return (
-    <IonPage>
-      <IonButton id="open-modal">
-        Open Modal
-      </IonButton>
-      <IonModal id="survey-modal" ref={modal} trigger="open-modal">
+      <IonModal isOpen={showPostSurvey} className="survey-modal" >
+        <IonCard>
           <img className="exit-logo-modal" alt="Walktober logo" src={smallLogo} />
-        <IonContent>
-            <IonTitle class="ion-text-center">Please fill out our exit survey!</IonTitle>
+            <IonCardTitle class="ion-text-center">Thank you for participating in Walktober!</IonCardTitle>
+            <div>&nbsp;</div>
+            <IonCardSubtitle class="ion-text-center">Please complete the survey to see results!</IonCardSubtitle>
             <div>&nbsp;</div>
           <IonList class="ion-no-padding">
               <IonItem className="modal-field">
@@ -126,15 +136,14 @@ function ExitSurveyModal() {
                   <IonLabel position="floating">Please provite us with any other feedback on your Walktober experience.</IonLabel>
                   <IonInput></IonInput>
               </IonItem>
-
-              <div>&nbsp;</div>
-
-              <IonButton className="modal-submit" expand="block" onClick={submitExitForm}>Complete Exit Form</IonButton>
             </IonList>
-        </IonContent>
+            <h2 className="survey-divider">
+              <span></span>
+            </h2>
+            <IonButton className="modal-submit" expand="block" onClick={submitExitForm}>Take me to the results!</IonButton>
+        </IonCard>
       </IonModal>
-    </IonPage>
   );
 }
 
-export default ExitSurveyModal;
+export default PostEventSurvey;

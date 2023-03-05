@@ -1,20 +1,21 @@
-ion-modal#survey-modal {
-    --height: 65%;
+.survey-modal {
+    --height: 70%;
     --border-radius: 16px;
     --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   }
   
-  ion-modal#survey-modal::part(backdrop) {
+  .survey-modal::part(backdrop) {
     background: rgba(209, 213, 219);
   }
   
-  ion-modal#survey-modal ion-toolbar {
+  .survey-modal ion-toolbar {
     --background: rgb(100 116 144);
     --color: white;
   }
 
 .modal-field {
   --pading-start: 0px;
+  --height: auto;
 }
 
 .exit-logo-modal {
@@ -27,7 +28,9 @@ ion-modal#survey-modal {
 }
 
 .modal-submit {
-  margin-left: 20px;
-  margin-right: 20px;
+  margin: 15px;
 }
 
+.survey-divider{
+  padding: 2px;
+}
