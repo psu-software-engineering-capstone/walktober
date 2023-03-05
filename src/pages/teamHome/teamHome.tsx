@@ -13,20 +13,24 @@ import {
   IonTitle,
   RefresherEventDetail
 } from '@ionic/react';
-import { getDoc, doc } from 'firebase/firestore';
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  query,
+  updateDoc,
+  where
+} from 'firebase/firestore';
 import React, { useContext, useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
 import { auth, FirestoreDB, storage } from '../../firebase';
 import { useHistory } from 'react-router';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { updateDoc } from 'firebase/firestore';
-import { deleteDoc } from 'firebase/firestore';
-import { onSnapshot } from 'firebase/firestore';
+import AdminContext from '../../store/admin-context';
 import AuthContext from '../../store/auth-context';
-import { collection } from 'firebase/firestore';
-import { where } from 'firebase/firestore';
-import { query } from 'firebase/firestore';
-import { getDocs } from 'firebase/firestore';
 import TeamLeaderBoardChart from '../../components/LeaderBoard/TeamLeaderboardChart';
 import './teamHome.scss';
 
@@ -45,9 +49,11 @@ const TeamHome: React.FC = () => {
   const [userReference, setUserRef] = useState('');
   const [teamReference, setTeamRef] = useState('');
   const [isLeader, setIsLeader] = useState(false);
+  const [buttonValid, setValid] = useState(false);
   const [photo, setPhoto] = useState<any>(null);
   const [userTotalSteps, setUserTotalSteps] = useState(0);
   const [teamTotalSteps, setTeamTotalSteps] = useState(0);
+  const adData = useContext(AdminContext);
 
   const history = useHistory();
 
@@ -116,11 +122,12 @@ const TeamHome: React.FC = () => {
     setIsLeader(userData.team_leader);
     const teamRef = doc(FirestoreDB, 'teams', teamName); // reference team document
     setTeamRef(teamRef);
+    
     const teamSnapshot = await getDoc(teamRef); // grab the team document
     const teamData = teamSnapshot.data(); // get the team data
     setProfilePic(teamData.profile_pic);
     setTeamTotalSteps(teamData.totalStep);
-    // get all the users in the team    
+    // get all the users in the team
     const usersRef = collection(FirestoreDB, 'users');
     const q = query(usersRef, where('team', '==', ctx.team));
     const querySnapshot = await getDocs(q);
@@ -134,11 +141,22 @@ const TeamHome: React.FC = () => {
       emailList.push(member.email);
       members.push(member);
     });
+
     // set the data
     setLeaderboardData(
       members.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
     ); // sort the array
     setTeamMembers(emailList); // set the mates array
+    const today = new Date();
+    today.setDate(today.getDate() - 1);
+    console.log(today, adData.teamDate, today.toISOString().slice(0, 10), adData);
+    if (adData.teamDate < today.toISOString().slice(0, 10)) {
+      setValid(true);
+      console.log('true');
+    } else {
+      setValid(false);
+      console.log('false');
+    }
   }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -267,6 +285,19 @@ const TeamHome: React.FC = () => {
     }
   }, [ctx.team]);
 
+  function verifyCount() {
+    if (buttonValid) {
+      if (teamMembers.length < adData.minSize) {
+        return (
+          <b>
+            Your team will not be particpating in the Walktober challenge due to
+            not having enough teammembers
+          </b>
+        );
+      }
+    }
+  }
+
   return (
     <IonPage>
       <IonHeader>
@@ -300,6 +331,7 @@ const TeamHome: React.FC = () => {
             <IonItem>
               <IonButton onClick={leaveTeam}> Leave team </IonButton>{' '}
             </IonItem>
+            <IonItem>{verifyCount()}</IonItem>
             <IonItem>{DisplayTeam(leaderboardData)}</IonItem>
           </IonCol>
         </IonRow>

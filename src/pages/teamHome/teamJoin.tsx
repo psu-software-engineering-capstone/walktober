@@ -30,6 +30,7 @@ import { auth, FirestoreDB } from '../../firebase';
 import { eyeOff, eye } from 'ionicons/icons';
 import { useHistory } from 'react-router';
 import AuthContext from '../../store/auth-context';
+import AdminContext from '../../store/admin-context';
 import './teamHome.scss';
 import { onSnapshot } from 'firebase/firestore';
 
@@ -52,7 +53,8 @@ const TeamJoin: React.FC = () => {
   const [teamPass, setPass] = useState(''); // variable to collect team password
   const [passwordShown, setPasswordShown] = useState(false); // enable visability to see password
   const [allTeams, setTeams] = useState(Array<teamData>); // array of teams from database
-
+  const [buttonValid, setValid] = useState(false);
+  const adData = useContext(AdminContext);
   const ctx = useContext(AuthContext);
 
   const togglePasswordVisibility = () => {
@@ -214,14 +216,22 @@ const TeamJoin: React.FC = () => {
       history.push('/app/team'); // redirect them to the team home page
       return;
     }
-    const indData: Array<teamData> = []; // temp array for the teams data
-    const groupNames: Array<selectFormat> = []; // need the group names to look thorugh
-    const adminRef = doc(FirestoreDB, 'admin', 'admin'); // ref the admin doc
-    const adminSnapshot = await getDoc(adminRef); // get the admin docu
-    const adminData = adminSnapshot.data(); // get data
-    const querySnapshot = await getDocs(collection(FirestoreDB, 'teams')); // grab all the team documents
+    const indData: Array<teamData> = []; //temp array for the teams data
+    const groupNames: Array<selectFormat> = []; //need the group names to look thorugh
+    const today = new Date(Date());
+    const maxDate = new Date(adData.teamDate);
+    console.log(today < maxDate, today, maxDate, adData.teamDate);
+    if (maxDate < today) {
+      setValid(true);
+      console.log('true');
+    } else {
+      setValid(false);
+      console.log('false');
+    }
+    const querySnapshot = await getDocs(collection(FirestoreDB, 'teams')); //grab all the team documents
     querySnapshot.forEach((doc: any) => {
-      if (doc.data().members.length <= adminData.max_team_size) {
+      console.log(adData.maxSize, doc.data().members.length);
+      if (doc.data().members.length < adData.maxSize) {
         // this is deteremined by the admins
         const allNames: selectFormat = {
           // this was to create an array if we used the selection drop down method
@@ -284,6 +294,14 @@ const TeamJoin: React.FC = () => {
     history.push('/app/teamcreation');
   };
 
+  function displayPage() {
+    if (buttonValid === false) {
+      return (<>{DisplayTeams(allTeams)}</>);
+    } else {
+      return <h1>The deadline to join or create a team was {adData.teamDate}.</h1>;
+    }
+  }
+
   return (
     <IonPage>
       <IonHeader>
@@ -318,12 +336,18 @@ const TeamJoin: React.FC = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              <IonButton onClick={toJoin}> Join </IonButton>
-              <IonButton onClick={moveToCreateTeam}> Create a Team </IonButton>
+              <IonButton disabled={buttonValid} onClick={toJoin}>
+                {' '}
+                Join{' '}
+              </IonButton>
+              <IonButton disabled={buttonValid} onClick={moveToCreateTeam}>
+                {' '}
+                Create a Team{' '}
+              </IonButton>
             </IonItem>
           </IonCol>
         </IonRow>
-        <IonItem>{DisplayTeams(allTeams)}</IonItem>
+        <>{displayPage()}</>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
