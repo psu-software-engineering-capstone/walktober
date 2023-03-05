@@ -44,7 +44,6 @@ const TeamHome: React.FC = () => {
 
   const [leaderboardData, setLeaderboardData] = useState(Array<memberData>);
   const [teamMembers, setTeamMembers] = useState(Array<string>);
-  const [teamName, setTeamName] = useState('');
   const [profilePic, setProfilePic] = useState('');
   const [userReference, setUserRef] = useState('');
   const [teamReference, setTeamRef] = useState('');
@@ -99,7 +98,7 @@ const TeamHome: React.FC = () => {
   };
 
   // get the data from the database
-  async function getData() {
+  async function getData(teamData: any) {
     if (ctx.user === null) {
       alert('You are not logged in');
       history.push('/login'); // if the user is not logged in, redirect them to the login page
@@ -113,28 +112,23 @@ const TeamHome: React.FC = () => {
     const members: Array<memberData> = [];
     const emailList: Array<string> = [];
     const currentUserRef = doc(
-      // reference the current user document
       FirestoreDB,
       'users',
       auth.currentUser.email as string
-    );
-    setUserRef(currentUserRef);
-    const userSnap = await getDoc(currentUserRef); // grab the user document
-    const userData = userSnap.data(); // get the user data
-    const teamName = userData.team; // get the team name
+    ); // get user reference
+    setUserRef(currentUserRef); // set user reference
+    const userSnap = await getDoc(currentUserRef); // get user data
+    const userData = userSnap.data(); // set user data
     setUserTotalSteps(userData.totalStep);
-    setTeamName(teamName);
     setIsLeader(userData.team_leader);
-    const teamRef = doc(FirestoreDB, 'teams', teamName); // reference team document
-    setTeamRef(teamRef);
-    const teamSnapshot = await getDoc(teamRef); // grab the team document
-    const teamData = teamSnapshot.data(); // get the team data
+    const teamRef = doc(FirestoreDB, 'teams', ctx.team); // get team reference
+    setTeamRef(teamRef); // set team reference
     setProfilePic(teamData.profile_pic);
     setTeamTotalSteps(teamData.totalStep);
     // get all the users in the team
-    const usersRef = collection(FirestoreDB, 'users');
-    const q = query(usersRef, where('team', '==', ctx.team));
-    const querySnapshot = await getDocs(q);
+    const usersRef = collection(FirestoreDB, 'users'); // get all users reference
+    const q = query(usersRef, where('team', '==', ctx.team)); // query team members
+    const querySnapshot = await getDocs(q); // get team members data
     querySnapshot.forEach((doc: any) => {
       const member: memberData = {
         name: doc.data().name as string,
@@ -147,11 +141,11 @@ const TeamHome: React.FC = () => {
     });
     setLeaderboardData(
       members.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
-    ); // set the leaderboard data
-    setTeamMembers(emailList); // set the team members
+    ); // set leaderboard data
+    setTeamMembers(emailList); // set team members
     const today = new Date();
     const deadline = new Date(adData.teamDate);
-    if (deadline < today) {
+    if (deadline < today) { // deadline check
       setValid(true);
     } else {
       setValid(false);
@@ -167,7 +161,7 @@ const TeamHome: React.FC = () => {
 
   // handle image upload
   const handleSubmit = async () => {
-    const imageRef = ref(storage, teamName + '.png');
+    const imageRef = ref(storage, ctx.team + '.png');
     await uploadBytes(imageRef, photo);
     const photoURL = await getDownloadURL(imageRef);
     await updateDoc(teamReference, { profile_pic: photoURL })
@@ -204,7 +198,6 @@ const TeamHome: React.FC = () => {
   // handle refresher
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
-    getData(); // Refresh data
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 
@@ -232,7 +225,7 @@ const TeamHome: React.FC = () => {
     if (isLeader === true) {
       // if the user is the only member of the team
       if (teamMembers.length === 1) {
-        await deleteDoc(doc(FirestoreDB, 'teams', teamName)) // delete the team document
+        await deleteDoc(doc(FirestoreDB, 'teams', ctx.team)) // delete the team document
           .then(() => {
             console.log('Team deleted');
           })
@@ -288,7 +281,7 @@ const TeamHome: React.FC = () => {
         (doc: any) => {
           if (doc.data() !== undefined) {
             console.log('Team home page updated');
-            getData();
+            getData(doc.data());
           }
         }
       );
@@ -316,7 +309,7 @@ const TeamHome: React.FC = () => {
     <IonPage>
       <IonHeader>
         <NavBar>
-          <IonTitle> {teamName} </IonTitle>
+          <IonTitle> {ctx.team} </IonTitle>
         </NavBar>
       </IonHeader>
       <IonContent>
@@ -341,7 +334,7 @@ const TeamHome: React.FC = () => {
                   {' '}
                 </IonImg>
               </IonItem>
-              <IonItem> {teamName} Profile Picture </IonItem>
+              <IonItem> {ctx.team} Profile Picture </IonItem>
               {changePicture()}
               <IonItem>
                 <IonButton onClick={leaveTeam}> Leave team </IonButton>{' '}
