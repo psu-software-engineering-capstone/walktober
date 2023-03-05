@@ -115,6 +115,11 @@ const TeamJoin: React.FC = () => {
 
   // join the team
   const toJoin = () => {
+    if (ctx.user === null) {
+      alert('You are not logged in');
+      history.push('/login'); // if the user is not logged in, move them to the login page
+      return;
+    }
     if (ctx.team !== '') {
       alert('You are already in a team');
       history.push('/app/team'); // if the user is already in a team, move them to the team page
@@ -228,7 +233,13 @@ const TeamJoin: React.FC = () => {
 
   // get the data from the database
   async function getData() {
+    if (ctx.user === null) {
+      alert('You are not logged in');
+      history.push('/login'); // if the user is not logged in, move them to the login page
+      return;
+    }
     if (ctx.team !== '') {
+      alert('You are already in a team');
       history.push('/app/team'); // if the user is already in a team, move them to the team page
       return;
     }
@@ -308,6 +319,16 @@ const TeamJoin: React.FC = () => {
 
   // move to the team creation page
   const moveToCreateTeam = () => {
+    if (ctx.user === null) {
+      alert('You are not logged in');
+      history.push('/login'); // if the user is not logged in, move them to the login page
+      return;
+    }
+    if (ctx.team !== '') {
+      alert('You are already in a team');
+      history.push('/app/team'); // if the user is already in a team, move them to the team page
+      return;
+    }
     history.push('/app/teamcreation');
   };
 

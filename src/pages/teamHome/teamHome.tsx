@@ -106,6 +106,7 @@ const TeamHome: React.FC = () => {
       return;
     }
     if (ctx.team === '') {
+      alert('You are not in a team');
       history.push('/app/team/join'); // if the user is not in a team, redirect them to the team join page
       return;
     }
