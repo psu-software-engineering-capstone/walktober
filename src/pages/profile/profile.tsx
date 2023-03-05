@@ -232,7 +232,7 @@ const Profile: React.FC = () => {
                   <p>{totalDistance} miles walked in total</p>
                 </IonItem>
                 <form onSubmit={handleSubmitStepGoal}>
-                  <IonLabel position="stacked">Set Your Step Goal:</IonLabel>
+                  <IonLabel position="stacked">Set Your Step Goal for today:</IonLabel>
                   <IonInput
                     min="0"
                     type="number"
@@ -245,7 +245,7 @@ const Profile: React.FC = () => {
                     Save
                   </IonButton>
                 </form>
-                <p>Your current step goal is: {stepGoal} steps!</p>
+                <p>Today&apos;s step goal is: {stepGoal} steps!</p>
                 <IonItem>
                   <h6>Badges:</h6>
                 </IonItem>
