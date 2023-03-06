@@ -1,11 +1,8 @@
 import React, { useRef } from 'react';
 import {
   IonButton,
-  IonModal,
   IonHeader,
   IonContent,
-  IonToolbar,
-  IonTitle,
   IonPage,
   IonList,
   IonItem,
@@ -51,8 +48,6 @@ function ExitSurveyModal() {
       feedback: walktoberFeedback
     });
   };
-
-  const modal = useRef<HTMLIonModalElement>(null);
 
   // for routing
   const history = useHistory();
