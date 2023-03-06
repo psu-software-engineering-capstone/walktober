@@ -22,7 +22,7 @@ import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import ProgressChart from '../../components/ProgressChart';
 import AuthContext from '../../store/auth-context';
-import { getDoc, doc, onSnapshot } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
 import './homePage.css';
@@ -56,8 +56,7 @@ const HomePage: React.FC = () => {
       doc(FirestoreDB, 'users', auth.currentUser.email as string),
       (doc: any) => {
         if (doc.exists()) {
-          console.log('Home page updated');
-          getPastSevenDaysSteps();
+          getPastSevenDaysSteps(doc.data());
         }
       }
     );
@@ -67,15 +66,7 @@ const HomePage: React.FC = () => {
   }, [ctx.user]);
 
   // get past seven days of steps from firestore
-  const getPastSevenDaysSteps = async () => {
-    if (ctx.user === null) {
-      alert('You are not logged in!');
-      history.push('/login'); // if the user is not logged in, redirect them to the login page
-      return;
-    }
-    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-    const dbSnap = await getDoc(dbRef);
-    const userData = dbSnap.data();
+  const getPastSevenDaysSteps = async (userData: any) => {
     const stepsByDate = userData.stepsByDate;
     const stepGoal = userData.step_goal;
 
@@ -86,7 +77,6 @@ const HomePage: React.FC = () => {
     }
     else if (stepsByDate[stepsByDate.length - 1].date == today) {
       setSteps(stepsByDate[stepsByDate.length - 1].steps);
-      console.log(today, stepsByDate[stepsByDate.length - 1]);
     }
 
     // Create an array of the last seven dates (including today)
@@ -114,7 +104,6 @@ const HomePage: React.FC = () => {
   // handle refresher
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
-    getPastSevenDaysSteps(); // Refresh data
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 

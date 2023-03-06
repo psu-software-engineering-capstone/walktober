@@ -20,14 +20,13 @@ import {
   useIonToast
 } from '@ionic/react';
 import { auth, FirestoreDB } from '../../firebase';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, onSnapshot } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import AuthContext from '../../store/auth-context';
 import NavBar from '../../components/NavBar';
 import { Health } from '@awesome-cordova-plugins/health';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
 import './manualLoggingSteps.css';
-import { onSnapshot } from 'firebase/firestore';
 
 const ManualSteps: React.FC = () => {
   interface StepLog {
