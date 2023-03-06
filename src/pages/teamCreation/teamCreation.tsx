@@ -35,11 +35,6 @@ const TeamCreation: React.FC = () => {
 
   // create a new team
   const createTeam = async () => {
-    if (ctx.user == null) {
-      alert('You are not logged in');
-      history.push('/login'); // if the user is not logged in, redirect to login page
-      return;
-    }
     if (ctx.team !== '') {
       alert('You are already in a team');
       history.push('/app/team'); // if the user is already in a team, redirect to team page
@@ -99,9 +94,6 @@ const TeamCreation: React.FC = () => {
 
   // update the current user's data
   const updateCurrentUser = async () => {
-    if (ctx.user == null) {
-      return;
-    }
     const currentUserRef = doc(
       FirestoreDB,
       'users',
