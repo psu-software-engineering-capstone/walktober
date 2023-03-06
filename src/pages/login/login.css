@@ -33,3 +33,7 @@
 .no-account {
    text-align: center;
 }
+
+.forgot-password-text{
+   color: var(--ion-color-secondary);
+}
