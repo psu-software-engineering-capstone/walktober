@@ -99,16 +99,6 @@ const TeamHome: React.FC = () => {
 
   // get the data from the database
   async function getData(teamData: any) {
-    if (ctx.user === null) {
-      alert('You are not logged in');
-      history.push('/login'); // if the user is not logged in, redirect them to the login page
-      return;
-    }
-    if (ctx.team === '') {
-      alert('You are not in a team');
-      history.push('/app/team/join'); // if the user is not in a team, redirect them to the team join page
-      return;
-    }
     const members: Array<memberData> = [];
     const emailList: Array<string> = [];
     const currentUserRef = doc(
@@ -203,15 +193,6 @@ const TeamHome: React.FC = () => {
 
   // leave team
   async function leaveTeam() {
-    if (ctx.user === null) {
-      alert('You are not logged in');
-      history.push('/login'); // if the user is not logged in, redirect them to the login page
-      return;
-    }
-    if (ctx.team === '') {
-      history.push('/app/team/join'); // if the user is not in a team, redirect them to the team join page
-      return;
-    }
     const newTotalStep = teamTotalSteps - userTotalSteps; //new total step for team
     const newAvg = newTotalStep / (teamMembers.length - 1); //new average step for team
     const newMembers: Array<string> = []; //array for members field
@@ -275,21 +256,28 @@ const TeamHome: React.FC = () => {
   // update the data when the page loads
   // update the data when the team gets updated
   useEffect(() => {
-    if (ctx.team !== '') {
-      const unsubscribe = onSnapshot(
-        doc(FirestoreDB, 'teams', ctx.team),
-        (doc: any) => {
-          if (doc.data() !== undefined) {
-            console.log('Team home page updated');
-            getData(doc.data());
-          }
-        }
-      );
-      return () => {
-        unsubscribe();
-      };
+    if (ctx.user === null) {
+      alert('You are not logged in');
+      history.push('/login'); // if the user is not logged in, redirect them to the login page
+      return;
     }
-  }, [ctx.team]);
+    if (ctx.team === '') {
+      history.push('/app/team/join'); // if the user is not in a team, redirect them to the team join page
+      return;
+    }
+    const unsubscribe = onSnapshot(
+      doc(FirestoreDB, 'teams', ctx.team),
+      (doc: any) => {
+        if (doc.data() !== undefined) {
+          console.log('Team home page updated');
+          getData(doc.data());
+        }
+      }
+    );
+    return () => {
+      unsubscribe();
+    };
+  }, [ctx.user, ctx.team]);
 
   // team deadline verification
   function verifyCount() {

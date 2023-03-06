@@ -209,7 +209,7 @@ const TeamJoin: React.FC = () => {
     }
   };
 
-  // get the data from the database
+  // set the data
   async function getData(teamList: any) {
     const teams: Array<teamData> = []; // array of teams
     const teamNames: Array<selectFormat> = []; // array of team names
