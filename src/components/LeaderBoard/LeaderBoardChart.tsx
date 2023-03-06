@@ -1,4 +1,6 @@
 import {
+  IonCard,
+  IonCardContent,
   IonButton,
   IonContent,
   IonHeader,
@@ -245,12 +247,12 @@ const LeaderBoardChart: React.FC = () => {
   }, []);
 
   return (
-    <IonContent>
-      <div className="leaderboard-container">
-        <IonHeader className="title">
-          <IonTitle>Leaderboard</IonTitle>
-        </IonHeader>
-        <div className="button-container">
+    <IonCard>
+      <IonCardContent>
+      <div className='leaderboard-container'>
+        <IonHeader className='title'>
+          <IonTitle>Leaderboard</IonTitle></IonHeader>
+        <div className='button-container'>
           <IonButton
             onClick={() => {
               dataType = 'individual';
@@ -282,7 +284,8 @@ const LeaderBoardChart: React.FC = () => {
           )}
         </IonContent>
       </div>
-    </IonContent>
+    </IonCardContent>
+    </IonCard>
   );
 };
 
