@@ -19,19 +19,17 @@ import {
   IonTitle,
   RefresherEventDetail
 } from '@ionic/react';
-import './profile.css';
 import { Route } from 'react-router-dom';
 import { auth, FirestoreDB, storage } from '../../firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, onSnapshot } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import newPassword from './newPassword';
 import AuthContext from '../../store/auth-context';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
-import { updateDoc } from 'firebase/firestore';
 import CalendarLeafs from '../../components/CalendarLeafs';
-import { onSnapshot } from 'firebase/firestore';
+import './profile.css';
 
 const Profile: React.FC = () => {
   const history = useHistory();
@@ -53,26 +51,23 @@ const Profile: React.FC = () => {
         doc(FirestoreDB, 'users', auth.currentUser.email as string),
         (doc: any) => {
           if (doc.exists()) {
-            console.log('Profile page updated');
-            GetRecords();
+            GetRecords(doc.data());
           }
         }
       );
       return () => {
         unsubscribe();
       };
+    } else {
+      history.push('/login');
     }
   }, [ctx.user]);
 
-  async function GetRecords(): Promise<void> {
+  async function GetRecords(userData: any): Promise<void> {
     if (ctx.user === null) {
-      alert('You are not logged in!');
-      history.push('/login');
+      history.push('/login'); // if the user is not logged in, redirect to login page
       return;
     }
-    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-    const dbSnap = await getDoc(dbRef);
-    const userData = dbSnap.data();
     setProfilePic(userData.profile_pic);
     setName(userData.name);
     setEmail(userData.email);
@@ -144,7 +139,6 @@ const Profile: React.FC = () => {
   // handle refresher
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
-    GetRecords(); // Refresh data
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 

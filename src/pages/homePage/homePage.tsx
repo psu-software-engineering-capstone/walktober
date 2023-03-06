@@ -57,10 +57,11 @@ const HomePage: React.FC = () => {
           }
         }
       );
-
       return () => {
         unsubscribe();
       };
+    } else {
+      history.push('/login');
     }
   }, [ctx.user]);
 
