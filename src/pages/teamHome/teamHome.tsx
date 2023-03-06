@@ -124,6 +124,7 @@ const TeamHome: React.FC = () => {
     }
     setUserTotalSteps(userData.totalStep);
     setIsLeader(userData.team_leader);
+    setChannelId(channelId);
     const teamRef = doc(FirestoreDB, 'teams', ctx.team); // get team reference
     setTeamRef(teamRef); // set team reference
     setProfilePic(teamData.profile_pic);
