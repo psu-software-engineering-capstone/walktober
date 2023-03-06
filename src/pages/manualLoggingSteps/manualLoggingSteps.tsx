@@ -21,7 +21,6 @@ import {
 } from '@ionic/react';
 import { auth, FirestoreDB } from '../../firebase';
 import { doc, getDoc, updateDoc, onSnapshot } from 'firebase/firestore';
-import { useHistory } from 'react-router';
 import AuthContext from '../../store/auth-context';
 import NavBar from '../../components/NavBar';
 import { Health } from '@awesome-cordova-plugins/health';
@@ -33,8 +32,6 @@ const ManualSteps: React.FC = () => {
     date: string;
     steps: number;
   }
-
-  const history = useHistory();
 
   const ctx = useContext(AuthContext);
 
@@ -58,10 +55,6 @@ const ManualSteps: React.FC = () => {
   // update the data when the page loads
   // update the data when the data is updated
   useEffect(() => {
-    if (ctx.user === null) {
-      history.push('/login');
-      return;
-    }
     const unsubscribe = onSnapshot(doc(FirestoreDB, 'users', auth.currentUser.email as string), (doc: any) => {
         if (doc.exists()) {
           setUserData(doc.data());
@@ -403,11 +396,6 @@ const ManualSteps: React.FC = () => {
 
   // update current user's total steps and steps by date
   const updateCurrentUser = async (stepsByDate: any, totalStep: any) => {
-    if (ctx.user === null) {
-      alert('You are not logged in!');
-      history.push('/login');
-      return;
-    }
     const currentUserRef = doc(
       FirestoreDB,
       'users',
@@ -432,11 +420,6 @@ const ManualSteps: React.FC = () => {
 
   // update team total steps and average steps
   const updateTeam = async (currentTotalSteps: any, totalStep: any) => {
-    if (ctx.user === null) {
-      alert('You are not logged in!');
-      history.push('/login');
-      return;
-    }
     if (ctx.team === '') {
       return; // user is not in a team
     }

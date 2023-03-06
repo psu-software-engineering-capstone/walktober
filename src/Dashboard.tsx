@@ -31,6 +31,7 @@ import StepsCalculator from './pages/stepsCalculator/stepsCalculator';
 import AuthContext from './store/auth-context';
 import landing404 from './pages/404landing/landing404';
 import Results from './pages/results/results';
+import ProtectedRoutes from './ProtectedRoutes';
 
 /* Theming */
 import './theme/app.scss';
@@ -48,21 +49,17 @@ const Dashboard: React.FC = () => {
     <IonTabs>
       <IonRouterOutlet>
         <Route path="/" component={landing404}></Route>
-        <Route exact path="/app/home" component={HomePage} />
-        <Route exact path="/app/profile" component={Profile} />
-        <Route
-          exact
-          path="/app/profile/passwordChange"
-          component={newPassword}
-        />
-        <Route exact path="/app/manualsteps" component={ManualSteps} />
-        <Route exact path="/app/stepscalc" component={StepsCalculator} />
-        <Route exact path="/app/healthapp" component={HealthApp} />
-        <Route exact path="/app/teamcreation" component={TeamCreation} />
-        <Route exact path="/app/team" component={TeamHome} />
-        <Route exact path="/app/team/join" component={TeamJoin} />
-        <Route exact path="/app/admin" component={Admin} />
-        <Route exact path="/app/results" component={Results} />
+        <Route exact path="/app/home" component={ctx.user ? HomePage : ProtectedRoutes} />
+        <Route exact path="/app/profile" component={ctx.user ? Profile : ProtectedRoutes} />
+        <Route exact path="/app/profile/passwordChange" component={ctx.user ? newPassword : ProtectedRoutes} />
+        <Route exact path="/app/manualsteps" component={ctx.user ? ManualSteps : ProtectedRoutes} />
+        <Route exact path="/app/stepscalc" component={ctx.user ? StepsCalculator : ProtectedRoutes} />
+        <Route exact path="/app/healthapp" component={ctx.user ? HealthApp : ProtectedRoutes} />
+        <Route exact path="/app/teamcreation" component={ctx.user ? TeamCreation : ProtectedRoutes} />
+        <Route exact path="/app/team" component={ctx.user ? TeamHome : ProtectedRoutes} />
+        <Route exact path="/app/team/join" component={ctx.user ? TeamJoin : ProtectedRoutes} />
+        <Route exact path="/app/admin" component={ctx.user ? Admin : ProtectedRoutes} />
+        <Route exact path="/app/results" component={ctx.user ? Results : ProtectedRoutes} />
         <Route exact path="/app">
           <Redirect to="/app/home" />
         </Route>

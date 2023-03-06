@@ -48,10 +48,6 @@ const HomePage: React.FC = () => {
   // update profile data when the page loads
   // update profile data when the profile data changes
   useEffect(() => {
-    if (ctx.user === null) {
-      history.push('/login');
-      return;
-    }
     const unsubscribe = onSnapshot(
       doc(FirestoreDB, 'users', auth.currentUser.email as string),
       (doc: any) => {

@@ -32,9 +32,9 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import AdminContext from '../../store/admin-context';
 import AuthContext from '../../store/auth-context';
 import TeamLeaderBoardChart from '../../components/LeaderBoard/TeamLeaderboardChart';
-import './teamHome.scss';
 import { ChannelData } from "../sampleData";
 import WidgetBot from '@widgetbot/react-embed';
+import './teamHome.scss';
 
 const TeamHome: React.FC = () => {
   interface memberData {
@@ -270,10 +270,6 @@ const TeamHome: React.FC = () => {
   // update the data when the page loads
   // update the data when the team gets updated
   useEffect(() => {
-    if (ctx.user === null) {
-      history.push('/login');
-      return;
-    }
     if (ctx.team === '') {
       history.push('/app/team/join');
       return;
@@ -282,7 +278,6 @@ const TeamHome: React.FC = () => {
       doc(FirestoreDB, 'teams', ctx.team),
       (doc: any) => {
         if (doc.data() !== undefined) {
-          console.log('Team home page updated');
           getData(doc.data());
         }
       }
