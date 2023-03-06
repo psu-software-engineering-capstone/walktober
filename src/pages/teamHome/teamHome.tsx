@@ -148,7 +148,6 @@ const TeamHome: React.FC = () => {
     ); // sort the array
     setTeamMembers(emailList); // set the mates array
     const today = new Date();
-    today.setDate(today.getDate() - 1);
     console.log(today, adData.teamDate, today.toISOString().slice(0, 10), adData);
     if (adData.teamDate < today.toISOString().slice(0, 10)) {
       setValid(true);

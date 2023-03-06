@@ -137,6 +137,7 @@ function PostEventSurvey() {
                   <IonInput></IonInput>
               </IonItem>
             </IonList>
+
             <h2 className="survey-divider">
               <span></span>
             </h2>
