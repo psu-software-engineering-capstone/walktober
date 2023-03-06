@@ -17,7 +17,6 @@ import {
 } from '@ionic/react';
 import {
   getDoc,
-  getDocs,
   collection,
   doc,
   updateDoc,
@@ -65,27 +64,17 @@ const TeamJoin: React.FC = () => {
 
   // join the team
   const joined = async () => {
-    if (ctx.user === null) { // if the user is not logged in
-      alert('You need to be logged in to join a team');
-      history.push('/login');
-      return;
-    }
-    if (ctx.team !== '') { // if the user is already in a team
-      alert('You are already in a team');
-      history.push('/app/team');
-      return;
-    }
-    const currentUserRef = doc( // make a reference to the user's document
+    const currentUserRef = doc(
       FirestoreDB,
       'users',
       auth.currentUser.email as string
-    );
-    const userSnap = await getDoc(currentUserRef); // get user document
-    const userData = userSnap.data(); // get all the data of the user
-    const teamRef = doc(FirestoreDB, 'teams', joinTeam); // make a reference to the team document
-    const teamSnap = await getDoc(teamRef); // get team document
-    const teamData = teamSnap.data(); // get team data
-    if (teamData.members.length >= 1) {
+    ); // get user reference
+    const userSnap = await getDoc(currentUserRef); // get user data
+    const userData = userSnap.data(); // set user data
+    const teamRef = doc(FirestoreDB, 'teams', joinTeam); // get team reference
+    const teamSnap = await getDoc(teamRef); // get team data
+    const teamData = teamSnap.data(); // set team data
+    if (teamData.members.length >= 1) { // if there are members in the team
       await updateDoc(currentUserRef, {
         team: joinTeam
       }); // update the user's document
@@ -96,7 +85,7 @@ const TeamJoin: React.FC = () => {
           (teamData.totalStep + userData.totalStep) /
           (teamData.members.length + 1)
       }); // update the teams members, their total steps, and the new average steps
-    } else {
+    } else { // if there are no members in the team
       await updateDoc(currentUserRef, {
         team: joinTeam,
         team_leader: true
@@ -115,16 +104,6 @@ const TeamJoin: React.FC = () => {
 
   // join the team
   const toJoin = () => {
-    if (ctx.user === null) {
-      alert('You are not logged in');
-      history.push('/login'); // if the user is not logged in, move them to the login page
-      return;
-    }
-    if (ctx.team !== '') {
-      alert('You are already in a team');
-      history.push('/app/team'); // if the user is already in a team, move them to the team page
-      return;
-    }
     if (joinTeam === '') {
       alert('No team name has been entered as of yet');
       return; // team name cannot be empty
@@ -164,7 +143,6 @@ const TeamJoin: React.FC = () => {
   // handle refresher
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
-    getData(); // get the data from the database
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 
@@ -232,101 +210,81 @@ const TeamJoin: React.FC = () => {
   };
 
   // get the data from the database
-  async function getData() {
-    if (ctx.user === null) {
-      alert('You are not logged in');
-      history.push('/login'); // if the user is not logged in, move them to the login page
-      return;
-    }
-    if (ctx.team !== '') {
-      alert('You are already in a team');
-      history.push('/app/team'); // if the user is already in a team, move them to the team page
-      return;
-    }
-    const indData: Array<teamData> = []; // temp array for the teams data
-    const groupNames: Array<selectFormat> = []; // need the group names to look thorugh
+  async function getData(teamList: any) {
+    const teams: Array<teamData> = []; // array of teams
+    const teamNames: Array<selectFormat> = []; // array of team names
     const today = new Date();
     const deadline = new Date(adData.teamDate);
-    if (deadline < today) {
+    if (deadline < today) { // if the deadline has passed
       setValid(true);
     } else {
       setValid(false);
     }
-    const querySnapshot = await getDocs(collection(FirestoreDB, 'teams')); //grab all the team documents
-    querySnapshot.forEach((doc: any) => {
+    teamList.forEach((doc: any) => {
       if (doc.data().members.length < adData.maxSize) {
-        // this is deteremined by the admins
         const allNames: selectFormat = {
-          // this was to create an array if we used the selection drop down method
+          // for selection drop down method
           text: doc.data().name,
           value: doc.data().name
         };
-        groupNames.push(allNames); // push it to the overall array
+        teamNames.push(allNames); // push the data to the array
         if (doc.data().status === '1') {
           // private team
-          const tem: teamData = {
+          const temp: teamData = {
             name: doc.data().name as string,
             leader: doc.data().leader as string,
             size: doc.data().members.length as number,
             type: 'Private',
             password: doc.data().password
           };
-          indData.push(tem); // push the data to the array
+          teams.push(temp); // push the data to the array
         } else {
           // public team
-          const tem: teamData = {
+          const temp: teamData = {
             name: doc.data().name as string,
             leader: doc.data().leader as string,
             size: doc.data().members.length as number,
             type: 'Public',
             password: doc.data().password
           };
-          indData.push(tem);
+          teams.push(temp); // push the data to the array
         }
       } else {
         console.log(doc.data().name, ' is full'); // if the team is full
       }
     });
-    indData.sort((a: any, b: any) =>
+    teams.sort((a: any, b: any) =>
       a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
     );
-    setTeams(indData);
+    setTeams(teams); // set the teams
   }
 
   // update the data when the page loads
   // update the data when the teams are added, removed, or modified
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(FirestoreDB, 'teams'), (snapshot: any) => {
-      snapshot.docChanges().forEach((change: any) => {
-        if (change.type === 'added') {
-          console.log('New Team: ', change.doc.data());
-        }
-        if (change.type === 'modified') {
-          console.log('Modified Team: ', change.doc.data());
-        }
-        if (change.type === 'removed') {
-          console.log('Removed Team: ', change.doc.data());
-        }
-      });
-      getData();
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
-  // move to the team creation page
-  const moveToCreateTeam = () => {
     if (ctx.user === null) {
       alert('You are not logged in');
       history.push('/login'); // if the user is not logged in, move them to the login page
       return;
     }
     if (ctx.team !== '') {
-      alert('You are already in a team');
       history.push('/app/team'); // if the user is already in a team, move them to the team page
       return;
     }
+    const unsubscribe = onSnapshot(collection(FirestoreDB, 'teams'), (collection: any) => {
+      const temp: any[] = [];
+      collection.forEach((doc: any) => {
+        temp.push(doc);
+      });
+      getData(temp);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [ctx.user, ctx.team]);
+
+  // move to the team creation page
+  const moveToCreateTeam = () => {
     history.push('/app/teamcreation');
   };
 
