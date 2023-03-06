@@ -47,28 +47,25 @@ const Profile: React.FC = () => {
   // update profile data when the page loads
   // update profile data when the profile data changes
   useEffect(() => {
-    if (ctx.user !== null) {
-      const unsubscribe = onSnapshot(
-        doc(FirestoreDB, 'users', auth.currentUser.email as string),
-        (doc: any) => {
-          if (doc.exists()) {
-            GetRecords(doc.data());
-          }
-        }
-      );
-      return () => {
-        unsubscribe();
-      };
-    } else {
-      history.push('/login');
-    }
-  }, [ctx.user]);
-
-  async function GetRecords(userData: any): Promise<void> {
     if (ctx.user === null) {
-      history.push('/login'); // if the user is not logged in, redirect to login page
+      history.push('/login');
       return;
     }
+    const unsubscribe = onSnapshot(
+      doc(FirestoreDB, 'users', auth.currentUser.email as string),
+      (doc: any) => {
+        if (doc.exists()) {
+          GetRecords(doc.data());
+        }
+      }
+    );
+    return () => {
+      unsubscribe();
+    };
+  }, [ctx.user]);
+
+  // set the data
+  async function GetRecords(userData: any): Promise<void> {
     setProfilePic(userData.profile_pic);
     setName(userData.name);
     setEmail(userData.email);
@@ -83,12 +80,14 @@ const Profile: React.FC = () => {
     );
   }
 
+  // handle image change
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setPhoto(e.target.files[0]);
     }
   };
 
+  // handle image upload
   const handleSubmit = async () => {
     const imageRef = ref(storage, auth.currentUser.email + '.png');
     await uploadBytes(imageRef, photo);
@@ -106,6 +105,7 @@ const Profile: React.FC = () => {
       });
   };
 
+  // change password
   const changePassword = () => {
     if (isGoogleUser) {
       return;
@@ -113,6 +113,7 @@ const Profile: React.FC = () => {
     history.push('/app/profile/passwordChange');
   };
 
+  // display team
   function teamDisplay() {
     if (team === '') {
       return (
@@ -129,6 +130,7 @@ const Profile: React.FC = () => {
     }
   }
 
+  // sign out
   const signOut = async () => {
     try {
       await auth.signOut();

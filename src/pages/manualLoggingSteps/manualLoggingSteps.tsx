@@ -58,18 +58,19 @@ const ManualSteps: React.FC = () => {
   // update the data when the page loads
   // update the data when the data is updated
   useEffect(() => {
-    if (ctx.user !== null) {
-      const unsubscribe = onSnapshot(doc(FirestoreDB, 'users', auth.currentUser.email as string), (doc: any) => {
-          if (doc.exists()) {
-            console.log('Manual logging page updated');
-            getRecordsFromDB(); // get records from database
-          }
-        }
-      );
-      return () => {
-        unsubscribe();
-      };
+    if (ctx.user === null) {
+      history.push('/login');
+      return;
     }
+    const unsubscribe = onSnapshot(doc(FirestoreDB, 'users', auth.currentUser.email as string), (doc: any) => {
+        if (doc.exists()) {
+          getRecordsFromDB(); // get records from database
+        }
+      }
+    );
+    return () => {
+      unsubscribe();
+    };
   }, [ctx.user]);
 
   useEffect(() => {
