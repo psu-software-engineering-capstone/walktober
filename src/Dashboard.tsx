@@ -30,14 +30,13 @@ import Admin from './pages/admin/admin';
 import StepsCalculator from './pages/stepsCalculator/stepsCalculator';
 import AuthContext from './store/auth-context';
 import landing404 from './pages/404landing/landing404';
-import AdminSteps from './pages/adminSteps/adminSteps';
+import Results from './pages/results/results';
 
 /* Theming */
 import './theme/app.scss';
 
 /* Context */
 import { useContext } from 'react';
-
 
 const Dashboard: React.FC = () => {
   const ctx = useContext(AuthContext);
@@ -63,7 +62,7 @@ const Dashboard: React.FC = () => {
         <Route exact path="/app/team" component={TeamHome} />
         <Route exact path="/app/team/join" component={TeamJoin} />
         <Route exact path="/app/admin" component={Admin} />
-        <Route exact path="/app/adminSteps" component={AdminSteps} />
+        <Route exact path="/app/results" component={Results} />
         <Route exact path="/app">
           <Redirect to="/app/home" />
         </Route>

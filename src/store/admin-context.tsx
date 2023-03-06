@@ -9,7 +9,9 @@ const AdminContext = createContext({
   maxSize: 0,
   minSize: 0,
   regDate: '',
-  teamDate: ''
+  teamDate: '', 
+  startDate: '', 
+  endDate: ''
 });
 
 export const useAdminContext = () => useContext(AdminContext);
@@ -19,6 +21,8 @@ export const AdminContextProvider: React.FC<{ children: any }> = ( props: any ) 
   const [minSize, setMin] = useState(0);
   const [regDate, setRegDate] = useState("");
   const [teamDate, setTeamDate] = useState("");
+  const [startDate, setStart] = useState("");
+  const [endDate, setEnd] = useState("");
   const [complete, setComplete] = useState(false);
 
   // update admin team settings whenever there is an update in firestore database
@@ -28,6 +32,8 @@ export const AdminContextProvider: React.FC<{ children: any }> = ( props: any ) 
       setMin(doc.data().min_team_size as number);
       setRegDate(doc.data().registration_deadline);
       setTeamDate(doc.data().team_creation_due);
+      setStart(doc.data().event_start_date);
+      setEnd(doc.data().event_end_date);
       setComplete(true);
     });
     return () => {
@@ -36,7 +42,7 @@ export const AdminContextProvider: React.FC<{ children: any }> = ( props: any ) 
   }, []);
 
   return (
-    <AdminContext.Provider value={{ maxSize, minSize, regDate, teamDate }}>
+    <AdminContext.Provider value={{ endDate, maxSize, minSize, regDate, startDate, teamDate }}>
       {complete && props.children}
     </AdminContext.Provider>
   );

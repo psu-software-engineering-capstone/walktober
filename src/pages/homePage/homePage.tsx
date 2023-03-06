@@ -41,6 +41,7 @@ const HomePage: React.FC = () => {
   const history = useHistory();
   const [badges, setBadges] = useState(Array<badgeOutline>);
   const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
+  const [stepGoal, setStepGoal] = useState(0);
 
   const ctx = useContext(AuthContext); // auth context
 
@@ -76,11 +77,18 @@ const HomePage: React.FC = () => {
     const dbSnap = await getDoc(dbRef);
     const userData = dbSnap.data();
     const stepsByDate = userData.stepsByDate;
+    const stepGoal = userData.step_goal;
+
     //Add today's step count
-    const today = new Date();
-    if (stepsByDate[0].date === today.toISOString().slice(0, 10)) {
+    const today = new Date().toISOString().slice(0, 10);
+    if (stepsByDate[0].date == today) {
       setSteps(stepsByDate[0].steps);
     }
+    else if (stepsByDate[stepsByDate.length - 1].date == today) {
+      setSteps(stepsByDate[stepsByDate.length - 1].steps);
+      console.log(today, stepsByDate[stepsByDate.length - 1]);
+    }
+
     // Create an array of the last seven dates (including today)
     const pastSevenDaysDates = [];
     for (let i = 1; i < 8; i++) {
@@ -100,6 +108,7 @@ const HomePage: React.FC = () => {
       }
     });
     setPastSevenDaysSteps(pastSevenDays.reverse());
+    setStepGoal(stepGoal);
   };
 
   // handle refresher
@@ -156,7 +165,7 @@ const HomePage: React.FC = () => {
               className="personalProgress"
             >
               {pastSevenDaysSteps.length > 1 ? (
-                <ProgressChart data={pastSevenDaysSteps} />
+                <ProgressChart data={pastSevenDaysSteps} todayStep = {steps} stepGoal = {stepGoal} />
               ) : (
                 ' '
               )}

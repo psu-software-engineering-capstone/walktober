@@ -15,26 +15,12 @@ import {
 } from '@ionic/react';
 import { useContext, useState } from 'react';
 import { auth, FirestoreDB } from '../../firebase';
-import { doc, getDoc, setDoc, updateDoc, Timestamp } from 'firebase/firestore';
+import AdminContext from '../../store/admin-context';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import AuthContext from '../../store/auth-context';
 import './teamCreation.css';
-
-interface Timestamp {
-  seconds: number;
-  nanoseconds: number;
-
-  compareTo(other: Timestamp): number;
-}
-
-Timestamp.prototype.compareTo = function (other: Timestamp): number {
-  if (this.seconds === other.seconds) {
-    return this.nanoseconds - other.nanoseconds;
-  } else {
-    return this.seconds - other.seconds;
-  }
-};
 
 const TeamCreation: React.FC = () => {
   const [newTeamName, setNewTeamName] = useState('');
@@ -45,7 +31,9 @@ const TeamCreation: React.FC = () => {
 
   const history = useHistory(); // for routing
 
-  // create a team
+  const adData = useContext(AdminContext); // admin context
+
+  // create a new team
   const createTeam = async () => {
     if (ctx.user == null) {
       alert('You are not logged in');
@@ -79,13 +67,11 @@ const TeamCreation: React.FC = () => {
       alert('You must create a password for a private team!');
       return;
     }
-    const currentDate: Timestamp = Timestamp.now();
-    const adminRef = doc(FirestoreDB, 'admin', 'admin');
-    const adminSnap = await getDoc(adminRef);
-    const teamCreationDueDate: Timestamp = adminSnap.data().team_creation_due;
-    if (currentDate.compareTo(teamCreationDueDate) > 0) {
+    const currentDate: Date = new Date();
+    const teamCreationDeadline: Date = new Date(adData.teamDate);
+    if (currentDate > teamCreationDeadline) {
       alert(
-        `The team creation deadline is: ${teamCreationDueDate}. You cannot create a team now.`
+        `The team creation deadline is: ${teamCreationDeadline}. You cannot create a team now.`
       );
       return;
     }
