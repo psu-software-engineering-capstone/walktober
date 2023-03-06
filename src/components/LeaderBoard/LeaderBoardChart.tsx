@@ -213,17 +213,10 @@ const LeaderBoardChart: React.FC = () => {
           profile_pic: doc.data().profile_pic as string,
           avg_steps: doc.data().avg_steps as number
         };
-        const today = new Date(Date());
-        const maxDate = new Date(adData.teamDate);
-        console.log(
-          adData.maxSize,
-          adData.minSize,
-          adData.regDate,
-          adData.teamDate
-        );
-        if (maxDate < today) {
+        const today = new Date();
+        const deadline = new Date(adData.teamDate);
+        if (deadline < today) {
           const membersLength = doc.data().members.length;
-          console.log(membersLength, adData.minSize);
           if (adData.minSize <= membersLength) {
             indData.push(team);
           }

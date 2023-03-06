@@ -46,7 +46,6 @@ const TeamHome: React.FC = () => {
 
   const [leaderboardData, setLeaderboardData] = useState(Array<memberData>);
   const [teamMembers, setTeamMembers] = useState(Array<string>);
-  const [teamName, setTeamName] = useState('');
   const [profilePic, setProfilePic] = useState('');
   const [userReference, setUserRef] = useState('');
   const [teamReference, setTeamRef] = useState('');
@@ -56,12 +55,13 @@ const TeamHome: React.FC = () => {
   const [photo, setPhoto] = useState<any>(null);
   const [userTotalSteps, setUserTotalSteps] = useState(0);
   const [teamTotalSteps, setTeamTotalSteps] = useState(0);
-  const adData = useContext(AdminContext);
 
-  const history = useHistory();
+  const history = useHistory(); // for routing
 
-  const ctx = useContext(AuthContext);
+  const ctx = useContext(AuthContext); // auth context
+  const adData = useContext(AdminContext); // admin context
 
+  // display team members
   const DisplayTeam = (team: memberData[]): any => {
     if (team.length > 0) {
       return (
@@ -69,10 +69,7 @@ const TeamHome: React.FC = () => {
           <IonGrid>
             <IonRow class="top">
               <IonCol
-                sizeSm="12"
-                sizeLg="8"
-                sizeMd="6"
-                sizeXs="12"
+                size="12"
                 align-self-center="true"
                 class="header-col admin-col"
               >
@@ -80,19 +77,19 @@ const TeamHome: React.FC = () => {
               </IonCol>
             </IonRow>
             <IonRow class="header-row">
-              <IonCol sizeMd="4" size="5" class="header-col admin-col">
+              <IonCol size="6" class="header-col admin-col">
                 Members Name
               </IonCol>
-              <IonCol sizeMd="4" size="5" class="header-col admin-col">
+              <IonCol size="6" class="header-col admin-col">
                 Members email
               </IonCol>
             </IonRow>
             {team.map((item: { name: string; email: string }) => (
               <IonRow key={Math.random()}>
-                <IonCol sizeMd="4" size="5" class="admin-col">
+                <IonCol size="6" class="admin-col">
                   {item.name}
                 </IonCol>
-                <IonCol sizeMd="4" size="5" class="admin-col">
+                <IonCol size="6" class="admin-col">
                   {item.email}
                 </IonCol>
               </IonRow>
@@ -103,27 +100,21 @@ const TeamHome: React.FC = () => {
     }
   };
 
-  async function getData() {
-    if (ctx.team === '') {
-      history.push('/app/team/join'); // if the user is not in a team, redirect them to the team join page
-      return;
-    }
+  // get the data from the database
+  async function getData(teamData: any) {
     const members: Array<memberData> = [];
     const emailList: Array<string> = [];
     const currentUserRef = doc(
-      // reference the current user document
       FirestoreDB,
       'users',
       auth.currentUser.email as string
-    );
+    ); // get user reference
     setUserRef(currentUserRef);
     const userSnap = await getDoc(currentUserRef); // grab the user document
     const userData = userSnap.data(); // get the user data
-    const teamName = userData.team; // get the team name
     const dbChannelId =
-      ChannelData.find(c => c.team == teamName)?.id; // get the team channel id
+      ChannelData.find(c => c.team == ctx.team)?.id; // get the team channel id
     let channelId = "";
-
     // if channel not set up with id in database, default to #general
     if(dbChannelId) {
       channelId = dbChannelId;
@@ -131,22 +122,17 @@ const TeamHome: React.FC = () => {
     else {
       channelId = "1068966009106600110"; // #general channel id
     }
-
     setUserTotalSteps(userData.totalStep);
-    setTeamName(teamName);
     setIsLeader(userData.team_leader);
     setChannelId(channelId);
-    const teamRef = doc(FirestoreDB, 'teams', teamName); // reference team document
-    setTeamRef(teamRef);
-    
-    const teamSnapshot = await getDoc(teamRef); // grab the team document
-    const teamData = teamSnapshot.data(); // get the team data
+    const teamRef = doc(FirestoreDB, 'teams', ctx.team); // get team reference
+    setTeamRef(teamRef); // set team reference
     setProfilePic(teamData.profile_pic);
     setTeamTotalSteps(teamData.totalStep);
     // get all the users in the team
-    const usersRef = collection(FirestoreDB, 'users');
-    const q = query(usersRef, where('team', '==', ctx.team));
-    const querySnapshot = await getDocs(q);
+    const usersRef = collection(FirestoreDB, 'users'); // get all users reference
+    const q = query(usersRef, where('team', '==', ctx.team)); // query team members
+    const querySnapshot = await getDocs(q); // get team members data
     querySnapshot.forEach((doc: any) => {
       const member: memberData = {
         name: doc.data().name as string,
@@ -157,31 +143,29 @@ const TeamHome: React.FC = () => {
       emailList.push(member.email);
       members.push(member);
     });
-
-    // set the data
     setLeaderboardData(
       members.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
-    ); // sort the array
-    setTeamMembers(emailList); // set the mates array
+    ); // set leaderboard data
+    setTeamMembers(emailList); // set team members
     const today = new Date();
-    console.log(today, adData.teamDate, today.toISOString().slice(0, 10), adData);
-    if (adData.teamDate < today.toISOString().slice(0, 10)) {
+    const deadline = new Date(adData.teamDate);
+    if (deadline < today) { // deadline check
       setValid(true);
-      console.log('true');
     } else {
       setValid(false);
-      console.log('false');
     }
   }
 
+  // handle image change
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setPhoto(e.target.files[0]);
     }
   };
 
+  // handle image upload
   const handleSubmit = async () => {
-    const imageRef = ref(storage, teamName + '.png');
+    const imageRef = ref(storage, ctx.team + '.png');
     await uploadBytes(imageRef, photo);
     const photoURL = await getDownloadURL(imageRef);
     await updateDoc(teamReference, { profile_pic: photoURL })
@@ -193,6 +177,7 @@ const TeamHome: React.FC = () => {
       });
   };
 
+  // display the change picture button if the user is the leader
   function changePicture() {
     if (isLeader === true) {
       return (
@@ -217,7 +202,6 @@ const TeamHome: React.FC = () => {
   // handle refresher
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
-    getData(); // Refresh data
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 
@@ -236,7 +220,7 @@ const TeamHome: React.FC = () => {
     if (isLeader === true) {
       // if the user is the only member of the team
       if (teamMembers.length === 1) {
-        await deleteDoc(doc(FirestoreDB, 'teams', teamName)) // delete the team document
+        await deleteDoc(doc(FirestoreDB, 'teams', ctx.team)) // delete the team document
           .then(() => {
             console.log('Team deleted');
           })
@@ -286,20 +270,29 @@ const TeamHome: React.FC = () => {
   // update the data when the page loads
   // update the data when the team gets updated
   useEffect(() => {
-    if (ctx.team !== '') {
-      const unsubscribe = onSnapshot(
-        doc(FirestoreDB, 'teams', ctx.team),
-        (doc: any) => {
-          if (doc.data() !== undefined) {
-            console.log('Team home page updated');
-            getData();
-          }
-        }
-      );
-      return unsubscribe;
+    if (ctx.user === null) {
+      history.push('/login');
+      return;
     }
-  }, [ctx.team]);
+    if (ctx.team === '') {
+      history.push('/app/team/join');
+      return;
+    } 
+    const unsubscribe = onSnapshot(
+      doc(FirestoreDB, 'teams', ctx.team),
+      (doc: any) => {
+        if (doc.data() !== undefined) {
+          console.log('Team home page updated');
+          getData(doc.data());
+        }
+      }
+    );
+    return () => {
+      unsubscribe();
+    };
+  }, [ctx.user, ctx.team]);
 
+  // team deadline verification
   function verifyCount() {
     if (buttonValid) {
       if (teamMembers.length < adData.minSize) {
@@ -317,7 +310,7 @@ const TeamHome: React.FC = () => {
     <IonPage>
       <IonHeader>
         <NavBar>
-          <IonTitle> {teamName} </IonTitle>
+          <IonTitle> {ctx.team} </IonTitle>
         </NavBar>
       </IonHeader>
       <IonContent>
@@ -354,8 +347,8 @@ const TeamHome: React.FC = () => {
                   {' '}
                 </IonImg>
               </IonItem>
-              <IonItem> {teamName} Profile Picture </IonItem>
-              <IonItem> {changePicture()} </IonItem>
+              <IonItem> {ctx.team} Profile Picture </IonItem>
+              {changePicture()}
               <IonItem>
                 <IonButton onClick={leaveTeam}> Leave team </IonButton>{' '}
               </IonItem>

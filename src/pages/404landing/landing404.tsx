@@ -2,27 +2,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable multiline-ternary */
-import { useState, useContext, useEffect } from 'react';
 import {
   IonContent,
   IonHeader,
-  IonLabel,
   IonPage,
   IonTitle,
-  IonIcon,
-  IonGrid,
-  IonRow,
-  IonCol,
   IonCard,
   IonCardHeader,
   IonCardContent
-  // useIonToast
 } from '@ionic/react';
-import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
-import './landing404.css';
-import AuthContext from '../../store/auth-context';
 import HomePage from '../homePage/homePage';
+import './landing404.css';
 
 const landing404: React.FC = () => {
   return (

@@ -19,19 +19,17 @@ import {
   IonTitle,
   RefresherEventDetail
 } from '@ionic/react';
-import './profile.css';
 import { Route } from 'react-router-dom';
 import { auth, FirestoreDB, storage } from '../../firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, onSnapshot } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import newPassword from './newPassword';
 import AuthContext from '../../store/auth-context';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
-import { updateDoc } from 'firebase/firestore';
 import CalendarLeafs from '../../components/CalendarLeafs';
-import { onSnapshot } from 'firebase/firestore';
+import './profile.css';
 
 const Profile: React.FC = () => {
   const history = useHistory();
@@ -49,29 +47,25 @@ const Profile: React.FC = () => {
   // update profile data when the page loads
   // update profile data when the profile data changes
   useEffect(() => {
-    if (ctx.user !== null) {
-      const unsubscribe = onSnapshot(
-        doc(FirestoreDB, 'users', auth.currentUser.email as string),
-        (doc: any) => {
-          if (doc.exists()) {
-            console.log('Profile page updated');
-            GetRecords();
-          }
-        }
-      );
-      return unsubscribe;
-    }
-  }, [ctx.user]);
-
-  async function GetRecords(): Promise<void> {
     if (ctx.user === null) {
-      alert('You are not logged in!');
       history.push('/login');
       return;
     }
-    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-    const dbSnap = await getDoc(dbRef);
-    const userData = dbSnap.data();
+    const unsubscribe = onSnapshot(
+      doc(FirestoreDB, 'users', auth.currentUser.email as string),
+      (doc: any) => {
+        if (doc.exists()) {
+          GetRecords(doc.data());
+        }
+      }
+    );
+    return () => {
+      unsubscribe();
+    };
+  }, [ctx.user]);
+
+  // set the data
+  async function GetRecords(userData: any): Promise<void> {
     setProfilePic(userData.profile_pic);
     setName(userData.name);
     setEmail(userData.email);
@@ -86,12 +80,14 @@ const Profile: React.FC = () => {
     );
   }
 
+  // handle image change
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setPhoto(e.target.files[0]);
     }
   };
 
+  // handle image upload
   const handleSubmit = async () => {
     const imageRef = ref(storage, auth.currentUser.email + '.png');
     await uploadBytes(imageRef, photo);
@@ -109,6 +105,7 @@ const Profile: React.FC = () => {
       });
   };
 
+  // change password
   const changePassword = () => {
     if (isGoogleUser) {
       return;
@@ -116,6 +113,7 @@ const Profile: React.FC = () => {
     history.push('/app/profile/passwordChange');
   };
 
+  // display team
   function teamDisplay() {
     if (team === '') {
       return (
@@ -132,6 +130,7 @@ const Profile: React.FC = () => {
     }
   }
 
+  // sign out
   const signOut = async () => {
     try {
       await auth.signOut();
@@ -144,7 +143,6 @@ const Profile: React.FC = () => {
   // handle refresher
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
-    GetRecords(); // Refresh data
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 
@@ -212,7 +210,7 @@ const Profile: React.FC = () => {
                 <IonItem>
                   <p>{email}</p>
                 </IonItem>
-                <IonItem>{teamDisplay()}</IonItem>
+                {teamDisplay()}
                 {!isGoogleUser && (
                   <IonItem>
                     <IonButton onClick={changePassword}>

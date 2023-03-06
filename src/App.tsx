@@ -41,14 +41,24 @@ function App() {
       console.log('auth state: logged out');
     } else {
       console.log('auth state: logged in');
-      console.log(`team: ${ctx.team}`);
-      if (ctx.admin === true) {
-        console.log('user type: admin');
-      } else {
-        console.log('user type: regular');
-      }
     }
-  }, [ctx]);
+  }, [ctx.user]);
+
+  useEffect(() => {
+    if (ctx.team === '') {
+      console.log('team state: no team');
+    } else {
+      console.log(`team state: ${ctx.team}`);
+    }
+  }, [ctx.team]);
+
+  useEffect(() => {
+    if (ctx.admin === false) {
+      console.log('admin state: not admin');
+    } else {
+      console.log('admin state: admin');
+    }
+  }, [ctx.admin]);
 
   return (
     <IonApp>

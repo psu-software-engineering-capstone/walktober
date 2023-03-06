@@ -17,12 +17,12 @@ import {
 } from '@ionic/react';
 import {
   getDoc,
-  getDocs,
   collection,
   doc,
   updateDoc,
   arrayUnion,
-  increment
+  increment,
+  onSnapshot
 } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
@@ -32,7 +32,6 @@ import { useHistory } from 'react-router';
 import AuthContext from '../../store/auth-context';
 import AdminContext from '../../store/admin-context';
 import './teamHome.scss';
-import { onSnapshot } from 'firebase/firestore';
 
 const TeamJoin: React.FC = () => {
   interface teamData {
@@ -53,31 +52,29 @@ const TeamJoin: React.FC = () => {
   const [teamPass, setPass] = useState(''); // variable to collect team password
   const [passwordShown, setPasswordShown] = useState(false); // enable visability to see password
   const [allTeams, setTeams] = useState(Array<teamData>); // array of teams from database
-  const [buttonValid, setValid] = useState(false);
-  const adData = useContext(AdminContext);
-  const ctx = useContext(AuthContext);
+  const [buttonValid, setValid] = useState(false); // to check if the button should be enabled or not
+  
+  const adData = useContext(AdminContext); // admin context
+  const ctx = useContext(AuthContext); // auth context
 
+  // toggle password visability
   const togglePasswordVisibility = () => {
-    // can we see the password?
     setPasswordShown(!passwordShown);
   };
 
+  // join the team
   const joined = async () => {
-    if (ctx.user === null) { // if the user is not logged in
-      history.push('/login');
-      return;
-    }
-    const currentUserRef = doc( // make a reference to the user's document
+    const currentUserRef = doc(
       FirestoreDB,
       'users',
       auth.currentUser.email as string
-    );
-    const userSnap = await getDoc(currentUserRef); // get user document
-    const userData = userSnap.data(); // get all the data of the user
-    const teamRef = doc(FirestoreDB, 'teams', joinTeam); // make a reference to the team document
-    const teamSnap = await getDoc(teamRef); // get team document
-    const teamData = teamSnap.data(); // get team data
-    if (teamData.members.length >= 1) {
+    ); // get user reference
+    const userSnap = await getDoc(currentUserRef); // get user data
+    const userData = userSnap.data(); // set user data
+    const teamRef = doc(FirestoreDB, 'teams', joinTeam); // get team reference
+    const teamSnap = await getDoc(teamRef); // get team data
+    const teamData = teamSnap.data(); // set team data
+    if (teamData.members.length >= 1) { // if there are members in the team
       await updateDoc(currentUserRef, {
         team: joinTeam
       }); // update the user's document
@@ -88,7 +85,7 @@ const TeamJoin: React.FC = () => {
           (teamData.totalStep + userData.totalStep) /
           (teamData.members.length + 1)
       }); // update the teams members, their total steps, and the new average steps
-    } else {
+    } else { // if there are no members in the team
       await updateDoc(currentUserRef, {
         team: joinTeam,
         team_leader: true
@@ -105,23 +102,25 @@ const TeamJoin: React.FC = () => {
     history.push('/app/team'); // move to the team page
   };
 
+  // join the team
   const toJoin = () => {
     if (joinTeam === '') {
       alert('No team name has been entered as of yet');
-      return;
+      return; // team name cannot be empty
     }
     for (let i = 0; i < allTeams.length; i++) {
       if (allTeams[i].name === joinTeam) {
-        // check if it is one of the team's that is available
+        // check if the team name entered matches a team in the database
         if (allTeams[i].type === 'Private') {
-          // okay we are gonna need a password
+          // check if the team is private
           if (teamPass === '') {
+            // private team but no password entered
             alert(
               'A password needs to be entered as this team is private. Please enter the password and try again.'
             );
             return;
           } else if (allTeams[i].password === teamPass) {
-            joined(); // we can join them
+            joined(); // password is correct
             return;
           } else {
             // incorrect password
@@ -131,25 +130,25 @@ const TeamJoin: React.FC = () => {
             return;
           }
         } else {
-          // public team aka no password required
+          // public team
           joined();
           return;
         }
       }
     }
-    alert('No team was found that matched what was entered');
+    alert('No team was found that matched what was entered'); // no team was found
     return;
   };
 
   // handle refresher
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
-    getData(); // get the data from the database
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 
+  // display the teams
   const DisplayTeams = (teams: teamData[]): any => {
-    if (teams.length > 0) {
+    if (teams.length > 0) { // if there are teams
       return (
         <>
           <IonGrid>
@@ -198,7 +197,7 @@ const TeamJoin: React.FC = () => {
           </IonGrid>
         </>
       );
-    } else {
+    } else { // if there are no teams
       return (
         <>
           <IonItem>
@@ -210,90 +209,85 @@ const TeamJoin: React.FC = () => {
     }
   };
 
-  async function getData() {
-    if (ctx.team !== '') {
-      // if they are already on a team
-      history.push('/app/team'); // redirect them to the team home page
-      return;
-    }
-    const indData: Array<teamData> = []; //temp array for the teams data
-    const groupNames: Array<selectFormat> = []; //need the group names to look thorugh
-    const today = new Date(Date());
-    const maxDate = new Date(adData.teamDate);
-    console.log(today < maxDate, today, maxDate, adData.teamDate);
-    if (maxDate < today) {
+  // set the data
+  async function getData(teamList: any) {
+    const teams: Array<teamData> = []; // array of teams
+    const teamNames: Array<selectFormat> = []; // array of team names
+    const today = new Date();
+    const deadline = new Date(adData.teamDate);
+    if (deadline < today) { // if the deadline has passed
       setValid(true);
-      console.log('true');
     } else {
       setValid(false);
-      console.log('false');
     }
-    const querySnapshot = await getDocs(collection(FirestoreDB, 'teams')); //grab all the team documents
-    querySnapshot.forEach((doc: any) => {
-      console.log(adData.maxSize, doc.data().members.length);
+    teamList.forEach((doc: any) => {
       if (doc.data().members.length < adData.maxSize) {
-        // this is deteremined by the admins
         const allNames: selectFormat = {
-          // this was to create an array if we used the selection drop down method
+          // for selection drop down method
           text: doc.data().name,
           value: doc.data().name
         };
-        groupNames.push(allNames); // push it to the overall array
+        teamNames.push(allNames); // push the data to the array
         if (doc.data().status === '1') {
           // private team
-          const tem: teamData = {
+          const temp: teamData = {
             name: doc.data().name as string,
             leader: doc.data().leader as string,
             size: doc.data().members.length as number,
             type: 'Private',
             password: doc.data().password
           };
-          indData.push(tem); // push the data to the array
+          teams.push(temp); // push the data to the array
         } else {
           // public team
-          const tem: teamData = {
+          const temp: teamData = {
             name: doc.data().name as string,
             leader: doc.data().leader as string,
             size: doc.data().members.length as number,
             type: 'Public',
             password: doc.data().password
           };
-          indData.push(tem);
+          teams.push(temp); // push the data to the array
         }
       } else {
         console.log(doc.data().name, ' is full'); // if the team is full
       }
     });
-    indData.sort((a: any, b: any) =>
+    teams.sort((a: any, b: any) =>
       a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
     );
-    setTeams(indData);
+    setTeams(teams); // set the teams
   }
 
   // update the data when the page loads
   // update the data when the teams are added, removed, or modified
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(FirestoreDB, 'teams'), (snapshot: any) => {
-      snapshot.docChanges().forEach((change: any) => {
-        if (change.type === 'added') {
-          console.log('New Team: ', change.doc.data());
-        }
-        if (change.type === 'modified') {
-          console.log('Modified Team: ', change.doc.data());
-        }
-        if (change.type === 'removed') {
-          console.log('Removed Team: ', change.doc.data());
-        }
-        getData();
+    if (ctx.user === null) {
+      history.push('/login');
+      return;
+    }
+    if (ctx.team !== '') {
+      history.push('/app/team');
+      return;
+    }
+    const unsubscribe = onSnapshot(collection(FirestoreDB, 'teams'), (collection: any) => {
+      const temp: any[] = [];
+      collection.forEach((doc: any) => {
+        temp.push(doc);
       });
+      getData(temp);
     });
-    return unsubscribe;
-  }, []);
+    return () => {
+      unsubscribe();
+    };
+  }, [ctx.user, ctx.team]);
 
+  // move to the team creation page
   const moveToCreateTeam = () => {
     history.push('/app/teamcreation');
   };
 
+  // check team deadline
   function displayPage() {
     if (buttonValid === false) {
       return (<>{DisplayTeams(allTeams)}</>);
