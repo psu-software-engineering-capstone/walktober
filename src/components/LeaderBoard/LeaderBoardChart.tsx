@@ -2,7 +2,6 @@ import {
   IonCard,
   IonCardContent,
   IonButton,
-  IonContent,
   IonHeader,
   IonSpinner,
   IonTitle
