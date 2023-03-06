@@ -262,10 +262,6 @@ const TeamJoin: React.FC = () => {
   // update the data when the page loads
   // update the data when the teams are added, removed, or modified
   useEffect(() => {
-    if (ctx.team !== '') {
-      history.push('/app/team');
-      return;
-    }
     const unsubscribe = onSnapshot(collection(FirestoreDB, 'teams'), (collection: any) => {
       const temp: any[] = [];
       collection.forEach((doc: any) => {

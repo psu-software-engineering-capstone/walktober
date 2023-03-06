@@ -19,7 +19,6 @@ import AdminContext from '../../store/admin-context';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
-import AuthContext from '../../store/auth-context';
 import './teamCreation.css';
 
 const TeamCreation: React.FC = () => {
@@ -27,19 +26,12 @@ const TeamCreation: React.FC = () => {
   const [newTeamStatus, setNewTeamStatus] = useState(0);
   const [newTeamPassword, setNewTeamPassword] = useState('');
 
-  const ctx = useContext(AuthContext); // auth context
-
   const history = useHistory(); // for routing
 
   const adData = useContext(AdminContext); // admin context
 
   // create a new team
   const createTeam = async () => {
-    if (ctx.team !== '') {
-      alert('You are already in a team');
-      history.push('/app/team'); // if the user is already in a team, redirect to team page
-      return;
-    }
     const userRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     const userSnap = await getDoc(userRef);
     const userData = userSnap.data();
