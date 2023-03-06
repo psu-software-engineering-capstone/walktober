@@ -4,7 +4,6 @@ import {
   IonModal,
   IonCard,
   IonCardTitle,
-  IonTitle,
   IonList,
   IonItem,
   IonLabel,
