@@ -33,6 +33,8 @@ import AdminContext from '../../store/admin-context';
 import AuthContext from '../../store/auth-context';
 import TeamLeaderBoardChart from '../../components/LeaderBoard/TeamLeaderboardChart';
 import './teamHome.scss';
+import { ChannelData } from "../sampleData";
+import WidgetBot from '@widgetbot/react-embed';
 
 const TeamHome: React.FC = () => {
   interface memberData {
@@ -48,6 +50,7 @@ const TeamHome: React.FC = () => {
   const [profilePic, setProfilePic] = useState('');
   const [userReference, setUserRef] = useState('');
   const [teamReference, setTeamRef] = useState('');
+  const [channelId, setChannelId] = useState({});
   const [isLeader, setIsLeader] = useState(false);
   const [buttonValid, setValid] = useState(false);
   const [photo, setPhoto] = useState<any>(null);
@@ -63,7 +66,7 @@ const TeamHome: React.FC = () => {
     if (team.length > 0) {
       return (
         <>
-          <IonGrid fixed={true}>
+          <IonGrid>
             <IonRow class="top">
               <IonCol
                 sizeSm="12"
@@ -117,9 +120,22 @@ const TeamHome: React.FC = () => {
     const userSnap = await getDoc(currentUserRef); // grab the user document
     const userData = userSnap.data(); // get the user data
     const teamName = userData.team; // get the team name
+    const dbChannelId =
+      ChannelData.find(c => c.team == teamName)?.id; // get the team channel id
+    let channelId = "";
+
+    // if channel not set up with id in database, default to #general
+    if(dbChannelId) {
+      channelId = dbChannelId;
+    }
+    else {
+      channelId = "1068966009106600110"; // #general channel id
+    }
+
     setUserTotalSteps(userData.totalStep);
     setTeamName(teamName);
     setIsLeader(userData.team_leader);
+    setChannelId(channelId);
     const teamRef = doc(FirestoreDB, 'teams', teamName); // reference team document
     setTeamRef(teamRef);
     
@@ -305,35 +321,49 @@ const TeamHome: React.FC = () => {
         </NavBar>
       </IonHeader>
       <IonContent>
-        <IonRow>
-          <IonCol
-            className="boxSize"
-            sizeSm="12"
-            sizeLg="4"
-            sizeMd="6"
-            sizeXs="12"
-          >
-            <TeamLeaderBoardChart data={leaderboardData}></TeamLeaderBoardChart>
-          </IonCol>
-          <IonCol sizeLg="8">
-            <IonItem>
-              <IonImg
-                className="profile_pic"
-                src={profilePic}
-                alt="Profile picture for the team the user is a part of"
-              >
-                {' '}
-              </IonImg>
-            </IonItem>
-            <IonItem> {teamName} Profile Picture </IonItem>
-            <IonItem> {changePicture()} </IonItem>
-            <IonItem>
-              <IonButton onClick={leaveTeam}> Leave team </IonButton>{' '}
-            </IonItem>
-            <IonItem>{verifyCount()}</IonItem>
-            <IonItem>{DisplayTeam(leaderboardData)}</IonItem>
-          </IonCol>
-        </IonRow>
+        <IonGrid>
+          <IonRow>
+            <IonCol
+              className="boxSize"
+              sizeSm="12"
+              sizeLg="4"
+              sizeMd="6"
+              sizeXs="12"
+            >
+              <TeamLeaderBoardChart data={leaderboardData}></TeamLeaderBoardChart>
+            </IonCol>
+            <IonCol
+              sizeSm="12"
+              sizeLg="4"
+              sizeMd="6"
+              sizeXs="12"
+            >
+              <WidgetBot
+                className="discord-widget"
+                server="1068966007886069841"
+                channel={channelId}
+              />
+            </IonCol>
+            <IonCol>
+              <IonItem>
+                <IonImg
+                  className="profile_pic"
+                  src={profilePic}
+                  alt="Profile picture for the team the user is a part of"
+                >
+                  {' '}
+                </IonImg>
+              </IonItem>
+              <IonItem> {teamName} Profile Picture </IonItem>
+              <IonItem> {changePicture()} </IonItem>
+              <IonItem>
+                <IonButton onClick={leaveTeam}> Leave team </IonButton>{' '}
+              </IonItem>
+              <IonItem>{verifyCount()}</IonItem>
+              <IonItem>{DisplayTeam(leaderboardData)}</IonItem>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
