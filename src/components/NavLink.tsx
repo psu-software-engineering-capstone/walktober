@@ -7,6 +7,7 @@ import {
 import { chevronDown } from 'ionicons/icons';
 import React from 'react';
 import { useHistory } from 'react-router';
+import { Browser } from '@capacitor/browser';
 import './NavLink.scss';
 
 interface NavLinkProps {
@@ -32,21 +33,24 @@ const NavLink: React.FC<NavLinkProps> = ({ id, text, href, children = null }) =>
     const tag = elem?.nodeName.toLowerCase();
 
     // using instanceof doesn't work here for some reason so just check the tag
-    if(tag !== 'ion-content' && tag !== 'ion-toolbar') {
-      setTimeout(() => {
-        dismiss();
-  
-        // since the above doesn't always seem to remove popovers...
-        // get all the remaining popovers in the document and delete them
-        const popovers = document.getElementsByTagName('ion-popover');
-  
-        if(popovers.length > 0) {
-          for(let i = 0; i < popovers.length; i++) {
-            popovers[i].parentNode?.removeChild(popovers[i]);
-          }
+    if(!elem?.classList.contains('nav-link-container') && tag !== 'ion-content'
+        && tag !== 'ion-toolbar') {
+      dismiss();
+
+      // since the above doesn't always seem to remove popovers...
+      // get all the remaining popovers in the document and delete them
+      const popovers = document.getElementsByTagName('ion-popover');
+
+      if(popovers.length > 0) {
+        for(let i = 0; i < popovers.length; i++) {
+          popovers[i].parentNode?.removeChild(popovers[i]);
         }
-      }, 500); // Delay in milliseconds
+      }
     }
+  };
+
+  const navigateExternal = async(url: string) => {
+    await Browser.open({ url: url });
   };
 
   const navigate = (e: React.MouseEvent) => {
@@ -56,6 +60,9 @@ const NavLink: React.FC<NavLinkProps> = ({ id, text, href, children = null }) =>
     // pass their current 'href' to the dismiss() event
     if(popover !== null) {
       popover.dismiss(href);
+    }
+    else if(href.startsWith("http")) {
+      navigateExternal(href);
     }
     // links outside popovers can navigate directly
     else {
