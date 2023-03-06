@@ -211,6 +211,14 @@ const TeamJoin: React.FC = () => {
 
   // set the data
   async function getData(teamList: any) {
+    if (ctx.user === null) {
+      history.push('/login'); // if the user is not logged in, move them to the login page
+      return;
+    }
+    if (ctx.team !== '') {
+      history.push('/app/team'); // if the user is already in a team, move them to the team page
+      return;
+    }
     const teams: Array<teamData> = []; // array of teams
     const teamNames: Array<selectFormat> = []; // array of team names
     const today = new Date();
@@ -262,15 +270,6 @@ const TeamJoin: React.FC = () => {
   // update the data when the page loads
   // update the data when the teams are added, removed, or modified
   useEffect(() => {
-    if (ctx.user === null) {
-      alert('You are not logged in');
-      history.push('/login'); // if the user is not logged in, move them to the login page
-      return;
-    }
-    if (ctx.team !== '') {
-      history.push('/app/team'); // if the user is already in a team, move them to the team page
-      return;
-    }
     const unsubscribe = onSnapshot(collection(FirestoreDB, 'teams'), (collection: any) => {
       const temp: any[] = [];
       collection.forEach((doc: any) => {
