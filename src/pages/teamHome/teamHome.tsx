@@ -270,10 +270,6 @@ const TeamHome: React.FC = () => {
   // update the data when the page loads
   // update the data when the team gets updated
   useEffect(() => {
-    if (ctx.team === '') {
-      history.push('/app/team/join');
-      return;
-    } 
     const unsubscribe = onSnapshot(
       doc(FirestoreDB, 'teams', ctx.team),
       (doc: any) => {

@@ -31,7 +31,12 @@ import StepsCalculator from './pages/stepsCalculator/stepsCalculator';
 import AuthContext from './store/auth-context';
 import landing404 from './pages/404landing/landing404';
 import Results from './pages/results/results';
-import ProtectedRoutes from './ProtectedRoutes';
+
+/* Routes */
+import ToLogin from './routes/ToLogin';
+import ToTeamHome from './routes/ToTeamHome';
+import ToTeamJoin from './routes/ToTeamJoin';
+import ToHome from './routes/ToHome';
 
 /* Theming */
 import './theme/app.scss';
@@ -49,17 +54,17 @@ const Dashboard: React.FC = () => {
     <IonTabs>
       <IonRouterOutlet>
         <Route path="/" component={landing404}></Route>
-        <Route exact path="/app/home" component={ctx.user ? HomePage : ProtectedRoutes} />
-        <Route exact path="/app/profile" component={ctx.user ? Profile : ProtectedRoutes} />
-        <Route exact path="/app/profile/passwordChange" component={ctx.user ? newPassword : ProtectedRoutes} />
-        <Route exact path="/app/manualsteps" component={ctx.user ? ManualSteps : ProtectedRoutes} />
-        <Route exact path="/app/stepscalc" component={ctx.user ? StepsCalculator : ProtectedRoutes} />
-        <Route exact path="/app/healthapp" component={ctx.user ? HealthApp : ProtectedRoutes} />
-        <Route exact path="/app/teamcreation" component={ctx.user ? TeamCreation : ProtectedRoutes} />
-        <Route exact path="/app/team" component={ctx.user ? TeamHome : ProtectedRoutes} />
-        <Route exact path="/app/team/join" component={ctx.user ? TeamJoin : ProtectedRoutes} />
-        <Route exact path="/app/admin" component={ctx.user ? Admin : ProtectedRoutes} />
-        <Route exact path="/app/results" component={ctx.user ? Results : ProtectedRoutes} />
+        <Route exact path="/app/home" component={ctx.user ? HomePage : ToLogin} />
+        <Route exact path="/app/profile" component={ctx.user ? Profile : ToLogin} />
+        <Route exact path="/app/profile/passwordChange" component={ctx.user ? newPassword : ToLogin} />
+        <Route exact path="/app/manualsteps" component={ctx.user ? ManualSteps : ToLogin} />
+        <Route exact path="/app/stepscalc" component={ctx.user ? StepsCalculator : ToLogin} />
+        <Route exact path="/app/healthapp" component={ctx.user ? HealthApp : ToLogin} />
+        <Route exact path="/app/teamcreation" component={ctx.user && ctx.team === '' ? TeamCreation : ctx.user && ctx.team !== '' ? ToTeamHome : ToLogin} />
+        <Route exact path="/app/team" component={ctx.user && ctx.team !== '' ? TeamHome : ctx.user && ctx.team === '' ? ToTeamJoin : ToLogin} />
+        <Route exact path="/app/team/join" component={ctx.user && ctx.team === '' ? TeamJoin : ctx.user && ctx.team !== '' ? ToTeamHome : ToLogin} />
+        <Route exact path="/app/admin" component={ctx.user && ctx.admin === true ? Admin : ctx.user && ctx.admin === false ? ToHome : ToLogin} />
+        <Route exact path="/app/results" component={ctx.user ? Results : ToLogin} />
         <Route exact path="/app">
           <Redirect to="/app/home" />
         </Route>
