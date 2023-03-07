@@ -2,7 +2,7 @@
 
 Welcome to the Walktober project! Walktober is a yearly fitness challenge at PSU, and this project aims to design and implement a new software platform to support the event. The new platform should have a modern look and feel, be responsive and accessible on different devices, and have improved design, graphics, and branding. It should also have better controls, analytics, and be more fun for participants. Additionally, it should have a simpler configuration for PSU administrators, with a focus on how PSU runs the Walktober event, and provide backend reports.
 
-![Ionic App1024_1](https://user-images.githubusercontent.com/94903612/220264244-832e7874-9241-406c-b047-ce79084d912b.jpg)
+![Ionic App](https://user-images.githubusercontent.com/94903612/223044951-6cdbdd99-067d-41ca-98e4-2333ebf3ffd9.jpg)
 
 ## Prerequisites
 

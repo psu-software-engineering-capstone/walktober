@@ -16,8 +16,7 @@ import {
   IonCol,
   RefresherEventDetail,
   IonRefresher,
-  IonRefresherContent,
-  IonItem
+  IonRefresherContent
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
 import { useHistory } from 'react-router';
@@ -25,7 +24,7 @@ import NavBar from '../../components/NavBar';
 import ProgressChart from '../../components/ProgressChart';
 import AuthContext from '../../store/auth-context';
 import AdminContext from '../../store/admin-context';
-import { getDoc, doc, onSnapshot } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
 import PostEventSurvey from '../postEventSurvey/postEventSurvey';
@@ -48,25 +47,23 @@ const HomePage: React.FC = () => {
   const [showPostSurvey, setShowPostSurvey] = useState(false);
   const [stepGoal, setStepGoal] = useState(0);
 
-  const ctx = useContext(AuthContext);
+  const ctx = useContext(AuthContext); // auth context
   const adminInfo = useContext(AdminContext);
 
   // update profile data when the page loads
   // update profile data when the profile data changes
   useEffect(() => {
-    if (ctx.user !== null) {
-      const unsubscribe = onSnapshot(
-        doc(FirestoreDB, 'users', auth.currentUser.email as string),
-        (doc: any) => {
-          if (doc.exists()) {
-            console.log('Home page updated');
-            getPastSevenDaysSteps();
-          }
+    const unsubscribe = onSnapshot(
+      doc(FirestoreDB, 'users', auth.currentUser.email as string),
+      (doc: any) => {
+        if (doc.exists()) {
+          getPastSevenDaysSteps(doc.data());
         }
-      );
-
-      return unsubscribe;
-    }
+      }
+    );
+    return () => {
+      unsubscribe();
+    };
   }, [ctx.user]);
 
   useEffect(() => {
@@ -76,32 +73,19 @@ const HomePage: React.FC = () => {
   }, []);
 
   // get past seven days of steps from firestore
-  // even though the user does not have seven days of steps
-  // the chart will still render with seven days of steps
-  // each day will have 0 steps
-  const getPastSevenDaysSteps = async () => {
-    if (ctx.user === null) {
-      alert('You are not logged in!');
-      history.push('/login');
-      return;
-    }
-
-    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-    const dbSnap = await getDoc(dbRef);
-    const userData = dbSnap.data();
+  const getPastSevenDaysSteps = async (userData: any) => {
     const stepsByDate = userData.stepsByDate;
-    const totalStep = userData.totalStep;
     const stepGoal = userData.step_goal;
 
     //Add today's step count
-    const today = new Date().toISOString().slice(0, 10);
-    if (stepsByDate[0].date == today) {
-      setSteps(stepsByDate[0].steps);
-      console.log(today, stepsByDate[0]);
-    }
-    else if (stepsByDate[stepsByDate.length - 1].date == today) {
-      setSteps(stepsByDate[stepsByDate.length - 1].steps);
-      console.log(today, stepsByDate[stepsByDate.length - 1]);
+    if (stepsByDate.length > 0) {
+      const today = new Date().toISOString().slice(0, 10);
+      if (stepsByDate[0].date == today) {
+        setSteps(stepsByDate[0].steps);
+      }
+      else if (stepsByDate[stepsByDate.length - 1].date == today) {
+        setSteps(stepsByDate[stepsByDate.length - 1].steps);
+      }
     }
 
     // Create an array of the last seven dates (including today)
@@ -111,7 +95,6 @@ const HomePage: React.FC = () => {
       date.setDate(date.getDate() - i);
       pastSevenDaysDates.push(date.toISOString().slice(0, 10));
     }
-
     // Populate pastSevenDays with step count or 0 for each date
     const pastSevenDays = pastSevenDaysDates.map((date) => {
       const stepLog = stepsByDate.find(
@@ -123,7 +106,6 @@ const HomePage: React.FC = () => {
         return { date: date, steps: 0 };
       }
     });
-
     setPastSevenDaysSteps(pastSevenDays.reverse());
     setStepGoal(stepGoal);
   };
@@ -131,10 +113,10 @@ const HomePage: React.FC = () => {
   // handle refresher
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
-    getPastSevenDaysSteps(); // Refresh data
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 
+  // move to manual steps page
   const moveToManualSteps = () => {
     history.push('/app/manualsteps');
   };

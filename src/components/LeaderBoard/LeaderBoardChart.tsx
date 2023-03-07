@@ -1,6 +1,7 @@
 import {
+  IonCard,
+  IonCardContent,
   IonButton,
-  IonContent,
   IonHeader,
   IonSpinner,
   IonTitle
@@ -31,7 +32,7 @@ const LeaderBoardChart: React.FC = () => {
 
   //Formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
   const chartData = {
-    labels: data.map((row) => row.name),
+    labels: data.map((row) => row.name.split(' ')),
     datasets: [
       {
         minBarLength: 5,
@@ -211,17 +212,10 @@ const LeaderBoardChart: React.FC = () => {
           profile_pic: doc.data().profile_pic as string,
           avg_steps: doc.data().avg_steps as number
         };
-        const today = new Date(Date());
-        const maxDate = new Date(adData.teamDate);
-        console.log(
-          adData.maxSize,
-          adData.minSize,
-          adData.regDate,
-          adData.teamDate
-        );
-        if (maxDate < today) {
+        const today = new Date();
+        const deadline = new Date(adData.teamDate);
+        if (deadline < today) {
           const membersLength = doc.data().members.length;
-          console.log(membersLength, adData.minSize);
           if (adData.minSize <= membersLength) {
             indData.push(team);
           }
@@ -245,12 +239,11 @@ const LeaderBoardChart: React.FC = () => {
   }, []);
 
   return (
-    <IonContent>
-      <div className="leaderboard-container">
-        <IonHeader className="title">
+    <IonCard className='leaderboard-container'>
+        <IonHeader className='title'>
           <IonTitle>Leaderboard</IonTitle>
         </IonHeader>
-        <div className="button-container">
+        <div className='button-container'>
           <IonButton
             onClick={() => {
               dataType = 'individual';
@@ -270,7 +263,7 @@ const LeaderBoardChart: React.FC = () => {
             Teams
           </IonButton>
         </div>
-        <IonContent className="box">
+        <IonCardContent className="box">
           {loading ? (
             <IonSpinner className="spinner" />
           ) : (
@@ -280,9 +273,8 @@ const LeaderBoardChart: React.FC = () => {
               plugins={[imgItems, ChartDataLabels]}
             ></Bar>
           )}
-        </IonContent>
-      </div>
-    </IonContent>
+        </IonCardContent>
+    </IonCard>
   );
 };
 

@@ -69,6 +69,7 @@ const NavBar: React.FC<NavBarProps> = ({
                 />
               </NavLink>
             )}
+            <NavLink id="nav-about" text="About" href="https://www.pdx.edu/recreation/walktober" />
           </div>
         </IonToolbar>
       </IonHeader>

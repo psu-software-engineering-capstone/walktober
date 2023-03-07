@@ -13,35 +13,28 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/react';
-import './teamCreation.css';
 import { useContext, useState } from 'react';
 import { auth, FirestoreDB } from '../../firebase';
 import AdminContext from '../../store/admin-context';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
+import './teamCreation.css';
 
 const TeamCreation: React.FC = () => {
   const [newTeamName, setNewTeamName] = useState('');
   const [newTeamStatus, setNewTeamStatus] = useState(0);
   const [newTeamPassword, setNewTeamPassword] = useState('');
-  const history = useHistory();
 
-  // Admin settings context //
-  const adData = useContext(AdminContext);
+  const history = useHistory(); // for routing
 
+  const adData = useContext(AdminContext); // admin context
+
+  // create a new team
   const createTeam = async () => {
-    if (auth.currentUser == null) {
-      alert('You are not signed-in!');
-      return;
-    }
     const userRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     const userSnap = await getDoc(userRef);
     const userData = userSnap.data();
-    if (userData.team !== '') {
-      alert('You are already in a team! You cannot create a team.');
-      return;
-    }
     if (newTeamName === '') {
       alert('Team name cannot be an empty string!');
       return;
@@ -91,10 +84,8 @@ const TeamCreation: React.FC = () => {
       });
   };
 
+  // update the current user's data
   const updateCurrentUser = async () => {
-    if (auth.currentUser == null) {
-      return;
-    }
     const currentUserRef = doc(
       FirestoreDB,
       'users',

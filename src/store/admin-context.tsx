@@ -36,7 +36,9 @@ export const AdminContextProvider: React.FC<{ children: any }> = ( props: any ) 
       setEnd(doc.data().event_end_date);
       setComplete(true);
     });
-    return unsubcribe;
+    return () => {
+      unsubcribe();
+    };
   }, []);
 
   return (
