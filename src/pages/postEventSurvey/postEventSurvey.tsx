@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
   IonButton,
   IonModal,
@@ -24,7 +24,7 @@ function PostEventSurvey() {
 
   useEffect(() => {
     const today = new Date();
-    const eventEnd = new Date(adminInfo.teamDate);
+    const eventEnd = new Date(adminInfo.endDate);
     setShowPostSurvey(today < eventEnd);
   }, []);
 
