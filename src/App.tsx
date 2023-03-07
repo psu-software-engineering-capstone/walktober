@@ -45,17 +45,19 @@ function App() {
   }, [ctx.user]);
 
   useEffect(() => {
-    if (ctx.team === '') {
+    if (ctx.user && ctx.team === '') {
       console.log('team state: no team');
-    } else {
+    }
+    if (ctx.user && ctx.team !== '') {
       console.log(`team state: ${ctx.team}`);
     }
   }, [ctx.team]);
 
   useEffect(() => {
-    if (ctx.admin === false) {
+    if (ctx.user && ctx.admin === false) {
       console.log('admin state: not admin');
-    } else {
+    }
+    if (ctx.user && ctx.admin === true) {
       console.log('admin state: admin');
     }
   }, [ctx.admin]);

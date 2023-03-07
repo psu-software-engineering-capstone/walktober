@@ -2,7 +2,6 @@ import {
   IonCard,
   IonCardContent,
   IonButton,
-  IonContent,
   IonHeader,
   IonSpinner,
   IonTitle
@@ -33,7 +32,7 @@ const LeaderBoardChart: React.FC = () => {
 
   //Formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
   const chartData = {
-    labels: data.map((row) => row.name),
+    labels: data.map((row) => row.name.split(' ')),
     datasets: [
       {
         minBarLength: 5,
@@ -240,11 +239,10 @@ const LeaderBoardChart: React.FC = () => {
   }, []);
 
   return (
-    <IonCard>
-      <IonCardContent>
-      <div className='leaderboard-container'>
+    <IonCard className='leaderboard-container'>
         <IonHeader className='title'>
-          <IonTitle>Leaderboard</IonTitle></IonHeader>
+          <IonTitle>Leaderboard</IonTitle>
+        </IonHeader>
         <div className='button-container'>
           <IonButton
             onClick={() => {
@@ -265,7 +263,7 @@ const LeaderBoardChart: React.FC = () => {
             Teams
           </IonButton>
         </div>
-        <IonContent className="box">
+        <IonCardContent className="box">
           {loading ? (
             <IonSpinner className="spinner" />
           ) : (
@@ -275,9 +273,7 @@ const LeaderBoardChart: React.FC = () => {
               plugins={[imgItems, ChartDataLabels]}
             ></Bar>
           )}
-        </IonContent>
-      </div>
-    </IonCardContent>
+        </IonCardContent>
     </IonCard>
   );
 };
