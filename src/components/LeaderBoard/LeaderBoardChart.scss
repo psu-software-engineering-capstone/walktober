@@ -1,7 +1,16 @@
+.leaderboard-container {
+  padding: 10px;
+  text-align: left;
+  max-height: 100%;
+  overflow-y: scroll;
+}
+
 .box {
   display: flex;
   align-items: center;
   max-width: 100%;
+  background-color: transparent;
+  
 }
 
 .box-team-leaderboard {
@@ -13,11 +22,6 @@
 .spinner {
   width: 100%;
   margin-top: 60%;
-}
-
-.leaderboard-container {
-  padding: 10px;
-  text-align: left;
 }
 
 .button-container{
