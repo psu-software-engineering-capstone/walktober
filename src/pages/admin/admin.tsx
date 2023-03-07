@@ -86,8 +86,8 @@ const Admin: React.FC = () => {
 
   const [userReportCheck, setUserReportCheck] = useState(false);
   const [teamReportCheck, setTeamReportCheck] = useState(false);
-  const [preSurveryReportCheck, setpreSurveryReportCheck] = useState(false);
-  const [postSurveryReportCheck, setpostSurveryReportCheck] = useState(false);
+  const [preSurveyReportCheck, setpreSurveyReportCheck] = useState(false);
+  const [postSurveyReportCheck, setpostSurveyReportCheck] = useState(false);
   const [devicesReportCheck, setDevicesReportCheck] = useState(false);
 
   const [userLogs, setUserLogs] = useState<UserLog[]>([]);
@@ -547,7 +547,7 @@ const Admin: React.FC = () => {
       }
     }
 
-    if (preSurveryReportCheck) {
+    if (preSurveyReportCheck) {
       console.log('Generating pre survey report');
 
       let str =
@@ -580,7 +580,7 @@ const Admin: React.FC = () => {
       }
     }
 
-    if (postSurveryReportCheck) {
+    if (postSurveyReportCheck) {
       console.log('Generating post survey report');
 
       let str =
@@ -937,23 +937,23 @@ const Admin: React.FC = () => {
               </IonItem>
               <IonItem>
                 <IonCheckbox
-                  checked={preSurveryReportCheck}
+                  checked={preSurveyReportCheck}
                   onIonChange={(e) =>
-                    setpreSurveryReportCheck(e.detail.checked)
+                    setpreSurveyReportCheck(e.detail.checked)
                   }
                   slot="start"
                 ></IonCheckbox>
-                <IonLabel>Pre Survery Report</IonLabel>
+                <IonLabel>Pre Survey Report</IonLabel>
               </IonItem>
               <IonItem>
                 <IonCheckbox
-                  checked={postSurveryReportCheck}
+                  checked={postSurveyReportCheck}
                   onIonChange={(e) =>
-                    setpostSurveryReportCheck(e.detail.checked)
+                    setpostSurveyReportCheck(e.detail.checked)
                   }
                   slot="start"
                 ></IonCheckbox>
-                <IonLabel>Post Survery Report</IonLabel>
+                <IonLabel>Post Survey Report</IonLabel>
               </IonItem>
               <IonItem>
                 <IonCheckbox
