@@ -195,9 +195,8 @@ const ManualSteps: React.FC = () => {
       return;
     }
     if (isPlatform('android')) {
-      const date = new Date();
       const stepOptions: object = {
-        startDate: new Date(date.getFullYear(), date.getMonth(), 1),
+        startDate: new Date(adData.startDate),
         endDate: new Date(),
         dataType: 'steps',
         filtered: true
@@ -295,9 +294,8 @@ const ManualSteps: React.FC = () => {
         })
         .catch((error: any) => alert(error));
     } else if (isPlatform('ios')) {
-      const date = new Date();
       const stepOptions = {
-        startDate: new Date(date.getFullYear(), date.getMonth(), 1),
+        startDate: new Date(adData.startDate),
         endDate: new Date(),
         unit: 'count',
         sampleType: 'HKQuantityTypeIdentifierStepCount',
