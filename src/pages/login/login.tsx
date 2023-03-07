@@ -18,7 +18,8 @@ import {
   IonRouterLink,
   IonPage,
   IonHeader,
-  isPlatform
+  isPlatform,
+  useIonLoading
 } from '@ionic/react';
 import { eye, eyeOff, logoGoogle } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
@@ -38,6 +39,9 @@ import smallLogo from '../../assets/Walktober.png';
 const Login: React.FC = () => {
   // for routing //
   const history = useHistory();
+
+  // loading screen //
+  const [present] = useIonLoading();
 
   // google auth provider //
   const provider = new GoogleAuthProvider();
@@ -88,8 +92,15 @@ const Login: React.FC = () => {
           const dbRef = doc(FirestoreDB, 'users', result.user.email as string);
           const dbSnap = await getDoc(dbRef);
           if (dbSnap.exists()) {
-            alert('Sign-in successful');
-            history.push('/app');
+            // delay 1 second to allow firebase to update auth state //
+            present({
+              message: 'Loading...',
+              duration: 1000,
+              spinner: 'circles'
+            });
+            setTimeout(() => {
+              history.push('/app');
+            }, 1000);
           } else {
             void auth.signOut();
             alert(
@@ -99,7 +110,6 @@ const Login: React.FC = () => {
         })
         .catch((error: unknown) => {
           console.log(error);
-          alert(error);
         });
       // ios & android //
     } else {
@@ -116,8 +126,15 @@ const Login: React.FC = () => {
             const dbRef = doc(FirestoreDB, 'users', result.email);
             const dbSnap = await getDoc(dbRef);
             if (dbSnap.exists()) {
-              alert('Sign-in successful');
-              history.push('/app');
+              // delay 1 second to allow firebase to update auth state //
+              present({
+                message: 'Loading...',
+                duration: 1000,
+                spinner: 'circles'
+              });
+              setTimeout(() => {
+                history.push('/app');
+              }, 1000);
             } else {
               void auth.signOut();
               alert(
@@ -128,7 +145,6 @@ const Login: React.FC = () => {
         )
         .catch((error: any) => {
           console.log(error);
-          alert(error);
         });
     }
   };
@@ -136,12 +152,18 @@ const Login: React.FC = () => {
   // sign in with email and password (web & ios & android) //
   const signInEmailPassword = () => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((data: unknown) => {
-        console.log(data);
-        alert('Sign-in successful');
-        history.push('/app');
+      .then(() => {
+        // delay 1 second to allow firebase to update auth state //
+        present({
+          message: 'Loading...',
+          duration: 1000,
+          spinner: 'circles'
+        });
+        setTimeout(() => {
+          history.push('/app');
+        }, 1000);
       })
-      .catch((error: unknown) => {
+      .catch((error: any) => {
         console.log(error);
         alert(error);
       });
@@ -249,3 +271,4 @@ const Login: React.FC = () => {
 };
 
 export default Login;
+

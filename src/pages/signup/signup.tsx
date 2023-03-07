@@ -16,7 +16,8 @@ import {
   IonInput,
   IonButton,
   IonIcon,
-  isPlatform
+  isPlatform,
+  useIonLoading
 } from '@ionic/react';
 import { eye, eyeOff, logoGoogle } from 'ionicons/icons';
 import { useContext, useState } from 'react';
@@ -38,6 +39,9 @@ import logo from '../../assets/Walktober.png';
 const Signup: React.FC = () => {
   // for routing //
   const history = useHistory();
+
+  // loading screen //
+  const [present] = useIonLoading();
 
   // sign-up variables //
   const [newEmail, setNewEmail] = useState('');
@@ -129,9 +133,16 @@ const Signup: React.FC = () => {
             alert('There is already an existing account under this email');
             void auth.signOut();
           } else {
-            alert('Sign-up successful');
             createUserWithGoogleAuth(result);
-            history.push('/register');
+            // delay 1 second to allow firebase to update auth state //
+            present({
+              message: 'Loading...',
+              duration: 1000,
+              spinner: 'circles'
+            });
+            setTimeout(() => {
+              history.push('/register');
+            }, 1000);
           }
         })
         .catch((error: unknown) => {
@@ -156,9 +167,16 @@ const Signup: React.FC = () => {
               alert('There is already an existing account under this email');
               void auth.signOut();
             } else {
-              alert('Sign-up successful');
               createUserWithGoogleAuthMobile(result);
-              history.push('/register');
+              // delay 1 second to allow firebase to update auth state //
+              present({
+                message: 'Loading...',
+                duration: 1000,
+                spinner: 'circles'
+              });
+              setTimeout(() => {
+                history.push('/register');
+              }, 1000);
             }
           }
         )
@@ -186,8 +204,15 @@ const Signup: React.FC = () => {
           console.log(data);
           //send a verification link to the email
           emailVerification();
-          alert('Sign-up successful');
-          history.push('/register');
+          /// delay 1 second to allow firebase to update auth state //
+          present({
+            message: 'Loading...',
+            duration: 1000,
+            spinner: 'circles'
+          });
+          setTimeout(() => {
+            history.push('/register');
+          }, 1000);
         })
         .catch((error: unknown) => {
           console.log(error);
