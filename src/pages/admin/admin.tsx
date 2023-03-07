@@ -373,20 +373,22 @@ const Admin: React.FC = () => {
     if (preSurveyReportCheck) {
       console.log('Generating pre survey report');
 
-      let str =
-        '"Anonymous ID #","Hours of Physical Activity","Minutes of Physical Activity","TotalSteps"\n';
+      let str = '"Name","Affiliation","Email","Distance From Campus","Heard From","Hours of Physical Activity","Minutes of Physical Activity","Rec Center Usage"\n';
 
-      for (let i = 0; i < PreSurvey.length; i++) {
+      const querySnapshot = await getDocs(collection(FirestoreDB, "registrationQuestions"));
+      querySnapshot.forEach((doc: { id: any; data: () => any; }) => {
         let line = '';
-        line += PreSurvey[i].anonymous_id + ',';
-        line += '"' + PreSurvey[i].psu_affiliation + '",';
-        line += '"' + PreSurvey[i].heard_about + '",';
-        line += PreSurvey[i].weekly_physical_activity_hours + ',';
-        line += PreSurvey[i].weekly_physical_activity_minutes + ',';
-        line += '"' + PreSurvey[i].distance_from_campus + '",';
-        line += '"' + PreSurvey[i].rec_center_frequency + '"';
+        line += '"' + doc.data().name + '",';
+        line += '"' + doc.data().affiliation + '",';
+        line += '"' + doc.data().email + '",';
+        line += '"' + doc.data().distFromCamp + '",';
+        line += '"' + doc.data().heardAboutFrom + '",';
+        line += '"' + doc.data().hoursPhysical + '",';
+        line += '"' + doc.data().minsPhysical + '",';
+        line += doc.data().recCenterUse;
         str += line + '\r\n';
-      }
+      });
+
       console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
@@ -406,23 +408,23 @@ const Admin: React.FC = () => {
     if (postSurveyReportCheck) {
       console.log('Generating post survey report');
 
-      let str =
-        '"Team Name","Cumulative Steps","Number of Team Members","TotalSteps"\n';
+      let str = 
+      '"Walktober Feedback","Future Ideas","Hours Active Per Week","Minutes Active Per Day","Why Not Participate Again","Participation Opinion","Events Participated In","Rec Center Usage","Well-being"\n';
 
-      for (let i = 0; i < PostSurvey.length; i++) {
+      const querySnapshot = await getDocs(collection(FirestoreDB, "exitQuestions"));
+      querySnapshot.forEach((doc: { id: any; data: () => any; }) => {
         let line = '';
-        line += PostSurvey[i].anonymous_id + ',';
-        line += PostSurvey[i].weekly_physical_activity_hours + ',';
-        line += PostSurvey[i].weekly_physical_activity_minutes + ',';
-        line += '"' + PostSurvey[i].participated_events + '",';
-        line += '"' + PostSurvey[i].future_walk_ideas + '",';
-        line += PostSurvey[i].walktober_improved_health + ',';
-        line += PostSurvey[i].walktober_improved_community + ',';
-        line += PostSurvey[i].would_participate_again + ',';
-        line += '"' + PostSurvey[i].if_not_why + '",';
-        line += '"' + PostSurvey[i].feedback + '"';
+        line += '"' + doc.data().feedback + '",';
+        line += '"' + doc.data().futureIdeas + '",';
+        line += '"' + doc.data().hours + '",';
+        line += '"' + doc.data().minutes + '",';
+        line += '"' + doc.data().notParticipate + '",';
+        line += '"' + doc.data().participate + '",';
+        line += '"' + doc.data().participations + '",';
+        line += '"' + doc.data().recUsage + '",';
+        line += doc.data().wellBeing;
         str += line + '\r\n';
-      }
+      });
       console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
