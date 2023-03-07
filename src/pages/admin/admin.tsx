@@ -259,24 +259,29 @@ const Admin: React.FC = () => {
         <>
           <IonGrid fixed={true}>
             <IonRow class="header-row">
-              <IonCol sizeMd="6" size={isPlatform('ios') || isPlatform('android') ? "6" : "6"} class="header-col admin-col">
+              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="header-col admin-col">
                 Team Name
               </IonCol>
 
-              <IonCol sizeMd="5" size={isPlatform('ios') || isPlatform('android') ? "5" : "5"} class="header-col admin-col">
+              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="header-col admin-col">
                 Number of Members
               </IonCol>
 
-              <IonCol sizeMd="5" size={isPlatform('ios') || isPlatform('android') ? "5" : "5"} class="header-col admin-col">
+              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="header-col admin-col">
+                Average Total Steps
+              </IonCol>
+
+              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="header-col admin-col">
                 Total Steps
               </IonCol>
             </IonRow>
 
             {TeamData.map((item) => (
               <IonRow key={Math.random()}>
-                <IonCol sizeMd="6" size={isPlatform('ios') || isPlatform('android') ? "6" : "6"} class="admin-col">{item.name}</IonCol>
-                <IonCol sizeMd="5" size={isPlatform('ios') || isPlatform('android') ? "5" : "5"} class="admin-col">insert number of members here</IonCol>
-                <IonCol sizeMd="5" size={isPlatform('ios') || isPlatform('android') ? "5" : "5"} class="admin-col">{item.avg_steps}</IonCol>
+                <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="admin-col">{item.name}</IonCol>
+                <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="admin-col">insert number of members here</IonCol>
+                <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="admin-col">insert average steps here</IonCol>
+                <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="admin-col">{item.avg_steps}</IonCol>
               </IonRow>
             ))}
           </IonGrid>
