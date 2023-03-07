@@ -416,11 +416,11 @@ const Admin: React.FC = () => {
         let line = '';
         line += '"' + doc.data().feedback + '",';
         line += '"' + doc.data().futureIdeas + '",';
-        line += '"' + doc.data().hours + '",';
-        line += '"' + doc.data().minutes + '",';
-        line += '"' + doc.data().notParticipate + '",';
-        line += '"' + doc.data().participate + '",';
-        line += '"' + doc.data().participations + '",';
+        line += '"' + doc.data().hoursPerWeek + '",';
+        line += '"' + doc.data().minutesPerDay + '",';
+        line += '"' + doc.data().wouldNotParticipateAgain + '",';
+        line += '"' + doc.data().wouldParticipateAgain + '",';
+        line += '"' + doc.data().prevParticipatedEvents + '",';
         line += '"' + doc.data().recUsage + '",';
         line += doc.data().wellBeing;
         str += line + '\r\n';
