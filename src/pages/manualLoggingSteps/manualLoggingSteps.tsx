@@ -487,6 +487,14 @@ const ManualSteps: React.FC = () => {
     return minDate.toISOString().slice(0, 10);
   }
 
+  // Get the latest date allowed for the user to log the steps
+  function getMaxDate(): string {
+    const today = new Date();
+    const eventEndDate = new Date(adData.endDate);
+    const maxDate = eventEndDate < today ? eventEndDate : today;
+    return maxDate.toISOString().slice(0, 10);
+  }
+
   // display steps logs
   function DisplayRecords(): any {
     if (stepLogs.length > 0) {
@@ -560,7 +568,7 @@ const ManualSteps: React.FC = () => {
               id="time"
               type="date"
               min={getMinDate()}
-              max={new Date().toISOString().slice(0, 10)}
+              max={getMaxDate()}
               onInput={(event: any) => {
                 setManualDate(
                   new Date(event.target.value).toISOString().slice(0, 10)
