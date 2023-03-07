@@ -22,6 +22,7 @@ import {
 import { auth, FirestoreDB } from '../../firebase';
 import { doc, getDoc, updateDoc, onSnapshot } from 'firebase/firestore';
 import AuthContext from '../../store/auth-context';
+import AdminContext from '../../store/admin-context';
 import NavBar from '../../components/NavBar';
 import { Health } from '@awesome-cordova-plugins/health';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
@@ -34,6 +35,7 @@ const ManualSteps: React.FC = () => {
   }
 
   const ctx = useContext(AuthContext);
+  const adData = useContext(AdminContext);
 
   const [manualDate, setManualDate] = useState('');
   const [manualSteps, setManualSteps] = useState(0);
@@ -479,6 +481,14 @@ const ManualSteps: React.FC = () => {
     setUpdateTotalStep(true);
   };
 
+  // Get the earliest date allowed for the user to log the steps
+  function getMinDate(): string {
+    const priorDate = new Date(Date.now() - adData.priorLogDays * 24 * 60 * 60 * 1000);
+    const eventStartDate = new Date(adData.startDate);
+    const minDate = eventStartDate > priorDate ? eventStartDate : priorDate;
+    return minDate.toISOString().slice(0, 10);
+  }
+
   // display steps logs
   function DisplayRecords(): any {
     if (stepLogs.length > 0) {
@@ -551,6 +561,8 @@ const ManualSteps: React.FC = () => {
             <IonInput
               id="time"
               type="date"
+              min={getMinDate()}
+              max={new Date().toISOString().slice(0, 10)}
               onInput={(event: any) => {
                 setManualDate(
                   new Date(event.target.value).toISOString().slice(0, 10)
