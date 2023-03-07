@@ -311,16 +311,18 @@ const Admin: React.FC = () => {
     if (userReportCheck) {
       console.log('Generating user report');
 
-      let str = '"Name","eMail","Team","TotalSteps"\n';
+      let str = '"Name","Email","Team","TotalSteps"\n';
 
-      for (let i = 0; i < IndividualData.length; i++) {
+      const querySnapshot = await getDocs(collection(FirestoreDB, "users"));
+      querySnapshot.forEach((doc: { id: any; data: () => any; }) => {
         let line = '';
-        line += '"' + IndividualData[i].name + '",';
-        line += '"' + IndividualData[i].email + '",';
-        line += '"' + IndividualData[i].team + '",';
-        line += IndividualData[i].totalStep;
+        line += '"' + doc.data().name + '",';
+        line += '"' + doc.data().email + '",';
+        line += '"' + doc.data().team + '",';
+        line += doc.data().totalStep;
         str += line + '\r\n';
-      }
+      });
+
       console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
