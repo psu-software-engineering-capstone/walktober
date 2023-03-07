@@ -82,16 +82,16 @@ const Results: React.FC = () => {
           console.log(day.steps, day.date);
         }
         tempTotal += day.steps; //add the total steps
-        tempLogged += 1; //increase counter for days active 
+        tempLogged += 1; //increase counter for days active
         //NOTE: The above 2 variables shouldn't be needed if we implement a method to only enter data within the event dates
         //Then we could leave it as it is originally done in line 68 & 69
       }
     });
     daData.maxSteps = tempSteps; // rewrite the max step count
     daData.maxStepDate = tempDate; //rewrite the max step date
-    daData.totalStep=tempTotal; //rewrite the total to be within event parameters
+    daData.totalStep = tempTotal; //rewrite the total to be within event parameters
     daData.daysLogged = tempLogged; //rewrite the days active to be within event parameters
-    setData(daData); //reassign the Data 
+    setData(daData); //reassign the Data
   }
 
   useEffect(() => {
@@ -165,8 +165,8 @@ const Results: React.FC = () => {
                         <img alt="picture of calendar" src={recorddate} />
                       </IonThumbnail>
                       <IonLabel>
-                        You logged steps on <b>{data?.daysLogged}</b>{' '}
-                        out of 31 days in October!
+                        You logged steps on <b>{data?.daysLogged}</b> out of 31
+                        days in October!
                       </IonLabel>
                     </IonItem>
 
@@ -175,8 +175,8 @@ const Results: React.FC = () => {
                         <img alt="picture of medal" src={personalrecord} />
                       </IonThumbnail>
                       <IonLabel>
-                        Your personal record was on <b>{data?.maxStepDate}</b> where you
-                        walked <b>{data?.maxSteps}</b> steps!
+                        Your personal record was on <b>{data?.maxStepDate}</b>{' '}
+                        where you walked <b>{data?.maxSteps}</b> steps!
                       </IonLabel>
                     </IonItem>
                   </IonList>
