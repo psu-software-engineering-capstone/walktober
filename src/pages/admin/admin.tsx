@@ -522,17 +522,18 @@ const Admin: React.FC = () => {
     if (teamReportCheck) {
       console.log('Generating team report');
 
-      let str =
-        '"Team Name","Cumulative Steps","Number of Team Members","TotalSteps"\n';
+      let str = '"Team Name","Average Steps","Number of Team Members","TotalSteps"\n'; 
 
-      for (let i = 0; i < TeamData.length; i++) {
+      const querySnapshot = await getDocs(collection(FirestoreDB, "teams"));
+      querySnapshot.forEach((doc: { id: any; data: () => any; }) => {
         let line = '';
-        line += '"' + TeamData[i].name + '",';
-        line += 0 + ',';
-        line += 0 + ',';
-        line += TeamData[i].avg_steps;
+        line += '"' + doc.data().name + '",';
+        line += doc.data().avg_steps + ',';
+        line += doc.data().members.length + ',';
+        line += doc.data().totalStep;
         str += line + '\r\n';
-      }
+      });
+
       console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
