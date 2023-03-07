@@ -17,10 +17,8 @@ import {
   IonRow,
   IonCol
 } from '@ionic/react';
-//import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import './results.scss';
-//import AuthContext from '../../store/auth-context';
 import AdminContext from '../../store/admin-context';
 import { auth, FirestoreDB } from '../../firebase';
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
@@ -46,16 +44,13 @@ interface Data {
   name: string;
   totalStep?: number;
   daysLogged?: number;
+  maxSteps: number;
+  maxStepDate: string;
   stepsByDate?: StepLog[];
 }
 
 const Results: React.FC = () => {
-  //const history = useHistory();
-  //const [badges, setBadges] = useState(Array<badgeOutline>);
   const [data, setData] = useState<Data>();
-  const [maxSteps, setMaxSteps] = useState(0);
-  const [maxDate, setMaxDate] = useState('');
-  //const ctx = useContext(AuthContext);
   const adData = useContext(AdminContext);
 
   async function getData() {
@@ -70,33 +65,38 @@ const Results: React.FC = () => {
       name: userData.name,
       totalStep: userData.totalStep,
       daysLogged: userData.stepsByDate.length,
+      maxSteps: 0,
+      maxStepDate: '',
       stepsByDate: userData.stepsByDate
     };
-    setData(daData);
+    //Get the max steps and date of it, also grab the total steps
+    let tempSteps = 0;
+    let tempDate = '';
+    let tempTotal = 0;
+    let tempLogged = 0;
+    daData.stepsByDate?.forEach((day) => {
+      if (day.date >= adData.startDate && day.date <= adData.endDate) {
+        if (day.steps > tempSteps) {
+          tempSteps = day.steps; //new  Max step
+          tempDate = day.date; // new max date
+          console.log(day.steps, day.date);
+        }
+        tempTotal += day.steps; //add the total steps
+        tempLogged += 1; //increase counter for days active 
+        //NOTE: The above 2 variables shouldn't be needed if we implement a method to only enter data within the event dates
+        //Then we could leave it as it is originally done in line 68 & 69
+      }
+    });
+    daData.maxSteps = tempSteps; // rewrite the max step count
+    daData.maxStepDate = tempDate; //rewrite the max step date
+    daData.totalStep=tempTotal; //rewrite the total to be within event parameters
+    daData.daysLogged = tempLogged; //rewrite the days active to be within event parameters
+    setData(daData); //reassign the Data 
   }
 
   useEffect(() => {
     getData();
-    setMax();
-  }, []);
-
-  
-  function setMax() {
-    let tempSteps = 0;
-    let tempDate = '';
-    console.log(adData.endDate, adData.startDate);
-    data?.stepsByDate?.forEach((day) => {
-      if (day.date >= adData.startDate && day.date <= adData.endDate) {
-        if (day.steps > tempSteps) {
-          tempSteps = day.steps;
-          tempDate = day.date;
-          console.log(day.steps, day.date);
-        }
-      }
-    });
-    setMaxSteps(tempSteps);
-    setMaxDate(tempDate);
-  }
+  }, [adData]);
 
   return (
     <IonPage>
@@ -165,7 +165,7 @@ const Results: React.FC = () => {
                         <img alt="picture of calendar" src={recorddate} />
                       </IonThumbnail>
                       <IonLabel>
-                        You logged steps on <b>{data?.stepsByDate?.length}</b>{' '}
+                        You logged steps on <b>{data?.daysLogged}</b>{' '}
                         out of 31 days in October!
                       </IonLabel>
                     </IonItem>
@@ -175,8 +175,8 @@ const Results: React.FC = () => {
                         <img alt="picture of medal" src={personalrecord} />
                       </IonThumbnail>
                       <IonLabel>
-                        Your personal record was on <b>{maxDate}</b> where you
-                        walked <b>{maxSteps}</b> steps!
+                        Your personal record was on <b>{data?.maxStepDate}</b> where you
+                        walked <b>{data?.maxSteps}</b> steps!
                       </IonLabel>
                     </IonItem>
                   </IonList>
