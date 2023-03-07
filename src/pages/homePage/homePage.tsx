@@ -15,8 +15,7 @@ import {
   IonCol,
   RefresherEventDetail,
   IonRefresher,
-  IonRefresherContent,
-  IonButton
+  IonRefresherContent
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
 import { useHistory } from 'react-router';
@@ -111,9 +110,6 @@ const HomePage: React.FC = () => {
     history.push('/app/manualsteps');
   };
 
-  const toResults = () => {
-    history.push('/app/results');
-  };
 
   return (
     <IonPage>
@@ -148,7 +144,6 @@ const HomePage: React.FC = () => {
               click
               <a onClick={moveToManualSteps}> here </a>
               to see previous logs
-              <IonButton onClick={toResults}> Results </IonButton>
             </IonCol>
             <IonCol
               sizeSm="6"
