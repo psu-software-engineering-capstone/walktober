@@ -67,12 +67,14 @@ const HomePage: React.FC = () => {
     const stepGoal = userData.step_goal;
 
     //Add today's step count
-    const today = new Date().toISOString().slice(0, 10);
-    if (stepsByDate[0].date == today) {
-      setSteps(stepsByDate[0].steps);
-    }
-    else if (stepsByDate[stepsByDate.length - 1].date == today) {
-      setSteps(stepsByDate[stepsByDate.length - 1].steps);
+    if (stepsByDate.length > 0) {
+      const today = new Date().toISOString().slice(0, 10);
+      if (stepsByDate[0].date == today) {
+        setSteps(stepsByDate[0].steps);
+      }
+      else if (stepsByDate[stepsByDate.length - 1].date == today) {
+        setSteps(stepsByDate[stepsByDate.length - 1].steps);
+      }
     }
 
     // Create an array of the last seven dates (including today)
