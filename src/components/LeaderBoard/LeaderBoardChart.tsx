@@ -41,7 +41,7 @@ const LeaderBoardChart: React.FC = () => {
         data: data.map((col) =>
           col.totalStep ? col.totalStep : col.avg_steps
         ),
-        backgroundColor: data.map((col) => col.highlight ? 'rgba(45, 211, 111, 0.5)' : 'rgba(226, 127, 38, 0.5)'),
+        backgroundColor: data.map((col) => col.highlight ? 'rgba(226, 127, 38, 1)' : 'rgba(152, 161, 64, 1)'),
         image: data.map((col) => (col.profile_pic ? col.profile_pic : null))
       }
     ]
