@@ -189,21 +189,6 @@ const LeaderBoardChart: React.FC = () => {
       : '';
   };
 
-  const centerUser = () => {
-    let focus = 0;
-    data.every((doc)=>{
-      if (doc.highlight){
-        focus += 1;
-        return false;
-      }
-      else {
-        focus += 1;
-        return true;
-      }
-    });
-    
-  };
-
   //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
   async function getData(dataType: string) {
     setLoading(true);
@@ -262,7 +247,7 @@ const LeaderBoardChart: React.FC = () => {
 
   useEffect(() => {
     getData(dataType); //go into the firestore and get all the users' names, pictures, and then totalStep
-    centerUser();
+    
   }, []);
 
   return (
