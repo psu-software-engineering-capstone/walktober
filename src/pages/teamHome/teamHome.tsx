@@ -57,6 +57,7 @@ const TeamHome: React.FC = () => {
   const [photo, setPhoto] = useState<any>(null);
   const [userTotalSteps, setUserTotalSteps] = useState(0);
   const [teamTotalSteps, setTeamTotalSteps] = useState(0);
+  const [teamLeaderEmail, setTeamLeaderEmail] = useState('');
 
   const history = useHistory(); // for routing
 
@@ -87,16 +88,27 @@ const TeamHome: React.FC = () => {
                 Members email
               </IonCol>
             </IonRow>
-            {team.map((item: { name: string; email: string }) => (
-              <IonRow key={Math.random()}>
-                <IonCol size="6" offset="0" className="admin-col">
-                  {item.name}
-                </IonCol>
-                <IonCol size="6" offset="0" className="admin-col">
-                  {item.email}
-                </IonCol>
-              </IonRow>
-            ))}
+            {team.map((item: { name: string; email: string }) =>
+              teamLeaderEmail === item.email ? (
+                <IonRow key={Math.random()}>
+                  <IonCol size="6" offset="0" className="admin-col team-lead">
+                    {item.name}
+                  </IonCol>
+                  <IonCol size="6" offset="0" className="admin-col team-lead">
+                    {item.email}
+                  </IonCol>
+                </IonRow>
+              ) : (
+                <IonRow key={Math.random()}>
+                  <IonCol size="6" offset="0" className="admin-col">
+                    {item.name}
+                  </IonCol>
+                  <IonCol size="6" offset="0" className="admin-col">
+                    {item.email}
+                  </IonCol>
+                </IonRow>
+              )
+            )}
           </IonGrid>
         </>
       );
@@ -130,6 +142,7 @@ const TeamHome: React.FC = () => {
     setTeamRef(teamRef); // set team reference
     setProfilePic(teamData.profile_pic);
     setTeamTotalSteps(teamData.totalStep);
+    setTeamLeaderEmail(teamData.leader);
     // get all the users in the team
     const usersRef = collection(FirestoreDB, 'users'); // get all users reference
     const q = query(usersRef, where('team', '==', ctx.team)); // query team members
