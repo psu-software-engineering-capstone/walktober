@@ -6,7 +6,7 @@ import {
   IonSpinner,
   IonTitle
 } from '@ionic/react';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import './LeaderBoardChart.scss';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -28,6 +28,7 @@ const LeaderBoardChart: React.FC = () => {
   const [data, setData] = useState(Array<Data>);
   const [loading, setLoading] = useState(false);
   const adData = useContext(AdminContext);
+  const contentRef = useRef<HTMLIonCardElement | null>(null);
   let dataType = 'individual';
 
   //Formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
@@ -234,12 +235,21 @@ const LeaderBoardChart: React.FC = () => {
     }, 0);
   }
 
+  //leaderboard will scroll to the user in the leaderboard
+  const scrollToUser = () => {
+    const content = contentRef.current;
+    if(content){
+      content.scrollTop = 500;
+    }
+  };
+
   useEffect(() => {
     getData(dataType); //go into the firestore and get all the users' names, pictures, and then totalStep
+    scrollToUser();
   }, []);
 
   return (
-    <IonCard className='leaderboard-container'>
+    <IonCard className='leaderboard-container' ref={contentRef}>
         <IonHeader className='title'>
           <IonTitle>Leaderboard</IonTitle>
         </IonHeader>
