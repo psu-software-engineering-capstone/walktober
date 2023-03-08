@@ -50,6 +50,7 @@ const Admin: React.FC = () => {
   const [newRegistrationDeadline, setNewRegistrationDeadline] = useState(adData.regDate);
   const [newStartDate, setNewStart] = useState(adData.startDate);
   const [newEndDate, setNewEnd] = useState(adData.endDate);
+  const [newEditingLimit, setNewEditingLimit] = useState(adData.priorLogDays);
 
   // used for Open Team Module
 
@@ -138,8 +139,8 @@ const Admin: React.FC = () => {
   const sendNewTeamSetting = async () => {
     const dbRef = doc(FirestoreDB, 'admin', 'admin');
     await updateDoc(dbRef, {
-      min_team_size: newMinTeamSize,
-      max_team_size: newMaxTeamSize,
+      min_team_size: Number(newMinTeamSize),
+      max_team_size: Number(newMaxTeamSize),
       team_creation_due: newTeamCreationDate
     })
       .then(() => {
@@ -156,7 +157,8 @@ const Admin: React.FC = () => {
     await updateDoc(dbRef, {
       registration_deadline: newRegistrationDeadline, 
       event_start_date: newStartDate, 
-      event_end_date: newEndDate
+      event_end_date: newEndDate,
+      prior_log_days: Number(newEditingLimit)
     })
       .then(() => {
         alert('User Settings Updated!');
@@ -597,7 +599,11 @@ const Admin: React.FC = () => {
             </IonItem>
             <IonItem>
               <IonLabel>Retroactive Editting Limit</IonLabel>
-              <IonInput type="number"></IonInput>
+              <IonInput 
+                type="number"
+                name="editDaysLimit"
+                onIonChange={(e) => setNewEditingLimit(e.target.value as number)}
+              ></IonInput>
             </IonItem>
             <IonItem>
               <IonLabel>Walktober Event Start Date</IonLabel>
