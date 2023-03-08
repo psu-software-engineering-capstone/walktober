@@ -179,6 +179,7 @@ const TeamHome: React.FC = () => {
   };
 
   // display the change picture button if the user is the leader
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function changePicture() {
     if (isLeader === true) {
       return (
