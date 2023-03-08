@@ -30,8 +30,8 @@ import AuthContext from '../../store/auth-context';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
 import CalendarLeafs from '../../components/CalendarLeafs';
-import './profile.css';
 import AdminContext from '../../store/admin-context';
+import './profile.css';
 
 interface StepLog {
   date: string;
@@ -48,6 +48,7 @@ const Profile: React.FC = () => {
 
   const [present] = useIonLoading(); // for loading screen
 
+  // state variables //
   const [email, setEmail] = useState('');
   const [joinDate, setJoinDate] = useState('');
   const [name, setName] = useState('');
@@ -75,6 +76,16 @@ const Profile: React.FC = () => {
       unsubscribe();
     };
   }, [ctx.user]);
+
+  // step logs with colors from event start date to event end date
+  useEffect(() => {
+    if (stepLogs.length === 0) {
+      return;
+    }
+    stepLogs.forEach((log: StepLog) => {
+      console.log(log);
+    });
+  }, [stepLogs]);
 
   // set the data
   async function GetRecords(userData: any): Promise<void> {
@@ -109,7 +120,6 @@ const Profile: React.FC = () => {
     setIsGoogleUser(
       auth.currentUser.providerData[0]?.providerId === 'google.com'
     );
-    console.log(stepLogs); // step logs with colors (from start date to end date)
   }
 
   // handle image change
