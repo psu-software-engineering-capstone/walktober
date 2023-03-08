@@ -110,6 +110,7 @@ const HomePage: React.FC = () => {
     history.push('/app/manualsteps');
   };
 
+
   return (
     <IonPage>
       <IonHeader>
