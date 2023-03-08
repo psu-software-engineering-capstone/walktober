@@ -16,10 +16,11 @@ import {
   IonInput,
   IonButton,
   IonIcon,
-  isPlatform
+  isPlatform,
+  useIonLoading
 } from '@ionic/react';
 import { eye, eyeOff, logoGoogle } from 'ionicons/icons';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FirestoreDB, auth } from '../../firebase';
 import {
@@ -31,12 +32,16 @@ import {
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import AdminContext from '../../store/admin-context';
 import './signup.css';
 import logo from '../../assets/Walktober.png';
 
 const Signup: React.FC = () => {
   // for routing //
   const history = useHistory();
+
+  // loading screen //
+  const [present] = useIonLoading();
 
   // sign-up variables //
   const [newEmail, setNewEmail] = useState('');
@@ -48,6 +53,9 @@ const Signup: React.FC = () => {
 
   // google auth provider //
   const provider = new GoogleAuthProvider();
+
+  // Admin settings context //
+  const adData = useContext(AdminContext);
 
   // toggle password visibility
   const togglePasswordVisibility = () => {
@@ -67,6 +75,7 @@ const Signup: React.FC = () => {
       team_leader: false,
       stepsByDate: [],
       admin: true,
+      step_goal: 0,
     });
   };
 
@@ -83,6 +92,7 @@ const Signup: React.FC = () => {
       team_leader: false,
       stepsByDate: [],
       admin: true,
+      step_goal: 0,
     });
   };
 
@@ -99,11 +109,20 @@ const Signup: React.FC = () => {
       team_leader: false,
       stepsByDate: [],
       admin: true,
+      step_goal: 0,
     });
   };
 
   // sign up with google //
   const googleAuth = async () => {
+    const currentDate: Date = new Date();
+    const userCreationDeadline: Date = new Date(adData.regDate);
+    if (currentDate > userCreationDeadline) {
+      alert(
+        `The user sign-up deadline is: ${userCreationDeadline}. You cannot register for an account now.`
+      );
+      return;
+    }
     // web //
     if (!isPlatform('capacitor')) {
       signInWithPopup(auth, provider)
@@ -114,14 +133,20 @@ const Signup: React.FC = () => {
             alert('There is already an existing account under this email');
             void auth.signOut();
           } else {
-            alert('Sign-up successful');
             createUserWithGoogleAuth(result);
-            history.push('/register');
+            // delay 1 second to allow firebase to update auth state //
+            present({
+              message: 'Loading...',
+              duration: 1000,
+              spinner: 'circles'
+            });
+            setTimeout(() => {
+              history.push('/register');
+            }, 1000);
           }
         })
         .catch((error: unknown) => {
           console.log(error);
-          alert(error);
         });
       // ios & android //
     } else {
@@ -141,21 +166,35 @@ const Signup: React.FC = () => {
               alert('There is already an existing account under this email');
               void auth.signOut();
             } else {
-              alert('Sign-up successful');
               createUserWithGoogleAuthMobile(result);
-              history.push('/register');
+              // delay 1 second to allow firebase to update auth state //
+              present({
+                message: 'Loading...',
+                duration: 1000,
+                spinner: 'circles'
+              });
+              setTimeout(() => {
+                history.push('/register');
+              }, 1000);
             }
           }
         )
         .catch((error: any) => {
           console.log(error);
-          alert(error);
         });
     }
   };
 
   // sign up with email and password (web & ios & android) //
   const signUpEmailPassword = () => {
+    const currentDate: Date = new Date();
+    const userCreationDeadline: Date = new Date(adData.regDate);
+    if (currentDate > userCreationDeadline) {
+      alert(
+        `The user sign-up deadline is: ${userCreationDeadline}. You cannot register for an account now.`
+      );
+      return;
+    }
     if (newPassword === newConfirmPassword) {
       createUserWithEmailAndPassword(auth, newEmail, newPassword)
         .then((data: unknown) => {
@@ -163,8 +202,15 @@ const Signup: React.FC = () => {
           console.log(data);
           //send a verification link to the email
           emailVerification();
-          alert('Sign-up successful');
-          history.push('/register');
+          /// delay 1 second to allow firebase to update auth state //
+          present({
+            message: 'Loading...',
+            duration: 1000,
+            spinner: 'circles'
+          });
+          setTimeout(() => {
+            history.push('/register');
+          }, 1000);
         })
         .catch((error: unknown) => {
           console.log(error);
@@ -264,7 +310,7 @@ const Signup: React.FC = () => {
 
               <div>&nbsp;</div>
 
-              <IonButton expand="block" onClick={signUpEmailPassword}>
+              <IonButton expand="block" color="primary" onClick={signUpEmailPassword}>
                 Sign up
               </IonButton>
 
@@ -272,16 +318,16 @@ const Signup: React.FC = () => {
                 <span>OR</span>
               </h2>
 
-              <IonButton expand="block" onClick={googleAuth} color="tertiary">
+              <IonButton expand="block" onClick={googleAuth} color="secondary">
                 <IonIcon icon={logoGoogle}></IonIcon> &nbsp;Sign up with Google
               </IonButton>
             </IonList>
           </IonCardContent>
         </IonCard>
 
-        <IonCard className={'signup-card ' + 'bottom'}>
+        <IonCard className="signup-card bottom">
           <IonCardContent>
-            <IonButton expand="block" onClick={moveToLogin} color="success">
+            <IonButton expand="block" onClick={moveToLogin} color="tertiary">
               Return to Login
             </IonButton>
           </IonCardContent>

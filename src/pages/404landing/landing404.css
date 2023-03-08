@@ -8,3 +8,12 @@
 .d-flex {
   display: flex;
 }
+
+.card-header {
+  text-align: center;
+}
+
+.card {
+  width: auto;
+  margin: auto;
+}

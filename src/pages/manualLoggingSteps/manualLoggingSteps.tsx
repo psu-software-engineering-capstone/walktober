@@ -20,9 +20,9 @@ import {
   useIonToast
 } from '@ionic/react';
 import { auth, FirestoreDB } from '../../firebase';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { useHistory } from 'react-router';
+import { doc, getDoc, updateDoc, onSnapshot } from 'firebase/firestore';
 import AuthContext from '../../store/auth-context';
+import AdminContext from '../../store/admin-context';
 import NavBar from '../../components/NavBar';
 import { Health } from '@awesome-cordova-plugins/health';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
@@ -34,9 +34,8 @@ const ManualSteps: React.FC = () => {
     steps: number;
   }
 
-  const history = useHistory();
-
   const ctx = useContext(AuthContext);
+  const adData = useContext(AdminContext);
 
   const [manualDate, setManualDate] = useState('');
   const [manualSteps, setManualSteps] = useState(0);
@@ -44,6 +43,7 @@ const ManualSteps: React.FC = () => {
   const [totalStep, setTotalStep] = useState(0);
   const [updateTotalStep, setUpdateTotalStep] = useState(false);
   const [updateDB, setUpdateDB] = useState(false);
+  const [userData , setUserData] = useState<any>([]);
   const [present] = useIonToast();
   const supportedTypes = [
     'steps',
@@ -54,9 +54,21 @@ const ManualSteps: React.FC = () => {
     }
   ];
 
+  // update the data when the page loads
+  // update the data when the data is updated
   useEffect(() => {
-    getRecordsFromDB(); // get records from database
-  }, []);
+    const unsubscribe = onSnapshot(doc(FirestoreDB, 'users', auth.currentUser.email as string), (doc: any) => {
+        if (doc.exists()) {
+          setUserData(doc.data());
+          setStepLogs(doc.data().stepsByDate);
+        }
+      }
+    );
+    return () => {
+      console.log('unsubscribing from manual logging page');
+      unsubscribe();
+    };
+  }, [ctx.user]);
 
   useEffect(() => {
     if (updateTotalStep === true) {
@@ -77,37 +89,16 @@ const ManualSteps: React.FC = () => {
     setUpdateDB(false);
   }, [updateDB]);
 
-  // get records from database
-  const getRecordsFromDB = async () => {
-    if (ctx.user === null) {
-      alert('You are not logged in!');
-      history.push('/login');
-      return;
-    }
-    let stepsByDate = [];
-    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-    const dbSnap = await getDoc(dbRef);
-    stepsByDate = dbSnap.data().stepsByDate;
-    setStepLogs(stepsByDate);
-  };
-
   // send new log to database (manual logging)
   const sendNewLog = async () => {
-    if (auth.currentUser === null) {
-      alert('You are not logged in!');
-      return;
-    }
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-    // get current total steps
-    const dbSnap = await getDoc(dbRef);
-    const currentTotalSteps = dbSnap.data().totalStep;
+    const currentTotalSteps = userData.totalStep;
     // update total steps
     await updateDoc(dbRef, {
       stepsByDate: stepLogs,
       totalStep: totalStep
     })
       .then(() => {
-        console.log(stepLogs, totalStep);
         alert('Steps Updated!');
       })
       .catch((error: any) => {
@@ -120,7 +111,6 @@ const ManualSteps: React.FC = () => {
   // handle refresher
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
-    getRecordsFromDB();
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 
@@ -206,22 +196,15 @@ const ManualSteps: React.FC = () => {
       return;
     }
     if (isPlatform('android')) {
-      const date = new Date();
       const stepOptions: object = {
-        startDate: new Date(date.getFullYear(), date.getMonth(), 1),
+        startDate: new Date(adData.startDate),
         endDate: new Date(),
         dataType: 'steps',
         filtered: true
       };
       await Health.query(stepOptions)
         .then(async (data: any) => {
-          const dbRef = doc(
-            FirestoreDB,
-            'users',
-            auth.currentUser.email as string
-          );
-          const dbSnap = await getDoc(dbRef);
-          const dbStepsByDate: StepLog[] = dbSnap.data().stepsByDate;
+          const dbStepsByDate: StepLog[] = userData.stepsByDate;
           if (dbStepsByDate.length > 0) {
             dbStepsByDate.sort(
               (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
@@ -312,9 +295,8 @@ const ManualSteps: React.FC = () => {
         })
         .catch((error: any) => alert(error));
     } else if (isPlatform('ios')) {
-      const date = new Date();
       const stepOptions = {
-        startDate: new Date(date.getFullYear(), date.getMonth(), 1),
+        startDate: new Date(adData.startDate),
         endDate: new Date(),
         unit: 'count',
         sampleType: 'HKQuantityTypeIdentifierStepCount',
@@ -322,14 +304,7 @@ const ManualSteps: React.FC = () => {
       };
       await HealthKit.querySampleType(stepOptions)
         .then(async (data: any) => {
-          console.log(data);
-          const dbRef = doc(
-            FirestoreDB,
-            'users',
-            auth.currentUser.email as string
-          );
-          const dbSnap = await getDoc(dbRef);
-          const dbStepsByDate: StepLog[] = dbSnap.data().stepsByDate;
+          const dbStepsByDate: StepLog[] = userData.stepsByDate;
           if (dbStepsByDate.length > 0) {
             dbStepsByDate.sort(
               (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
@@ -422,19 +397,13 @@ const ManualSteps: React.FC = () => {
 
   // update current user's total steps and steps by date
   const updateCurrentUser = async (stepsByDate: any, totalStep: any) => {
-    if (ctx.user === null) {
-      alert('You are not logged in!');
-      history.push('/login');
-      return;
-    }
     const currentUserRef = doc(
       FirestoreDB,
       'users',
       auth.currentUser.email as string
     );
     // get current total steps
-    const dbSnap = await getDoc(currentUserRef);
-    const currentTotalSteps = dbSnap.data().totalStep;
+    const currentTotalSteps = userData.totalStep;
     // update total steps
     await updateDoc(currentUserRef, {
       stepsByDate: stepsByDate,
@@ -452,11 +421,6 @@ const ManualSteps: React.FC = () => {
 
   // update team total steps and average steps
   const updateTeam = async (currentTotalSteps: any, totalStep: any) => {
-    if (ctx.user === null) {
-      alert('You are not logged in!');
-      history.push('/login');
-      return;
-    }
     if (ctx.team === '') {
       return; // user is not in a team
     }
@@ -515,6 +479,22 @@ const ManualSteps: React.FC = () => {
     setManualDate('');
     setUpdateTotalStep(true);
   };
+
+  // Get the earliest date allowed for the user to log the steps
+  function getMinDate(): string {
+    const priorDate = new Date(Date.now() - adData.priorLogDays * 24 * 60 * 60 * 1000);
+    const eventStartDate = new Date(adData.startDate);
+    const minDate = eventStartDate > priorDate ? eventStartDate : priorDate;
+    return minDate.toISOString().slice(0, 10);
+  }
+
+  // Get the latest date allowed for the user to log the steps
+  function getMaxDate(): string {
+    const today = new Date();
+    const eventEndDate = new Date(adData.endDate);
+    const maxDate = eventEndDate < today ? eventEndDate : today;
+    return maxDate.toISOString().slice(0, 10);
+  }
 
   // display steps logs
   function DisplayRecords(): any {
@@ -588,6 +568,8 @@ const ManualSteps: React.FC = () => {
             <IonInput
               id="time"
               type="date"
+              min={getMinDate()}
+              max={getMaxDate()}
               onInput={(event: any) => {
                 setManualDate(
                   new Date(event.target.value).toISOString().slice(0, 10)

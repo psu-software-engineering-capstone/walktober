@@ -13,46 +13,28 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/react';
-import './teamCreation.css';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { auth, FirestoreDB } from '../../firebase';
-import { doc, getDoc, setDoc, updateDoc, Timestamp } from 'firebase/firestore';
+import AdminContext from '../../store/admin-context';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
-
-interface Timestamp {
-  seconds: number;
-  nanoseconds: number;
-
-  compareTo(other: Timestamp): number;
-}
-
-Timestamp.prototype.compareTo = function (other: Timestamp): number {
-  if (this.seconds === other.seconds) {
-    return this.nanoseconds - other.nanoseconds;
-  } else {
-    return this.seconds - other.seconds;
-  }
-};
+import './teamCreation.css';
 
 const TeamCreation: React.FC = () => {
   const [newTeamName, setNewTeamName] = useState('');
   const [newTeamStatus, setNewTeamStatus] = useState(0);
   const [newTeamPassword, setNewTeamPassword] = useState('');
-  const history = useHistory();
 
+  const history = useHistory(); // for routing
+
+  const adData = useContext(AdminContext); // admin context
+
+  // create a new team
   const createTeam = async () => {
-    if (auth.currentUser == null) {
-      alert('You are not signed-in!');
-      return;
-    }
     const userRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     const userSnap = await getDoc(userRef);
     const userData = userSnap.data();
-    if (userData.team !== '') {
-      alert('You are already in a team! You cannot create a team.');
-      return;
-    }
     if (newTeamName === '') {
       alert('Team name cannot be an empty string!');
       return;
@@ -72,13 +54,11 @@ const TeamCreation: React.FC = () => {
       alert('You must create a password for a private team!');
       return;
     }
-    const currentDate: Timestamp = Timestamp.now();
-    const adminRef = doc(FirestoreDB, 'admin', 'admin');
-    const adminSnap = await getDoc(adminRef);
-    const teamCreationDueDate: Timestamp = adminSnap.data().team_creation_due;
-    if (currentDate.compareTo(teamCreationDueDate) > 0) {
+    const currentDate: Date = new Date();
+    const teamCreationDeadline: Date = new Date(adData.teamDate);
+    if (currentDate > teamCreationDeadline) {
       alert(
-        `The team creation deadline is: ${teamCreationDueDate}. You cannot create a team now.`
+        `The team creation deadline is: ${teamCreationDeadline}. You cannot create a team now.`
       );
       return;
     }
@@ -90,7 +70,8 @@ const TeamCreation: React.FC = () => {
       status: newTeamStatus,
       password: newTeamPassword,
       profile_pic: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
-      totalStep: userData.totalStep
+      totalStep: userData.totalStep,
+      channel_id: '' // TODO: create discord channel
     })
       .then(async () => {
         console.log('Document written successfully');
@@ -103,10 +84,8 @@ const TeamCreation: React.FC = () => {
       });
   };
 
+  // update the current user's data
   const updateCurrentUser = async () => {
-    if (auth.currentUser == null) {
-      return;
-    }
     const currentUserRef = doc(
       FirestoreDB,
       'users',
