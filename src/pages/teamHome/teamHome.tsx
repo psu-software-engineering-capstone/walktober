@@ -92,7 +92,7 @@ const TeamHome: React.FC = () => {
               teamLeaderEmail === item.email ? (
                 <IonRow key={Math.random()}>
                   <IonCol size="6" offset="0" className="admin-col team-lead">
-                    {item.name}
+                    {item.name}*
                   </IonCol>
                   <IonCol size="6" offset="0" className="admin-col team-lead">
                     {item.email}
@@ -109,6 +109,11 @@ const TeamHome: React.FC = () => {
                 </IonRow>
               )
             )}
+            <IonRow>
+              <IonCol size="12" className="foot-note">
+                *Team Leader
+              </IonCol>
+            </IonRow>
           </IonGrid>
         </>
       );
