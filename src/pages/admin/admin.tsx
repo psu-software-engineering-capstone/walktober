@@ -66,6 +66,13 @@ const Admin: React.FC = () => {
     steps: number;
   }
 
+  interface TeamLog {
+    name: string;
+    size: number;
+    avg_step: number;
+    totalStep: number;
+  }
+
   const [userReportCheck, setUserReportCheck] = useState(false);
   const [teamReportCheck, setTeamReportCheck] = useState(false);
   const [preSurveryReportCheck, setpreSurveryReportCheck] = useState(false);
@@ -73,6 +80,7 @@ const Admin: React.FC = () => {
   const [devicesReportCheck, setDevicesReportCheck] = useState(false);
 
   const [userLogs, setUserLogs] = useState<UserLog[]>([]);
+  const [teamLogs, setTeamLogs] = useState<TeamLog[]>([]);
 
   const history = useHistory();
   const ctx = useContext(AuthContext);
@@ -102,6 +110,30 @@ const Admin: React.FC = () => {
     setUserLogs(userLogsData);
   };
 
+  const loadTeamLogs = async () => {
+    // prevents the user from entering the admin page from the url if they are not an admin
+    if (isAdmin === false) {
+      history.push('/app');
+      return;
+    }
+    const dbRef = collection(FirestoreDB, 'teams');//create reference to access the whole team collection
+    const dbSnap = await getDocs(dbRef);//get all the docs
+    const teamLogsData: TeamLog[] = [];//emtpy array to gather the required information from the team docs
+    dbSnap.forEach((doc: { data: () => any }) => {
+      const data = doc.data();//get data
+      if (data) {
+        const teamLogData: TeamLog = {
+          name: data.name,
+          size: data.members.length, 
+          avg_step: data.avg_steps,
+          totalStep: data.totalStep
+        };//get the necessary info
+        teamLogsData.push(teamLogData);//add it to the array
+      }
+    });
+    setTeamLogs(teamLogsData);//reassign the data to a more global variable
+  };
+
   // in team setting module, when user presses save setting, sends the data to database.
   const sendNewTeamSetting = async () => {
     const dbRef = doc(FirestoreDB, 'admin', 'admin');
@@ -112,7 +144,6 @@ const Admin: React.FC = () => {
     })
       .then(() => {
         alert('Team Settings Updated!');
-        console.log(newMaxTeamSize, newMinTeamSize, newTeamCreationDate);
       })
       .catch((error: any) => {
         alert(error);
@@ -129,7 +160,6 @@ const Admin: React.FC = () => {
     })
       .then(() => {
         alert('User Settings Updated!');
-        console.log(newRegistrationDeadline, newStartDate, newEndDate);
       })
       .catch((error: any) => {
         alert(error);
@@ -167,6 +197,7 @@ const Admin: React.FC = () => {
 
   useEffect(() => {
     loadUserLogs();
+    loadTeamLogs();
   }, []);
 
   //creates the grid, if the sample data has users in the individual data collection, it pulls the relevant information
@@ -254,29 +285,34 @@ const Admin: React.FC = () => {
   }
 
   function DisplayTeams(): any {
-    if (TeamData.length > 0) {
+    if (teamLogs.length > 0) {
       return (
         <>
           <IonGrid fixed={true}>
             <IonRow class="header-row">
-              <IonCol sizeMd="6" size={isPlatform('ios') || isPlatform('android') ? "6" : "6"} class="header-col admin-col">
+              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="header-col admin-col">
                 Team Name
               </IonCol>
 
-              <IonCol sizeMd="5" size={isPlatform('ios') || isPlatform('android') ? "5" : "5"} class="header-col admin-col">
+              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="header-col admin-col">
                 Number of Members
               </IonCol>
 
-              <IonCol sizeMd="5" size={isPlatform('ios') || isPlatform('android') ? "5" : "5"} class="header-col admin-col">
+              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="header-col admin-col">
+                Average Total Steps
+              </IonCol>
+
+              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="header-col admin-col">
                 Total Steps
               </IonCol>
             </IonRow>
 
-            {TeamData.map((item) => (
+            {teamLogs.map((item) => (
               <IonRow key={Math.random()}>
-                <IonCol sizeMd="6" size={isPlatform('ios') || isPlatform('android') ? "6" : "6"} class="admin-col">{item.name}</IonCol>
-                <IonCol sizeMd="5" size={isPlatform('ios') || isPlatform('android') ? "5" : "5"} class="admin-col">insert number of members here</IonCol>
-                <IonCol sizeMd="5" size={isPlatform('ios') || isPlatform('android') ? "5" : "5"} class="admin-col">{item.avg_steps}</IonCol>
+                <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="admin-col">{item.name}</IonCol>
+                <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="admin-col">{item.size}</IonCol>
+                <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="admin-col">{item.avg_step}</IonCol>
+                <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="admin-col">{item.totalStep}</IonCol>
               </IonRow>
             ))}
           </IonGrid>
