@@ -30,6 +30,7 @@ import {
   PostSurvey,
   Devices
 } from '../sampleData';
+import { useHistory } from 'react-router';
 
 const Admin: React.FC = () => {
   //used to open and close modals
@@ -51,12 +52,9 @@ const Admin: React.FC = () => {
   const [newEditingLimit, setNewEditingLimit] = useState(adData.priorLogDays);
 
   // used for Open Team Module
-
   const [newOpenTeam, setOpenTeam] = useState('');
 
-  //used for dates for teams
-  //const [teamDeadline, setTeamDeadline] = useState('');
-  //const [teamRegistrationDeadline, setTeamRegistrationDeadline] = useState('');
+  const history = useHistory(); // for routing
 
   interface UserLog {
     name: string;
@@ -181,6 +179,10 @@ const Admin: React.FC = () => {
     }
   };
 
+  const goToAdminSteps = (email: string) => {
+    history.push(`/app/adminSteps/${email}`);
+  };
+
   useEffect(() => {
     loadUserLogs();
     loadTeamLogs();
@@ -217,7 +219,7 @@ const Admin: React.FC = () => {
 
             {userLogs.map(
               (item: { name: any; team: any; email: any; steps: any }) => (
-                <IonRow key={Math.random()}>
+                <IonRow key={item.email}>
                   <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="admin-col">
                     {item.name}
                   </IonCol>
@@ -231,7 +233,7 @@ const Admin: React.FC = () => {
                     {item.steps}
                   </IonCol>
                   <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "4" : "8"} class="admin-col">
-                    <IonButton size="small">{isPlatform('ios') || isPlatform('android') ? "Edit Log" : "Edit Step Log"}</IonButton>
+                    <IonButton size="small" onClick={() => goToAdminSteps(item.email)}>{isPlatform('ios') || isPlatform('android') ? "Edit Log" : "Edit Step Log"}</IonButton>
                   </IonCol>
                 </IonRow>
               )
