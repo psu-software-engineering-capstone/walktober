@@ -17,7 +17,9 @@ import {
   IonRefresherContent,
   RefresherEventDetail,
   isPlatform,
-  useIonToast
+  useIonToast,
+  IonCard,
+  IonCardContent
 } from '@ionic/react';
 import { auth, FirestoreDB } from '../../firebase';
 import { doc, getDoc, updateDoc, onSnapshot } from 'firebase/firestore';
@@ -43,7 +45,7 @@ const ManualSteps: React.FC = () => {
   const [totalStep, setTotalStep] = useState(0);
   const [updateTotalStep, setUpdateTotalStep] = useState(false);
   const [updateDB, setUpdateDB] = useState(false);
-  const [userData , setUserData] = useState<any>([]);
+  const [userData, setUserData] = useState<any>([]);
   const [present] = useIonToast();
   const supportedTypes = [
     'steps',
@@ -57,7 +59,9 @@ const ManualSteps: React.FC = () => {
   // update the data when the page loads
   // update the data when the data is updated
   useEffect(() => {
-    const unsubscribe = onSnapshot(doc(FirestoreDB, 'users', auth.currentUser.email as string), (doc: any) => {
+    const unsubscribe = onSnapshot(
+      doc(FirestoreDB, 'users', auth.currentUser.email as string),
+      (doc: any) => {
         if (doc.exists()) {
           setUserData(doc.data());
           setStepLogs(doc.data().stepsByDate);
@@ -441,7 +445,7 @@ const ManualSteps: React.FC = () => {
           .catch((error: any) => {
             console.log('Error updating document: ', error);
           });
-      }      
+      }
     });
   };
 
@@ -482,7 +486,9 @@ const ManualSteps: React.FC = () => {
 
   // Get the earliest date allowed for the user to log the steps
   function getMinDate(): string {
-    const priorDate = new Date(Date.now() - adData.priorLogDays * 24 * 60 * 60 * 1000);
+    const priorDate = new Date(
+      Date.now() - adData.priorLogDays * 24 * 60 * 60 * 1000
+    );
     const eventStartDate = new Date(adData.startDate);
     const minDate = eventStartDate > priorDate ? eventStartDate : priorDate;
     return minDate.toISOString().slice(0, 10);
@@ -540,49 +546,63 @@ const ManualSteps: React.FC = () => {
           <IonTitle>Steps log</IonTitle>
         </NavBar>
       </IonHeader>
-      <IonContent className="ion-padding">
-        <form
-          id="stepLog"
-          onSubmit={(event: React.FormEvent) => {
-            submitHandler(event);
-          }}
-        >
-          <IonItem>
-            <IonLabel position="floating">Number of steps</IonLabel>
-            <IonInput
-              min="1"
-              id="steps"
-              type="number"
-              onInput={(event: any) => {
-                setManualSteps(Number(event.target.value));
+      <IonContent className="ion-padding body">
+        <IonCard className="card-body">
+          <IonCardContent className="card-body">
+            {' '}
+            <form
+              id="stepLog"
+              onSubmit={(event: React.FormEvent) => {
+                submitHandler(event);
               }}
-            ></IonInput>
-          </IonItem>
-          <a>
-            <IonRouterLink slot="helper" routerLink="/app/stepscalc">
-              Need help calculating steps?
-            </IonRouterLink>
-          </a>
-          <IonItem>
-            <IonLabel position="floating"></IonLabel>
-            <IonInput
-              id="time"
-              type="date"
-              min={getMinDate()}
-              max={getMaxDate()}
-              onInput={(event: any) => {
-                setManualDate(
-                  new Date(event.target.value).toISOString().slice(0, 10)
-                );
-              }}
-            ></IonInput>
-          </IonItem>
-          <IonCol>
-            <IonButton type="submit">Submit</IonButton>
-            <IonButton onClick={syncApp}>Sync Health App</IonButton>
-          </IonCol>
-        </form>
-        <IonItem>{DisplayRecords()}</IonItem>
+            >
+              <IonItem>
+                <IonLabel position="floating">Number of steps</IonLabel>
+                <IonInput
+                  min="1"
+                  id="steps"
+                  type="number"
+                  onInput={(event: any) => {
+                    setManualSteps(Number(event.target.value));
+                  }}
+                ></IonInput>
+              </IonItem>
+              <a className="anchor">
+                <IonRouterLink slot="helper" routerLink="/app/stepscalc">
+                  Need help calculating steps?
+                </IonRouterLink>
+              </a>
+              <IonItem className="calendar-input">
+                <IonLabel position="floating"></IonLabel>
+                <IonInput
+                  id="time"
+                  type="date"
+                  min={getMinDate()}
+                  max={getMaxDate()}
+                  onInput={(event: any) => {
+                    setManualDate(
+                      new Date(event.target.value).toISOString().slice(0, 10)
+                    );
+                  }}
+                ></IonInput>
+              </IonItem>
+              <IonCol>
+                <IonButton type="submit" className="button-form">
+                  Submit
+                </IonButton>
+
+                {isPlatform('android') || isPlatform('ios') ? (
+                  <IonButton onClick={syncApp} className="button-form-sync">
+                    Sync Health App
+                  </IonButton>
+                ) : (
+                  ' '
+                )}
+              </IonCol>
+            </form>
+            <IonItem>{DisplayRecords()}</IonItem>
+          </IonCardContent>
+        </IonCard>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
