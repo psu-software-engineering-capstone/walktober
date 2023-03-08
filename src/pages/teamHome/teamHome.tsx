@@ -69,29 +69,30 @@ const TeamHome: React.FC = () => {
       return (
         <>
           <IonGrid>
-            <IonRow class="top">
+            <IonRow className="top">
               <IonCol
                 size="12"
+                offset="0"
                 align-self-center="true"
                 class="header-col admin-col"
               >
                 Teammates
               </IonCol>
             </IonRow>
-            <IonRow class="header-row">
-              <IonCol size="6" class="header-col admin-col">
+            <IonRow className="header-row">
+              <IonCol size="6" offset="0" className="header-col admin-col">
                 Members Name
               </IonCol>
-              <IonCol size="6" class="header-col admin-col">
+              <IonCol size="6" offset="0" className="header-col admin-col">
                 Members email
               </IonCol>
             </IonRow>
             {team.map((item: { name: string; email: string }) => (
               <IonRow key={Math.random()}>
-                <IonCol size="6" class="admin-col">
+                <IonCol size="6" offset="0" className="admin-col">
                   {item.name}
                 </IonCol>
-                <IonCol size="6" class="admin-col">
+                <IonCol size="6" offset="0" className="admin-col">
                   {item.email}
                 </IonCol>
               </IonRow>
@@ -350,9 +351,8 @@ const TeamHome: React.FC = () => {
                         >
                           {' '}
                         </IonImg>
-                        {/* <IonItem> {ctx.team} Profile Picture </IonItem>
-              {changePicture()} */}
                       </IonCol>
+                      <IonCol size="12">{changePicture()}</IonCol>
                       <IonCol size="12" className="col-from-cards">
                         <IonButton
                           onClick={leaveTeam}
