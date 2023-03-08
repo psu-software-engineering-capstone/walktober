@@ -13,7 +13,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import AdminContext from '../../store/admin-context';
 import { Bar } from 'react-chartjs-2';
 import { collection, getDocs } from 'firebase/firestore';
-import { FirestoreDB } from '../../firebase';
+import { auth, FirestoreDB } from '../../firebase';
 
 ChartJS.register(...registerables);
 
@@ -22,6 +22,7 @@ interface Data {
   profile_pic?: string;
   totalStep?: number;
   avg_steps?: number;
+  highlight: boolean;
 }
 
 const LeaderBoardChart: React.FC = () => {
@@ -40,10 +41,12 @@ const LeaderBoardChart: React.FC = () => {
         data: data.map((col) =>
           col.totalStep ? col.totalStep : col.avg_steps
         ),
+        backgroundColor: data.map((col) => col.highlight ? 'rgba(45, 211, 111, 0.5)' : 'rgba(226, 127, 38, 0.5)'),
         image: data.map((col) => (col.profile_pic ? col.profile_pic : null))
       }
     ]
   };
+  
 
   //adds image of users or team to the chart next to the user's/team's name
   const imgItems = {
@@ -186,6 +189,21 @@ const LeaderBoardChart: React.FC = () => {
       : '';
   };
 
+  const centerUser = () => {
+    let focus = 0;
+    data.every((doc)=>{
+      if (doc.highlight){
+        focus += 1;
+        return false;
+      }
+      else {
+        focus += 1;
+        return true;
+      }
+    });
+    
+  };
+
   //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
   async function getData(dataType: string) {
     setLoading(true);
@@ -196,7 +214,8 @@ const LeaderBoardChart: React.FC = () => {
         const person: Data = {
           name: doc.data().name as string,
           profile_pic: doc.data().profile_pic as string,
-          totalStep: doc.data().totalStep as number
+          totalStep: doc.data().totalStep as number,
+          highlight: auth.currentUser.email == doc.data().email ? true as boolean : false as boolean
         };
         indData.push(person);
       });
@@ -210,8 +229,14 @@ const LeaderBoardChart: React.FC = () => {
         const team: Data = {
           name: doc.data().name as string,
           profile_pic: doc.data().profile_pic as string,
-          avg_steps: doc.data().avg_steps as number
+          avg_steps: doc.data().avg_steps as number,
+          highlight: false as boolean
         };
+        const teamMembers = doc.data().members;
+        teamMembers.forEach((member: string) => {
+          if(auth.currentUser.email == member)
+            team.highlight = true;
+        });
         const today = new Date();
         const deadline = new Date(adData.teamDate);
         if (deadline < today) {
@@ -227,6 +252,7 @@ const LeaderBoardChart: React.FC = () => {
         indData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
       );
     }
+
     boxAdjust(indData.length);
     //need to find way to not hardcode time
     setTimeout(() => {
@@ -236,6 +262,7 @@ const LeaderBoardChart: React.FC = () => {
 
   useEffect(() => {
     getData(dataType); //go into the firestore and get all the users' names, pictures, and then totalStep
+    centerUser();
   }, []);
 
   return (
