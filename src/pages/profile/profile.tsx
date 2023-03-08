@@ -31,6 +31,12 @@ import { updateProfile } from 'firebase/auth';
 import CalendarLeafs from '../../components/CalendarLeafs';
 import './profile.css';
 
+interface StepLog {
+  date: string;
+  steps: number;
+  color: string;
+}
+
 const Profile: React.FC = () => {
   const history = useHistory();
   const ctx = useContext(AuthContext);
@@ -43,6 +49,7 @@ const Profile: React.FC = () => {
   const [stepGoal, setStepGoal] = useState(0);
   const [photo, setPhoto] = useState<any>(null);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
+  const [stepLogs, setStepLogs] = useState<StepLog[]>([]);
 
   // update profile data when the page loads
   // update profile data when the profile data changes
@@ -62,6 +69,25 @@ const Profile: React.FC = () => {
 
   // set the data
   async function GetRecords(userData: any): Promise<void> {
+    const holdStep = userData.stepsByDate;
+
+    const stepLogsWithColors = holdStep.map((log: { steps: number; date: any; }) => {
+      let color = "null"; 
+      if(log.steps >= 10000)
+        color = "green";
+      else if(log.steps >= 7500 && log.steps < 10000)
+        color = "yellow";
+      else if (log.steps >= 5000 && log.steps < 7500)
+        color = "orange";
+    
+      return {
+        date: log.date,
+        steps: log.steps,
+        color,
+      };
+    });
+
+    setStepLogs (stepLogsWithColors);
     setProfilePic(userData.profile_pic);
     setName(userData.name);
     setEmail(userData.email);
