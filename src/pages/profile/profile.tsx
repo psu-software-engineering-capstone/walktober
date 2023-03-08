@@ -100,6 +100,8 @@ const Profile: React.FC = () => {
     setIsGoogleUser(
       auth.currentUser.providerData[0]?.providerId === 'google.com'
     );
+
+    console.log(stepLogs[1].color);
   }
 
   // handle image change
