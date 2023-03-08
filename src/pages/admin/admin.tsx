@@ -22,7 +22,6 @@ import { useContext, useEffect, useState } from 'react';
 import AdminContext from '../../store/admin-context';
 import { FirestoreDB } from '../../firebase';
 import { doc, collection, getDocs, updateDoc, setDoc, getDoc } from 'firebase/firestore';
-import { useHistory } from 'react-router';
 import './admin.css';
 import {
   TeamData,
@@ -31,6 +30,7 @@ import {
   PostSurvey,
   Devices
 } from '../sampleData';
+import { useHistory } from 'react-router';
 
 const Admin: React.FC = () => {
   //used to open and close modals
@@ -179,10 +179,9 @@ const Admin: React.FC = () => {
     }
   };
 
-  const goToAdminSteps = (email : string) => {
+  const goToAdminSteps = (email: string) => {
     history.push(`/app/adminSteps/${email}`);
   };
-
 
   useEffect(() => {
     loadUserLogs();

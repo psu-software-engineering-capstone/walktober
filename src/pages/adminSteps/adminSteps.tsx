@@ -19,42 +19,40 @@ import {
 } from '@ionic/react';
 import './adminSteps.css';
 import { FirestoreDB } from '../../firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import { updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import NavBar from '../../components/NavBar';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 interface AdminStepsParams {
   email: string;
 }
 
-const AdminSteps: React.FC<{ email: string }> = ( ) => {
+const AdminSteps: React.FC<{ email: string }> = () => {
   interface StepLog {
     date: string;
     steps: number;
   }
 
+  // state variables //
   const [logsName, setLogsName] = useState('');
+  const [logsTeam, setLogsTeam] = useState('');
+  const [currentTotalSteps, setCurrentTotalSteps] = useState(0);
   const [manualDate, setManualDate] = useState('');
   const [manualSteps, setManualSteps] = useState(0);
   const [stepLogs, setStepLogs] = useState<StepLog[]>([]);
   const [totalStep, setTotalStep] = useState(0);
   const [updateTotalStep, setUpdateTotalStep] = useState(false);
   const [updateDB, setUpdateDB] = useState(false);
-  const [email, setEmail] = useState('');
   const { email: emailParam } = useParams<AdminStepsParams>();
 
-  console.log("email is: " + email);
-  console.log("param is: " + emailParam);
+  const history = useHistory(); // for routing
 
-  useEffect(() => {
-    setEmail(emailParam);
-  }, [emailParam]);
-
+  // get data from db
   useEffect(() => {
     getRecordsFromDB();
-  }, []);
+  }, [emailParam]);
 
+  // calculate new total steps
   useEffect(() => {
     if (updateTotalStep === true) {
       let sum = 0;
@@ -67,6 +65,7 @@ const AdminSteps: React.FC<{ email: string }> = ( ) => {
     setUpdateTotalStep(false);
   }, [updateTotalStep]);
 
+  // call update db function
   useEffect(() => {
     if (updateDB === true) {
       sendNewLog();
@@ -74,25 +73,29 @@ const AdminSteps: React.FC<{ email: string }> = ( ) => {
     setUpdateDB(false);
   }, [updateDB]);
 
+  // get data from db
   const getRecordsFromDB = async () => {
-    console.log("bruh");
-    let stepsByDate = [];
     const dbRef = doc(FirestoreDB, 'users', emailParam);
     const dbSnap = await getDoc(dbRef);
-    stepsByDate = dbSnap.data().stepsByDate;
+    const stepsByDate = dbSnap.data().stepsByDate;
     const name = dbSnap.data().name;
+    const team = dbSnap.data().team;
+    const currentTotal = dbSnap.data().totalStep;
     setLogsName(name);
+    setLogsTeam(team);
     setStepLogs(stepsByDate);
+    setCurrentTotalSteps(currentTotal);
   };
 
+  // update db with new steps
   const sendNewLog = async () => {
-    const dbRef = doc(FirestoreDB, 'users', email);
+    const dbRef = doc(FirestoreDB, 'users', emailParam);
     await updateDoc(dbRef, {
       stepsByDate: stepLogs,
       totalStep: totalStep
     })
       .then(() => {
-        console.log(stepLogs, totalStep);
+        updateTeam(currentTotalSteps, totalStep); // update team total steps and average steps
         alert('Steps Updated!');
       })
       .catch((error: any) => {
@@ -100,12 +103,35 @@ const AdminSteps: React.FC<{ email: string }> = ( ) => {
       });
   };
 
+  // update team total steps and average steps
+  const updateTeam = async (currentTotalSteps: any, totalStep: any) => {
+    if (logsTeam === '') {
+      return; // user is not in a team
+    }
+    const dbRef = doc(FirestoreDB, 'teams', logsTeam);
+    getDoc(dbRef).then((doc: any) => {
+      if (doc.exists()) {
+        const teamData = doc.data();
+        const teamTotalSteps = teamData.totalStep;
+        const newTotalSteps = teamTotalSteps - currentTotalSteps + totalStep;
+        const newAvgSteps = newTotalSteps / teamData.members.length;
+        updateDoc(dbRef, {
+          totalStep: newTotalSteps,
+          avg_steps: newAvgSteps
+        })
+          .then(() => {
+            console.log('Team total steps and average steps updated!');
+          })
+          .catch((error: any) => {
+            console.log(error);
+          });
+      }      
+    });
+  };
+
+  // display records
   function DisplayRecords(): any {
     if (stepLogs.length > 0) {
-      if(email !== emailParam)
-      {
-        window.location.reload();
-      }
       stepLogs.sort(
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
       );
@@ -140,6 +166,7 @@ const AdminSteps: React.FC<{ email: string }> = ( ) => {
     }
   }
 
+  // handle refresh
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     console.log("handlerec");
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
@@ -147,6 +174,7 @@ const AdminSteps: React.FC<{ email: string }> = ( ) => {
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 
+  // handle manual entry
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!manualSteps || !manualDate) {
@@ -158,7 +186,8 @@ const AdminSteps: React.FC<{ email: string }> = ( ) => {
       if (existingIndex !== -1) {
         const newLogs = prev.map((log, index) => {
           if (index === existingIndex) {
-            return { ...log, steps: log.steps + manualSteps };
+            // return { ...log, steps: log.steps + manualSteps };
+            return { ...log, steps: manualSteps };
           }
           return log;
         });
@@ -170,6 +199,11 @@ const AdminSteps: React.FC<{ email: string }> = ( ) => {
     setManualSteps(0);
     setManualDate('');
     setUpdateTotalStep(true);
+  };
+
+  // go to admin page
+  const goToAdmin = () => {
+    history.push('/app/admin');
   };
 
   return (
@@ -217,6 +251,7 @@ const AdminSteps: React.FC<{ email: string }> = ( ) => {
           </IonItem>
           <IonCol>
             <IonButton type="submit">Submit</IonButton>
+            <IonButton onClick={goToAdmin}>Back to Admin Page</IonButton>
           </IonCol>
         </form>
         <IonItem>{DisplayRecords()}</IonItem>

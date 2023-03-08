@@ -31,6 +31,7 @@ import Admin from './pages/admin/admin';
 import StepsCalculator from './pages/stepsCalculator/stepsCalculator';
 import AuthContext from './store/auth-context';
 import Results from './pages/results/results';
+import AdminSteps from './pages/adminSteps/adminSteps';
 
 /* Routes */
 import ToLogin from './routes/ToLogin';
@@ -64,6 +65,7 @@ const Dashboard: React.FC = () => {
         <Route exact path="/app/team/join" component={ctx.user && ctx.team === '' ? TeamJoin : ctx.user && ctx.team !== '' ? ToTeamHome : ToLogin} />
         <Route exact path="/app/admin" component={ctx.user && ctx.admin === true ? Admin : ctx.user && ctx.admin === false ? ToHome : ToLogin} />
         <Route exact path="/app/results" component={ctx.user ? Results : ToLogin} />
+        <Route path="/app/adminSteps/:email" component={ctx.user && ctx.admin === true ? AdminSteps : ctx.user && ctx.admin === false ? ToHome : ToLogin} />
         <Route exact path="/app">
           <Redirect to="/app/home" />
         </Route>
