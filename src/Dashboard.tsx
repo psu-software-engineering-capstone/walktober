@@ -46,7 +46,6 @@ import { useContext } from 'react';
 
 const Dashboard: React.FC = () => {
   const ctx = useContext(AuthContext);
-  const isAdmin = ctx.admin;
 
   const tabsVisible = isPlatform('android') || isPlatform('ios');
 
@@ -93,7 +92,7 @@ const Dashboard: React.FC = () => {
           <IonIcon icon={people} />
           <IonLabel>Team</IonLabel>
         </IonTabButton>
-        {isAdmin && (
+        {ctx.admin && (
           <IonTabButton tab="admin" href="/app/admin">
             <IonIcon icon={construct} />
             <IonLabel>Admin</IonLabel>

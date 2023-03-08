@@ -22,6 +22,7 @@ import { useContext, useEffect, useState } from 'react';
 import AdminContext from '../../store/admin-context';
 import { FirestoreDB } from '../../firebase';
 import { doc, collection, getDocs, updateDoc, setDoc, getDoc } from 'firebase/firestore';
+import { useHistory } from 'react-router';
 import './admin.css';
 import {
   TeamData,
@@ -30,7 +31,6 @@ import {
   PostSurvey,
   Devices
 } from '../sampleData';
-import AdminSteps from '../adminSteps/adminSteps';
 
 const Admin: React.FC = () => {
   //used to open and close modals
@@ -52,12 +52,9 @@ const Admin: React.FC = () => {
   const [newEditingLimit, setNewEditingLimit] = useState(adData.priorLogDays);
 
   // used for Open Team Module
-
   const [newOpenTeam, setOpenTeam] = useState('');
 
-  //used for dates for teams
-  //const [teamDeadline, setTeamDeadline] = useState('');
-  //const [teamRegistrationDeadline, setTeamRegistrationDeadline] = useState('');
+  const history = useHistory(); // for routing
 
   interface UserLog {
     name: string;
@@ -183,10 +180,7 @@ const Admin: React.FC = () => {
   };
 
   const goToAdminSteps = (email : string) => {
-    //console.log(email);
     history.push(`/app/adminSteps/${email}`);
-    // window.history.replaceState(null, '');
-    // history.push('/app/adminSteps', { email: email });
   };
 
 
