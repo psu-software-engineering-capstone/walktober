@@ -65,6 +65,7 @@ const ManualSteps: React.FC = () => {
       }
     );
     return () => {
+      console.log('unsubscribing from manual logging page');
       unsubscribe();
     };
   }, [ctx.user]);

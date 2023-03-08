@@ -279,6 +279,7 @@ const TeamHome: React.FC = () => {
       }
     );
     return () => {
+      console.log('unsubscribing from team home page');
       unsubscribe();
     };
   }, [ctx.user, ctx.team]);

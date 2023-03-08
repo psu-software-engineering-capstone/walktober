@@ -15,7 +15,7 @@ export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) =
   const [admin, setAdmin] = useState(false);
   const [complete, setComplete] = useState(false);
 
-  // update team context whenever there is an update in firestore database
+  // team state change listener
   useEffect(() => {
     if (auth.currentUser !== null) {
       const unsubscribe = onSnapshot(doc(FirestoreDB, "users", auth.currentUser.email as string), (doc: any) => {
@@ -27,12 +27,13 @@ export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) =
     }
   }, [auth.currentUser]);
   
+  // auth state change listener
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(
       async (res: SetStateAction<null>) => {
         res ? setUser(res) : setUser(null); // if user is logged in, set user to the user object, otherwise set user to null
-        await getUserInfo(); // get user info from firestore database
-        setComplete(true); // set complete to true to render the children
+        await getAdminInfo(); // get admin info from firestore database
+        setComplete(true); // set complete to true to render the children components
       }
     );
     return () => {
@@ -40,7 +41,8 @@ export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) =
     };
   }, [auth]);
 
-  const getUserInfo = async () => {
+  // get admin info from firestore database
+  const getAdminInfo = async () => {
     if (auth.currentUser !== null) {
       const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
       const dbSnap = await getDoc(dbRef);
@@ -50,7 +52,6 @@ export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) =
       } else {
         setAdmin(false);
       }
-      setTeam(userData.team);
     } else {
       setAdmin(false);
     }

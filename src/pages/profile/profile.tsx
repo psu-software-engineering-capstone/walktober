@@ -68,6 +68,7 @@ const Profile: React.FC = () => {
       }
     );
     return () => {
+      console.log('unsubscribing from profile page');
       unsubscribe();
     };
   }, [ctx.user]);

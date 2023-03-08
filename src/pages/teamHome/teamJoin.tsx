@@ -270,6 +270,7 @@ const TeamJoin: React.FC = () => {
       getData(temp);
     });
     return () => {
+      console.log('unsubscribing from team join page');
       unsubscribe();
     };
   }, [ctx.user, ctx.team]);

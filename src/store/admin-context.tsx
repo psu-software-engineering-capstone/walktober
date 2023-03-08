@@ -27,9 +27,9 @@ export const AdminContextProvider: React.FC<{ children: any }> = ( props: any ) 
   const [priorLogDays, setPriorLogDays] = useState(0);
   const [complete, setComplete] = useState(false);
 
-  // update admin team settings whenever there is an update in firestore database
+  // update admin settings whenever there is an update in firestore database
   useEffect(() => {
-    const unsubcribe = onSnapshot(doc(FirestoreDB, "admin", "admin"), (doc: any) => {
+    const unsubscribe = onSnapshot(doc(FirestoreDB, "admin", "admin"), (doc: any) => {
       setMax(doc.data().max_team_size as number);
       setMin(doc.data().min_team_size as number);
       setRegDate(doc.data().registration_deadline);
@@ -40,7 +40,7 @@ export const AdminContextProvider: React.FC<{ children: any }> = ( props: any ) 
       setComplete(true);
     });
     return () => {
-      unsubcribe();
+      unsubscribe();
     };
   }, []);
 

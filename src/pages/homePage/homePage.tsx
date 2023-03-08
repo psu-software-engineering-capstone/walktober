@@ -57,6 +57,7 @@ const HomePage: React.FC = () => {
       }
     );
     return () => {
+      console.log('unsubscribing from home page');
       unsubscribe();
     };
   }, [ctx.user]);
