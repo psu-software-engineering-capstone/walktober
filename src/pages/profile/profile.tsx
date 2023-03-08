@@ -17,7 +17,8 @@ import {
   IonRouterOutlet,
   IonRow,
   IonTitle,
-  RefresherEventDetail
+  RefresherEventDetail,
+  useIonLoading
 } from '@ionic/react';
 import { Route } from 'react-router-dom';
 import { auth, FirestoreDB, storage } from '../../firebase';
@@ -38,8 +39,12 @@ interface StepLog {
 }
 
 const Profile: React.FC = () => {
-  const history = useHistory();
-  const ctx = useContext(AuthContext);
+  const history = useHistory(); // for routing
+
+  const ctx = useContext(AuthContext); // auth context
+
+  const [present] = useIonLoading(); // for loading screen
+
   const [email, setEmail] = useState('');
   const [joinDate, setJoinDate] = useState('');
   const [name, setName] = useState('');
@@ -156,12 +161,16 @@ const Profile: React.FC = () => {
 
   // sign out
   const signOut = async () => {
-    try {
+    // delay 1 second to allow firebase to update auth state //
+    present({
+      message: 'Loading...',
+      duration: 1000,
+      spinner: 'circles'
+    });
+    setTimeout(async () => {
       await auth.signOut();
       history.push('/');
-    } catch (error) {
-      console.log('Error signing out:', error);
-    }
+    }, 1000);
   };
 
   // handle refresher

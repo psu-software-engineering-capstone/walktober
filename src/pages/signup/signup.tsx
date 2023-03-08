@@ -147,7 +147,6 @@ const Signup: React.FC = () => {
         })
         .catch((error: unknown) => {
           console.log(error);
-          alert(error);
         });
       // ios & android //
     } else {
@@ -182,7 +181,6 @@ const Signup: React.FC = () => {
         )
         .catch((error: any) => {
           console.log(error);
-          alert(error);
         });
     }
   };
