@@ -18,6 +18,7 @@ import {
 } from 'ionicons/icons';
 
 /* Pages */
+import landing404 from './pages/404landing/landing404';
 import HomePage from './pages/homePage/homePage';
 import Profile from './pages/profile/profile';
 import newPassword from './pages/profile/newPassword';
@@ -29,7 +30,6 @@ import TeamCreation from './pages/teamCreation/teamCreation';
 import Admin from './pages/admin/admin';
 import StepsCalculator from './pages/stepsCalculator/stepsCalculator';
 import AuthContext from './store/auth-context';
-import landing404 from './pages/404landing/landing404';
 import Results from './pages/results/results';
 
 /* Routes */
@@ -53,7 +53,7 @@ const Dashboard: React.FC = () => {
   return (
     <IonTabs>
       <IonRouterOutlet>
-        <Route path="/" component={landing404}></Route>
+        <Route component={landing404} />
         <Route exact path="/app/home" component={ctx.user ? HomePage : ToLogin} />
         <Route exact path="/app/profile" component={ctx.user ? Profile : ToLogin} />
         <Route exact path="/app/profile/passwordChange" component={ctx.user ? newPassword : ToLogin} />

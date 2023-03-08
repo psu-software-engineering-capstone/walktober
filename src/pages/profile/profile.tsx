@@ -31,6 +31,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
 import CalendarLeafs from '../../components/CalendarLeafs';
 import './profile.css';
+import AdminContext from '../../store/admin-context';
 
 interface StepLog {
   date: string;
@@ -42,6 +43,8 @@ const Profile: React.FC = () => {
   const history = useHistory(); // for routing
 
   const ctx = useContext(AuthContext); // auth context
+
+  const adData = useContext(AdminContext); // admin context
 
   const [present] = useIonLoading(); // for loading screen
 
@@ -76,24 +79,24 @@ const Profile: React.FC = () => {
   // set the data
   async function GetRecords(userData: any): Promise<void> {
     const holdStep = userData.stepsByDate;
-
-    const stepLogsWithColors = holdStep.map((log: { steps: number; date: any; }) => {
-      let color = "null"; 
-      if(log.steps >= 10000)
-        color = "green";
-      else if(log.steps >= 7500 && log.steps < 10000)
-        color = "yellow";
-      else if (log.steps >= 5000 && log.steps < 7500)
-        color = "orange";
-    
-      return {
-        date: log.date,
-        steps: log.steps,
-        color,
-      };
+    const stepLogsWithColors: StepLog[] = [];
+    holdStep.forEach((log: { date: string; steps: number; }) => {
+      if (new Date(adData.startDate) <= new Date(log.date) && new Date(log.date) <= new Date(adData.endDate)) {
+        let color = "null"; 
+        if(log.steps >= 10000)
+          color = "green";
+        else if(log.steps >= 7500 && log.steps < 10000)
+          color = "yellow";
+        else if (log.steps >= 5000 && log.steps < 7500)
+          color = "orange";
+        stepLogsWithColors.push({
+          date: log.date,
+          steps: log.steps,
+          color,
+        });
+      }
     });
-
-    setStepLogs (stepLogsWithColors);
+    setStepLogs(stepLogsWithColors);
     setProfilePic(userData.profile_pic);
     setName(userData.name);
     setEmail(userData.email);
@@ -106,8 +109,7 @@ const Profile: React.FC = () => {
     setIsGoogleUser(
       auth.currentUser.providerData[0]?.providerId === 'google.com'
     );
-
-    console.log(stepLogs[1].color);
+    console.log(stepLogs); // step logs with colors (from start date to end date)
   }
 
   // handle image change
