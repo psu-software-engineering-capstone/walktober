@@ -19,9 +19,7 @@ import {
 } from '@ionic/react';
 import NavBar from '../../components/NavBar';
 import { useContext, useEffect, useState } from 'react';
-import AuthContext from '../../store/auth-context';
 import AdminContext from '../../store/admin-context';
-import { useHistory } from 'react-router-dom';
 import { FirestoreDB } from '../../firebase';
 import { doc, collection, getDocs, updateDoc, setDoc, getDoc } from 'firebase/firestore';
 import './admin.css';
@@ -83,16 +81,7 @@ const Admin: React.FC = () => {
   const [userLogs, setUserLogs] = useState<UserLog[]>([]);
   const [teamLogs, setTeamLogs] = useState<TeamLog[]>([]);
 
-  const history = useHistory();
-  const ctx = useContext(AuthContext);
-  const isAdmin = ctx.admin;
-
   const loadUserLogs = async () => {
-    // prevents the user from entering the admin page from the url if they are not an admin
-    if (isAdmin === false) {
-      history.push('/app');
-      return;
-    }
     const dbRef = collection(FirestoreDB, 'users');
     const dbSnap = await getDocs(dbRef);
     const userLogsData: UserLog[] = [];
@@ -112,14 +101,9 @@ const Admin: React.FC = () => {
   };
 
   const loadTeamLogs = async () => {
-    // prevents the user from entering the admin page from the url if they are not an admin
-    if (isAdmin === false) {
-      history.push('/app');
-      return;
-    }
-    const dbRef = collection(FirestoreDB, 'teams');//create reference to access the whole team collection
-    const dbSnap = await getDocs(dbRef);//get all the docs
-    const teamLogsData: TeamLog[] = [];//emtpy array to gather the required information from the team docs
+    const dbRef = collection(FirestoreDB, 'teams'); // create reference to access the whole team collection
+    const dbSnap = await getDocs(dbRef); // get all the docs
+    const teamLogsData: TeamLog[] = []; // emtpy array to gather the required information from the team docs
     dbSnap.forEach((doc: { data: () => any }) => {
       const data = doc.data();//get data
       if (data) {
@@ -128,11 +112,11 @@ const Admin: React.FC = () => {
           size: data.members.length, 
           avg_step: data.avg_steps,
           totalStep: data.totalStep
-        };//get the necessary info
-        teamLogsData.push(teamLogData);//add it to the array
+        }; // get the necessary info
+        teamLogsData.push(teamLogData); // add it to the array
       }
     });
-    setTeamLogs(teamLogsData);//reassign the data to a more global variable
+    setTeamLogs(teamLogsData); // reassign the data to a more global variable
   };
 
   // in team setting module, when user presses save setting, sends the data to database.
@@ -202,8 +186,8 @@ const Admin: React.FC = () => {
     loadTeamLogs();
   }, []);
 
-  //creates the grid, if the sample data has users in the individual data collection, it pulls the relevant information
-  //and adds it into rows
+  // creates the grid, if the sample data has users in the individual data collection, it pulls the relevant information
+  // and adds it into rows
   function DisplayUsers(userLogs: UserLog[]): any {
     if (userLogs.length > 0) {
       return (
@@ -520,7 +504,7 @@ const Admin: React.FC = () => {
                 size={isPlatform('ios') || isPlatform('android') ? 'default' : 'large'}
                 expand="block"
               >
-                User Settings
+                Event Settings
               </IonButton>
             </IonCol>
             <IonCol class="invis-grid-col">
@@ -573,7 +557,7 @@ const Admin: React.FC = () => {
         <IonModal isOpen={isOpenUser} backdropDismiss={false}>
           <IonHeader class="modal-header">
             <IonToolbar>
-              <IonTitle class="modal-title">User Settings</IonTitle>
+              <IonTitle class="modal-title">Event Settings</IonTitle>
               <IonButtons slot="end">
                 <IonButton
                   onClick={() => setIsOpenUser(false)}
@@ -598,7 +582,7 @@ const Admin: React.FC = () => {
               ></IonInput>
             </IonItem>
             <IonItem>
-              <IonLabel>Retroactive Editting Limit</IonLabel>
+              <IonLabel>Step Log Allowed Period</IonLabel>
               <IonInput 
                 type="number"
                 name="editDaysLimit"
@@ -606,7 +590,7 @@ const Admin: React.FC = () => {
               ></IonInput>
             </IonItem>
             <IonItem>
-              <IonLabel>Walktober Event Start Date</IonLabel>
+              <IonLabel>Event Start Date</IonLabel>
               <IonInput
                 id="time"
                 type="date"
@@ -618,7 +602,7 @@ const Admin: React.FC = () => {
               ></IonInput>
             </IonItem>
             <IonItem>
-              <IonLabel>Walktober Event End Date</IonLabel>
+              <IonLabel>Event End Date</IonLabel>
               <IonInput
                 id="time"
                 type="date"
