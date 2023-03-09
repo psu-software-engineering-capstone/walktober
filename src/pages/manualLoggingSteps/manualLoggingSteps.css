@@ -57,3 +57,11 @@
 .anchor {
   margin-left: 1.1em;
 }
+
+.log-col {
+  text-align: right;
+}
+
+.log-col-l {
+  text-align: left;
+}

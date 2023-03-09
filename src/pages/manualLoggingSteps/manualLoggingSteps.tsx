@@ -512,14 +512,18 @@ const ManualSteps: React.FC = () => {
         <>
           <IonGrid>
             <IonRow>
-              <IonCol>Date:</IonCol>
-              <IonCol>Steps:</IonCol>
+              <IonCol className="log-col-l">Date:</IonCol>
+              <IonCol className="log-col">Steps:</IonCol>
+              <IonCol></IonCol>
             </IonRow>
 
             {stepLogs.map((item) => (
               <IonRow key={Math.random()}>
-                <IonCol>{item.date}</IonCol>
-                <IonCol>{item.steps}</IonCol>
+                <IonCol className="log-col-l">
+                  {new Date(item.date).toDateString()}
+                </IonCol>
+                <IonCol className="log-col">{item.steps}</IonCol>
+                <IonCol></IonCol>
               </IonRow>
             ))}
           </IonGrid>
