@@ -3,6 +3,7 @@ import {
   IonCardContent,
   IonButton,
   IonHeader,
+  IonCardHeader,
   IonSpinner,
   IonTitle
 } from '@ionic/react';
@@ -28,9 +29,9 @@ interface Data {
 const LeaderBoardChart: React.FC = () => {
   const [data, setData] = useState(Array<Data>);
   const [loading, setLoading] = useState(false);
+  const [dataType, setDataType] = useState('individual');
   const adData = useContext(AdminContext);
   const contentRef = useRef<HTMLIonCardElement | null>(null);
-  let dataType = 'individual';
   const chartHeightMultiplier = 60;
 
   //Formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
@@ -190,7 +191,26 @@ const LeaderBoardChart: React.FC = () => {
       ? ['th', 'st', 'nd', 'rd'][(n > 3 && n < 21) || n % 10 > 3 ? 0 : n % 10]
       : '';
   };
-
+  //leaderboard will scroll to the user in the leaderboard
+  const scrollToUser= () => {
+    const content = contentRef.current;
+    let y = 0;
+    console.log(dataType);
+    data.every((member: any) =>{
+      if(!member.highlight){
+        y += 1;
+        return true;
+      }
+      else{
+        return false;
+      }
+        
+    });
+    console.log(y);
+    if(content){
+      content.scrollTop = y * chartHeightMultiplier;
+    }
+  };
   //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
   async function getData(dataType: string) {
     setLoading(true);
@@ -241,52 +261,28 @@ const LeaderBoardChart: React.FC = () => {
     }
 
     boxAdjust(indData.length);
-    scrollToUser();
     //need to find way to not hardcode time
     setTimeout(() => {
       setLoading(false);
-      
-    });
-  }
-
-  //leaderboard will scroll to the user in the leaderboard
-  async function scrollToUser() {
-    const content = contentRef.current;
-    let y = 0;
-    console.log(dataType);
-    console.log(data);
-    await data.every((member: any) =>{
-      if(!member.highlight){
-        y += 1;
-        return true;
-      }
-      else{
-        return false;
-      }
-        
-    });
-    console.log(y);
-    if(content){
-      content.scrollTop = y * chartHeightMultiplier;
-    }
+    }, 500);
+    
   }
 
   useEffect(() => {
     getData(dataType); //go into the firestore and get all the users' names, pictures, and then totalStep
-    scrollToUser();
-  }, []);
+    
+  }, [dataType]);
 
   return (
     <IonCard className='leaderboard-container' ref={contentRef}>
-        <IonHeader className='title'>
+        <IonCardHeader className='title'>
           <IonTitle>Leaderboard</IonTitle>
-        </IonHeader>
+        </IonCardHeader>
         <div className='button-container'>
           <IonButton
             onClick={() => {
-              dataType = 'individual';
-              getData(dataType);
-              console.log(data.length);
+              setDataType('individual');
+              scrollToUser();
             }}
             disabled={loading}
           >
@@ -294,8 +290,9 @@ const LeaderBoardChart: React.FC = () => {
           </IonButton>
           <IonButton
             onClick={() => {
-              dataType = 'teams';
+              setDataType('teams');
               getData(dataType);
+              scrollToUser();
             }}
             disabled={loading}
           >
