@@ -31,6 +31,7 @@ const LeaderBoardChart: React.FC = () => {
   const adData = useContext(AdminContext);
   const contentRef = useRef<HTMLIonCardElement | null>(null);
   let dataType = 'individual';
+  const chartHeightMultiplier = 60;
 
   //Formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
   const chartData = {
@@ -178,7 +179,7 @@ const LeaderBoardChart: React.FC = () => {
   const boxAdjust = (labelLength: number) => {
     const box = document.querySelector('.box');
     if (box != null) {
-      const newHeight = labelLength * 60;
+      const newHeight = labelLength * chartHeightMultiplier;
       box.setAttribute('style', 'height: ' + newHeight.toString() + 'px');
     }
   };
@@ -240,19 +241,35 @@ const LeaderBoardChart: React.FC = () => {
     }
 
     boxAdjust(indData.length);
+    scrollToUser();
     //need to find way to not hardcode time
     setTimeout(() => {
       setLoading(false);
-    }, 0);
+      
+    });
   }
 
   //leaderboard will scroll to the user in the leaderboard
-  const scrollToUser = () => {
+  async function scrollToUser() {
     const content = contentRef.current;
+    let y = 0;
+    console.log(dataType);
+    console.log(data);
+    await data.every((member: any) =>{
+      if(!member.highlight){
+        y += 1;
+        return true;
+      }
+      else{
+        return false;
+      }
+        
+    });
+    console.log(y);
     if(content){
-      content.scrollTop = 500;
+      content.scrollTop = y * chartHeightMultiplier;
     }
-  };
+  }
 
   useEffect(() => {
     getData(dataType); //go into the firestore and get all the users' names, pictures, and then totalStep
@@ -269,6 +286,7 @@ const LeaderBoardChart: React.FC = () => {
             onClick={() => {
               dataType = 'individual';
               getData(dataType);
+              console.log(data.length);
             }}
             disabled={loading}
           >
