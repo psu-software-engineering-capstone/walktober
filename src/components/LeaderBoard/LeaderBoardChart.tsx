@@ -2,7 +2,6 @@ import {
   IonCard,
   IonCardContent,
   IonButton,
-  IonHeader,
   IonCardHeader,
   IonSpinner,
   IonTitle
@@ -13,7 +12,7 @@ import { Chart as ChartJS, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import AdminContext from '../../store/admin-context';
 import { Bar } from 'react-chartjs-2';
-import { collection, getDocs } from 'firebase/firestore';
+import { doc, collection, getDocs, onSnapshot } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
 
 ChartJS.register(...registerables);
@@ -33,7 +32,14 @@ const LeaderBoardChart: React.FC = () => {
   const adData = useContext(AdminContext);
   const contentRef = useRef<HTMLIonCardElement | null>(null);
   const chartHeightMultiplier = 60;
-
+  const user = onSnapshot(doc(FirestoreDB, 'users', auth.currentUser.email as string),
+    (doc: any) => {
+      if (doc.exists()) {
+        console.log(doc.data());
+      }
+    }
+  );
+  
   //Formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
   const chartData = {
     labels: data.map((row) => row.name.split(' ')),
@@ -222,13 +228,10 @@ const LeaderBoardChart: React.FC = () => {
           name: doc.data().name as string,
           profile_pic: doc.data().profile_pic as string,
           totalStep: doc.data().totalStep as number,
-          highlight: auth.currentUser.email == doc.data().email ? true as boolean : false as boolean
+          highlight: user == doc.data().email ? true as boolean : false as boolean
         };
         indData.push(person);
       });
-      setData(
-        indData.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
-      );
     }
     if (dataType == 'teams') {
       const querySnapshot = await getDocs(collection(FirestoreDB, 'teams'));
@@ -241,7 +244,7 @@ const LeaderBoardChart: React.FC = () => {
         };
         const teamMembers = doc.data().members;
         teamMembers.forEach((member: string) => {
-          if(auth.currentUser.email == member)
+          if(user == member)
             team.highlight = true;
         });
         const today = new Date();
@@ -255,11 +258,10 @@ const LeaderBoardChart: React.FC = () => {
           indData.push(team);
         }
       });
-      setData(
-        indData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
-      );
+      
     }
-
+    indData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1));
+    setData(indData);
     boxAdjust(indData.length);
     //need to find way to not hardcode time
     setTimeout(() => {
