@@ -67,7 +67,7 @@ const Profile: React.FC = () => {
       doc(FirestoreDB, 'users', auth.currentUser.email as string),
       (doc: any) => {
         if (doc.exists()) {
-          GetRecords(doc.data());
+          getData(doc.data());
         }
       }
     );
@@ -88,7 +88,7 @@ const Profile: React.FC = () => {
   }, [stepLogs]);
 
   // set the data
-  async function GetRecords(userData: any): Promise<void> {
+  async function getData(userData: any): Promise<void> {
     const holdStep = userData.stepsByDate;
     const stepLogsWithColors: StepLog[] = [];
     holdStep.forEach((log: { date: string; steps: number; }) => {

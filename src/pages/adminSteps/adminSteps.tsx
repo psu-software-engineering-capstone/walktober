@@ -49,7 +49,7 @@ const AdminSteps: React.FC<{ email: string }> = () => {
 
   // get data from db
   useEffect(() => {
-    getRecordsFromDB();
+    getData();
   }, [emailParam]);
 
   // calculate new total steps
@@ -74,7 +74,7 @@ const AdminSteps: React.FC<{ email: string }> = () => {
   }, [updateDB]);
 
   // get data from db
-  const getRecordsFromDB = async () => {
+  const getData = async () => {
     const dbRef = doc(FirestoreDB, 'users', emailParam);
     const dbSnap = await getDoc(dbRef);
     const stepsByDate = dbSnap.data().stepsByDate;
@@ -170,7 +170,7 @@ const AdminSteps: React.FC<{ email: string }> = () => {
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     console.log("handlerec");
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
-    getRecordsFromDB();
+    getData();
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 

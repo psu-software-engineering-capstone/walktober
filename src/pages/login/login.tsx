@@ -169,11 +169,15 @@ const Login: React.FC = () => {
       });
   };
 
+  // pressing enter on keyboard triggers login button //
   useEffect(() => {
-    window.addEventListener('keydown', e => {
-     if(e.key === 'Enter'){
-      signInEmailPassword();
-     }
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const loginBtn = document.getElementById('login');
+        if (loginBtn) {
+          loginBtn.click();
+        }
+      }
     });
   }, []);
   
@@ -241,7 +245,7 @@ const Login: React.FC = () => {
               <u color="tertiary" className="forgot-password-text">Forgot Password?</u>
             </IonRouterLink>
 
-            <IonButton expand="block" color="primary" onClick={signInEmailPassword}>
+            <IonButton id="login" expand="block" color="primary" onClick={signInEmailPassword}>
               Login
             </IonButton>
             <h2 className="or-divider">
@@ -271,4 +275,5 @@ const Login: React.FC = () => {
 };
 
 export default Login;
+
 
