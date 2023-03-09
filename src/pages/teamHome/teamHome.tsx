@@ -185,6 +185,10 @@ const TeamHome: React.FC = () => {
 
   // handle image upload
   const handleSubmit = async () => {
+    if (photo === null) {
+      alert('Please select an image to upload');
+      return;
+    }
     const imageRef = ref(storage, ctx.team + '.png');
     await uploadBytes(imageRef, photo);
     const photoURL = await getDownloadURL(imageRef);
