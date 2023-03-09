@@ -11,26 +11,20 @@ import {
   IonButton,
   isPlatform
 } from '@ionic/react';
-import './healthApp.css';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
 import { auth, FirestoreDB } from '../../firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { useHistory } from 'react-router';
 import { updateDoc } from 'firebase/firestore';
-import { Health } from '@awesome-cordova-plugins/health'; // removed , HealthQueryOptions
+import { Health } from '@awesome-cordova-plugins/health';
 import NavBar from '../../components/NavBar';
-import { useContext } from 'react';
-import AuthContext from '../../store/auth-context';
+import './healthApp.css';
+
 
 const HealthApp: React.FC = () => {
   interface StepLog {
     date: string;
     steps: number;
   }
-
-  const ctx = useContext(AuthContext);
-
-  const history = useHistory();
 
   const available = async () => {
     if (!isPlatform('ios')) {
@@ -90,7 +84,6 @@ const HealthApp: React.FC = () => {
     };
     await HealthKit.querySampleType(stepOptions)
       .then(async (data: any) => {
-        console.log(data);
         const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
         const dbSnap = await getDoc(dbRef);
         const dbStepsByDate: StepLog[] = dbSnap.data().stepsByDate;
@@ -185,11 +178,6 @@ const HealthApp: React.FC = () => {
   };
 
   const updateCurrentUser = async (stepsByDate: any, totalStep: any) => {
-    if (ctx.user === null) {
-      alert('You are not looged in!');
-      history.push('/login');
-      return;
-    }
     const currentUserRef = doc(
       FirestoreDB,
       'users',

@@ -22,7 +22,7 @@ import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import ProgressChart from '../../components/ProgressChart';
 import AuthContext from '../../store/auth-context';
-import { getDoc, doc } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
 import './homePage.css';
@@ -41,32 +41,43 @@ const HomePage: React.FC = () => {
   const history = useHistory();
   const [badges, setBadges] = useState(Array<badgeOutline>);
   const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
+  const [stepGoal, setStepGoal] = useState(0);
 
-  const ctx = useContext(AuthContext);
+  const ctx = useContext(AuthContext); // auth context
 
+  // update profile data when the page loads
+  // update profile data when the profile data changes
   useEffect(() => {
-    if (ctx.user) {
-      console.log('get past seven days steps');
-      getPastSevenDaysSteps();
-    }
+    const unsubscribe = onSnapshot(
+      doc(FirestoreDB, 'users', auth.currentUser.email as string),
+      (doc: any) => {
+        if (doc.exists()) {
+          getPastSevenDaysSteps(doc.data());
+        }
+      }
+    );
+    return () => {
+      console.log('unsubscribing from home page');
+      unsubscribe();
+    };
   }, [ctx.user]);
 
   // get past seven days of steps from firestore
-  // even though the user does not have seven days of steps
-  // the chart will still render with seven days of steps
-  // each day will have 0 steps
-  const getPastSevenDaysSteps = async () => {
-    if (ctx.user === null) {
-      alert('You are not logged in!');
-      history.push('/login');
-      return;
-    }
-  
-    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-    const dbSnap = await getDoc(dbRef);
-    const userData = dbSnap.data();
+  const getPastSevenDaysSteps = async (userData: any) => {
     const stepsByDate = userData.stepsByDate;
-  
+    const stepGoal = userData.step_goal;
+
+    //Add today's step count
+    if (stepsByDate.length > 0) {
+      const today = new Date().toISOString().slice(0, 10);
+      if (stepsByDate[0].date == today) {
+        setSteps(stepsByDate[0].steps);
+      }
+      else if (stepsByDate[stepsByDate.length - 1].date == today) {
+        setSteps(stepsByDate[stepsByDate.length - 1].steps);
+      }
+    }
+
     // Create an array of the last seven dates (including today)
     const pastSevenDaysDates = [];
     for (let i = 1; i < 8; i++) {
@@ -74,38 +85,32 @@ const HomePage: React.FC = () => {
       date.setDate(date.getDate() - i);
       pastSevenDaysDates.push(date.toISOString().slice(0, 10));
     }
-  
     // Populate pastSevenDays with step count or 0 for each date
-    const pastSevenDays = pastSevenDaysDates.map(date => {
-      const stepLog = stepsByDate.find((stepLog: StepLog) => stepLog.date === date);
+    const pastSevenDays = pastSevenDaysDates.map((date) => {
+      const stepLog = stepsByDate.find(
+        (stepLog: StepLog) => stepLog.date === date
+      );
       if (stepLog) {
         return stepLog;
       } else {
         return { date: date, steps: 0 };
       }
     });
-  
-    setPastSevenDaysSteps(pastSevenDays);
+    setPastSevenDaysSteps(pastSevenDays.reverse());
+    setStepGoal(stepGoal);
   };
-
-  // const stepUpdateHandler = (event: any): void => {
-  //   const newValue = document.querySelector('#stepsUpdate') as HTMLInputElement;
-  //   const newSteps = Number(newValue.value);
-  //   if (newSteps > 0) {
-  //     setSteps(newSteps);
-  //   }
-  // };
 
   // handle refresher
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
-    getPastSevenDaysSteps(); // Refresh data
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 
+  // move to manual steps page
   const moveToManualSteps = () => {
     history.push('/app/manualsteps');
   };
+
 
   return (
     <IonPage>
@@ -134,19 +139,8 @@ const HomePage: React.FC = () => {
               className="todaysSteps"
             >
               <IonLabel className="">
-                Todays Steps:{' '}
-                <div className="localStepsUpdater">{steps.toString()}</div>
+                Todays Steps: <div className="localStepsUpdater">{steps}</div>
               </IonLabel>
-              {/* <IonItem
-                className="localStepsUpdater"
-                id="stepsUpdate"
-                placeholder={steps.toString()}
-                onInput={(event: any) => {
-                  stepUpdateHandler(event);
-                }}
-              >
-                sad
-              </IonItem> */}
               <br />
               click
               <a onClick={moveToManualSteps}> here </a>
@@ -160,7 +154,7 @@ const HomePage: React.FC = () => {
               className="personalProgress"
             >
               {pastSevenDaysSteps.length > 1 ? (
-                <ProgressChart data={pastSevenDaysSteps.reverse()} />
+                <ProgressChart data={pastSevenDaysSteps} todayStep = {steps} stepGoal = {stepGoal} />
               ) : (
                 ' '
               )}

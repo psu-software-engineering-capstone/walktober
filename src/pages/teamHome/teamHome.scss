@@ -5,3 +5,57 @@
   width: 500px;
 }
 
+h1 {
+  vertical-align: middle;
+  align-items: center;
+  text-align: center;
+}
+
+.body {
+  --background: url(../../assets/Walktober-graphic.png);
+}
+
+.text-center {
+  text-align: center;
+  padding: 0.5em;
+  font-size: 2.5em;
+}
+
+.card-padding-team-home {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.leave-team-button {
+  padding: auto;
+}
+
+.card-content-class {
+  display: flex;
+}
+
+.profile_pic {
+  width: 100%;
+  height: 100%;
+}
+
+.col-from-cards {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.box-size {
+  height: auto;
+}
+
+.team-lead {
+  font-style: italic;
+}
+
+.foot-note {
+  text-align: center;
+}

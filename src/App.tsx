@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Redirect, Route } from 'react-router-dom';
+import { useContext, useEffect } from 'react';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Login from './pages/login/login';
@@ -8,6 +9,8 @@ import Signup from './pages/signup/signup';
 import SignupForm from './pages/signup/signupForm';
 import ForgotPassword from './pages/forgotPassword/forgotPassword';
 import Dashboard from './Dashboard';
+import landing404 from './pages/404landing/landing404';
+import AuthContext from './store/auth-context';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -28,9 +31,6 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-import { useContext, useEffect } from 'react';
-import AuthContext from './store/auth-context';
-
 setupIonicReact();
 
 function App() {
@@ -41,19 +41,32 @@ function App() {
       console.log('auth state: logged out');
     } else {
       console.log('auth state: logged in');
-      console.log(`team: ${ctx.team}`);
-      if (ctx.admin === true) {
-        console.log('user type: admin');
-      } else {
-        console.log('user type: regular');
-      }
     }
-  }, [ctx]);
+  }, [ctx.user]);
+
+  useEffect(() => {
+    if (ctx.user && ctx.team === '') {
+      console.log('team state: no team');
+    }
+    if (ctx.user && ctx.team !== '') {
+      console.log(`team state: ${ctx.team}`);
+    }
+  }, [ctx.team]);
+
+  useEffect(() => {
+    if (ctx.user && ctx.admin === false) {
+      console.log('admin state: not admin');
+    }
+    if (ctx.user && ctx.admin === true) {
+      console.log('admin state: admin');
+    }
+  }, [ctx.admin]);
 
   return (
     <IonApp>
       <IonReactRouter>
         <IonRouterOutlet>
+          <Route component={landing404} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/register" component={SignupForm} />

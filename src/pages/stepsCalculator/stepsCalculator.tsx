@@ -77,9 +77,6 @@ const StepsCalculator: React.FC = () => {
 
   function placeHolder(ev: Event): void {
     ev.preventDefault();
-    if (metric) {
-      console.log('ASDASDSADASDSADASDQWDQWDQWEAQWEASDAWEAWEASEWAQEDWQDQAW');
-    }
     const updateSteps = document.querySelector('#result');
     if (updateSteps != null) {
       if (!metric && heightFt > 0) {
@@ -96,7 +93,6 @@ const StepsCalculator: React.FC = () => {
         } else {
           steps = miles * (5280 / ((heightCm * cmToIn * strideConverter) / 12));
         }
-        console.log('placeholder');
         console.log(steps);
       }
       if (steps.toString() !== 'NaN' && steps !== 0) {
@@ -105,8 +101,6 @@ const StepsCalculator: React.FC = () => {
         updateSteps.innerHTML = '0';
       }
     }
-
-    // updateSteps.innerHTML = steps.toString();
   }
 
   const changeMetricImperial = (): void => {
@@ -114,11 +108,9 @@ const StepsCalculator: React.FC = () => {
     if (testing != null) {
       (testing as HTMLFormElement).reset();
     }
-    /// console.log(testing);
     setMetric((prev) => {
       return !prev;
     });
-    /// console.log(metric);
   };
 
   return (

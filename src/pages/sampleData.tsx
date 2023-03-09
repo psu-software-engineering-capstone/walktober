@@ -1,7 +1,14 @@
+const ChannelData = [
+  { id: "1068983906872868914", team: "Butter!" },   // team-1
+  { id: "1068983997272690748", team: "Open Team" }, // team-2
+  { id: "1068983926317654168", team: "VIP Team" },  // team-3
+  { id: "1076336334488211566", team: "" }           // team-4
+];
+
 const TeamData = [
-  { name: 'Team 1', avg_steps: 8000 },
-  { name: 'Team 2', avg_steps: 6000 },
-  { name: 'Team 3', avg_steps: 7000 },
+  { name: 'Butter!', avg_steps: 8000 },
+  { name: 'Open Team', avg_steps: 6000 },
+  { name: 'VIP Team', avg_steps: 7000 },
   { name: 'Team 4', avg_steps: 9000 },
   { name: 'Team 5', avg_steps: 5500 },
   { name: 'Team 6', avg_steps: 7200 },
@@ -129,4 +136,77 @@ const IndividualData = [
   }
 ];
 
-export { TeamData, IndividualData };
+const PreSurvey = [
+  {
+    anonymous_id: 1,
+    psu_affiliation: 'student',
+    heard_about: 'Word of mouth',
+    weekly_physical_activity_hours: 3,
+    weekly_physical_activity_minutes: 45,
+    distance_from_campus: 'On campus',
+    rec_center_frequency: 'Never'
+  }, {
+    anonymous_id: 2,
+    psu_affiliation: 'student',
+    heard_about: 'Flyer',
+    weekly_physical_activity_hours: 1,
+    weekly_physical_activity_minutes: 15,
+    distance_from_campus: '5 miles',
+    rec_center_frequency: 'Sometimes'
+  }, {
+    anonymous_id: 3,
+    psu_affiliation: 'faculty',
+    heard_about: 'Social Media',
+    weekly_physical_activity_hours: 4,
+    weekly_physical_activity_minutes: 45,
+    distance_from_campus: 'On campus',
+    rec_center_frequency: 'Often'
+  }
+];
+
+const PostSurvey = [
+  {
+    anonymous_id: 1,
+    weekly_physical_activity_hours: 7,
+    weekly_physical_activity_minutes: 45,
+    participated_events: 'sunset walk',
+    future_walk_ideas: '',
+    walktober_improved_health: 4,
+    walktober_improved_community: 3,
+    would_participate_again: 5,
+    if_not_why: '',
+    feedback: ''
+  }, {
+    anonymous_id: 2,
+    weekly_physical_activity_hours: 1,
+    weekly_physical_activity_minutes: 15,
+    participated_events: '',
+    future_walk_ideas: '',
+    walktober_improved_health: 3,
+    walktober_improved_community: 3,
+    would_participate_again: 3,
+    if_not_why: '',
+    feedback: 'more indoor walks '
+  }, {
+    anonymous_id: 5,
+    weekly_physical_activity_hours: 0,
+    weekly_physical_activity_minutes: 45,
+    participated_events: 'sunset walk',
+    future_walk_ideas: '',
+    walktober_improved_health: 5,
+    walktober_improved_community: 5,
+    would_participate_again: 5,
+    if_not_why: 'I hate exercise ',
+    feedback: ''
+  }
+];
+
+const Devices = {
+  iPhone: 34,
+  android: 76,
+	apple_health:	134,
+  fitbit: 45,
+  google_health:	36
+};
+
+export { ChannelData, TeamData, IndividualData, PreSurvey, PostSurvey, Devices };
