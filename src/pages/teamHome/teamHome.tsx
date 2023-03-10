@@ -142,7 +142,6 @@ const TeamHome: React.FC = () => {
     const chanIdData: channelIDS[] = chanIdSnap.data().channelData;
     setAllChannelIDs(chanIdData);
     const dbChannelId = chanIdData.find((c) => c.team == ctx.team)?.id; // get the team channel id
-    console.log(dbChannelId);
     // if channel not set up with id in database, default to #general
     if (dbChannelId) {
       setChannelId(dbChannelId);

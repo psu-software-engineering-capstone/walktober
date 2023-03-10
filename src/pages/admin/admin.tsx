@@ -177,9 +177,7 @@ const Admin: React.FC = () => {
       const chanIdRef = doc(FirestoreDB, 'channelIDs', 'channelIDs');
       const chanIdSnap = await getDoc(chanIdRef);
       const chanIdData: channelIDS[] = chanIdSnap.data().channelData;
-      console.log(chanIdData);
       for (let i = 0; i < chanIdData.length; i++) {
-        console.log(chanIdData[i]);
         if (chanIdData[i].team === '') {
           channelId = chanIdData[i].id;
           chanIdData[i].team = newOpenTeam;
