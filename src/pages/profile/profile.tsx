@@ -97,7 +97,9 @@ const Profile: React.FC = () => {
         ...prev,
         {
           // starting from event start date to event end date
-          date: new Date(start.getTime() + i * (1000 * 60 * 60 * 24)).toISOString().slice(0, 10),
+          date: new Date(start.getTime() + i * (1000 * 60 * 60 * 24))
+            .toISOString()
+            .slice(0, 10),
           steps: 0,
           color: 'null'
         }
@@ -135,7 +137,7 @@ const Profile: React.FC = () => {
           color
         });
       }
-    });    
+    });
     setStepLogs(stepLogsWithColors);
     setProfilePic(userData.profile_pic);
     setName(userData.name);
