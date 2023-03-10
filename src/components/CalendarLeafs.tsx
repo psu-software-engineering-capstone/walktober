@@ -30,27 +30,23 @@ const populateCalendar = (data: StepLog[]) => {
         <IonRow>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                day <= 31 ? (
-                  data[day - 1].color !== 'null' ? (
-                    <img
-                      alt={data[day - 1].color}
-                      src={
-                        data[day - 1].color === 'green'
-                          ? GreenLeaf
-                          : data[day - 1].color === 'yellow'
-                          ? YellowLeaf
-                          : data[day - 1].color === 'orange'
-                          ? OrangeLeaf
-                          : ''
-                      }
-                      className="leafImg"
-                    ></img>
-                  ) : (
-                    ''
-                  )
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
                 ) : (
-                  ' '
+                  ''
                 )
               ) : (
                 ' '
@@ -60,16 +56,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -86,16 +82,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -112,16 +108,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -138,16 +134,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -164,16 +160,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -190,16 +186,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -218,16 +214,16 @@ const populateCalendar = (data: StepLog[]) => {
         <IonRow>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -244,16 +240,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -270,16 +266,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -296,16 +292,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -322,16 +318,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -348,16 +344,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -374,200 +370,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
-                        ? OrangeLeaf
-                        : ''
-                    }
-                    className="leafImg"
-                  ></img>
-                ) : (
-                  ''
-                )
-              ) : (
-                ' '
-              )}
-              {day++}
-            </IonItem>
-          </IonCol>
-        </IonRow>
-        <IonRow>
-          <IonCol>
-            <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
-                  <img
-                    alt={data[day - 1].color}
-                    src={
-                      data[day - 1].color === 'green'
-                        ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
-                        ? YellowLeaf
-                        : data[day - 1].color === 'orange'
-                        ? OrangeLeaf
-                        : ''
-                    }
-                    className="leafImg"
-                  ></img>
-                ) : (
-                  ''
-                )
-              ) : (
-                ' '
-              )}
-              {day++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
-                  <img
-                    alt={data[day - 1].color}
-                    src={
-                      data[day - 1].color === 'green'
-                        ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
-                        ? YellowLeaf
-                        : data[day - 1].color === 'orange'
-                        ? OrangeLeaf
-                        : ''
-                    }
-                    className="leafImg"
-                  ></img>
-                ) : (
-                  ''
-                )
-              ) : (
-                ' '
-              )}
-              {day++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
-                  <img
-                    alt={data[day - 1].color}
-                    src={
-                      data[day - 1].color === 'green'
-                        ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
-                        ? YellowLeaf
-                        : data[day - 1].color === 'orange'
-                        ? OrangeLeaf
-                        : ''
-                    }
-                    className="leafImg"
-                  ></img>
-                ) : (
-                  ''
-                )
-              ) : (
-                ' '
-              )}
-              {day++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
-                  <img
-                    alt={data[day - 1].color}
-                    src={
-                      data[day - 1].color === 'green'
-                        ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
-                        ? YellowLeaf
-                        : data[day - 1].color === 'orange'
-                        ? OrangeLeaf
-                        : ''
-                    }
-                    className="leafImg"
-                  ></img>
-                ) : (
-                  ''
-                )
-              ) : (
-                ' '
-              )}
-              {day++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
-                  <img
-                    alt={data[day - 1].color}
-                    src={
-                      data[day - 1].color === 'green'
-                        ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
-                        ? YellowLeaf
-                        : data[day - 1].color === 'orange'
-                        ? OrangeLeaf
-                        : ''
-                    }
-                    className="leafImg"
-                  ></img>
-                ) : (
-                  ''
-                )
-              ) : (
-                ' '
-              )}
-              {day++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
-                  <img
-                    alt={data[day - 1].color}
-                    src={
-                      data[day - 1].color === 'green'
-                        ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
-                        ? YellowLeaf
-                        : data[day - 1].color === 'orange'
-                        ? OrangeLeaf
-                        : ''
-                    }
-                    className="leafImg"
-                  ></img>
-                ) : (
-                  ''
-                )
-              ) : (
-                ' '
-              )}
-              {day++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
-                  <img
-                    alt={data[day - 1].color}
-                    src={
-                      data[day - 1].color === 'green'
-                        ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
-                        ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -586,16 +398,16 @@ const populateCalendar = (data: StepLog[]) => {
         <IonRow>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -612,16 +424,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -638,16 +450,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -664,16 +476,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -690,16 +502,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -716,16 +528,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -742,16 +554,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -770,16 +582,200 @@ const populateCalendar = (data: StepLog[]) => {
         <IonRow>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day++}
+            </IonItem>
+          </IonCol>
+        </IonRow>
+        <IonRow>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -796,16 +792,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -822,16 +818,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -848,16 +844,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -874,16 +870,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -900,16 +896,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
@@ -926,16 +922,16 @@ const populateCalendar = (data: StepLog[]) => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {day <= 31 ? (
-                data[day - 1].color !== 'null' ? (
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
                   <img
-                    alt={data[day - 1].color}
+                    alt={data[day].color}
                     src={
-                      data[day - 1].color === 'green'
+                      data[day].color === 'green'
                         ? GreenLeaf
-                        : data[day - 1].color === 'yellow'
+                        : data[day].color === 'yellow'
                         ? YellowLeaf
-                        : data[day - 1].color === 'orange'
+                        : data[day].color === 'orange'
                         ? OrangeLeaf
                         : ''
                     }
