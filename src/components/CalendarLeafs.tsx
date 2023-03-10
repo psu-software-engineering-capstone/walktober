@@ -28,6 +28,15 @@ const populateCalendar = (data: StepLog[]) => {
           <IonCol>{'October'}</IonCol>
         </IonRow>
         <IonRow>
+          <IonCol className="dow">S</IonCol>
+          <IonCol className="dow">M</IonCol>
+          <IonCol className="dow">Tu</IonCol>
+          <IonCol className="dow">W</IonCol>
+          <IonCol className="dow">Th</IonCol>
+          <IonCol className="dow">F</IonCol>
+          <IonCol className="dow">Sa</IonCol>
+        </IonRow>
+        <IonRow>
           <IonCol>
             <IonItem>
               {day < 31 ? (
