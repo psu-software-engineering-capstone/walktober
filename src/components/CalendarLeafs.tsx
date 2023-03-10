@@ -9,25 +9,17 @@ const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
 const monthStart = new Date(`October 1, ${currentYear}`);
 
+interface StepLog {
+  date: string;
+  steps: number;
+  color: string;
+}
+
 // for displaying badges we could just make an array of the badge level with its current leaf. That way the content could
 // just be leaftDate[number]; to display it more or less. Probably more complicated than that but that's the jist
 
-const populateCalendar = () => {
+const populateCalendar = (data: StepLog[]) => {
   let number = 1;
-  const dummyLeafs = Array(31);
-  const dummyLeafsAlt = Array(31);
-  dummyLeafs[8] = OrangeLeaf;
-  dummyLeafs[9] = OrangeLeaf;
-  dummyLeafs[10] = GreenLeaf;
-  dummyLeafs[11] = YellowLeaf;
-  dummyLeafs[12] = OrangeLeaf;
-  dummyLeafs[13] = OrangeLeaf;
-  dummyLeafs[14] = GreenLeaf;
-  dummyLeafs[16] = YellowLeaf;
-  dummyLeafs[17] = null;
-  dummyLeafsAlt[8] = 'orange leaf';
-  dummyLeafsAlt[9] = 'orange leaf2';
-  dummyLeafsAlt[10] = 'orange leaf3';
 
   return (
     <>
@@ -38,10 +30,10 @@ const populateCalendar = () => {
         <IonRow>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={OrangeLeaf}
                   className="leafImg"
                 ></img>
               ) : (
@@ -52,10 +44,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -66,10 +66,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -80,10 +88,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -94,10 +110,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -108,10 +132,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -122,10 +154,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -138,10 +178,18 @@ const populateCalendar = () => {
         <IonRow>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -152,10 +200,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -166,10 +222,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -180,10 +244,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -194,10 +266,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -208,10 +288,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -222,110 +310,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-        </IonRow>
-        <IonRow>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -338,10 +334,18 @@ const populateCalendar = () => {
         <IonRow>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -352,10 +356,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -366,10 +378,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -380,10 +400,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -394,10 +422,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -408,10 +444,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -422,10 +466,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -438,10 +490,174 @@ const populateCalendar = () => {
         <IonRow>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {data[number].color !== 'null' ? (
+                <img
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {data[number].color !== 'null' ? (
+                <img
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {data[number].color !== 'null' ? (
+                <img
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {data[number].color !== 'null' ? (
+                <img
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {data[number].color !== 'null' ? (
+                <img
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {data[number].color !== 'null' ? (
+                <img
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
+                  className="leafImg"
+                ></img>
+              ) : (
+                ''
+              )}
+              {number++}
+            </IonItem>
+          </IonCol>
+        </IonRow>
+        <IonRow>
+          <IonCol>
+            <IonItem>
+              {data[number].color !== 'null' ? (
+                <img
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -452,10 +668,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -466,10 +690,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -480,10 +712,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -494,10 +734,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -508,10 +756,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -522,10 +778,18 @@ const populateCalendar = () => {
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
+              {data[number].color !== 'null' ? (
                 <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
+                  alt={data[number].color}
+                  src={
+                    data[number].color === 'green'
+                      ? GreenLeaf
+                      : data[number].color === 'yellow'
+                      ? YellowLeaf
+                      : data[number].color === 'orange'
+                      ? OrangeLeaf
+                      : ''
+                  }
                   className="leafImg"
                 ></img>
               ) : (
@@ -540,10 +804,12 @@ const populateCalendar = () => {
   );
 };
 
-const CalendarLeafs: React.FC<object> = () => {
+const CalendarLeafs: React.FC<{ data: StepLog[] }> = ({ data }) => {
   // let calStart = false;
 
-  return <>{populateCalendar()}</>;
+  return (
+    <>{data.length < 30 ? <h1>Not enough data</h1> : populateCalendar(data)}</>
+  );
 };
 
 export default CalendarLeafs;

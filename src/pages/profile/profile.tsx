@@ -91,19 +91,19 @@ const Profile: React.FC = () => {
   async function getData(userData: any): Promise<void> {
     const holdStep = userData.stepsByDate;
     const stepLogsWithColors: StepLog[] = [];
-    holdStep.forEach((log: { date: string; steps: number; }) => {
-      if (new Date(adData.startDate) <= new Date(log.date) && new Date(log.date) <= new Date(adData.endDate)) {
-        let color = "null"; 
-        if(log.steps >= 10000)
-          color = "green";
-        else if(log.steps >= 7500 && log.steps < 10000)
-          color = "yellow";
-        else if (log.steps >= 5000 && log.steps < 7500)
-          color = "orange";
+    holdStep.forEach((log: { date: string; steps: number }) => {
+      if (
+        new Date(adData.startDate) <= new Date(log.date) &&
+        new Date(log.date) <= new Date(adData.endDate)
+      ) {
+        let color = 'null';
+        if (log.steps >= 10000) color = 'green';
+        else if (log.steps >= 7500 && log.steps < 10000) color = 'yellow';
+        else if (log.steps >= 5000 && log.steps < 7500) color = 'orange';
         stepLogsWithColors.push({
           date: log.date,
           steps: log.steps,
-          color,
+          color
         });
       }
     });
@@ -280,7 +280,9 @@ const Profile: React.FC = () => {
                   <p>{totalDistance} miles walked in total</p>
                 </IonItem>
                 <form onSubmit={handleSubmitStepGoal}>
-                  <IonLabel position="stacked">Set Your Step Goal for today:</IonLabel>
+                  <IonLabel position="stacked">
+                    Set Your Step Goal for today:
+                  </IonLabel>
                   <IonInput
                     min="0"
                     type="number"
@@ -301,7 +303,7 @@ const Profile: React.FC = () => {
             </IonRow>
             <IonRow>
               <IonCol sizeLg="6" sizeMd="8" sizeSm="12">
-                <CalendarLeafs></CalendarLeafs>
+                <CalendarLeafs data={stepLogs}></CalendarLeafs>
               </IonCol>
             </IonRow>
           </IonGrid>
