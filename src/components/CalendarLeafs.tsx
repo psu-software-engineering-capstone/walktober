@@ -25,7 +25,9 @@ const populateCalendar = (data: StepLog[]) => {
     <>
       <IonGrid>
         <IonRow>
-          <IonCol>{'October'}</IonCol>
+          <IonCol offset="5" className="month">
+            {'October'}
+          </IonCol>
         </IonRow>
         <IonRow>
           <IonCol className="dow">S</IonCol>
