@@ -955,7 +955,15 @@ const populateCalendar = (data: StepLog[]) => {
 const CalendarLeafs: React.FC<{ data: StepLog[] }> = ({ data }) => {
   // let calStart = false;
 
-  return <>{data.length > 30 ? populateCalendar(data) : <h1>Error</h1>}</>;
+  return (
+    <>
+      {data.length > 30 ? (
+        populateCalendar(data)
+      ) : (
+        <h1>Unable to load calendar data</h1>
+      )}
+    </>
+  );
 };
 
 export default CalendarLeafs;
