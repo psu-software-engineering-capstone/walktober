@@ -19,7 +19,7 @@ interface StepLog {
 // just be leaftDate[number]; to display it more or less. Probably more complicated than that but that's the jist
 
 const populateCalendar = (data: StepLog[]) => {
-  let number = 1;
+  let number = 0;
 
   return (
     <>
@@ -663,7 +663,7 @@ const populateCalendar = (data: StepLog[]) => {
               ) : (
                 ''
               )}
-              {number <= 31 ? number++ : ''}
+              {number < 31 ? number++ : ''}
             </IonItem>
           </IonCol>
           <IonCol>
@@ -685,7 +685,7 @@ const populateCalendar = (data: StepLog[]) => {
               ) : (
                 ''
               )}
-              {number <= 31 ? number++ : ''}
+              {number < 31 ? number++ : ''}
             </IonItem>
           </IonCol>
           <IonCol>
@@ -707,7 +707,7 @@ const populateCalendar = (data: StepLog[]) => {
               ) : (
                 ''
               )}
-              {number <= 31 ? number++ : ''}
+              {number < 31 ? number++ : ''}
             </IonItem>
           </IonCol>
           <IonCol>
@@ -729,7 +729,7 @@ const populateCalendar = (data: StepLog[]) => {
               ) : (
                 ''
               )}
-              {number <= 31 ? number++ : ''}
+              {number < 31 ? number++ : ''}
             </IonItem>
           </IonCol>
           <IonCol>
@@ -751,7 +751,7 @@ const populateCalendar = (data: StepLog[]) => {
               ) : (
                 ''
               )}
-              {number <= 31 ? number++ : ''}
+              {number < 31 ? number++ : ''}
             </IonItem>
           </IonCol>
           <IonCol>
@@ -773,7 +773,7 @@ const populateCalendar = (data: StepLog[]) => {
               ) : (
                 ''
               )}
-              {number <= 31 ? number++ : ''}
+              {number < 31 ? number++ : ''}
             </IonItem>
           </IonCol>
           <IonCol>
@@ -795,7 +795,7 @@ const populateCalendar = (data: StepLog[]) => {
               ) : (
                 ''
               )}
-              {number <= 31 ? number++ : ''}
+              {number < 31 ? number++ : ''}
             </IonItem>
           </IonCol>
         </IonRow>

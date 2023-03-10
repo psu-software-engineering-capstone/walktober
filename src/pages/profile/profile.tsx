@@ -59,6 +59,7 @@ const Profile: React.FC = () => {
   const [photo, setPhoto] = useState<any>(null);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [stepLogs, setStepLogs] = useState<StepLog[]>([]);
+  const [calanderLogs, setCalanderLogs] = useState<StepLog[]>([]);
 
   // update profile data when the page loads
   // update profile data when the profile data changes
@@ -87,6 +88,34 @@ const Profile: React.FC = () => {
     });
   }, [stepLogs]);
 
+  // step logs with colors from event start date to event end date
+  // including the days with 0 steps
+  useEffect(() => {
+    const start = new Date(adData.startDate);
+    for (let i = 0; i < 31; i++) {
+      setCalanderLogs((prev) => [
+        ...prev,
+        {
+          // starting from event start date to event end date
+          date: new Date(start.getTime() + i * (1000 * 60 * 60 * 24)).toISOString().slice(0, 10),
+          steps: 0,
+          color: 'null'
+        }
+      ]);
+    }
+    if (stepLogs.length !== 0) {
+      stepLogs.forEach((log: StepLog) => {
+        calanderLogs.forEach((calLog: StepLog) => {
+          if (log.date === calLog.date) {
+            calLog.steps = log.steps;
+            calLog.color = log.color;
+          }
+        });
+      });
+    }
+    console.log(calanderLogs);
+  }, [stepLogs]);
+
   // set the data
   async function getData(userData: any): Promise<void> {
     const holdStep = userData.stepsByDate;
@@ -106,7 +135,7 @@ const Profile: React.FC = () => {
           color
         });
       }
-    });
+    });    
     setStepLogs(stepLogsWithColors);
     setProfilePic(userData.profile_pic);
     setName(userData.name);
@@ -303,7 +332,7 @@ const Profile: React.FC = () => {
             </IonRow>
             <IonRow>
               <IonCol sizeLg="6" sizeMd="8" sizeSm="12">
-                <CalendarLeafs data={stepLogs}></CalendarLeafs>
+                <CalendarLeafs data={calanderLogs}></CalendarLeafs>
               </IonCol>
             </IonRow>
           </IonGrid>
