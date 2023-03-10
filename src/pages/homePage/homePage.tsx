@@ -77,6 +77,9 @@ const HomePage: React.FC = () => {
       else if (stepsByDate[stepsByDate.length - 1].date == today) {
         setSteps(stepsByDate[stepsByDate.length - 1].steps);
       }
+      else{
+        setSteps(0);
+      }
     }
 
     // Create an array of the last seven dates (including today)
@@ -140,12 +143,12 @@ const HomePage: React.FC = () => {
               className="todaysSteps"
             >
               <IonLabel className="">
-                Todays Steps: <div className="localStepsUpdater">{steps}</div>
+                Todays Steps: <div className="localStepsUpdater">{steps.toLocaleString()}</div>
               </IonLabel>
               <br />
               <br />
               <IonLabel className="">
-                Total Steps: <div className="localStepsUpdater">{totalSteps}</div>
+                Total Steps: <div className="localStepsUpdater">{totalSteps.toLocaleString()}</div>
               </IonLabel>
               <br />
               <br />

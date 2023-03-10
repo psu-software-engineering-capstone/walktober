@@ -513,7 +513,7 @@ const ManualSteps: React.FC = () => {
             {stepLogs.map((item) => (
               <IonRow key={Math.random()}>
                 <IonCol>{item.date}</IonCol>
-                <IonCol>{item.steps}</IonCol>
+                <IonCol>{item.steps.toLocaleString()}</IonCol>
               </IonRow>
             ))}
           </IonGrid>

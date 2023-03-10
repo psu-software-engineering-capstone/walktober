@@ -22,6 +22,11 @@ import NavBar from '../../components/NavBar';
 import './teamCreation.css';
 
 const TeamCreation: React.FC = () => {
+  interface channelIDS {
+    id: string;
+    team: string;
+  }
+
   const [newTeamName, setNewTeamName] = useState('');
   const [newTeamStatus, setNewTeamStatus] = useState(0);
   const [newTeamPassword, setNewTeamPassword] = useState('');
@@ -56,6 +61,19 @@ const TeamCreation: React.FC = () => {
     }
     const currentDate: Date = new Date();
     const teamCreationDeadline: Date = new Date(adData.teamDate);
+    let channelId = '';
+    const chanIdRef = doc(FirestoreDB, 'channelIDs', 'channelIDs');
+    const chanIdSnap = await getDoc(chanIdRef);
+    const chanIdData: channelIDS[] = chanIdSnap.data().channelData;
+    console.log(chanIdData);
+    for (let i = 0; i < chanIdData.length; i++) {
+      console.log(chanIdData[i]);
+      if (chanIdData[i].team === '') {
+        channelId = chanIdData[i].id;
+        chanIdData[i].team = newTeamName;
+        break;
+      }
+    }
     if (currentDate > teamCreationDeadline) {
       alert(
         `The team creation deadline is: ${teamCreationDeadline}. You cannot create a team now.`
@@ -69,14 +87,18 @@ const TeamCreation: React.FC = () => {
       members: [userData.email],
       status: newTeamStatus,
       password: newTeamPassword,
-      profile_pic: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
+      profile_pic:
+        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
       totalStep: userData.totalStep,
-      channel_id: '' // TODO: create discord channel
+      channel_id: channelId // TODO: create discord channel
     })
       .then(async () => {
         console.log('Document written successfully');
         alert('Your team has been created!');
         await updateCurrentUser();
+        await updateDoc(chanIdRef, {
+          channelData: chanIdData
+        });
         history.push('/app/team');
       })
       .catch((error: unknown) => {

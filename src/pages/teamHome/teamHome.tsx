@@ -34,7 +34,6 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import AdminContext from '../../store/admin-context';
 import AuthContext from '../../store/auth-context';
 import TeamLeaderBoardChart from '../../components/LeaderBoard/TeamLeaderboardChart';
-import { ChannelData } from '../sampleData';
 import WidgetBot from '@widgetbot/react-embed';
 import './teamHome.scss';
 
@@ -46,7 +45,13 @@ const TeamHome: React.FC = () => {
     totalStep: number;
   }
 
+  interface channelIDS {
+    id: string;
+    team: string;
+  }
+
   const [leaderboardData, setLeaderboardData] = useState(Array<memberData>);
+  const [allChannelIDs, setAllChannelIDs] = useState(Array<channelIDS>);
   const [teamMembers, setTeamMembers] = useState(Array<string>);
   const [profilePic, setProfilePic] = useState('');
   const [userReference, setUserRef] = useState('');
@@ -132,17 +137,20 @@ const TeamHome: React.FC = () => {
     setUserRef(currentUserRef);
     const userSnap = await getDoc(currentUserRef); // grab the user document
     const userData = userSnap.data(); // get the user data
-    const dbChannelId = ChannelData.find((c) => c.team == ctx.team)?.id; // get the team channel id
-    let channelId = '';
+    const chanIdRef = doc(FirestoreDB, 'channelIDs', 'channelIDs');
+    const chanIdSnap = await getDoc(chanIdRef);
+    const chanIdData: channelIDS[] = chanIdSnap.data().channelData;
+    setAllChannelIDs(chanIdData);
+    const dbChannelId = chanIdData.find((c) => c.team == ctx.team)?.id; // get the team channel id
+    console.log(dbChannelId);
     // if channel not set up with id in database, default to #general
     if (dbChannelId) {
-      channelId = dbChannelId;
+      setChannelId(dbChannelId);
     } else {
-      channelId = '1068966009106600110'; // #general channel id
+      setChannelId('1068966009106600110'); // #general channel id
     }
     setUserTotalSteps(userData.totalStep);
     setIsLeader(userData.team_leader);
-    setChannelId(channelId);
     const teamRef = doc(FirestoreDB, 'teams', ctx.team); // get team reference
     setTeamRef(teamRef); // set team reference
     setProfilePic(teamData.profile_pic);
@@ -256,6 +264,15 @@ const TeamHome: React.FC = () => {
           // update the user document
           team_leader: false,
           team: ''
+        });
+        for (let i = 0; i < allChannelIDs.length; i++) {
+          if (allChannelIDs[i].team === ctx.team) {
+            allChannelIDs[i].team = '';
+            break;
+          }
+        }
+        await updateDoc(doc(FirestoreDB, 'channelIDs', 'channelIDs'), {
+          channelData: allChannelIDs
         });
         // if the user is not the only member of the team
       } else {
