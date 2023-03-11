@@ -4,7 +4,7 @@ import {
   IonButton,
   IonCardHeader,
   IonSpinner,
-  IonTitle
+  IonCardTitle
 } from '@ionic/react';
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import './LeaderBoardChart.scss';
@@ -12,7 +12,7 @@ import { Chart as ChartJS, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import AdminContext from '../../store/admin-context';
 import { Bar } from 'react-chartjs-2';
-import { doc, collection, getDocs, onSnapshot } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
 
 ChartJS.register(...registerables);
@@ -32,13 +32,6 @@ const LeaderBoardChart: React.FC = () => {
   const adData = useContext(AdminContext);
   const contentRef = useRef<HTMLIonCardElement | null>(null);
   const chartHeightMultiplier = 60;
-  const user = onSnapshot(doc(FirestoreDB, 'users', auth.currentUser.email as string),
-    (doc: any) => {
-      if (doc.exists()) {
-        console.log(doc.data());
-      }
-    }
-  );
   
   //Formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
   const chartData = {
@@ -50,12 +43,13 @@ const LeaderBoardChart: React.FC = () => {
         data: data.map((col) =>
           col.totalStep ? col.totalStep : col.avg_steps
         ),
-        backgroundColor: data.map((col) => col.highlight ? 'rgba(226, 127, 38, 1)' : 'rgba(152, 161, 64, 1)'),
+        backgroundColor: data.map((col) =>
+          col.highlight ? 'rgba(226, 127, 38, 1)' : 'rgba(152, 161, 64, 1)'
+        ),
         image: data.map((col) => (col.profile_pic ? col.profile_pic : null))
       }
     ]
   };
-  
 
   //adds image of users or team to the chart next to the user's/team's name
   const imgItems = {
@@ -120,7 +114,7 @@ const LeaderBoardChart: React.FC = () => {
         display: false
       },
       datalabels: {
-        color: 'grey',
+        color: ChartJS.defaults.color,
         labels: {
           title: {
             font: {
@@ -197,24 +191,22 @@ const LeaderBoardChart: React.FC = () => {
       ? ['th', 'st', 'nd', 'rd'][(n > 3 && n < 21) || n % 10 > 3 ? 0 : n % 10]
       : '';
   };
-  //leaderboard will scroll to the user in the leaderboard
-  const scrollToUser= () => {
+  //gets the index to calculate the scoll distance needed to bring the user into view
+  const scrollToUser = () => {
     const content = contentRef.current;
     let y = 0;
     console.log(dataType);
-    data.every((member: any) =>{
-      if(!member.highlight){
+    data.every((member: any) => {
+      if (!member.highlight) {
         y += 1;
         return true;
-      }
-      else{
+      } else {
         return false;
       }
-        
     });
     console.log(y);
-    if(content){
-      content.scrollTop = y * chartHeightMultiplier;
+    if (content) {
+      content.scrollTop = y * chartHeightMultiplier - 240;
     }
   };
   //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
@@ -228,10 +220,16 @@ const LeaderBoardChart: React.FC = () => {
           name: doc.data().name as string,
           profile_pic: doc.data().profile_pic as string,
           totalStep: doc.data().totalStep as number,
-          highlight: user == doc.data().email ? true as boolean : false as boolean
+          highlight:
+            auth.currentUser.email == doc.data().email
+              ? (true as boolean)
+              : (false as boolean)
         };
         indData.push(person);
       });
+      setData(
+        indData.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
+      );
     }
     if (dataType == 'teams') {
       const querySnapshot = await getDocs(collection(FirestoreDB, 'teams'));
@@ -244,8 +242,7 @@ const LeaderBoardChart: React.FC = () => {
         };
         const teamMembers = doc.data().members;
         teamMembers.forEach((member: string) => {
-          if(user == member)
-            team.highlight = true;
+          if (auth.currentUser.email == member) team.highlight = true;
         });
         const today = new Date();
         const deadline = new Date(adData.teamDate);
@@ -257,61 +254,60 @@ const LeaderBoardChart: React.FC = () => {
         } else {
           indData.push(team);
         }
+        setData(
+          indData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
+        );
       });
-      
     }
-    indData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1));
-    setData(indData);
+
     boxAdjust(indData.length);
-    //need to find way to not hardcode time
     setTimeout(() => {
       setLoading(false);
-    }, 500);
-    
+    }, 0);
   }
-
+  //do not add data as a redux or you will end up with an infinite loop
   useEffect(() => {
     getData(dataType); //go into the firestore and get all the users' names, pictures, and then totalStep
-    
   }, [dataType]);
 
+  useEffect(() => {
+    scrollToUser();
+  }, [data]);
+
   return (
-    <IonCard className='leaderboard-container' ref={contentRef}>
-        <IonCardHeader className='title'>
-          <IonTitle>Leaderboard</IonTitle>
-        </IonCardHeader>
-        <div className='button-container'>
-          <IonButton
-            onClick={() => {
-              setDataType('individual');
-              scrollToUser();
-            }}
-            disabled={loading}
-          >
-            Individual
-          </IonButton>
-          <IonButton
-            onClick={() => {
-              setDataType('teams');
-              getData(dataType);
-              scrollToUser();
-            }}
-            disabled={loading}
-          >
-            Teams
-          </IonButton>
-        </div>
-        <IonCardContent className="box">
-          {loading ? (
-            <IonSpinner className="spinner" />
-          ) : (
-            <Bar
-              data={chartData}
-              options={chartOptions}
-              plugins={[imgItems, ChartDataLabels]}
-            ></Bar>
-          )}
-        </IonCardContent>
+    <IonCard className="leaderboard-container" ref={contentRef}>
+      <IonCardHeader className="title">
+        <IonCardTitle>Leaderboard</IonCardTitle>
+      </IonCardHeader>
+      <div className="button-container">
+        <IonButton
+          onClick={() => {
+            setDataType('individual');
+          }}
+          disabled={loading}
+        >
+          Individual
+        </IonButton>
+        <IonButton
+          onClick={() => {
+            setDataType('teams');
+          }}
+          disabled={loading}
+        >
+          Teams
+        </IonButton>
+      </div>
+      <IonCardContent className="box">
+        {loading ? (
+          <IonSpinner className="spinner" />
+        ) : (
+          <Bar
+            data={chartData}
+            options={chartOptions}
+            plugins={[imgItems, ChartDataLabels]}
+          ></Bar>
+        )}
+      </IonCardContent>
     </IonCard>
   );
 };
