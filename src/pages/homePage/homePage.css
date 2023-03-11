@@ -21,7 +21,6 @@
 }
 
 .team-card {
-  width: 100%;
   --color: var(--ion-color-light-contrast);
 }
 
@@ -60,10 +59,6 @@
 
 .restrict-height {
   max-height: 75vh;
-}
-
-.restrict-height > * {
-  width: 100%;
 }
 
 @media (max-width: 991px) {

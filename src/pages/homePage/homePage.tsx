@@ -124,7 +124,7 @@ const HomePage: React.FC = () => {
           <IonTitle>Home Page</IonTitle>
         </NavBar>
       </IonHeader>
-      <IonContent fullscreen={true} className="ion-padding testing">
+      <IonContent fullscreen={true} className="testing">
         <IonGrid>
           <IonRow>
             <IonCol
