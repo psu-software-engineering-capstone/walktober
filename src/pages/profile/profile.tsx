@@ -2,6 +2,7 @@
 import { useContext, useEffect, useState } from 'react';
 import {
   IonButton,
+  IonCard,
   IonCol,
   IonContent,
   IonFooter,
@@ -162,17 +163,9 @@ const Profile: React.FC = () => {
   // display team
   function teamDisplay() {
     if (team === '') {
-      return (
-        <>
-          <IonItem>You have not joined a team yet</IonItem>
-        </>
-      );
+      return "You have not joined a team yet";
     } else {
-      return (
-        <>
-          <IonItem>Team: {team}</IonItem>
-        </>
-      );
+      return `Team: ${team}`;
     }
   }
 
@@ -233,44 +226,46 @@ const Profile: React.FC = () => {
           <IonGrid>
             <IonRow>
               <IonCol size="auto">
-                <IonItem>
+                <IonCard>
                   <IonImg
-                    className="profile_pic"
+                    className="profile-pic"
                     src={profilePic}
                     alt="Profile picture for the user signed in"
                   ></IonImg>
-                </IonItem>
-                <IonItem>
-                  <input
-                    type="file"
-                    id="img"
-                    name="img"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                  />
-                </IonItem>
-                <IonItem>
-                  <IonButton onClick={handleSubmit}>
-                    Change Profile Picture
-                  </IonButton>
-                </IonItem>
-                <IonItem>
-                  <h2>{name}</h2>
-                </IonItem>
-                <IonItem>
-                  <p>{email}</p>
-                </IonItem>
-                {teamDisplay()}
-                {!isGoogleUser && (
                   <IonItem>
-                    <IonButton onClick={changePassword}>
-                      Change Password
+                    <input
+                      type="file"
+                      id="img"
+                      name="img"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                    />
+                  </IonItem>
+                  <IonItem>
+                    <IonButton onClick={handleSubmit}>
+                      Change Profile Picture
                     </IonButton>
                   </IonItem>
-                )}
-                <IonItem>
-                  <IonButton onClick={signOut}>Sign Out</IonButton>
-                </IonItem>
+                  <IonItem>
+                    <h2>{name}</h2>
+                  </IonItem>
+                  <IonItem>
+                    <p>{email}</p>
+                  </IonItem>
+                  <IonItem>
+                    {teamDisplay()}
+                  </IonItem>
+                  {!isGoogleUser && (
+                    <IonItem>
+                      <IonButton onClick={changePassword}>
+                        Change Password
+                      </IonButton>
+                    </IonItem>
+                  )}
+                  <IonItem>
+                    <IonButton onClick={signOut}>Sign Out</IonButton>
+                  </IonItem>
+                </IonCard>
               </IonCol>
               <IonCol>
                 <IonItem>

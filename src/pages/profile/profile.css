@@ -1,6 +1,7 @@
-.profile_pic {
-  max-width: 200px;
-  max-height: 300px;
+.profile-pic::part(image) {
+  width: auto;
+  margin: 15px auto;
+  max-width: calc(100% - 30px);
 }
 
 .attribution-list {
