@@ -310,34 +310,23 @@ const Profile: React.FC = () => {
           </IonRefresher>
         </IonContent>
         <IonFooter>
-          <ul>
-            <li>
-              <a
+          <IonItem>
+            <IonLabel className='attribution-list'>
+              Leaf icons created by <a
                 href="https://www.flaticon.com/free-icons/leaf"
-                title="leaf icons"
-              >
-                Leaf icons created by Freepik - Flaticon
-              </a>
-            </li>
-
-            <li>
-              <a
+                title="leaf icons">
+                  Freepik - Flaticon
+              </a> &bull; <a
                 href="https://www.flaticon.com/free-icons/leaf"
-                title="leaf icons"
-              >
-                Leaf icons created by Pixel perfect - Flaticon
-              </a>
-            </li>
-
-            <li>
-              <a
+                title="leaf icons">
+                Pixel perfect - Flaticon
+              </a> &bull; <a
                 href="https://www.flaticon.com/free-icons/leaf"
-                title="leaf icons"
-              >
-                Leaf icons created by Good Ware - Flaticon
+                title="leaf icons">
+                Good Ware - Flaticon
               </a>
-            </li>
-          </ul>
+            </IonLabel>
+          </IonItem>
         </IonFooter>
       </IonPage>
     </>
