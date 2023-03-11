@@ -206,7 +206,7 @@ const LeaderBoardChart: React.FC = () => {
     });
     console.log(y);
     if (content) {
-      content.scrollTop = y * chartHeightMultiplier - 240;
+      content.scrollTop = (y+2) * chartHeightMultiplier;
     }
   };
   //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
