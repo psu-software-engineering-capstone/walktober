@@ -2,4 +2,6 @@
   background-color: black;
   margin: auto;
   padding: 0.5em;
+  min-width: 25vw;
+  min-height: 15vh;
 }
