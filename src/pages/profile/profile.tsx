@@ -229,7 +229,7 @@ const Profile: React.FC = () => {
             <IonTitle>Profile</IonTitle>
           </NavBar>
         </IonHeader>
-        <IonContent>
+        <IonContent className='walktober-background'>
           <IonGrid>
             <IonRow>
               <IonCol size="auto">

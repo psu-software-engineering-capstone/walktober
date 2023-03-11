@@ -330,7 +330,7 @@ const TeamHome: React.FC = () => {
           <IonTitle> {ctx.team} </IonTitle>
         </NavBar>
       </IonHeader>
-      <IonContent className="body">
+      <IonContent className="walktober-background">
         <IonGrid>
           <IonRow>
             <IonCol
