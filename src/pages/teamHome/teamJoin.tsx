@@ -1,5 +1,9 @@
 import {
   IonButton,
+  IonCard,
+  IonCardHeader,
+  IonCardContent,
+  IonCardTitle,
   IonCol,
   IonContent,
   IonGrid,
@@ -150,13 +154,14 @@ const TeamJoin: React.FC = () => {
   const DisplayTeams = (teams: teamData[]): any => {
     if (teams.length > 0) { // if there are teams
       return (
-        <>
-          <IonGrid>
-            <IonRow align-items-stretch="true" class="top">
-              <IonCol align-self-center="true" class="header-col admin-col">
-                Available Teams
-              </IonCol>
-            </IonRow>
+         <IonCard className="join-team-card">
+            <IonCardHeader>
+              <IonCardTitle class="ion-text-center">
+                Walktober Teams!
+              </IonCardTitle>
+            </IonCardHeader>
+            <IonCardContent>
+                 <IonGrid>
             <IonRow class="header-row">
               <IonCol sizeMd="4" size="4" class="header-col admin-col">
                 Team Name
@@ -195,9 +200,11 @@ const TeamJoin: React.FC = () => {
               )
             )}
           </IonGrid>
-        </>
+            </IonCardContent>
+          </IonCard>
       );
-    } else { // if there are no teams
+              }
+     else { // if there are no teams
       return (
         <>
           <IonItem>
@@ -296,7 +303,7 @@ const TeamJoin: React.FC = () => {
           <IonTitle> Team Join </IonTitle>
         </NavBar>
       </IonHeader>
-      <IonContent>
+      <IonContent fullscreen className="team-join">
         <IonRow>
           <IonCol>
             <IonItem>
@@ -321,6 +328,7 @@ const TeamJoin: React.FC = () => {
               ></IonIcon>
             </IonItem>
           </IonCol>
+
           <IonCol>
             <IonItem>
               <IonButton disabled={buttonValid} onClick={toJoin}>
