@@ -38,6 +38,8 @@ import './teamHome.scss';
 import team from '../../assets/team.png';
 import solo from '../../assets/solo.png';
 
+// Credit of images via Canva open source -> artist 'goodstudio'
+
 const TeamJoin: React.FC = () => {
   interface teamData {
     name: string;
