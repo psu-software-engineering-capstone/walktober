@@ -1,25 +1,25 @@
 $discord-margin: 10px;
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 ion-header {
-    ion-toolbar {
-        img {
-            height: 56px;
-            padding: 10px 0px 10px 10px;
-        }
-
-        ion-title {
-            font-family: 'Oswald', sans-serif;
-            text-transform: uppercase;
-        }
+  ion-toolbar {
+    img {
+      height: 56px;
+      padding: 10px 0px 10px 10px;
     }
+
+    ion-title {
+      font-family: 'Oswald', sans-serif;
+      text-transform: uppercase;
+    }
+  }
 }
 
 .discord-widget {
-  margin: $discord-margin;
-  width: calc(100% - ($discord-margin * 2));
-  height: calc(100% - ($discord-margin * 2));
+  width: 100%;
+  height: 0;
+  min-height: 50vh;
 }
