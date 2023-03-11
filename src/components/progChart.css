@@ -3,3 +3,11 @@
   margin: auto;
   padding: 0.5em;
 }
+:root {
+  --primaryColor: black;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primaryColor: white;
+  }
+}
