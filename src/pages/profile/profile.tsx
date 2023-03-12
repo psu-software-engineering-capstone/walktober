@@ -263,7 +263,7 @@ const Profile: React.FC = () => {
         <IonContent>
           <IonGrid>
             <IonRow>
-              <IonCol size="auto">
+              <IonCol sizeLg="3" sizeMd="5" sizeSm="12">
                 <IonItem>
                   <IonImg
                     className="profile_pic"
@@ -303,7 +303,7 @@ const Profile: React.FC = () => {
                   <IonButton onClick={signOut}>Sign Out</IonButton>
                 </IonItem>
               </IonCol>
-              <IonCol>
+              <IonCol sizeLg="9" sizeMd="7" sizeSm="12">
                 <IonItem>
                   <p>Joined on {joinDate}</p>
                 </IonItem>
@@ -331,11 +331,12 @@ const Profile: React.FC = () => {
                   <h6>Badges:</h6>
                 </IonItem>
               </IonCol>
-              <IonCol sizeLg="6" sizeSm="12">
-                <CalendarLeafs data={calanderLogs}></CalendarLeafs>
-              </IonCol>
+              <IonRow>
+                <IonCol size="12" className="calendar">
+                  <CalendarLeafs data={calanderLogs}></CalendarLeafs>
+                </IonCol>
+              </IonRow>
             </IonRow>
-            <IonRow></IonRow>
           </IonGrid>
           <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
             <IonRefresherContent></IonRefresherContent>
