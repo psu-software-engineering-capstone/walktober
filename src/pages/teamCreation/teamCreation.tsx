@@ -68,7 +68,7 @@ const TeamCreation: React.FC = () => {
 
     if (newTeamStatus == 1 && newTeamPassword === '') {
       alert('You must create a password for a private team!');
-      return;     
+      return;
     }
 
     if (newTeamStatus == 1 && newTeamPassword != confirmNewTeamPassword) {
@@ -136,7 +136,10 @@ const TeamCreation: React.FC = () => {
         </IonHeader>
         <IonCard className="create-team-card">
           <IonCardHeader style={{ display: 'flex', justifyContent: 'center' }}>
-            <img alt="Art depicting 5 team members jumping in the air" src={create} />
+            <img
+              alt="Art depicting 5 team members jumping in the air"
+              src={create}
+            />
           </IonCardHeader>
           <IonCardTitle class="ion-text-center">Create a New Team</IonCardTitle>
           <IonCardContent>
@@ -151,46 +154,49 @@ const TeamCreation: React.FC = () => {
               </IonItem>
 
               <IonList class="ion-no-padding">
-              <IonLabel class="ion-no-padding">Type of Team</IonLabel>
-              <IonRadioGroup value={newTeamStatus} onIonChange={handleTeamChange}>
-                <IonItem>
-                  <IonLabel>Public (Any participant may join team)</IonLabel>
-                    <IonRadio slot="start"value="0"></IonRadio>
-                </IonItem>
-                <IonItem>
-                  <IonLabel>Private</IonLabel>
-                    <IonRadio slot="start"value="1"></IonRadio>
-                </IonItem>
-              </IonRadioGroup>
+                <IonLabel class="ion-no-padding">Type of Team</IonLabel>
+                <IonRadioGroup
+                  value={newTeamStatus}
+                  onIonChange={handleTeamChange}
+                >
+                  <IonItem>
+                    <IonLabel>Public (Any participant may join team)</IonLabel>
+                    <IonRadio slot="start" value="0"></IonRadio>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel>Private</IonLabel>
+                    <IonRadio slot="start" value="1"></IonRadio>
+                  </IonItem>
+                </IonRadioGroup>
               </IonList>
 
-              {showTeamPassword && 
-              (
-              <>
-              <IonItem>
-                <IonLabel position="floating">Team Password</IonLabel>
-                <IonInput
-                  type="password"
-                  name="Team Password"
-                  onIonChange={(e) =>
-                    setNewTeamPassword(e.target.value as string)
-                  }
-                ></IonInput>
-              </IonItem>
+              {showTeamPassword && (
+                <>
+                  <IonItem>
+                    <IonLabel position="floating">Team Password</IonLabel>
+                    <IonInput
+                      type="password"
+                      name="Team Password"
+                      onIonChange={(e) =>
+                        setNewTeamPassword(e.target.value as string)
+                      }
+                    ></IonInput>
+                  </IonItem>
 
-              <IonItem>
-                <IonLabel position="floating">Confirm Team Password</IonLabel>
-                <IonInput
-                  type="password"
-                  name="Confirm Team Password"
-                  onIonChange={(e) =>
-                    setConfirmNewTeamPassword(e.target.value as string)
-                  }
-                ></IonInput>
-              </IonItem>
-              </>
-              )
-              }
+                  <IonItem>
+                    <IonLabel position="floating">
+                      Confirm Team Password
+                    </IonLabel>
+                    <IonInput
+                      type="password"
+                      name="Confirm Team Password"
+                      onIonChange={(e) =>
+                        setConfirmNewTeamPassword(e.target.value as string)
+                      }
+                    ></IonInput>
+                  </IonItem>
+                </>
+              )}
             </IonList>
             <br></br>
             <IonButton expand="block" onClick={createTeam} color="primary">
