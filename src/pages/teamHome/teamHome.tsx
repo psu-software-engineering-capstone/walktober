@@ -33,7 +33,7 @@ import { useHistory } from 'react-router';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import AdminContext from '../../store/admin-context';
 import AuthContext from '../../store/auth-context';
-import TeamLeaderBoardChart from '../../components/LeaderBoard/TeamLeaderboardChart';
+import TeamLeaderboard from '../../components/LeaderBoard/TeamLeaderboardChart';
 import { ChannelData } from '../sampleData';
 import WidgetBot from '@widgetbot/react-embed';
 import './teamHome.scss';
@@ -334,15 +334,13 @@ const TeamHome: React.FC = () => {
         <IonGrid>
           <IonRow>
             <IonCol
-              className="boxSize "
+              className="leaderboard"
               sizeSm="12"
               sizeLg="4"
               sizeMd="6"
               sizeXs="12"
             >
-              <TeamLeaderBoardChart
-                data={leaderboardData}
-              ></TeamLeaderBoardChart>
+              <TeamLeaderboard></TeamLeaderboard>
             </IonCol>
             <IonCol sizeSm="12" sizeLg="4" sizeMd="6" sizeXs="12" className="">
               <WidgetBot
