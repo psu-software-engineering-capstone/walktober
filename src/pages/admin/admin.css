@@ -11,13 +11,6 @@
     --ion-grid-columns: 16;
 }
 
-.invis-announcements{
-    border: solid 0px #fff;
-    background-color: #98a140;
-    text-align: center;
-    vertical-align: middle;
-}
-
 .header-col{
     font-weight: bolder;
     background-color: var(--ion-color-medium);
