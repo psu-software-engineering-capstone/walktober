@@ -157,7 +157,7 @@ const TeamJoin: React.FC = () => {
         <IonCard className="join-team-card">
           <IonCardHeader>
             <IonCardTitle class="ion-text-center">
-              Walktober Teams!
+              Teams
             </IonCardTitle>
           </IonCardHeader>
           <IonCardContent>
@@ -324,6 +324,7 @@ const TeamJoin: React.FC = () => {
               <IonCardSubtitle class="ion-text-center">
                 Enter the team name, password (if private) and click Join Team!
               </IonCardSubtitle>
+              <IonCardContent>
               <IonRow>
                 <IonCol sizeXs="6" sizeMd="4">
                   <IonItem>
@@ -348,10 +349,11 @@ const TeamJoin: React.FC = () => {
                   </IonButton>
                 </IonCol>
               </IonRow>
+              </IonCardContent>
             </IonCard>
           </IonCol>
 
-          <IonCol sizeXs="12" sizeMd="6" className="join-button">
+          <IonCol sizeXs="12" sizeMd="6">
             <IonCard className="join-create-team-card">
               <IonCardHeader
                 style={{ display: 'flex', justifyContent: 'center' }}
@@ -365,11 +367,13 @@ const TeamJoin: React.FC = () => {
                 Don&apos;t see a team you&apos;d like to join? Then click Create
                 a Team!
               </IonCardSubtitle>
+              <IonCardContent>
               <IonCol className="join-create-button" sizeXs="12" sizeMd="12">
                 <IonButton disabled={buttonValid} onClick={moveToCreateTeam}>
                   Create a Team
                 </IonButton>
               </IonCol>
+              </IonCardContent>
             </IonCard>
           </IonCol>
         </IonRow>
