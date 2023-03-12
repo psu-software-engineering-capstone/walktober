@@ -211,7 +211,7 @@ const TeamLeaderboard: React.FC = () => {
     }
   };
   //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
-  async function getData(dataType: string) {
+  async function getData() {
     setLoading(true);
     const indData: Array<Data> = [];
     if (dataType == 'teamMembers') {
@@ -270,7 +270,7 @@ const TeamLeaderboard: React.FC = () => {
   }
   //do not add data as a redux or you will end up with an infinite loop
   useEffect(() => {
-    getData(dataType); //go into the firestore and get all the users' names, pictures, and then totalStep
+    getData(); //go into the firestore and get all the users' names, pictures, and then totalStep
   }, [dataType]);
 
   useEffect(() => {
