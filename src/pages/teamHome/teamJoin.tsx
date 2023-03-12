@@ -156,9 +156,7 @@ const TeamJoin: React.FC = () => {
       return (
         <IonCard className="join-team-card">
           <IonCardHeader>
-            <IonCardTitle class="ion-text-center">
-              Teams
-            </IonCardTitle>
+            <IonCardTitle class="ion-text-center">Teams</IonCardTitle>
           </IonCardHeader>
           <IonCardContent>
             <IonGrid>
@@ -325,30 +323,30 @@ const TeamJoin: React.FC = () => {
                 Enter the team name, password (if private) and click Join Team!
               </IonCardSubtitle>
               <IonCardContent>
-              <IonRow>
-                <IonCol sizeXs="6" sizeMd="4">
-                  <IonItem>
-                    <IonLabel position="floating">Team</IonLabel>
-                    <IonInput
-                      onIonChange={(e) => setJoin(e.target.value as string)}
-                    ></IonInput>
-                  </IonItem>
-                </IonCol>
-                <IonCol sizeXs="6" sizeMd="4">
-                  <IonItem>
-                    <IonLabel position="floating">Team Password</IonLabel>
-                    <IonInput
-                      name="password"
-                      onIonChange={(e) => setPass(e.target.value as string)}
-                    ></IonInput>
-                  </IonItem>
-                </IonCol>
-                <IonCol className="join-create-button" sizeXs="12" sizeMd="4">
-                  <IonButton disabled={buttonValid} onClick={toJoin}>
-                    Join Team
-                  </IonButton>
-                </IonCol>
-              </IonRow>
+                <IonRow>
+                  <IonCol sizeXs="6" sizeMd="4">
+                    <IonItem>
+                      <IonLabel position="floating">Team</IonLabel>
+                      <IonInput
+                        onIonChange={(e) => setJoin(e.target.value as string)}
+                      ></IonInput>
+                    </IonItem>
+                  </IonCol>
+                  <IonCol sizeXs="6" sizeMd="4">
+                    <IonItem>
+                      <IonLabel position="floating">Team Password</IonLabel>
+                      <IonInput
+                        name="password"
+                        onIonChange={(e) => setPass(e.target.value as string)}
+                      ></IonInput>
+                    </IonItem>
+                  </IonCol>
+                  <IonCol className="join-create-button" sizeXs="12" sizeMd="4">
+                    <IonButton disabled={buttonValid} onClick={toJoin}>
+                      Join Team
+                    </IonButton>
+                  </IonCol>
+                </IonRow>
               </IonCardContent>
             </IonCard>
           </IonCol>
@@ -368,11 +366,11 @@ const TeamJoin: React.FC = () => {
                 a Team!
               </IonCardSubtitle>
               <IonCardContent>
-              <IonCol className="join-create-button" sizeXs="12" sizeMd="12">
-                <IonButton disabled={buttonValid} onClick={moveToCreateTeam}>
-                  Create a Team
-                </IonButton>
-              </IonCol>
+                <IonCol className="join-create-button" sizeXs="12" sizeMd="12">
+                  <IonButton disabled={buttonValid} onClick={moveToCreateTeam}>
+                    Create a Team
+                  </IonButton>
+                </IonCol>
               </IonCardContent>
             </IonCard>
           </IonCol>

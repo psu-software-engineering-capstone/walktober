@@ -156,9 +156,9 @@ const TeamCreation: React.FC = () => {
               </IonItem>
             </IonList>
             <br></br>
-              <IonButton expand="block" onClick={createTeam} color="primary">
-                Create Team
-              </IonButton>
+            <IonButton expand="block" onClick={createTeam} color="primary">
+              Create Team
+            </IonButton>
           </IonCardContent>
         </IonCard>
       </IonContent>
