@@ -5,3 +5,11 @@
   min-width: 25vw;
   min-height: 15vh;
 }
+:root {
+  --primaryColor: black;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primaryColor: white;
+  }
+}
