@@ -3,6 +3,8 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
+  IonRadioGroup,
+  IonRadio,
   IonButton,
   IonCard,
   IonCardContent,
@@ -29,8 +31,15 @@ import create from '../../assets/create-team.png';
 
 const TeamCreation: React.FC = () => {
   const [newTeamName, setNewTeamName] = useState('');
-  const [newTeamStatus, setNewTeamStatus] = useState(0);
   const [newTeamPassword, setNewTeamPassword] = useState('');
+  const [confirmNewTeamPassword, setConfirmNewTeamPassword] = useState('');
+  const [newTeamStatus, setNewTeamStatus] = useState(0);
+  const [showTeamPassword, setShowTeamPassword] = useState(false);
+
+  const handleTeamChange = (e: any) => {
+    setNewTeamStatus(e.detail.value);
+    setShowTeamPassword(e.detail.value == 1 ? true : false);
+  };
 
   const history = useHistory(); // for routing
 
@@ -42,7 +51,7 @@ const TeamCreation: React.FC = () => {
     const userSnap = await getDoc(userRef);
     const userData = userSnap.data();
     if (newTeamName === '') {
-      alert('Team name cannot be an empty string!');
+      alert('Team name cannot be an empty!');
       return;
     } else {
       const dbRef = doc(FirestoreDB, 'teams', newTeamName);
@@ -52,14 +61,21 @@ const TeamCreation: React.FC = () => {
         return;
       }
     }
+
     if (newTeamStatus == 0 && newTeamPassword !== '') {
-      alert('You cannot create a password for a public team!');
-      return;
+      setNewTeamPassword('');
     }
+
     if (newTeamStatus == 1 && newTeamPassword === '') {
       alert('You must create a password for a private team!');
+      return;     
+    }
+
+    if (newTeamStatus == 1 && newTeamPassword != confirmNewTeamPassword) {
+      alert('Team passwords must match!');
       return;
     }
+
     const currentDate: Date = new Date();
     const teamCreationDeadline: Date = new Date(adData.teamDate);
     if (currentDate > teamCreationDeadline) {
@@ -68,6 +84,7 @@ const TeamCreation: React.FC = () => {
       );
       return;
     }
+
     setDoc(doc(FirestoreDB, 'teams', newTeamName), {
       name: newTeamName,
       avg_steps: userData.totalStep,
@@ -132,18 +149,24 @@ const TeamCreation: React.FC = () => {
                   onIonChange={(e) => setNewTeamName(e.target.value as string)}
                 ></IonInput>
               </IonItem>
-              <IonItem>
-                <IonLabel position="floating">
-                  Team status. 0 is public, 1 is private
-                </IonLabel>
-                <IonInput
-                  type="number"
-                  name="Team status. 0 is public, 1 is private"
-                  onIonChange={(e) =>
-                    setNewTeamStatus(e.target.value as number)
-                  }
-                ></IonInput>
-              </IonItem>
+
+              <IonList class="ion-no-padding">
+              <IonLabel class="ion-no-padding">Type of Team</IonLabel>
+              <IonRadioGroup value={newTeamStatus} onIonChange={handleTeamChange}>
+                <IonItem>
+                  <IonLabel>Public (Any participant may join team)</IonLabel>
+                    <IonRadio slot="start"value="0"></IonRadio>
+                </IonItem>
+                <IonItem>
+                  <IonLabel>Private</IonLabel>
+                    <IonRadio slot="start"value="1"></IonRadio>
+                </IonItem>
+              </IonRadioGroup>
+              </IonList>
+
+              {showTeamPassword && 
+              (
+              <>
               <IonItem>
                 <IonLabel position="floating">Team Password</IonLabel>
                 <IonInput
@@ -154,6 +177,20 @@ const TeamCreation: React.FC = () => {
                   }
                 ></IonInput>
               </IonItem>
+
+              <IonItem>
+                <IonLabel position="floating">Confirm Team Password</IonLabel>
+                <IonInput
+                  type="password"
+                  name="Confirm Team Password"
+                  onIonChange={(e) =>
+                    setConfirmNewTeamPassword(e.target.value as string)
+                  }
+                ></IonInput>
+              </IonItem>
+              </>
+              )
+              }
             </IonList>
             <br></br>
             <IonButton expand="block" onClick={createTeam} color="primary">
