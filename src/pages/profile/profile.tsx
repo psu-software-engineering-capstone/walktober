@@ -277,7 +277,7 @@ const Profile: React.FC = () => {
                   <p>Joined on {joinDate}</p>
                 </IonItem>
                 <IonItem>
-                  <p>{totalDistance} miles walked in total</p>
+                  <p>{totalDistance.toLocaleString()} miles walked in total</p>
                 </IonItem>
                 <form onSubmit={handleSubmitStepGoal}>
                   <IonLabel position="stacked">Set Your Step Goal for today:</IonLabel>
@@ -293,7 +293,7 @@ const Profile: React.FC = () => {
                     Save
                   </IonButton>
                 </form>
-                <p>Today&apos;s step goal is: {stepGoal} steps!</p>
+                <p>Today&apos;s step goal is: {stepGoal.toLocaleString()} steps!</p>
                 <IonItem>
                   <h6>Badges:</h6>
                 </IonItem>

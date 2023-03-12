@@ -22,10 +22,10 @@ const ProgressChart: React.FC<{ data: Array<StepLog>, todayStep: number, stepGoa
   // output is a react element
   return (
     <>
-      <h1>Goal steps: {stepGoal}</h1>
+      <h1>Goal steps: {stepGoal.toLocaleString()}</h1>
       <IonLabel>
         <IonProgressBar value={1 - stepsLeft / stepGoal / 1}></IonProgressBar>
-        {todayStep.toString() + '/' + stepGoal.toString() + ' steps'}
+        {todayStep.toLocaleString() + '/' + stepGoal.toLocaleString() + ' steps'}
       </IonLabel>
       <Bar
         className="box"
