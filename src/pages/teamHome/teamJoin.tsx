@@ -314,7 +314,7 @@ const TeamJoin: React.FC = () => {
               <IonCardHeader
                 style={{ display: 'flex', justifyContent: 'center' }}
               >
-                <img alt="Picture of walktober team" src={team} />
+                <img alt="Art depicting 6 team members in a team huddle" src={team} />
               </IonCardHeader>
               <IonCardTitle class="ion-text-center">
                 Join an Existing Team!
@@ -356,7 +356,7 @@ const TeamJoin: React.FC = () => {
               <IonCardHeader
                 style={{ display: 'flex', justifyContent: 'center' }}
               >
-                <img alt="picture of team leader" src={solo} />
+                <img alt="Art depicting a team leader raising their fist in triumph" src={solo} />
               </IonCardHeader>
               <IonCardTitle class="ion-text-center">
                 Create a New Team!

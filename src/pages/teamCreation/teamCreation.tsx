@@ -119,7 +119,7 @@ const TeamCreation: React.FC = () => {
         </IonHeader>
         <IonCard className="create-team-card">
           <IonCardHeader style={{ display: 'flex', justifyContent: 'center' }}>
-            <img alt="Picture of walktober team" src={create} />
+            <img alt="Art depicting 5 team members jumping in the air" src={create} />
           </IonCardHeader>
           <IonCardTitle class="ion-text-center">Create a New Team</IonCardTitle>
           <IonCardContent>
