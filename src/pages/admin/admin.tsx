@@ -22,12 +22,15 @@ import { useContext, useEffect, useState } from 'react';
 import AdminContext from '../../store/admin-context';
 import { FirestoreDB } from '../../firebase';
 import {
-  doc,
   collection,
+  doc,
+  getDoc,
   getDocs,
-  updateDoc,
+  limit,
+  query,
   setDoc,
-  getDoc
+  updateDoc,
+  where
 } from 'firebase/firestore';
 import './admin.css';
 import {
@@ -79,11 +82,6 @@ const Admin: React.FC = () => {
     size: number;
     avg_step: number;
     totalStep: number;
-  }
-
-  interface channelIDS {
-    id: string;
-    team: string;
   }
 
   const [userReportCheck, setUserReportCheck] = useState(false);
@@ -173,17 +171,16 @@ const Admin: React.FC = () => {
     if (dbSnap.exists()) {
       alert(`${newOpenTeam} already exists!`);
     } else {
-      let channelId = '';
-      const chanIdRef = doc(FirestoreDB, 'channelIDs', 'channelIDs');
-      const chanIdSnap = await getDoc(chanIdRef);
-      const chanIdData: channelIDS[] = chanIdSnap.data().channelData;
-      for (let i = 0; i < chanIdData.length; i++) {
-        if (chanIdData[i].team === '') {
-          channelId = chanIdData[i].id;
-          chanIdData[i].team = newOpenTeam;
-          break;
-        }
-      }
+      let channelId = ''; //temp array
+      const chanQuery = query(
+        collection(FirestoreDB, 'channelIDs'),
+        where('team', '==', ''),
+        limit(1)
+      ); //find empty channel id document
+      const chanIdSnap = await getDocs(chanQuery); //get results of query
+      chanIdSnap.forEach(async (doc: any) => {
+        channelId = doc.id; //reassign the string to the channel id (which is the document id)
+      });
       setDoc(doc(FirestoreDB, 'teams', newOpenTeam), {
         name: newOpenTeam,
         avg_steps: 0,
@@ -197,9 +194,9 @@ const Admin: React.FC = () => {
         channel_id: channelId // TODO: create discord channel
       })
         .then(() => {
-          updateDoc(chanIdRef, {
-            channelData: chanIdData
-          });
+          updateDoc(doc(FirestoreDB, 'channelIDs', channelId), {
+            team: newOpenTeam
+          }); //set channel id document to this new open team
           alert('Open Team Created!');
         })
         .catch((error: any) => {
@@ -647,6 +644,69 @@ const Admin: React.FC = () => {
     console.log('Reports have been generated');
   };
 
+  const sendChannelids = async () => {
+    //const chanIdRef = doc(FirestoreDB, 'channelIDs', 'channelIDs');
+    //const chanIdSnap = await getDoc(chanIdRef);
+    //const chanIdData: channelIDS[] = chanIdSnap.data().channelData;
+    const newIds = [
+      '1068983906872868914',
+      '1068983997272690748',
+      '1068983926317654168',
+      '1076336334488211566',
+      '1083965901679906896',
+      '1083966140168028230',
+      '1083999734991179829',
+      '1083999756898009118',
+      '1083999769610960907',
+      '1083999779366903829',
+      '1083999802473316362',
+      '1083999811449126972',
+      '1083999819409924096',
+      '1083999827597205544',
+      '1083999836707229696',
+      '1083999845183930388',
+      '1083999863148126298',
+      '1083999871071166524',
+      '1083999896970985503',
+      '1083999912288596021',
+      '1083999925332881428',
+      '1083999949009735761',
+      '1083999962678960138',
+      '1083999971608645753',
+      '1083999982446727238',
+      '1083999993033129994',
+      '1084000001866338355',
+      '1084000009680339034',
+      '1084000018605809664',
+      '1084000028567289866',
+      '1084000037664718878',
+      '1084000045621330000',
+      '1084000053523386419',
+      '1084000063661031514',
+      '1084000076176818249',
+      '1084000084833878048',
+      '1084000093469945919',
+      '1084000101694984192',
+      '1084000110419132416',
+      '1084000119483023431',
+      '1084000128735662080',
+      '1084000137254293604',
+      '1084000149677813820',
+      '1084000160314568754',
+      '1084000169525260350',
+      '1084000181000880188',
+      '1084000193466339380',
+      '1084000204224741386',
+      '1084000226303561838',
+      '1084000236139196457'
+    ];
+    for (let i = 0; i < newIds.length; i++) {
+      await setDoc(doc(FirestoreDB, 'channelIDs', newIds[i]), {
+        team: ''
+      });
+    }
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -796,6 +856,12 @@ const Admin: React.FC = () => {
                 }}
               ></IonInput>
             </IonItem>
+
+            <IonButton onClick={sendChannelids}>
+              {' '}
+              Send new Channel Ids
+            </IonButton>
+
             <IonButton
               class="modal-button"
               size="large"

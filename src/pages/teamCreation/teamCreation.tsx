@@ -16,17 +16,22 @@ import {
 import { useContext, useState } from 'react';
 import { auth, FirestoreDB } from '../../firebase';
 import AdminContext from '../../store/admin-context';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  limit,
+  query,
+  setDoc,
+  updateDoc,
+  where
+} from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import './teamCreation.css';
 
 const TeamCreation: React.FC = () => {
-  interface channelIDS {
-    id: string;
-    team: string;
-  }
-
   const [newTeamName, setNewTeamName] = useState('');
   const [newTeamStatus, setNewTeamStatus] = useState(0);
   const [newTeamPassword, setNewTeamPassword] = useState('');
@@ -61,24 +66,22 @@ const TeamCreation: React.FC = () => {
     }
     const currentDate: Date = new Date();
     const teamCreationDeadline: Date = new Date(adData.teamDate);
-    let channelId = '';
-    const chanIdRef = doc(FirestoreDB, 'channelIDs', 'channelIDs');
-    const chanIdSnap = await getDoc(chanIdRef);
-    const chanIdData: channelIDS[] = chanIdSnap.data().channelData;
-    console.log(chanIdData);
-    for (let i = 0; i < chanIdData.length; i++) {
-      if (chanIdData[i].team === '') {
-        channelId = chanIdData[i].id;
-        chanIdData[i].team = newTeamName;
-        break;
-      }
-    }
     if (currentDate > teamCreationDeadline) {
       alert(
         `The team creation deadline is: ${teamCreationDeadline}. You cannot create a team now.`
       );
       return;
     }
+    let channelId = ''; //temp array
+    const chanQuery = query(
+      collection(FirestoreDB, 'channelIDs'),
+      where('team', '==', ''),
+      limit(1)
+    ); //find empty channel id document
+    const chanIdSnap = await getDocs(chanQuery); //get results of query
+    chanIdSnap.forEach(async (doc: any) => {
+      channelId = doc.id;
+    }); //reassign the string to the channel id (which is the document id)
     setDoc(doc(FirestoreDB, 'teams', newTeamName), {
       name: newTeamName,
       avg_steps: userData.totalStep,
@@ -95,9 +98,9 @@ const TeamCreation: React.FC = () => {
         console.log('Document written successfully');
         alert('Your team has been created!');
         await updateCurrentUser();
-        await updateDoc(chanIdRef, {
-          channelData: chanIdData
-        });
+        updateDoc(doc(FirestoreDB, 'channelIDs', channelId), {
+          team: newTeamName
+        }); //update the channel id to assign team name to this new team
         history.push('/app/team');
       })
       .catch((error: unknown) => {

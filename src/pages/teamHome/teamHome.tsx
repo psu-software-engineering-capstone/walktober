@@ -21,6 +21,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  limit,
   onSnapshot,
   query,
   updateDoc,
@@ -45,13 +46,7 @@ const TeamHome: React.FC = () => {
     totalStep: number;
   }
 
-  interface channelIDS {
-    id: string;
-    team: string;
-  }
-
   const [leaderboardData, setLeaderboardData] = useState(Array<memberData>);
-  const [allChannelIDs, setAllChannelIDs] = useState(Array<channelIDS>);
   const [teamMembers, setTeamMembers] = useState(Array<string>);
   const [profilePic, setProfilePic] = useState('');
   const [userReference, setUserRef] = useState('');
@@ -137,14 +132,19 @@ const TeamHome: React.FC = () => {
     setUserRef(currentUserRef);
     const userSnap = await getDoc(currentUserRef); // grab the user document
     const userData = userSnap.data(); // get the user data
-    const chanIdRef = doc(FirestoreDB, 'channelIDs', 'channelIDs');
-    const chanIdSnap = await getDoc(chanIdRef);
-    const chanIdData: channelIDS[] = chanIdSnap.data().channelData;
-    setAllChannelIDs(chanIdData);
-    const dbChannelId = chanIdData.find((c) => c.team == ctx.team)?.id; // get the team channel id
+    let teamChannelId = ''; //temp string
+    const chanQuery = query(
+      collection(FirestoreDB, 'channelIDs'),
+      where('team', '==', ctx.team),
+      limit(1)
+    );//query to see if there is a document with the team name assigned to it
+    const chanIdSnap = await getDocs(chanQuery);//get results (has to be getDoccs because using query)
+    chanIdSnap.forEach(async (doc: any) => {
+      teamChannelId = doc.id;//get the document name (which is the channel id)
+    });
     // if channel not set up with id in database, default to #general
-    if (dbChannelId) {
-      setChannelId(dbChannelId);
+    if (channelId != '') {
+      setChannelId(teamChannelId);
     } else {
       setChannelId('1068966009106600110'); // #general channel id
     }
@@ -264,14 +264,9 @@ const TeamHome: React.FC = () => {
           team_leader: false,
           team: ''
         });
-        for (let i = 0; i < allChannelIDs.length; i++) {
-          if (allChannelIDs[i].team === ctx.team) {
-            allChannelIDs[i].team = '';
-            break;
-          }
-        }
-        await updateDoc(doc(FirestoreDB, 'channelIDs', 'channelIDs'), {
-          channelData: allChannelIDs
+        //Update the channel id document and allow it to be reused by another team
+        await updateDoc(doc(FirestoreDB, 'channelIDs', channelId), {
+          team: ''
         });
         // if the user is not the only member of the team
       } else {
