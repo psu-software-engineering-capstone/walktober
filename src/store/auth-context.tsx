@@ -6,6 +6,7 @@ import { createContext, SetStateAction, useContext, useEffect, useState } from '
 import { auth, FirestoreDB } from '../firebase';
 
 const AuthContext = createContext({ user: null, team: '', admin: false });
+console.log(AuthContext);
 
 export const useAuthContext = () => useContext(AuthContext);
 

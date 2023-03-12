@@ -191,7 +191,7 @@ const TeamJoin: React.FC = () => {
                       {item.leader}
                     </IonCol>
                     <IonCol sizeMd="4" size="4" class="admin-col">
-                      {item.size}
+                      {item.size} / {adData.maxSize}
                     </IonCol>
                     <IonCol sizeMd="4" size="4" class="admin-col">
                       {item.type}
