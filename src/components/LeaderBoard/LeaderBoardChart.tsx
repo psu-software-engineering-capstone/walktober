@@ -27,8 +27,9 @@ interface Data {
 
 const LeaderBoardChart: React.FC = () => {
   const [data, setData] = useState(Array<Data>);
-  const [loading, setLoading] = useState(false);
-  const [dataType, setDataType] = useState('individual');
+  const [indData, setIndData] = useState(Array<Data>);
+  const [teamData, setTeamData] = useState(Array<Data>);
+  const [dataType, setDataType] = useState('');
   const adData = useContext(AdminContext);
   const contentRef = useRef<HTMLIonCardElement | null>(null);
   const chartHeightMultiplier = 60;
@@ -207,66 +208,75 @@ const LeaderBoardChart: React.FC = () => {
       content.scrollTop = (y+2) * chartHeightMultiplier;
     }
   };
-  //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
-  async function getData() {
-    setLoading(true);
+
+  async function setChartData() {
     const indData: Array<Data> = [];
-    if (dataType == 'individual') {
-      const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
-      querySnapshot.forEach((doc: any) => {
-        const person: Data = {
-          name: doc.data().name as string,
-          profile_pic: doc.data().profile_pic as string,
-          totalStep: doc.data().totalStep as number,
-          highlight:
-            auth.currentUser.email == doc.data().email
-              ? (true as boolean)
-              : (false as boolean)
-        };
-        indData.push(person);
+    const teamData: Array<Data> = [];
+    const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
+    querySnapshot.forEach((doc: any) => {
+      const person: Data = {
+        name: doc.data().name as string,
+        profile_pic: doc.data().profile_pic as string,
+        totalStep: doc.data().totalStep as number,
+        highlight:
+          auth.currentUser.email == doc.data().email
+            ? (true as boolean)
+            : (false as boolean)
+      };
+      indData.push(person);
+    });
+    setIndData(
+      indData.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
+    );
+    const teamquerySnapshot = await getDocs(collection(FirestoreDB, 'teams'));
+    teamquerySnapshot.forEach((doc: any) => {
+      const team: Data = {
+        name: doc.data().name as string,
+        profile_pic: doc.data().profile_pic as string,
+        avg_steps: doc.data().avg_steps as number,
+        highlight: false as boolean
+      };
+      const teamMembers = doc.data().members;
+      teamMembers.forEach((member: string) => {
+        if (auth.currentUser.email == member) team.highlight = true;
       });
-      setData(
-        indData.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
+      const today = new Date();
+      const deadline = new Date(adData.teamDate);
+      if (deadline < today) {
+        const membersLength = doc.data().members.length;
+        if (adData.minSize <= membersLength) {
+          teamData.push(team);
+        }
+      } else {
+        teamData.push(team);
+      }
+      setTeamData(
+        teamData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
       );
+    });
+  }
+
+  //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
+  const getChartData = () => {
+    if (dataType == 'individual') {
+      setData(indData);
+      console.log(indData);
+      boxAdjust(indData.length);
     }
     if (dataType == 'teams') {
-      const querySnapshot = await getDocs(collection(FirestoreDB, 'teams'));
-      querySnapshot.forEach((doc: any) => {
-        const team: Data = {
-          name: doc.data().name as string,
-          profile_pic: doc.data().profile_pic as string,
-          avg_steps: doc.data().avg_steps as number,
-          highlight: false as boolean
-        };
-        const teamMembers = doc.data().members;
-        teamMembers.forEach((member: string) => {
-          if (auth.currentUser.email == member) team.highlight = true;
-        });
-        const today = new Date();
-        const deadline = new Date(adData.teamDate);
-        if (deadline < today) {
-          const membersLength = doc.data().members.length;
-          if (adData.minSize <= membersLength) {
-            indData.push(team);
-          }
-        } else {
-          indData.push(team);
-        }
-        setData(
-          indData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
-        );
-      });
+      setData(teamData);
+      boxAdjust(teamData.length);
     }
+  };
 
-    boxAdjust(indData.length);
-    setTimeout(() => {
-      setLoading(false);
-    }, 0);
-  }
+  useEffect(() => {
+    setChartData();
+    setDataType('individual');
+  },[]);
   //do not add data as a redux or you will end up with an infinite loop
   useEffect(() => {
-    getData(); //go into the firestore and get all the users' names, pictures, and then totalStep
-  }, [dataType]);
+    getChartData(); //go into the firestore and get all the users' names, pictures, and then totalStep
+  }, [dataType, indData]);
 
   useEffect(() => {
     scrollToUser();
@@ -282,7 +292,6 @@ const LeaderBoardChart: React.FC = () => {
           onClick={() => {
             setDataType('individual');
           }}
-          disabled={loading}
         >
           Individual
         </IonButton>
@@ -290,21 +299,16 @@ const LeaderBoardChart: React.FC = () => {
           onClick={() => {
             setDataType('teams');
           }}
-          disabled={loading}
         >
           Teams
         </IonButton>
       </div>
       <IonCardContent className="box">
-        {loading ? (
-          <IonSpinner className="spinner" />
-        ) : (
           <Bar
             data={chartData}
             options={chartOptions}
             plugins={[imgItems, ChartDataLabels]}
           ></Bar>
-        )}
       </IonCardContent>
     </IonCard>
   );

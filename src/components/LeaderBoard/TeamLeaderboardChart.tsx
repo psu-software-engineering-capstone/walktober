@@ -28,6 +28,8 @@ interface Data {
 
 const TeamLeaderboard: React.FC = () => {
   const [data, setData] = useState(Array<Data>);
+  const [indData, setIndData] = useState(Array<Data>);
+  const [teamData, setTeamData] = useState(Array<Data>);
   const [loading, setLoading] = useState(false);
   const [dataType, setDataType] = useState('teamMembers');
   const adData = useContext(AdminContext);
@@ -210,6 +212,12 @@ const TeamLeaderboard: React.FC = () => {
       content.scrollTop = (y+2) * chartHeightMultiplier;
     }
   };
+
+  async function setgetData() {
+    
+
+  }
+
   //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
   async function getData() {
     setLoading(true);
