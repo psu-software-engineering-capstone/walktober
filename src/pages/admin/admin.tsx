@@ -195,6 +195,9 @@ const Admin: React.FC = () => {
       return (
         <>
           <IonGrid fixed={true}>
+            <IonRow>
+              <IonCol class="grid-title">Users</IonCol>
+            </IonRow>
             <IonRow class="header-row">
               <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="header-col admin-col">
                 Name
@@ -233,7 +236,7 @@ const Admin: React.FC = () => {
                     {item.steps}
                   </IonCol>
                   <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "4" : "8"} class="admin-col">
-                    <IonButton size="small" onClick={() => goToAdminSteps(item.email)}>{isPlatform('ios') || isPlatform('android') ? "Edit Log" : "Edit Step Log"}</IonButton>
+                    <IonButton size="small" class="admin-button-small" onClick={() => goToAdminSteps(item.email)}>{isPlatform('ios') || isPlatform('android') ? "Edit Log" : "Edit Step Log"}</IonButton>
                   </IonCol>
                 </IonRow>
               )
@@ -245,6 +248,9 @@ const Admin: React.FC = () => {
       return (
         <>
           <IonGrid fixed={true}>
+            <IonRow>
+              <IonCol class="grid-title">Users</IonCol>
+            </IonRow>
             <IonRow class="header-row">
               <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="header-col">
                 Name
@@ -277,6 +283,9 @@ const Admin: React.FC = () => {
       return (
         <>
           <IonGrid fixed={true}>
+            <IonRow>
+              <IonCol class="grid-title">Teams</IonCol>
+            </IonRow>
             <IonRow class="header-row">
               <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="header-col admin-col">
                 Team Name
@@ -310,6 +319,9 @@ const Admin: React.FC = () => {
       return (
         <>
           <IonGrid fixed={true}>
+            <IonRow>
+              <IonCol class="grid-title">Teams</IonCol>
+            </IonRow>
             <IonRow class="header-row">
               <IonCol sizeMd="6" size={isPlatform('ios') || isPlatform('android') ? "6" : "6"} class="header-col admin-col">
                 Team Name
@@ -551,10 +563,9 @@ const Admin: React.FC = () => {
           </IonRow>
         </IonGrid>
 
-        <IonItem class="grid-title">Users</IonItem>
-        <IonItem>{DisplayUsers(userLogs)}</IonItem>
-        <IonItem class="grid-title">Teams</IonItem>
-        <IonItem>{DisplayTeams()}</IonItem>
+        <IonItem lines="none" class="transparent-item">{DisplayUsers(userLogs)}</IonItem>
+        <IonItem lines="none" class="transparent-item"></IonItem>
+        <IonItem lines="none" class="transparent-item">{DisplayTeams()}</IonItem>
 
         <IonModal isOpen={isOpenUser} backdropDismiss={false}>
           <IonHeader class="modal-header">
