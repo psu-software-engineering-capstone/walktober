@@ -12,7 +12,6 @@ import {
   IonSelectOption,
   IonSelect,
   IonInput,
-  IonCardSubtitle
 } from '@ionic/react';
 import './postEventSurvey.scss';
 import { useHistory } from 'react-router';
