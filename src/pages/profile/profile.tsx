@@ -115,7 +115,6 @@ const Profile: React.FC = () => {
         });
       });
     }
-    console.log(calanderLogs);
   }, [stepLogs]);
 
   // set the data
@@ -326,7 +325,9 @@ const Profile: React.FC = () => {
                     Save
                   </IonButton>
                 </form>
-                <p>Today&apos;s step goal is: {stepGoal.toLocaleString()} steps!</p>
+                <p>
+                  Today&apos;s step goal is: {stepGoal.toLocaleString()} steps!
+                </p>
                 <IonItem>
                   <h6>Badges:</h6>
                 </IonItem>
