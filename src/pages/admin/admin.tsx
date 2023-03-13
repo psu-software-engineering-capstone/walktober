@@ -589,11 +589,12 @@ const Admin: React.FC = () => {
       console.log('Generating post survey report');
 
       let str = 
-      '"Walktober Feedback","Future Ideas","Hours Active Per Week","Minutes Active Per Day","Why Not Participate Again","Participation Opinion","Events Participated In","Rec Center Usage","Well-being"\n';
+      '"Device Used","Walktober Feedback","Future Ideas","Hours Active Per Week","Minutes Active Per Day","Why Not Participate Again","Participation Opinion","Events Participated In","Rec Center Usage","Well-being"\n';
 
       const querySnapshot = await getDocs(collection(FirestoreDB, "exitQuestions"));
       querySnapshot.forEach((doc: { id: any; data: () => any; }) => {
         let line = '';
+        line += '"' + doc.data().device + '",';
         line += '"' + doc.data().feedback + '",';
         line += '"' + doc.data().futureIdeas + '",';
         line += '"' + doc.data().hoursPerWeek + '",';
