@@ -35,9 +35,6 @@ import {
 import './admin.css';
 import {
   TeamData,
-  IndividualData,
-  PreSurvey,
-  PostSurvey,
   Devices
 } from '../sampleData';
 import { useHistory } from 'react-router';
