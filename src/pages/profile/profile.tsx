@@ -59,6 +59,7 @@ const Profile: React.FC = () => {
   const [photo, setPhoto] = useState<any>(null);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [stepLogs, setStepLogs] = useState<StepLog[]>([]);
+  const [calanderLogs, setCalanderLogs] = useState<StepLog[]>([]);
 
   // update profile data when the page loads
   // update profile data when the profile data changes
@@ -87,23 +88,52 @@ const Profile: React.FC = () => {
     });
   }, [stepLogs]);
 
+  // step logs with colors from event start date to event end date
+  // including the days with 0 steps
+  useEffect(() => {
+    const start = new Date(adData.startDate);
+    for (let i = 0; i < 31; i++) {
+      setCalanderLogs((prev) => [
+        ...prev,
+        {
+          // starting from event start date to event end date
+          date: new Date(start.getTime() + i * (1000 * 60 * 60 * 24))
+            .toISOString()
+            .slice(0, 10),
+          steps: 0,
+          color: 'null'
+        }
+      ]);
+    }
+    if (stepLogs.length !== 0) {
+      stepLogs.forEach((log: StepLog) => {
+        calanderLogs.forEach((calLog: StepLog) => {
+          if (log.date === calLog.date) {
+            calLog.steps = log.steps;
+            calLog.color = log.color;
+          }
+        });
+      });
+    }
+  }, [stepLogs]);
+
   // set the data
   async function getData(userData: any): Promise<void> {
     const holdStep = userData.stepsByDate;
     const stepLogsWithColors: StepLog[] = [];
-    holdStep.forEach((log: { date: string; steps: number; }) => {
-      if (new Date(adData.startDate) <= new Date(log.date) && new Date(log.date) <= new Date(adData.endDate)) {
-        let color = "null"; 
-        if(log.steps >= 10000)
-          color = "green";
-        else if(log.steps >= 7500 && log.steps < 10000)
-          color = "yellow";
-        else if (log.steps >= 5000 && log.steps < 7500)
-          color = "orange";
+    holdStep.forEach((log: { date: string; steps: number }) => {
+      if (
+        new Date(adData.startDate) <= new Date(log.date) &&
+        new Date(log.date) <= new Date(adData.endDate)
+      ) {
+        let color = 'null';
+        if (log.steps >= 10000) color = 'green';
+        else if (log.steps >= 7500 && log.steps < 10000) color = 'yellow';
+        else if (log.steps >= 5000 && log.steps < 7500) color = 'orange';
         stepLogsWithColors.push({
           date: log.date,
           steps: log.steps,
-          color,
+          color
         });
       }
     });
@@ -232,7 +262,7 @@ const Profile: React.FC = () => {
         <IonContent>
           <IonGrid>
             <IonRow>
-              <IonCol size="auto">
+              <IonCol sizeLg="3" sizeMd="5" sizeSm="12">
                 <IonItem>
                   <IonImg
                     className="profile_pic"
@@ -272,15 +302,17 @@ const Profile: React.FC = () => {
                   <IonButton onClick={signOut}>Sign Out</IonButton>
                 </IonItem>
               </IonCol>
-              <IonCol>
+              <IonCol sizeLg="9" sizeMd="7" sizeSm="12">
                 <IonItem>
                   <p>Joined on {joinDate}</p>
                 </IonItem>
                 <IonItem>
-                  <p>{totalDistance} miles walked in total</p>
+                  <p>{totalDistance.toLocaleString()} miles walked in total</p>
                 </IonItem>
                 <form onSubmit={handleSubmitStepGoal}>
-                  <IonLabel position="stacked">Set Your Step Goal for today:</IonLabel>
+                  <IonLabel position="stacked">
+                    Set Your Step Goal for today:
+                  </IonLabel>
                   <IonInput
                     min="0"
                     type="number"
@@ -293,16 +325,18 @@ const Profile: React.FC = () => {
                     Save
                   </IonButton>
                 </form>
-                <p>Today&apos;s step goal is: {stepGoal} steps!</p>
+                <p>
+                  Today&apos;s step goal is: {stepGoal.toLocaleString()} steps!
+                </p>
                 <IonItem>
                   <h6>Badges:</h6>
                 </IonItem>
               </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol sizeLg="6" sizeMd="8" sizeSm="12">
-                <CalendarLeafs></CalendarLeafs>
-              </IonCol>
+              <IonRow>
+                <IonCol size="12" className="calendar">
+                  <CalendarLeafs data={calanderLogs}></CalendarLeafs>
+                </IonCol>
+              </IonRow>
             </IonRow>
           </IonGrid>
           <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>

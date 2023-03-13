@@ -2,3 +2,38 @@
   max-width: 200px;
   max-height: 300px;
 }
+
+.d-flex {
+  display: flex;
+}
+
+@media (min-width: 1024px) {
+  .calendar {
+    margin-left: 35vw;
+    margin-top: -15vh;
+    padding-right: 40vw;
+  }
+}
+
+@media (max-width: 1023px) {
+  .calendar {
+    margin-left: 40vw;
+    margin-top: -15vh;
+    padding-right: 40vw;
+  }
+}
+
+@media (max-width: 850px) {
+  .calendar {
+    margin-top: 0vh;
+    margin-left: 10vw;
+    padding-right: 0vw;
+  }
+}
+
+@media (max-width: 630px) {
+  .calendar {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

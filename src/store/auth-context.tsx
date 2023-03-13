@@ -5,8 +5,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { createContext, SetStateAction, useContext, useEffect, useState } from 'react';
 import { auth, FirestoreDB } from '../firebase';
 
-const AuthContext = createContext({ user: null, team: '', admin: false });
-console.log(AuthContext);
+const AuthContext = createContext({ user: null, team: '', admin: false, name: '' });
 
 export const useAuthContext = () => useContext(AuthContext);
 
@@ -14,6 +13,7 @@ export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) =
   const [user, setUser] = useState(null);
   const [team, setTeam] = useState('');
   const [admin, setAdmin] = useState(false);
+  const [name, setName] = useState('');
   const [complete, setComplete] = useState(false);
 
   // team state change listener
@@ -48,6 +48,7 @@ export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) =
       const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
       const dbSnap = await getDoc(dbRef);
       const userData = dbSnap.data();
+      setName(userData.name);//grab the user's name
       if (userData.admin === true) {
         setAdmin(true);
       } else {
@@ -59,7 +60,7 @@ export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) =
   };
 
   return (
-    <AuthContext.Provider value={{ user, team, admin }}>
+    <AuthContext.Provider value={{ user, team, admin, name }}>
       {complete && props.children}
     </AuthContext.Provider>
   );

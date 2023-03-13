@@ -9,529 +9,952 @@ const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
 const monthStart = new Date(`October 1, ${currentYear}`);
 
+interface StepLog {
+  date: string;
+  steps: number;
+  color: string;
+}
+
 // for displaying badges we could just make an array of the badge level with its current leaf. That way the content could
 // just be leaftDate[number]; to display it more or less. Probably more complicated than that but that's the jist
 
-const populateCalendar = () => {
-  let number = 1;
-  const dummyLeafs = Array(31);
-  const dummyLeafsAlt = Array(31);
-  dummyLeafs[8] = OrangeLeaf;
-  dummyLeafs[9] = OrangeLeaf;
-  dummyLeafs[10] = GreenLeaf;
-  dummyLeafs[11] = YellowLeaf;
-  dummyLeafs[12] = OrangeLeaf;
-  dummyLeafs[13] = OrangeLeaf;
-  dummyLeafs[14] = GreenLeaf;
-  dummyLeafs[16] = YellowLeaf;
-  dummyLeafs[17] = null;
-  dummyLeafsAlt[8] = 'orange leaf';
-  dummyLeafsAlt[9] = 'orange leaf2';
-  dummyLeafsAlt[10] = 'orange leaf3';
+const populateCalendar = (data: StepLog[]) => {
+  let day = 1;
 
   return (
     <>
       <IonGrid>
         <IonRow>
-          <IonCol>{'October'}</IonCol>
+          <IonCol offset="5" className="month">
+            {'October'}
+          </IonCol>
+        </IonRow>
+        <IonRow>
+          <IonCol className="dow">S</IonCol>
+          <IonCol className="dow">M</IonCol>
+          <IonCol className="dow">Tu</IonCol>
+          <IonCol className="dow">W</IonCol>
+          <IonCol className="dow">Th</IonCol>
+          <IonCol className="dow">F</IonCol>
+          <IonCol className="dow">Sa</IonCol>
         </IonRow>
         <IonRow>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {monthStart.getDay() == 0 ? number++ : ''}
+              {monthStart.getDay() == 0 ? day++ : ''}
             </IonItem>
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {monthStart.getDay() == 1 || number > 1 ? number++ : ''}
+              {monthStart.getDay() == 1 || day > 1 ? day++ : ''}
             </IonItem>
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {monthStart.getDay() == 2 || number > 1 ? number++ : ''}
+              {monthStart.getDay() == 2 || day > 1 ? day++ : ''}
             </IonItem>
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {monthStart.getDay() == 3 || number > 1 ? number++ : ''}
+              {monthStart.getDay() == 3 || day > 1 ? day++ : ''}
             </IonItem>
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {monthStart.getDay() == 4 || number > 1 ? number++ : ''}
+              {monthStart.getDay() == 4 || day > 1 ? day++ : ''}
             </IonItem>
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {monthStart.getDay() == 5 || number > 1 ? number++ : ''}
+              {monthStart.getDay() == 5 || day > 1 ? day++ : ''}
             </IonItem>
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {monthStart.getDay() == 6 || number > 1 ? number++ : ''}
-            </IonItem>
-          </IonCol>
-        </IonRow>
-        <IonRow>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
+              {monthStart.getDay() == 6 || day > 1 ? day++ : ''}
             </IonItem>
           </IonCol>
         </IonRow>
         <IonRow>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {number++}
+              {day++}
             </IonItem>
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {number++}
+              {day++}
             </IonItem>
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {number++}
+              {day++}
             </IonItem>
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {number++}
+              {day++}
             </IonItem>
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {number++}
+              {day++}
             </IonItem>
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {number++}
+              {day++}
             </IonItem>
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {number++}
-            </IonItem>
-          </IonCol>
-        </IonRow>
-        <IonRow>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
-            </IonItem>
-          </IonCol>
-          <IonCol>
-            <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
-              ) : (
-                ''
-              )}
-              {number++}
+              {day++}
             </IonItem>
           </IonCol>
         </IonRow>
         <IonRow>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {number <= 31 ? number++ : ''}
+              {day++}
             </IonItem>
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {number <= 31 ? number++ : ''}
+              {day++}
             </IonItem>
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {number <= 31 ? number++ : ''}
+              {day++}
             </IonItem>
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {number <= 31 ? number++ : ''}
+              {day++}
             </IonItem>
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {number <= 31 ? number++ : ''}
+              {day++}
             </IonItem>
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {number <= 31 ? number++ : ''}
+              {day++}
             </IonItem>
           </IonCol>
           <IonCol>
             <IonItem>
-              {dummyLeafs[number] !== null ? (
-                <img
-                  alt={dummyLeafsAlt[number]}
-                  src={dummyLeafs[number]}
-                  className="leafImg"
-                ></img>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
               ) : (
-                ''
+                ' '
               )}
-              {number <= 31 ? number++ : ''}
+              {day++}
+            </IonItem>
+          </IonCol>
+        </IonRow>
+        <IonRow>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day++}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day++}
+            </IonItem>
+          </IonCol>
+        </IonRow>
+        <IonRow>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day <= 31 ? day++ : ''}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day <= 31 ? day++ : ''}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day <= 31 ? day++ : ''}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day <= 31 ? day++ : ''}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day <= 31 ? day++ : ''}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day <= 31 ? day++ : ''}
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonItem>
+              {day < 31 ? (
+                data[day].color !== 'null' ? (
+                  <img
+                    alt={data[day].color}
+                    src={
+                      data[day].color === 'green'
+                        ? GreenLeaf
+                        : data[day].color === 'yellow'
+                        ? YellowLeaf
+                        : data[day].color === 'orange'
+                        ? OrangeLeaf
+                        : ''
+                    }
+                    className="leafImg"
+                  ></img>
+                ) : (
+                  ''
+                )
+              ) : (
+                ' '
+              )}
+              {day <= 31 ? day++ : ''}
             </IonItem>
           </IonCol>
         </IonRow>
@@ -540,10 +963,18 @@ const populateCalendar = () => {
   );
 };
 
-const CalendarLeafs: React.FC<object> = () => {
+const CalendarLeafs: React.FC<{ data: StepLog[] }> = ({ data }) => {
   // let calStart = false;
 
-  return <>{populateCalendar()}</>;
+  return (
+    <>
+      {data.length > 30 ? (
+        populateCalendar(data)
+      ) : (
+        <h1>Unable to load calendar data</h1>
+      )}
+    </>
+  );
 };
 
 export default CalendarLeafs;
