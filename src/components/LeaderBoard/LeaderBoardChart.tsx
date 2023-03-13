@@ -2,11 +2,11 @@ import {
   IonCard,
   IonCardContent,
   IonButton,
-  IonHeader,
+  IonCardHeader,
   IonSpinner,
-  IonTitle
+  IonCardTitle
 } from '@ionic/react';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import './LeaderBoardChart.scss';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -28,9 +28,11 @@ interface Data {
 const LeaderBoardChart: React.FC = () => {
   const [data, setData] = useState(Array<Data>);
   const [loading, setLoading] = useState(false);
+  const [dataType, setDataType] = useState('individual');
   const adData = useContext(AdminContext);
-  let dataType = 'individual';
-
+  const contentRef = useRef<HTMLIonCardElement | null>(null);
+  const chartHeightMultiplier = 60;
+  
   //Formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
   const chartData = {
     labels: data.map((row) => row.name.split(' ')),
@@ -41,12 +43,13 @@ const LeaderBoardChart: React.FC = () => {
         data: data.map((col) =>
           col.totalStep ? col.totalStep : col.avg_steps
         ),
-        backgroundColor: data.map((col) => col.highlight ? 'rgba(226, 127, 38, 1)' : 'rgba(152, 161, 64, 1)'),
+        backgroundColor: data.map((col) =>
+          col.highlight ? 'rgba(226, 127, 38, 1)' : 'rgba(152, 161, 64, 1)'
+        ),
         image: data.map((col) => (col.profile_pic ? col.profile_pic : null))
       }
     ]
   };
-  
 
   //adds image of users or team to the chart next to the user's/team's name
   const imgItems = {
@@ -111,7 +114,7 @@ const LeaderBoardChart: React.FC = () => {
         display: false
       },
       datalabels: {
-        color: 'grey',
+        color: ChartJS.defaults.color,
         labels: {
           title: {
             font: {
@@ -177,7 +180,7 @@ const LeaderBoardChart: React.FC = () => {
   const boxAdjust = (labelLength: number) => {
     const box = document.querySelector('.box');
     if (box != null) {
-      const newHeight = labelLength * 60;
+      const newHeight = labelLength * chartHeightMultiplier;
       box.setAttribute('style', 'height: ' + newHeight.toString() + 'px');
     }
   };
@@ -188,7 +191,24 @@ const LeaderBoardChart: React.FC = () => {
       ? ['th', 'st', 'nd', 'rd'][(n > 3 && n < 21) || n % 10 > 3 ? 0 : n % 10]
       : '';
   };
-
+  //gets the index to calculate the scoll distance needed to bring the user into view
+  const scrollToUser = () => {
+    const content = contentRef.current;
+    let y = 0;
+    console.log(dataType);
+    data.every((member: any) => {
+      if (!member.highlight) {
+        y += 1;
+        return true;
+      } else {
+        return false;
+      }
+    });
+    console.log(y);
+    if (content) {
+      content.scrollTop = (y+2) * chartHeightMultiplier;
+    }
+  };
   //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
   async function getData(dataType: string) {
     setLoading(true);
@@ -200,7 +220,10 @@ const LeaderBoardChart: React.FC = () => {
           name: doc.data().name as string,
           profile_pic: doc.data().profile_pic as string,
           totalStep: doc.data().totalStep as number,
-          highlight: auth.currentUser.email == doc.data().email ? true as boolean : false as boolean
+          highlight:
+            auth.currentUser.email == doc.data().email
+              ? (true as boolean)
+              : (false as boolean)
         };
         indData.push(person);
       });
@@ -219,8 +242,7 @@ const LeaderBoardChart: React.FC = () => {
         };
         const teamMembers = doc.data().members;
         teamMembers.forEach((member: string) => {
-          if(auth.currentUser.email == member)
-            team.highlight = true;
+          if (auth.currentUser.email == member) team.highlight = true;
         });
         const today = new Date();
         const deadline = new Date(adData.teamDate);
@@ -232,60 +254,60 @@ const LeaderBoardChart: React.FC = () => {
         } else {
           indData.push(team);
         }
+        setData(
+          indData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
+        );
       });
-      setData(
-        indData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
-      );
     }
 
     boxAdjust(indData.length);
-    //need to find way to not hardcode time
     setTimeout(() => {
       setLoading(false);
     }, 0);
   }
-
+  //do not add data as a redux or you will end up with an infinite loop
   useEffect(() => {
     getData(dataType); //go into the firestore and get all the users' names, pictures, and then totalStep
-    
-  }, []);
+  }, [dataType]);
+
+  useEffect(() => {
+    scrollToUser();
+  }, [data]);
 
   return (
-    <IonCard className='leaderboard-container'>
-        <IonHeader className='title'>
-          <IonTitle>Leaderboard</IonTitle>
-        </IonHeader>
-        <div className='button-container'>
-          <IonButton
-            onClick={() => {
-              dataType = 'individual';
-              getData(dataType);
-            }}
-            disabled={loading}
-          >
-            Individual
-          </IonButton>
-          <IonButton
-            onClick={() => {
-              dataType = 'teams';
-              getData(dataType);
-            }}
-            disabled={loading}
-          >
-            Teams
-          </IonButton>
-        </div>
-        <IonCardContent className="box">
-          {loading ? (
-            <IonSpinner className="spinner" />
-          ) : (
-            <Bar
-              data={chartData}
-              options={chartOptions}
-              plugins={[imgItems, ChartDataLabels]}
-            ></Bar>
-          )}
-        </IonCardContent>
+    <IonCard className="leaderboard-container" ref={contentRef}>
+      <IonCardHeader className="title">
+        <IonCardTitle>Leaderboard</IonCardTitle>
+      </IonCardHeader>
+      <div className="button-container">
+        <IonButton
+          onClick={() => {
+            setDataType('individual');
+          }}
+          disabled={loading}
+        >
+          Individual
+        </IonButton>
+        <IonButton
+          onClick={() => {
+            setDataType('teams');
+          }}
+          disabled={loading}
+        >
+          Teams
+        </IonButton>
+      </div>
+      <IonCardContent className="box">
+        {loading ? (
+          <IonSpinner className="spinner" />
+        ) : (
+          <Bar
+            data={chartData}
+            options={chartOptions}
+            plugins={[imgItems, ChartDataLabels]}
+          ></Bar>
+        )}
+      </IonCardContent>
     </IonCard>
   );
 };

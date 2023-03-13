@@ -21,6 +21,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  limit,
   onSnapshot,
   query,
   updateDoc,
@@ -34,7 +35,6 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import AdminContext from '../../store/admin-context';
 import AuthContext from '../../store/auth-context';
 import TeamLeaderBoardChart from '../../components/LeaderBoard/TeamLeaderboardChart';
-import { ChannelData } from '../sampleData';
 import WidgetBot from '@widgetbot/react-embed';
 import './teamHome.scss';
 
@@ -132,17 +132,24 @@ const TeamHome: React.FC = () => {
     setUserRef(currentUserRef);
     const userSnap = await getDoc(currentUserRef); // grab the user document
     const userData = userSnap.data(); // get the user data
-    const dbChannelId = ChannelData.find((c) => c.team == ctx.team)?.id; // get the team channel id
-    let channelId = '';
+    let teamChannelId = ''; //temp string
+    const chanQuery = query(
+      collection(FirestoreDB, 'channelIDs'),
+      where('team', '==', ctx.team),
+      limit(1)
+    );//query to see if there is a document with the team name assigned to it
+    const chanIdSnap = await getDocs(chanQuery);//get results (has to be getDoccs because using query)
+    chanIdSnap.forEach(async (doc: any) => {
+      teamChannelId = doc.id;//get the document name (which is the channel id)
+    });
     // if channel not set up with id in database, default to #general
-    if (dbChannelId) {
-      channelId = dbChannelId;
+    if (channelId != '') {
+      setChannelId(teamChannelId);
     } else {
-      channelId = '1068966009106600110'; // #general channel id
+      setChannelId('1068966009106600110'); // #general channel id
     }
     setUserTotalSteps(userData.totalStep);
     setIsLeader(userData.team_leader);
-    setChannelId(channelId);
     const teamRef = doc(FirestoreDB, 'teams', ctx.team); // get team reference
     setTeamRef(teamRef); // set team reference
     setProfilePic(teamData.profile_pic);
@@ -255,6 +262,10 @@ const TeamHome: React.FC = () => {
         await updateDoc(userReference, {
           // update the user document
           team_leader: false,
+          team: ''
+        });
+        //Update the channel id document and allow it to be reused by another team
+        await updateDoc(doc(FirestoreDB, 'channelIDs', channelId), {
           team: ''
         });
         // if the user is not the only member of the team
