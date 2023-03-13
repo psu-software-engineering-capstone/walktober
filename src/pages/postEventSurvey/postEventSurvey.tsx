@@ -149,10 +149,11 @@ function PostEventSurvey() {
               </IonItem>
 
               <IonItem className="modal-field">
-                <IonLabel position="floating">What device was used for Walktober?</IonLabel>
+                <IonLabel position="floating">What app did you use for Walktober?</IonLabel>
                   <IonSelect interfaceOptions={deviceWasUsed} interface="action-sheet" placeholder="Select One" onIonChange={(e) => setDeviceUsed(e.target.value as string)}>
-                    <IonSelectOption value="Apple">Apple</IonSelectOption>
-                    <IonSelectOption value="Android">Android</IonSelectOption>
+                    <IonSelectOption value="Apple Health">Apple Health</IonSelectOption>
+                    <IonSelectOption value="Google Fit">Google Fit</IonSelectOption>
+                    <IonSelectOption value="N/A">N/A</IonSelectOption>
                   </IonSelect>
               </IonItem>
 
