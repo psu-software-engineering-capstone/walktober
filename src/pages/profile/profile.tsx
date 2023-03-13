@@ -2,6 +2,7 @@
 import { useContext, useEffect, useState } from 'react';
 import {
   IonButton,
+  IonCard,
   IonCol,
   IonContent,
   IonFooter,
@@ -192,17 +193,9 @@ const Profile: React.FC = () => {
   // display team
   function teamDisplay() {
     if (team === '') {
-      return (
-        <>
-          <IonItem>You have not joined a team yet</IonItem>
-        </>
-      );
+      return "You have not joined a team yet";
     } else {
-      return (
-        <>
-          <IonItem>Team: {team}</IonItem>
-        </>
-      );
+      return `Team: ${team}`;
     }
   }
 
@@ -259,84 +252,106 @@ const Profile: React.FC = () => {
             <IonTitle>Profile</IonTitle>
           </NavBar>
         </IonHeader>
-        <IonContent>
+        <IonContent className='walktober-background'>
           <IonGrid>
             <IonRow>
-              <IonCol sizeLg="3" sizeMd="5" sizeSm="12">
-                <IonItem>
+              <IonCol
+                sizeXs="12"
+                sizeSm="12"
+                sizeMd="auto"
+                sizeLg="auto"
+                sizeXl="auto">
+                <IonCard>
                   <IonImg
-                    className="profile_pic"
+                    className="profile-pic"
                     src={profilePic}
                     alt="Profile picture for the user signed in"
                   ></IonImg>
-                </IonItem>
-                <IonItem>
-                  <input
-                    type="file"
-                    id="img"
-                    name="img"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                  />
-                </IonItem>
-                <IonItem>
-                  <IonButton onClick={handleSubmit}>
-                    Change Profile Picture
-                  </IonButton>
-                </IonItem>
-                <IonItem>
-                  <h2>{name}</h2>
-                </IonItem>
-                <IonItem>
-                  <p>{email}</p>
-                </IonItem>
-                {teamDisplay()}
-                {!isGoogleUser && (
                   <IonItem>
-                    <IonButton onClick={changePassword}>
-                      Change Password
+                    <input
+                      type="file"
+                      id="img"
+                      name="img"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                    />
+                  </IonItem>
+                  <IonItem>
+                    <IonButton onClick={handleSubmit}>
+                      Change Profile Picture
                     </IonButton>
                   </IonItem>
-                )}
-                <IonItem>
-                  <IonButton onClick={signOut}>Sign Out</IonButton>
-                </IonItem>
+                  <IonItem>
+                    <h2>{name}</h2>
+                  </IonItem>
+                  <IonItem>
+                    <p>{email}</p>
+                  </IonItem>
+                  <IonItem>
+                    {teamDisplay()}
+                  </IonItem>
+                  {!isGoogleUser && (
+                    <IonItem>
+                      <IonButton onClick={changePassword}>
+                        Change Password
+                      </IonButton>
+                    </IonItem>
+                  )}
+                  <IonItem>
+                    <IonButton onClick={signOut}>Sign Out</IonButton>
+                  </IonItem>
+                </IonCard>
               </IonCol>
-              <IonCol sizeLg="9" sizeMd="7" sizeSm="12">
-                <IonItem>
-                  <p>Joined on {joinDate}</p>
-                </IonItem>
-                <IonItem>
-                  <p>{totalDistance.toLocaleString()} miles walked in total</p>
-                </IonItem>
-                <form onSubmit={handleSubmitStepGoal}>
-                  <IonLabel position="stacked">
-                    Set Your Step Goal for today:
-                  </IonLabel>
-                  <IonInput
-                    min="0"
-                    type="number"
-                    value={stepGoal}
-                    onInput={(event: any) => {
-                      setStepGoal(Number(event.target.value));
-                    }}
-                  />
-                  <IonButton expand="block" type="submit">
-                    Save
-                  </IonButton>
-                </form>
-                <p>
-                  Today&apos;s step goal is: {stepGoal.toLocaleString()} steps!
-                </p>
-                <IonItem>
-                  <h6>Badges:</h6>
-                </IonItem>
+              <IonCol>
+                <IonRow>
+                  <IonCol>
+                    <IonCard>
+                      <IonItem>
+                        <p>Joined on {joinDate}</p>
+                      </IonItem>
+                      <IonItem>
+                        <p>{totalDistance.toLocaleString()} miles walked in total</p>
+                      </IonItem>
+                      <IonItem>
+                        <form onSubmit={handleSubmitStepGoal} className="step-form">
+                          <IonLabel position="stacked">
+                            Set your step goal for today:
+                          </IonLabel>
+                          <IonInput
+                            min="0"
+                            type="number"
+                            value={stepGoal}
+                            onInput={(event: any) => {
+                              setStepGoal(Number(event.target.value));
+                            }}
+                          />
+                          <IonButton expand="block" type="submit">
+                            Save
+                          </IonButton>
+                        </form>
+                      </IonItem>
+                      <IonItem>
+                        <p>Today&apos;s step goal is: {stepGoal.toLocaleString()} steps!</p>
+                      </IonItem>
+                      <IonItem>
+                        <h6>Badges:</h6>
+                      </IonItem>
+                    </IonCard>
+                  </IonCol>
+                </IonRow>
+                <IonRow>
+                  <IonCol
+                    sizeXs="12"
+                    sizeSm="12"
+                    sizeMd="12"
+                    sizeLg="12"
+                    sizeXl="12">
+                    <IonCard>
+                      <CalendarLeafs data={calanderLogs}></CalendarLeafs>
+                    </IonCard>
+                  </IonCol>
+                </IonRow>
               </IonCol>
-              <IonRow>
-                <IonCol size="12" className="calendar">
-                  <CalendarLeafs data={calanderLogs}></CalendarLeafs>
-                </IonCol>
-              </IonRow>
             </IonRow>
           </IonGrid>
           <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
@@ -344,34 +359,23 @@ const Profile: React.FC = () => {
           </IonRefresher>
         </IonContent>
         <IonFooter>
-          <ul>
-            <li>
-              <a
+          <IonItem>
+            <IonLabel className='attribution-list'>
+              Leaf icons created by <a
                 href="https://www.flaticon.com/free-icons/leaf"
-                title="leaf icons"
-              >
-                Leaf icons created by Freepik - Flaticon
-              </a>
-            </li>
-
-            <li>
-              <a
+                title="leaf icons">
+                  Freepik - Flaticon
+              </a> &bull; <a
                 href="https://www.flaticon.com/free-icons/leaf"
-                title="leaf icons"
-              >
-                Leaf icons created by Pixel perfect - Flaticon
-              </a>
-            </li>
-
-            <li>
-              <a
+                title="leaf icons">
+                Pixel perfect - Flaticon
+              </a> &bull; <a
                 href="https://www.flaticon.com/free-icons/leaf"
-                title="leaf icons"
-              >
-                Leaf icons created by Good Ware - Flaticon
+                title="leaf icons">
+                Good Ware - Flaticon
               </a>
-            </li>
-          </ul>
+            </IonLabel>
+          </IonItem>
         </IonFooter>
       </IonPage>
     </>

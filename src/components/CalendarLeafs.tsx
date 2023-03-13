@@ -1,4 +1,4 @@
-import { IonCol, IonGrid, IonItem, IonRow } from '@ionic/react';
+import { IonCol, IonGrid, IonItem, IonLabel, IonRow } from '@ionic/react';
 import React from 'react';
 import OrangeLeaf from '../assets/OrangeLeaf.png';
 import YellowLeaf from '../assets/yellowLeaf.png';
@@ -25,8 +25,16 @@ const populateCalendar = (data: StepLog[]) => {
     <>
       <IonGrid>
         <IonRow>
-          <IonCol offset="5" className="month">
-            {'October'}
+          <IonCol size="2">
+            <IonLabel>{'October'}</IonLabel>
+          </IonCol>
+          <IonCol className="leaf-legend" size="auto">
+            <img alt="Orange leaf" src={OrangeLeaf} className="leafImg" />
+            5,000-7,499 steps
+            <img alt="Yellow leaf" src={YellowLeaf} className="leafImg" />
+            7,500-9,999 steps
+            <img alt="Green leaf" src={GreenLeaf} className="leafImg" />
+            10,000 steps
           </IonCol>
         </IonRow>
         <IonRow>
