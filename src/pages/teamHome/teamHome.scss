@@ -11,7 +11,7 @@ h1 {
   text-align: center;
 }
 
-.body {
+.team-join {
   --background: url(../../assets/Walktober-graphic.png);
 }
 
@@ -58,4 +58,14 @@ h1 {
 
 .foot-note {
   text-align: center;
+}
+
+.join-create-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.join-create-team-card {
+  min-height: 325px;
 }
