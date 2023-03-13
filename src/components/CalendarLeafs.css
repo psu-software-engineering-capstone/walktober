@@ -4,6 +4,13 @@
   margin-right: 0.5em;
 }
 
+.grid-item-label {
+  grid-area: label;
+  grid-column: span 7;
+  display: flex;
+  justify-content: center;
+}
+
 .grid-item {
   grid-area: item;
   grid-row: span 1;
@@ -54,7 +61,8 @@
     'item item item item item item item'
     'item item item item item item item'
     'item item item item item item item'
-    'item item item item item item item';
+    'item item item item item item item'
+    'label';
 }
 
 @media (max-width: 768px) {
@@ -75,4 +83,8 @@
     max-height: 20px;
     margin-right: 0em;
   }
+}
+
+.mx {
+  margin-left: 1em;
 }
