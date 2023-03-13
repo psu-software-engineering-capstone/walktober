@@ -225,7 +225,12 @@ const Profile: React.FC = () => {
         <IonContent className='walktober-background'>
           <IonGrid>
             <IonRow>
-              <IonCol size="auto">
+              <IonCol
+                sizeXs="12"
+                sizeSm="12"
+                sizeMd="auto"
+                sizeLg="auto"
+                sizeXl="auto">
                 <IonCard>
                   <IonImg
                     className="profile-pic"
@@ -268,36 +273,57 @@ const Profile: React.FC = () => {
                 </IonCard>
               </IonCol>
               <IonCol>
-                <IonItem>
-                  <p>Joined on {joinDate}</p>
-                </IonItem>
-                <IonItem>
-                  <p>{totalDistance} miles walked in total</p>
-                </IonItem>
-                <form onSubmit={handleSubmitStepGoal}>
-                  <IonLabel position="stacked">Set Your Step Goal for today:</IonLabel>
-                  <IonInput
-                    min="0"
-                    type="number"
-                    value={stepGoal}
-                    onInput={(event: any) => {
-                      setStepGoal(Number(event.target.value));
-                    }}
-                  />
-                  <IonButton expand="block" type="submit">
-                    Save
-                  </IonButton>
-                </form>
-                <p>Today&apos;s step goal is: {stepGoal} steps!</p>
-                <IonItem>
-                  <h6>Badges:</h6>
-                </IonItem>
+                <IonRow>
+                  <IonCol>
+                    <IonCard>
+                      <IonItem>
+                        <p>Joined on {joinDate}</p>
+                      </IonItem>
+                      <IonItem>
+                        <p>{totalDistance} miles walked in total</p>
+                      </IonItem>
+                      <IonItem>
+                        <form onSubmit={handleSubmitStepGoal} className="step-form">
+                          <IonLabel position="stacked">
+                            Set Your Step Goal for today:
+                          </IonLabel>
+                          <IonInput
+                            min="0"
+                            type="number"
+                            value={stepGoal}
+                            onInput={(event: any) => {
+                              setStepGoal(Number(event.target.value));
+                            }}
+                          />
+                          <IonButton expand="block" type="submit">
+                            Save
+                          </IonButton>
+                        </form>
+                      </IonItem>
+                      <IonItem>
+                        <p>Today&apos;s step goal is: {stepGoal} steps!</p>
+                      </IonItem>
+                      <IonItem>
+                        <h6>Badges:</h6>
+                      </IonItem>
+                    </IonCard>
+                  </IonCol>
+                </IonRow>
+                <IonRow>
+                  <IonCol
+                    sizeXs="12"
+                    sizeSm="12"
+                    sizeMd="12"
+                    sizeLg="12"
+                    sizeXl="12">
+                    <IonCard>
+                      <CalendarLeafs></CalendarLeafs>
+                    </IonCard>
+                  </IonCol>
+                </IonRow>
               </IonCol>
             </IonRow>
             <IonRow>
-              <IonCol sizeLg="6" sizeMd="8" sizeSm="12">
-                <CalendarLeafs></CalendarLeafs>
-              </IonCol>
             </IonRow>
           </IonGrid>
           <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
