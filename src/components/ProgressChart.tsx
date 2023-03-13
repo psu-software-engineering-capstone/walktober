@@ -14,16 +14,18 @@ const ProgressChart: React.FC<{ data: Array<StepLog>, todayStep: number, stepGoa
 
   // below vars are self documenting
   const stepsLeft = stepGoal - todayStep;
-
+  const style = getComputedStyle(document.documentElement);
+  //primCol contains the color for the text and lines
+  const primCol = style.getPropertyValue('--primaryColor');
   // below is the react element.
   // input/props is an array of step logs
   // output is a react element
   return (
     <>
-      <h1>Goal steps: {stepGoal}</h1>
+      <h1>Goal steps: {stepGoal.toLocaleString()}</h1>
       <IonLabel>
         <IonProgressBar value={1 - stepsLeft / stepGoal / 1}></IonProgressBar>
-        {todayStep.toString() + '/' + stepGoal.toString() + ' steps'}
+        {todayStep.toLocaleString() + '/' + stepGoal.toLocaleString() + ' steps'}
       </IonLabel>
       <Bar
         className="box"
@@ -32,27 +34,26 @@ const ProgressChart: React.FC<{ data: Array<StepLog>, todayStep: number, stepGoa
             y: {
               grid: {
                 drawBorder: false,
-                color: '#FFFFFF'
+                color: primCol
               },
               ticks: {
                 beginAtZero: true,
-                color: 'white',
+                color: primCol,
                 fontSize: 12
               }
             },
             x: {
               grid: {
                 drawBorder: false,
-                color: '#FFFFFF'
+                color: primCol
               },
               ticks: {
                 beginAtZero: true,
-                color: 'white',
+                color: primCol,
                 fontSize: 12
               }
             }
           },
-          color: 'white'
         }}
         data={{
           labels: data.map((item) => item.date),

@@ -16,7 +16,8 @@ import {
   IonInput,
   IonButton,
   IonIcon,
-  isPlatform
+  isPlatform,
+  useIonLoading
 } from '@ionic/react';
 import { eye, eyeOff, logoGoogle } from 'ionicons/icons';
 import { useContext, useState } from 'react';
@@ -38,6 +39,9 @@ import logo from '../../assets/Walktober.png';
 const Signup: React.FC = () => {
   // for routing //
   const history = useHistory();
+
+  // loading screen //
+  const [present] = useIonLoading();
 
   // sign-up variables //
   const [newEmail, setNewEmail] = useState('');
@@ -63,8 +67,6 @@ const Signup: React.FC = () => {
     void setDoc(doc(FirestoreDB, 'users', newEmail), {
       email: newEmail,
       name: newFirstName + ' ' + newLastName,
-      badges: [],
-      device: '',
       totalStep: 0,
       profile_pic: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
       team: '',
@@ -80,8 +82,6 @@ const Signup: React.FC = () => {
     void setDoc(doc(FirestoreDB, 'users', result.user.email as string), {
       email: result.user.email,
       name: result.user.displayName,
-      badges: [],
-      device: '',
       totalStep: 0,
       profile_pic: result.user.photoURL,
       team: '',
@@ -97,8 +97,6 @@ const Signup: React.FC = () => {
     void setDoc(doc(FirestoreDB, 'users', result.email as string), {
       email: result.email,
       name: result.givenName + ' ' + result.familyName,
-      badges: [],
-      device: '',
       totalStep: 0,
       profile_pic: result.imageUrl,
       team: '',
@@ -129,14 +127,20 @@ const Signup: React.FC = () => {
             alert('There is already an existing account under this email');
             void auth.signOut();
           } else {
-            alert('Sign-up successful');
             createUserWithGoogleAuth(result);
-            history.push('/register');
+            // delay 1 second to allow firebase to update auth state //
+            present({
+              message: 'Loading...',
+              duration: 1000,
+              spinner: 'circles'
+            });
+            setTimeout(() => {
+              history.push('/register');
+            }, 1000);
           }
         })
         .catch((error: unknown) => {
           console.log(error);
-          alert(error);
         });
       // ios & android //
     } else {
@@ -156,15 +160,21 @@ const Signup: React.FC = () => {
               alert('There is already an existing account under this email');
               void auth.signOut();
             } else {
-              alert('Sign-up successful');
               createUserWithGoogleAuthMobile(result);
-              history.push('/register');
+              // delay 1 second to allow firebase to update auth state //
+              present({
+                message: 'Loading...',
+                duration: 1000,
+                spinner: 'circles'
+              });
+              setTimeout(() => {
+                history.push('/register');
+              }, 1000);
             }
           }
         )
         .catch((error: any) => {
           console.log(error);
-          alert(error);
         });
     }
   };
@@ -186,8 +196,15 @@ const Signup: React.FC = () => {
           console.log(data);
           //send a verification link to the email
           emailVerification();
-          alert('Sign-up successful');
-          history.push('/register');
+          /// delay 1 second to allow firebase to update auth state //
+          present({
+            message: 'Loading...',
+            duration: 1000,
+            spinner: 'circles'
+          });
+          setTimeout(() => {
+            history.push('/register');
+          }, 1000);
         })
         .catch((error: unknown) => {
           console.log(error);
