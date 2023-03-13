@@ -331,11 +331,9 @@ const Profile: React.FC = () => {
                   <h6>Badges:</h6>
                 </IonItem>
               </IonCol>
-              <IonRow>
-                <IonCol size="12" className="calendar">
-                  <CalendarLeafs data={calanderLogs}></CalendarLeafs>
-                </IonCol>
-              </IonRow>
+            </IonRow>
+            <IonRow>
+              <CalendarLeafs data={calanderLogs}></CalendarLeafs>
             </IonRow>
           </IonGrid>
           <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>

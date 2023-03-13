@@ -8,7 +8,7 @@
 }
 
 @media (min-width: 1024px) {
-  .calendar {
+  .z {
     margin-left: 35vw;
     margin-top: -15vh;
     padding-right: 40vw;
@@ -16,7 +16,7 @@
 }
 
 @media (max-width: 1023px) {
-  .calendar {
+  .z {
     margin-left: 40vw;
     margin-top: -15vh;
     padding-right: 40vw;
@@ -24,7 +24,7 @@
 }
 
 @media (max-width: 850px) {
-  .calendar {
+  .z {
     margin-top: 0vh;
     margin-left: 10vw;
     padding-right: 0vw;
@@ -32,8 +32,20 @@
 }
 
 @media (max-width: 630px) {
-  .calendar {
+  .z {
     margin-left: auto;
     margin-right: auto;
   }
+}
+
+.calendar {
+  display: block;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-right: 0px;
+  padding-left: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }

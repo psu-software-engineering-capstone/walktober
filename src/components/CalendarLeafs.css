@@ -1,24 +1,78 @@
 .leafImg {
   max-width: 20px;
   max-height: 20px;
+  margin-right: 0.5em;
 }
 
 .grid-item {
   grid-area: item;
+  grid-row: span 1;
+  grid-column: span 1;
+  background-color: var(--ion-item-background);
+  padding: 0.5em;
+  max-width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 10vw;
+  min-height: 5vh;
+  max-width: 10vw;
+  max-height: 5vh;
+  font-size: 1.5em;
+}
+
+.grid-item-title {
+  grid-area: title;
+  grid-column: span 7;
+  grid-row: span 1;
+  text-align: center;
+}
+
+.grid-item-dow {
+  grid-area: day;
+  grid-row: span 1;
+  grid-column: span 1;
+  font-size: 2em;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .grid-container {
   display: grid;
   height: 40vh;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(7, 1fr);
-  gap: 0.5em;
+  width: 40vw;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 2em;
   grid-template-areas:
-    'item item item item item item item'
-    'item item item item item item item'
+    'title'
+    'day day day day day day day'
     'item item item item item item item'
     'item item item item item item item'
     'item item item item item item item'
     'item item item item item item item'
     'item item item item item item item';
+}
+
+@media (max-width: 768px) {
+  .grid-container {
+    gap: 1.5em;
+  }
+}
+
+@media (max-width: 550px) {
+  .grid-container {
+    gap: 0em;
+  }
+  .grid-item {
+    min-height: auto;
+  }
+  .leafImg {
+    max-width: 20px;
+    max-height: 20px;
+    margin-right: 0em;
+  }
 }
