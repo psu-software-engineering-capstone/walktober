@@ -27,9 +27,6 @@ import { doc, collection, getDocs, updateDoc, setDoc, getDoc } from 'firebase/fi
 import './admin.css';
 import {
   TeamData,
-  IndividualData,
-  PreSurvey,
-  PostSurvey,
   Devices
 } from '../sampleData';
 
