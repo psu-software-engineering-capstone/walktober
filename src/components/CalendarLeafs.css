@@ -2,3 +2,23 @@
   max-width: 20px;
   max-height: 20px;
 }
+
+.grid-item {
+  grid-area: item;
+}
+
+.grid-container {
+  display: grid;
+  height: 40vh;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  gap: 0.5em;
+  grid-template-areas:
+    'item item item item item item item'
+    'item item item item item item item'
+    'item item item item item item item'
+    'item item item item item item item'
+    'item item item item item item item'
+    'item item item item item item item'
+    'item item item item item item item';
+}
