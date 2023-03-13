@@ -37,7 +37,9 @@ const SignupForm: React.FC = () => {
 
   // for routing
   const history = useHistory();
-  const ctx = useContext(AuthContext); //Auth Context variable
+  // auth context
+  const ctx = useContext(AuthContext);
+
   // pushes questions answered from the form to the database
   const createRegistrationQuestions = () => {
     void setDoc(doc(FirestoreDB, 'registrationQuestions', newEmail), {
@@ -53,27 +55,24 @@ const SignupForm: React.FC = () => {
   };
 
   const affiliationPSUOptions = {
-    header: 'Please select your affiliation to PSU'
+    header: 'What is your PSU affiliation?'
   };
   const hearAboutWalktober = {
-    header: 'Please select how you heard about Walktober'
+    header: 'How did you hear about Walktober?'
   };
   const hoursPhysicallyActive = {
-    header:
-      'Please select the approximate hours per week you are currently physically active'
+    header: 'On average, how many hours per week are you currently physically active?'
   };
   const minutesPhysicallyActive = {
     header:
-      'Please select the approximate minutes per day you are currently physically active'
+      'On average, how many minutes of physical activity do you currently engage in per day?'
   };
   const recCenterUsage = {
-    header:
-      'Please select the most accurate frequency for your PSU Rec Center usage'
+    header: 'How often, on average, do you use the Rec Center?'
   };
 
   const distFromCampus = {
-    header:
-      'Please select the most accurate distance you live from the PSU campus'
+    header: 'How far do you live from campus?'
   };
 
   const submitRegistration = () => {
@@ -143,13 +142,16 @@ const SignupForm: React.FC = () => {
                   }
                 >
                   <IonSelectOption value="print-materials">
-                    Print Materials
+                    Print Materials (Poster/Flyer)
                   </IonSelectOption>
                   <IonSelectOption value="word-of-mouth">
                     Word of Mouth
                   </IonSelectOption>
                   <IonSelectOption value="campus-rec-website">
                     Campus Rec Website
+                  </IonSelectOption>
+                  <IonSelectOption value="campus-rec-email">
+                    Campus Rec Email
                   </IonSelectOption>
                   <IonSelectOption value="campus-rec-social">
                     Campus Rec Social Media
@@ -165,7 +167,8 @@ const SignupForm: React.FC = () => {
 
               <IonItem className="signup-card-field">
                 <IonLabel position="floating">
-                  How many hours per week are you active?
+                  On average, how many hours per week are you currently
+                  physically active?
                 </IonLabel>
                 <IonSelect
                   interfaceOptions={hoursPhysicallyActive}
@@ -188,7 +191,8 @@ const SignupForm: React.FC = () => {
 
               <IonItem className="signup-card-field">
                 <IonLabel position="floating">
-                  How many minutes of activity per day?
+                  On average, how many minutes of physical activity do you
+                  currently engage in per day?
                 </IonLabel>
                 <IonSelect
                   interfaceOptions={minutesPhysicallyActive}
@@ -196,11 +200,11 @@ const SignupForm: React.FC = () => {
                   placeholder="Select One"
                   onIonChange={(e) => setMinPhysical(e.target.value as string)}
                 >
-                  <IonSelectOption value="0-15">0-15</IonSelectOption>
-                  <IonSelectOption value="16-30">16-30</IonSelectOption>
-                  <IonSelectOption value="31-45">31-45</IonSelectOption>
-                  <IonSelectOption value="46-60">46-60</IonSelectOption>
-                  <IonSelectOption value="60+">60+</IonSelectOption>
+                  <IonSelectOption value="0-15">0-15 minutes</IonSelectOption>
+                  <IonSelectOption value="16-30">16-30 minutes</IonSelectOption>
+                  <IonSelectOption value="31-45">31-45 minutes</IonSelectOption>
+                  <IonSelectOption value="46-60">46-60 minutes</IonSelectOption>
+                  <IonSelectOption value="60+">60+ minutes</IonSelectOption>
                 </IonSelect>
               </IonItem>
 
@@ -234,7 +238,7 @@ const SignupForm: React.FC = () => {
 
               <IonItem className="signup-card-field">
                 <IonLabel position="floating">
-                  How often do you use the PSU Rec Center?
+                  How often, on average, do you use the Rec Center?
                 </IonLabel>
                 <IonSelect
                   interfaceOptions={recCenterUsage}
