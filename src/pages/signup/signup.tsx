@@ -67,8 +67,6 @@ const Signup: React.FC = () => {
     void setDoc(doc(FirestoreDB, 'users', newEmail), {
       email: newEmail,
       name: newFirstName + ' ' + newLastName,
-      badges: [],
-      device: '',
       totalStep: 0,
       profile_pic: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
       team: '',
@@ -84,8 +82,6 @@ const Signup: React.FC = () => {
     void setDoc(doc(FirestoreDB, 'users', result.user.email as string), {
       email: result.user.email,
       name: result.user.displayName,
-      badges: [],
-      device: '',
       totalStep: 0,
       profile_pic: result.user.photoURL,
       team: '',
@@ -101,8 +97,6 @@ const Signup: React.FC = () => {
     void setDoc(doc(FirestoreDB, 'users', result.email as string), {
       email: result.email,
       name: result.givenName + ' ' + result.familyName,
-      badges: [],
-      device: '',
       totalStep: 0,
       profile_pic: result.imageUrl,
       team: '',

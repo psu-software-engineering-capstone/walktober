@@ -38,6 +38,7 @@ interface StepLog {
 
 const HomePage: React.FC = () => {
   const [steps, setSteps] = useState(0);
+  const [totalSteps, setTotalSteps] = useState(0);
   const history = useHistory();
   const [badges, setBadges] = useState(Array<badgeOutline>);
   const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
@@ -66,7 +67,7 @@ const HomePage: React.FC = () => {
   const getPastSevenDaysSteps = async (userData: any) => {
     const stepsByDate = userData.stepsByDate;
     const stepGoal = userData.step_goal;
-
+    setTotalSteps(userData.totalStep);
     //Add today's step count
     if (stepsByDate.length > 0) {
       const today = new Date().toISOString().slice(0, 10);
@@ -75,6 +76,9 @@ const HomePage: React.FC = () => {
       }
       else if (stepsByDate[stepsByDate.length - 1].date == today) {
         setSteps(stepsByDate[stepsByDate.length - 1].steps);
+      }
+      else{
+        setSteps(0);
       }
     }
 
@@ -139,8 +143,14 @@ const HomePage: React.FC = () => {
               className="todaysSteps"
             >
               <IonLabel className="">
-                Todays Steps: <div className="localStepsUpdater">{steps}</div>
+                Todays Steps: <div className="localStepsUpdater">{steps.toLocaleString()}</div>
               </IonLabel>
+              <br />
+              <br />
+              <IonLabel className="">
+                Total Steps: <div className="localStepsUpdater">{totalSteps.toLocaleString()}</div>
+              </IonLabel>
+              <br />
               <br />
               click
               <a onClick={moveToManualSteps}> here </a>
