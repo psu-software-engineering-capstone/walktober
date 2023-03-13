@@ -6,7 +6,6 @@ import { useState, useContext, useEffect } from 'react';
 import {
   IonContent,
   IonHeader,
-  IonLabel,
   IonPage,
   IonTitle,
   IonIcon,
@@ -19,8 +18,7 @@ import {
   IonRefresherContent,
   IonCardHeader,
   IonCardContent,
-  IonCardTitle,
-  IonCardSubtitle
+  IonCardTitle
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
 import { useHistory } from 'react-router';
@@ -43,6 +41,7 @@ interface StepLog {
 
 const HomePage: React.FC = () => {
   const [steps, setSteps] = useState(0);
+  const [totalSteps, setTotalSteps] = useState(0);
   const history = useHistory();
   const [badges, setBadges] = useState(Array<badgeOutline>);
   const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
@@ -71,7 +70,7 @@ const HomePage: React.FC = () => {
   const getPastSevenDaysSteps = async (userData: any) => {
     const stepsByDate = userData.stepsByDate;
     const stepGoal = userData.step_goal;
-
+    setTotalSteps(userData.totalStep);
     //Add today's step count
     if (stepsByDate.length > 0) {
       const today = new Date().toISOString().slice(0, 10);
@@ -80,6 +79,9 @@ const HomePage: React.FC = () => {
       }
       else if (stepsByDate[stepsByDate.length - 1].date == today) {
         setSteps(stepsByDate[stepsByDate.length - 1].steps);
+      }
+      else{
+        setSteps(0);
       }
     }
 
@@ -115,7 +117,6 @@ const HomePage: React.FC = () => {
   const moveToManualSteps = () => {
     history.push('/app/manualsteps');
   };
-
 
   return (
     <IonPage>
@@ -162,7 +163,12 @@ const HomePage: React.FC = () => {
               sizeLg='6'
               sizeXl='6'>
               <IonRow>
-                <IonCol>
+                <IonCol
+                  sizeXs='12'
+                  sizeSm='12'
+                  sizeMd='12'
+                  sizeLg='6'
+                  sizeXl='6'>
                   <IonCard className='team-card'>
                     <IonCardHeader>
                       <IonCardTitle>
@@ -178,17 +184,28 @@ const HomePage: React.FC = () => {
                     </IonCardContent>
                   </IonCard>
                 </IonCol>
-                <IonCol>
+                <IonCol
+                  sizeXs='12'
+                  sizeSm='12'
+                  sizeMd='12'
+                  sizeLg='6'
+                  sizeXl='6'>
                   <IonCard className='team-card'>
                     <IonCardHeader>
                       <IonCardTitle>
-                        Today&apos;s Steps:
+                        <p className="step-title">Today&apos;s Steps:</p>
+                        <div className='step-counter'>
+                          {steps.toLocaleString()}
+                        </div>
+                      </IonCardTitle>
+                      <IonCardTitle>
+                        <p className="step-title">Total Steps:</p>
+                        <div className='step-counter'>
+                          {totalSteps.toLocaleString()}
+                        </div>
                       </IonCardTitle>
                     </IonCardHeader>
                     <IonCardContent>
-                      <div className='step-counter'>
-                        {steps}
-                      </div>
                       <p>Click <a onClick={moveToManualSteps}>here </a>
                       to see previous logs.</p>
                     </IonCardContent>

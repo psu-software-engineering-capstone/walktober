@@ -522,7 +522,7 @@ const ManualSteps: React.FC = () => {
                 <IonCol className="log-col-l">
                   {new Date(item.date).toDateString()}
                 </IonCol>
-                <IonCol className="log-col">{item.steps}</IonCol>
+                <IonCol className="log-col">{item.steps.toLocaleString()}</IonCol>
                 <IonCol></IonCol>
               </IonRow>
             ))}

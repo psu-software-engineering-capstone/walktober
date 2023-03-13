@@ -60,6 +60,7 @@ const Profile: React.FC = () => {
   const [photo, setPhoto] = useState<any>(null);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [stepLogs, setStepLogs] = useState<StepLog[]>([]);
+  const [calanderLogs, setCalanderLogs] = useState<StepLog[]>([]);
 
   // update profile data when the page loads
   // update profile data when the profile data changes
@@ -88,23 +89,52 @@ const Profile: React.FC = () => {
     });
   }, [stepLogs]);
 
+  // step logs with colors from event start date to event end date
+  // including the days with 0 steps
+  useEffect(() => {
+    const start = new Date(adData.startDate);
+    for (let i = 0; i < 31; i++) {
+      setCalanderLogs((prev) => [
+        ...prev,
+        {
+          // starting from event start date to event end date
+          date: new Date(start.getTime() + i * (1000 * 60 * 60 * 24))
+            .toISOString()
+            .slice(0, 10),
+          steps: 0,
+          color: 'null'
+        }
+      ]);
+    }
+    if (stepLogs.length !== 0) {
+      stepLogs.forEach((log: StepLog) => {
+        calanderLogs.forEach((calLog: StepLog) => {
+          if (log.date === calLog.date) {
+            calLog.steps = log.steps;
+            calLog.color = log.color;
+          }
+        });
+      });
+    }
+  }, [stepLogs]);
+
   // set the data
   async function getData(userData: any): Promise<void> {
     const holdStep = userData.stepsByDate;
     const stepLogsWithColors: StepLog[] = [];
-    holdStep.forEach((log: { date: string; steps: number; }) => {
-      if (new Date(adData.startDate) <= new Date(log.date) && new Date(log.date) <= new Date(adData.endDate)) {
-        let color = "null"; 
-        if(log.steps >= 10000)
-          color = "green";
-        else if(log.steps >= 7500 && log.steps < 10000)
-          color = "yellow";
-        else if (log.steps >= 5000 && log.steps < 7500)
-          color = "orange";
+    holdStep.forEach((log: { date: string; steps: number }) => {
+      if (
+        new Date(adData.startDate) <= new Date(log.date) &&
+        new Date(log.date) <= new Date(adData.endDate)
+      ) {
+        let color = 'null';
+        if (log.steps >= 10000) color = 'green';
+        else if (log.steps >= 7500 && log.steps < 10000) color = 'yellow';
+        else if (log.steps >= 5000 && log.steps < 7500) color = 'orange';
         stepLogsWithColors.push({
           date: log.date,
           steps: log.steps,
-          color,
+          color
         });
       }
     });
@@ -280,12 +310,12 @@ const Profile: React.FC = () => {
                         <p>Joined on {joinDate}</p>
                       </IonItem>
                       <IonItem>
-                        <p>{totalDistance} miles walked in total</p>
+                        <p>{totalDistance.toLocaleString()} miles walked in total</p>
                       </IonItem>
                       <IonItem>
                         <form onSubmit={handleSubmitStepGoal} className="step-form">
                           <IonLabel position="stacked">
-                            Set Your Step Goal for today:
+                            Set your step goal for today:
                           </IonLabel>
                           <IonInput
                             min="0"
@@ -301,7 +331,7 @@ const Profile: React.FC = () => {
                         </form>
                       </IonItem>
                       <IonItem>
-                        <p>Today&apos;s step goal is: {stepGoal} steps!</p>
+                        <p>Today&apos;s step goal is: {stepGoal.toLocaleString()} steps!</p>
                       </IonItem>
                       <IonItem>
                         <h6>Badges:</h6>
@@ -317,13 +347,11 @@ const Profile: React.FC = () => {
                     sizeLg="12"
                     sizeXl="12">
                     <IonCard>
-                      <CalendarLeafs></CalendarLeafs>
+                      <CalendarLeafs data={calanderLogs}></CalendarLeafs>
                     </IonCard>
                   </IonCol>
                 </IonRow>
               </IonCol>
-            </IonRow>
-            <IonRow>
             </IonRow>
           </IonGrid>
           <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
