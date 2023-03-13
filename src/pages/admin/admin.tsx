@@ -33,10 +33,7 @@ import {
   where
 } from 'firebase/firestore';
 import './admin.css';
-import {
-  TeamData,
-  Devices
-} from '../sampleData';
+import { Devices } from '../sampleData';
 import { useHistory } from 'react-router';
 
 const Admin: React.FC = () => {
@@ -490,8 +487,8 @@ const Admin: React.FC = () => {
 
       let str = '"Name","Email","Team","TotalSteps"\n';
 
-      const querySnapshot = await getDocs(collection(FirestoreDB, "users"));
-      querySnapshot.forEach((doc: { id: any; data: () => any; }) => {
+      const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
+      querySnapshot.forEach((doc: { id: any; data: () => any }) => {
         let line = '';
         line += '"' + doc.data().name + '",';
         line += '"' + doc.data().email + '",';
@@ -519,10 +516,11 @@ const Admin: React.FC = () => {
     if (teamReportCheck) {
       console.log('Generating team report');
 
-      let str = '"Team Name","Average Steps","Number of Team Members","TotalSteps"\n'; 
+      let str =
+        '"Team Name","Average Steps","Number of Team Members","TotalSteps"\n';
 
-      const querySnapshot = await getDocs(collection(FirestoreDB, "teams"));
-      querySnapshot.forEach((doc: { id: any; data: () => any; }) => {
+      const querySnapshot = await getDocs(collection(FirestoreDB, 'teams'));
+      querySnapshot.forEach((doc: { id: any; data: () => any }) => {
         let line = '';
         line += '"' + doc.data().name + '",';
         line += doc.data().avg_steps + ',';
@@ -550,10 +548,13 @@ const Admin: React.FC = () => {
     if (preSurveyReportCheck) {
       console.log('Generating pre survey report');
 
-      let str = '"Name","Affiliation","Email","Distance From Campus","Heard From","Hours of Physical Activity","Minutes of Physical Activity","Rec Center Usage"\n';
+      let str =
+        '"Name","Affiliation","Email","Distance From Campus","Heard From","Hours of Physical Activity","Minutes of Physical Activity","Rec Center Usage"\n';
 
-      const querySnapshot = await getDocs(collection(FirestoreDB, "registrationQuestions"));
-      querySnapshot.forEach((doc: { id: any; data: () => any; }) => {
+      const querySnapshot = await getDocs(
+        collection(FirestoreDB, 'registrationQuestions')
+      );
+      querySnapshot.forEach((doc: { id: any; data: () => any }) => {
         let line = '';
         line += '"' + doc.data().name + '",';
         line += '"' + doc.data().affiliation + '",';
@@ -585,11 +586,13 @@ const Admin: React.FC = () => {
     if (postSurveyReportCheck) {
       console.log('Generating post survey report');
 
-      let str = 
-      '"Device Used","Walktober Feedback","Future Ideas","Hours Active Per Week","Minutes Active Per Day","Why Not Participate Again","Participation Opinion","Events Participated In","Rec Center Usage","Well-being"\n';
+      let str =
+        '"Device Used","Walktober Feedback","Future Ideas","Hours Active Per Week","Minutes Active Per Day","Why Not Participate Again","Participation Opinion","Events Participated In","Rec Center Usage","Well-being"\n';
 
-      const querySnapshot = await getDocs(collection(FirestoreDB, "exitQuestions"));
-      querySnapshot.forEach((doc: { id: any; data: () => any; }) => {
+      const querySnapshot = await getDocs(
+        collection(FirestoreDB, 'exitQuestions')
+      );
+      querySnapshot.forEach((doc: { id: any; data: () => any }) => {
         let line = '';
         line += '"' + doc.data().device + '",';
         line += '"' + doc.data().feedback + '",';
@@ -941,9 +944,7 @@ const Admin: React.FC = () => {
               <IonItem>
                 <IonCheckbox
                   checked={preSurveyReportCheck}
-                  onIonChange={(e) =>
-                    setpreSurveyReportCheck(e.detail.checked)
-                  }
+                  onIonChange={(e) => setpreSurveyReportCheck(e.detail.checked)}
                   slot="start"
                 ></IonCheckbox>
                 <IonLabel>Pre Survey Report</IonLabel>
