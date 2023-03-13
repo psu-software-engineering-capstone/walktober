@@ -12,13 +12,6 @@
   width: 100%;
 }
 
-.leaf-legend {
-  display: grid;
-  grid-template-columns: auto 1fr auto 1fr auto 1fr;
-  align-items: center;
-  gap: 10px;
-}
-
 .full-height {
   height: 100%;
 }
