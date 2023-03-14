@@ -9,6 +9,7 @@ import {
   IonPage,
   IonTitle,
   IonIcon,
+  IonModal,
   IonGrid,
   IonRow,
   IonCol,
@@ -25,9 +26,11 @@ import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import ProgressChart from '../../components/ProgressChart';
 import AuthContext from '../../store/auth-context';
+import AdminContext from '../../store/admin-context';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
+import PostEventSurvey from '../postEventSurvey/postEventSurvey';
 import './homePage.css';
 
 interface badgeOutline {
@@ -45,9 +48,11 @@ const HomePage: React.FC = () => {
   const history = useHistory();
   const [badges, setBadges] = useState(Array<badgeOutline>);
   const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
+  const [showPostSurvey, setShowPostSurvey] = useState(false);
   const [stepGoal, setStepGoal] = useState(0);
 
   const ctx = useContext(AuthContext); // auth context
+  const adminInfo = useContext(AdminContext);
 
   // update profile data when the page loads
   // update profile data when the profile data changes
@@ -65,6 +70,12 @@ const HomePage: React.FC = () => {
       unsubscribe();
     };
   }, [ctx.user]);
+
+  useEffect(() => {
+    const today = new Date();
+    const end = new Date(adminInfo.endDate);
+    setShowPostSurvey(today > end);
+  }, []);
 
   // get past seven days of steps from firestore
   const getPastSevenDaysSteps = async (userData: any) => {
@@ -125,7 +136,8 @@ const HomePage: React.FC = () => {
           <IonTitle>Home Page</IonTitle>
         </NavBar>
       </IonHeader>
-      <IonContent fullscreen={true} className="walktober-background">
+      <IonContent fullscreen={true} className="ion-padding testing">
+        {showPostSurvey ? <PostEventSurvey/> : ''}
         <IonGrid>
           <IonRow>
             <IonCol
