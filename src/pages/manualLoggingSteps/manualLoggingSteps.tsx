@@ -502,6 +502,13 @@ const ManualSteps: React.FC = () => {
     return maxDate.toISOString().slice(0, 10);
   }
 
+  //This function is for the displaying of the date in the step log. Previously, toDateString would provide the wrong date
+  function returnDate(item: string): string {
+    const originalDate = new Date(item);
+    originalDate.setDate(originalDate.getDate() + 1);
+    return originalDate.toDateString();
+  }
+
   // display steps logs
   function DisplayRecords(): any {
     if (stepLogs.length > 0) {
@@ -519,10 +526,10 @@ const ManualSteps: React.FC = () => {
 
             {stepLogs.map((item) => (
               <IonRow key={Math.random()}>
-                <IonCol className="log-col-l">
-                  {new Date(item.date).toDateString()}
+                <IonCol className="log-col-l">{returnDate(item.date)}</IonCol>
+                <IonCol className="log-col">
+                  {item.steps.toLocaleString()}
                 </IonCol>
-                <IonCol className="log-col">{item.steps.toLocaleString()}</IonCol>
                 <IonCol></IonCol>
               </IonRow>
             ))}
