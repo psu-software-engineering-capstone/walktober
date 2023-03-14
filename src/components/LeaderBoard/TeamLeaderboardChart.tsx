@@ -11,9 +11,8 @@ import './TeamLeaderboardChart.scss';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import AdminContext from '../../store/admin-context';
-import AuthContext from '../../store/auth-context';
 import { Bar } from 'react-chartjs-2';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
 
 ChartJS.register(...registerables);
@@ -36,7 +35,6 @@ const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
   const adData = useContext(AdminContext);
   const contentRef = useRef<HTMLIonCardElement | null>(null);
   const chartHeightMultiplier = 60;
-  const ctx = useContext(AuthContext); // auth context
   //Formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
   const chartData = {
     labels: data.map((row) => row.name.split(' ')),
