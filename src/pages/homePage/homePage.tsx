@@ -33,10 +33,6 @@ import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
 import PostEventSurvey from '../postEventSurvey/postEventSurvey';
 import './homePage.css';
 
-interface badgeOutline {
-  name: string;
-}
-
 interface StepLog {
   date: string;
   steps: number;
@@ -46,7 +42,6 @@ const HomePage: React.FC = () => {
   const [steps, setSteps] = useState(0);
   const [totalSteps, setTotalSteps] = useState(0);
   const history = useHistory();
-  const [badges, setBadges] = useState(Array<badgeOutline>);
   const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
   const [showPostSurvey, setShowPostSurvey] = useState(false);
   const [stepGoal, setStepGoal] = useState(0);
@@ -153,18 +148,6 @@ const HomePage: React.FC = () => {
               </IonRow>
               <IonRow>
                 <IonCol>
-                  <IonCard className="team-card">
-                    <IonCardHeader>
-                      <IonCardTitle>
-                        Badges Acquired:
-                      </IonCardTitle>
-                    </IonCardHeader>
-                    <IonCardContent>
-                      {badges.map((badge) => (
-                        <IonIcon name={badge.name} key={Math.random()}></IonIcon>
-                      ))}
-                    </IonCardContent>
-                  </IonCard>
                 </IonCol>
               </IonRow>
             </IonCol>
