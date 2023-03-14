@@ -245,13 +245,7 @@ const Profile: React.FC = () => {
         <IonContent className="walktober-background">
           <IonGrid>
             <IonRow>
-              <IonCol
-                sizeXs="12"
-                sizeSm="12"
-                sizeMd="auto"
-                sizeLg="auto"
-                sizeXl="auto"
-              >
+              <IonCol sizeXs="12" sizeSm="12" sizeMd="6" sizeLg="6" sizeXl="6">
                 <IonCard>
                   <IonImg
                     className="profile-pic"
@@ -291,64 +285,57 @@ const Profile: React.FC = () => {
                   </IonItem>
                 </IonCard>
               </IonCol>
-              <IonCol>
-                <IonRow>
-                  <IonCol>
-                    <IonCard>
-                      <IonItem>
-                        <p>Joined on {joinDate}</p>
-                      </IonItem>
-                      <IonItem>
-                        <p>
-                          {totalDistance.toLocaleString()} miles walked in total
-                        </p>
-                      </IonItem>
-                      <IonItem>
-                        <form
-                          onSubmit={handleSubmitStepGoal}
-                          className="step-form"
-                        >
-                          <IonLabel position="stacked">
-                            Set your step goal for today:
-                          </IonLabel>
-                          <IonInput
-                            min="0"
-                            type="number"
-                            value={stepGoal}
-                            onInput={(event: any) => {
-                              setStepGoal(Number(event.target.value));
-                            }}
-                          />
-                          <IonButton expand="block" type="submit">
-                            Save
-                          </IonButton>
-                        </form>
-                      </IonItem>
-                      <IonItem>
-                        <p>
-                          Today&apos;s step goal is: {stepGoal.toLocaleString()}{' '}
-                          steps!
-                        </p>
-                      </IonItem>
-                      <IonItem>
-                        <h6>Badges:</h6>
-                      </IonItem>
-                    </IonCard>
-                  </IonCol>
-                </IonRow>
-                <IonRow>
-                  <IonCol
-                    sizeXs="12"
-                    sizeSm="12"
-                    sizeMd="12"
-                    sizeLg="12"
-                    sizeXl="12"
-                  >
-                    <IonCard className="calendar">
-                      <CalendarLeafs data={calanderLogs}></CalendarLeafs>
-                    </IonCard>
-                  </IonCol>
-                </IonRow>
+              <IonCol sizeXs="12" sizeSm="12" sizeMd="6" sizeLg="6" sizeXl="6">
+                <IonCard>
+                  <IonItem>
+                    <p>Joined on {joinDate}</p>
+                  </IonItem>
+                  <IonItem>
+                    <p>
+                      {totalDistance.toLocaleString()} miles walked in total
+                    </p>
+                  </IonItem>
+                  <IonItem>
+                    <form onSubmit={handleSubmitStepGoal} className="step-form">
+                      <IonLabel position="stacked">
+                        Set your step goal for today:
+                      </IonLabel>
+                      <IonInput
+                        min="0"
+                        type="number"
+                        value={stepGoal}
+                        onInput={(event: any) => {
+                          setStepGoal(Number(event.target.value));
+                        }}
+                      />
+                      <IonButton expand="block" type="submit">
+                        Save
+                      </IonButton>
+                    </form>
+                  </IonItem>
+                  <IonItem>
+                    <p>
+                      Today&apos;s step goal is: {stepGoal.toLocaleString()}{' '}
+                      steps!
+                    </p>
+                  </IonItem>
+                  <IonItem>
+                    <h6>Badges:</h6>
+                  </IonItem>
+                </IonCard>
+
+                <IonCol
+                  sizeXs="12"
+                  sizeSm="12"
+                  sizeMd="6"
+                  sizeLg="6"
+                  sizeXl="6"
+                >
+                  {' '}
+                  <IonCard>
+                    <CalendarLeafs data={calanderLogs}></CalendarLeafs>
+                  </IonCard>
+                </IonCol>
               </IonCol>
             </IonRow>
           </IonGrid>
