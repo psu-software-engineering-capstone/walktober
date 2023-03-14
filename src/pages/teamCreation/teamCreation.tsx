@@ -23,7 +23,17 @@ import {
 import { useContext, useState } from 'react';
 import { auth, FirestoreDB } from '../../firebase';
 import AdminContext from '../../store/admin-context';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  limit,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where
+} from 'firebase/firestore';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import './teamCreation.css';
@@ -84,7 +94,16 @@ const TeamCreation: React.FC = () => {
       );
       return;
     }
-
+    let channelId = ''; //temp array
+    const chanQuery = query(
+      collection(FirestoreDB, 'channelIDs'),
+      where('team', '==', ''),
+      limit(1)
+    ); //find empty channel id document
+    const chanIdSnap = await getDocs(chanQuery); //get results of query
+    chanIdSnap.forEach(async (doc: any) => {
+      channelId = doc.id; //reassign the string to the channel id (which is the document id)
+    });
     setDoc(doc(FirestoreDB, 'teams', newTeamName), {
       name: newTeamName,
       avg_steps: userData.totalStep,
@@ -95,10 +114,12 @@ const TeamCreation: React.FC = () => {
       profile_pic:
         'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
       totalStep: userData.totalStep,
-      channel_id: '' // TODO: create discord channel
+      channel_id: channelId // TODO: create discord channel
     })
       .then(async () => {
-        console.log('Team created');
+        await updateDoc(doc(FirestoreDB, 'channelIDs', channelId), {
+          team: newTeamName
+        }); //set channel id document to this new open team
         alert('Your team has been created');
         await updateCurrentUser();
         history.push('/app/team');
