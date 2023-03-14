@@ -184,27 +184,6 @@ const HomePage: React.FC = () => {
                   <IonCard className='team-card'>
                     <IonCardHeader>
                       <IonCardTitle>
-                        Progress:
-                      </IonCardTitle>
-                    </IonCardHeader>
-                    <IonCardContent>
-                      {pastSevenDaysSteps.length > 1 ? (
-                        <ProgressChart data={pastSevenDaysSteps} todayStep={steps} stepGoal={stepGoal} />
-                      ) : (
-                        ' '
-                      )}
-                    </IonCardContent>
-                  </IonCard>
-                </IonCol>
-                <IonCol
-                  sizeXs='12'
-                  sizeSm='12'
-                  sizeMd='12'
-                  sizeLg='6'
-                  sizeXl='6'>
-                  <IonCard className='team-card'>
-                    <IonCardHeader>
-                      <IonCardTitle>
                         <p className="step-title">Today&apos;s Steps:</p>
                         <div className='step-counter'>
                           {steps.toLocaleString()}
@@ -219,7 +198,28 @@ const HomePage: React.FC = () => {
                     </IonCardHeader>
                     <IonCardContent>
                       <p>Click <a onClick={moveToManualSteps}>here </a>
-                      to see previous logs.</p>
+                      to add or edit steps.</p>
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+                <IonCol
+                  sizeXs='12'
+                  sizeSm='12'
+                  sizeMd='12'
+                  sizeLg='6'
+                  sizeXl='6'>
+                  <IonCard className='team-card'>
+                    <IonCardHeader>
+                      <IonCardTitle>
+                        Progress:
+                      </IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      {pastSevenDaysSteps.length > 1 ? (
+                        <ProgressChart data={pastSevenDaysSteps} todayStep={steps} stepGoal={stepGoal} />
+                      ) : (
+                        ' '
+                      )}
                     </IonCardContent>
                   </IonCard>
                 </IonCol>
