@@ -35,6 +35,7 @@ import {
 import './admin.css';
 import { Devices } from '../sampleData';
 import { useHistory } from 'react-router';
+import { getCountFromServer } from 'firebase/firestore';
 
 const Admin: React.FC = () => {
   //used to open and close modals
@@ -625,12 +626,23 @@ const Admin: React.FC = () => {
     if (devicesReportCheck) {
       console.log('Generating device usage report');
 
+      // Hardcoded count, should probably give exit survey device question a variable to use
+      const android = query(collection(FirestoreDB, 'exitQuestions'), where("device", "==", "Google Fit"));
+      const androidSnapshot = await getCountFromServer(android);
+      const gFitCount = androidSnapshot.data().count;
+
+      const apple = query(collection(FirestoreDB, 'exitQuestions'), where("device", "==", "Apple Health"));
+      const appleSnapshot = await getCountFromServer(apple);
+      const aHealthCount = appleSnapshot.data().count;
+
+      const neither = query(collection(FirestoreDB, 'exitQuestions'), where("device", "==", "N/A"));
+      const neitherSnapshot = await getCountFromServer(neither);
+      const nCount = neitherSnapshot.data().count;
+
       let str = '';
-      str += '"IPhone",' + Devices.iPhone + '\r\n';
-      str += '"Android",' + Devices.android + '\r\n';
-      str += '"Apple Health",' + Devices.apple_health + '\r\n';
-      str += '"FitBit",' + Devices.fitbit + '\r\n';
-      str += '"Google Health",' + Devices.google_health + '\r\n';
+      str += '"Apple Health",' + aHealthCount + '\r\n';
+      str += '"Google Fit",' + gFitCount + '\r\n';
+      str += '"N/A",' + nCount + '\r\n';
       console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
