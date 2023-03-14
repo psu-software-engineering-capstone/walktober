@@ -34,7 +34,7 @@ import { useHistory } from 'react-router';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import AdminContext from '../../store/admin-context';
 import AuthContext from '../../store/auth-context';
-import TeamLeaderBoardChart from '../../components/LeaderBoard/TeamLeaderboardChart';
+import TeamLeaderboardChart from '../../components/LeaderBoard/TeamLeaderboardChart';
 import WidgetBot from '@widgetbot/react-embed';
 import './teamHome.scss';
 
@@ -44,6 +44,7 @@ const TeamHome: React.FC = () => {
     email: string;
     profile_pic: string;
     totalStep: number;
+    highlight: boolean;
   }
 
   const [leaderboardData, setLeaderboardData] = useState(Array<memberData>);
@@ -164,7 +165,11 @@ const TeamHome: React.FC = () => {
         name: doc.data().name as string,
         email: doc.data().email as string,
         profile_pic: doc.data().profile_pic as string,
-        totalStep: doc.data().totalStep as number
+        totalStep: doc.data().totalStep as number,
+        highlight:
+          auth.currentUser.email == doc.data().email
+            ? (true as boolean)
+            : (false as boolean)
       };
       emailList.push(member.email);
       members.push(member);
@@ -345,15 +350,13 @@ const TeamHome: React.FC = () => {
         <IonGrid>
           <IonRow>
             <IonCol
-              className="boxSize "
+              className="leaderboard"
               sizeSm="12"
               sizeLg="4"
               sizeMd="6"
               sizeXs="12"
             >
-              <TeamLeaderBoardChart
-                data={leaderboardData}
-              ></TeamLeaderBoardChart>
+              <TeamLeaderboardChart memberData={leaderboardData}></TeamLeaderboardChart>
             </IonCol>
             <IonCol sizeSm="12" sizeLg="4" sizeMd="6" sizeXs="12" className="">
               <WidgetBot

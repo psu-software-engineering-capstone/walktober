@@ -3,7 +3,8 @@ import {
   IonCardContent,
   IonButton,
   IonCardHeader,
-  IonCardTitle
+  IonCardTitle,
+  IonSpinner
 } from '@ionic/react';
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import './LeaderBoardChart.scss';
@@ -28,7 +29,8 @@ const LeaderBoardChart: React.FC = () => {
   const [data, setData] = useState(Array<Data>);
   const [indData, setIndData] = useState(Array<Data>);
   const [teamData, setTeamData] = useState(Array<Data>);
-  const [dataType, setDataType] = useState('individual');
+  const [dataType, setDataType] = useState('');
+  const [loading, setLoading] = useState(false);
   const adData = useContext(AdminContext);
   const contentRef = useRef<HTMLIonCardElement | null>(null);
   const chartHeightMultiplier = 60;
@@ -209,7 +211,6 @@ const LeaderBoardChart: React.FC = () => {
     }
   };
 
-  // get data from database
   async function getChartData() {
     const indData: Array<Data> = [];
     const teamData: Array<Data> = [];
@@ -257,21 +258,26 @@ const LeaderBoardChart: React.FC = () => {
     });
   }
 
-  // set data for chart
+  //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
   const setChartData = () => {
-    if (dataType === 'individual') {
+    setLoading(true);
+    if (dataType == 'individual') {
       setData(indData);
       boxAdjust(indData.length);
     }
-    if (dataType === 'teams') {
+    if (dataType == 'teams') {
       setData(teamData);
       boxAdjust(teamData.length);
     }
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
   };
 
   // get data from database
   useEffect(() => {
     getChartData();
+    setDataType('individual');
   }, []);
 
   // set data for chart
@@ -281,7 +287,9 @@ const LeaderBoardChart: React.FC = () => {
 
   // auto scroll to user
   useEffect(() => {
-    scrollToUser();
+    setTimeout(() => {
+      scrollToUser();
+    }, 500);
   }, [data]);
 
   return (
@@ -306,11 +314,15 @@ const LeaderBoardChart: React.FC = () => {
         </IonButton>
       </div>
       <IonCardContent className="box">
-        <Bar
-          data={chartData}
-          options={chartOptions}
-          plugins={[imgItems, ChartDataLabels]}
-        ></Bar>
+      {loading ? (
+          <IonSpinner className="spinner" />
+        ) : (
+          <Bar
+            data={chartData}
+            options={chartOptions}
+            plugins={[imgItems, ChartDataLabels]}
+          ></Bar>
+        )}
       </IonCardContent>
     </IonCard>
   );
