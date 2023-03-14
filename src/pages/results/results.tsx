@@ -17,13 +17,12 @@ import {
   IonRow,
   IonCol
 } from '@ionic/react';
-//import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import './results.scss';
-import AuthContext from '../../store/auth-context';
-import { FirestoreDB } from '../../firebase';
+import AdminContext from '../../store/admin-context';
+import { auth, FirestoreDB } from '../../firebase';
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
-import { collection, getDocs } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import trophy from '../../assets/trophy.png';
 import average from '../../assets/average.png';
 import personalrecord from '../../assets/personalrecord.png';
@@ -42,47 +41,64 @@ interface StepLog {
 }
 
 interface Data {
-    name: string;
-    totalStep?: number;
-    daysLogged?: number;
-    stepsByDate?: StepLog[];
+  name: string;
+  totalStep?: number;
+  daysLogged?: number;
+  maxSteps: number;
+  maxStepDate: string;
+  stepsByDate?: StepLog[];
 }
 
 const Results: React.FC = () => {
-  //const history = useHistory();
-  //const [badges, setBadges] = useState(Array<badgeOutline>);
   const [data, setData] = useState<Data>();
-  const ctx = useContext(AuthContext);
-  const user = ctx.user as any;
+  const adData = useContext(AdminContext);
 
   async function getData() {
-    const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
-      querySnapshot.forEach((doc: any) => {
-        if(doc.data().name === user.displayName) {
-          setData(doc.data());
+    const currentUserRef = doc(
+      FirestoreDB,
+      'users',
+      auth.currentUser.email as string
+    ); // get user reference
+    const userSnap = await getDoc(currentUserRef); //get doc
+    const userData = userSnap.data(); //get  data
+    const daData: Data = {
+      name: userData.name,
+      totalStep: userData.totalStep,
+      daysLogged: userData.stepsByDate.length,
+      maxSteps: 0,
+      maxStepDate: '',
+      stepsByDate: userData.stepsByDate
+    };
+    //Get the max steps and date of it, also grab the total steps
+    let tempSteps = 0;
+    let tempDate = '';
+    let tempTotal = 0;
+    let tempLogged = 0;
+    daData.stepsByDate?.forEach((day) => {
+      if (day.date >= adData.startDate && day.date <= adData.endDate) {
+        if (day.steps > tempSteps) {
+          tempSteps = day.steps; //new  Max step
+          tempDate = day.date; // new max date
+          console.log(day.steps, day.date);
         }
+        tempTotal += day.steps; //add the total steps
+        tempLogged += 1; //increase counter for days active
+        //NOTE: The above 2 variables shouldn't be needed if we implement a method to only enter data within the event dates
+        //Then we could leave it as it is originally done in line 68 & 69
       }
-    );
+    });
+    daData.maxSteps = tempSteps; // rewrite the max step count
+    daData.maxStepDate = tempDate; //rewrite the max step date
+    daData.totalStep = tempTotal; //rewrite the total to be within event parameters
+    daData.daysLogged = tempLogged; //rewrite the days active to be within event parameters
+    setData(daData); //reassign the Data
   }
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [adData]);
 
-  let maxSteps = 0;
-  let maxStepsDate;
-
-  data?.stepsByDate?.forEach((day) => {
-    if (day.steps > maxSteps) {
-      maxSteps = day.steps;
-      maxStepsDate = day.date;
-    }
-  }
-);
-
-  console.log(data);
-
-   return (
+  return (
     <IonPage>
       <IonHeader>
         <NavBar>
@@ -94,12 +110,14 @@ const Results: React.FC = () => {
           <IonRow>
             <IonCol className="results-col">
               <IonCard className="results-card">
-                <IonCardHeader style={{ display: 'flex', justifyContent: 'center' }}>
-                    <img alt="Walktober logo" src={trophy} />
+                <IonCardHeader
+                  style={{ display: 'flex', justifyContent: 'center' }}
+                >
+                  <img alt="Walktober logo" src={trophy} />
                 </IonCardHeader>
                 <IonCardContent>
                   <IonCardTitle class="ion-text-center">
-                      Congratulations <b>{(user.displayName as string).split(' ')[0]}</b>!
+                    Congratulations <b>{data?.name}</b>!
                   </IonCardTitle>
                 </IonCardContent>
               </IonCard>
@@ -108,53 +126,69 @@ const Results: React.FC = () => {
             <IonCol className="results-col">
               <IonCard className="results-card">
                 <IonCardHeader>
-                  <IonCardTitle class="ion-text-center">During the Month of October</IonCardTitle>
+                  <IonCardTitle class="ion-text-center">
+                    During the Month of October
+                  </IonCardTitle>
                   <IonCardSubtitle class="ion-text-center">
                     You walked accomplished some amazing things!
                   </IonCardSubtitle>
                 </IonCardHeader>
                 <IonCardContent>
-                <IonList>
+                  <IonList>
                     <IonItem>
                       <IonThumbnail slot="start">
                         <img alt="picture of person walking" src={walking} />
-                        </IonThumbnail>
-                        <IonLabel>You walked <b>{data?.totalStep}</b> steps in the month of October!</IonLabel>
+                      </IonThumbnail>
+                      <IonLabel>
+                        You walked <b>{data?.totalStep}</b> steps in the month
+                        of October!
+                      </IonLabel>
                     </IonItem>
 
                     <IonItem>
-                        <IonThumbnail slot="start">
+                      <IonThumbnail slot="start">
                         <img alt="picture of compass" src={average} />
-                        </IonThumbnail>
-                        <IonLabel>
-                          You walked average of <b>{data?.totalStep != null ? (Math.round(data?.totalStep as number / 31)) : '0' }</b> steps per day during Walktober!
-                        </IonLabel>
+                      </IonThumbnail>
+                      <IonLabel>
+                        You walked average of{' '}
+                        <b>
+                          {data?.totalStep != null
+                            ? Math.round((data?.totalStep as number) / 31)
+                            : '0'}
+                        </b>{' '}
+                        steps per day during Walktober!
+                      </IonLabel>
                     </IonItem>
 
                     <IonItem>
-                    <IonThumbnail slot="start">
+                      <IonThumbnail slot="start">
                         <img alt="picture of calendar" src={recorddate} />
-                        </IonThumbnail>
-                        <IonLabel>You logged steps on <b>{data?.stepsByDate?.length}</b> out of 31 days in October!</IonLabel>
+                      </IonThumbnail>
+                      <IonLabel>
+                        You logged steps on <b>{data?.daysLogged}</b> out of 31
+                        days in October!
+                      </IonLabel>
                     </IonItem>
 
                     <IonItem>
-                        <IonThumbnail slot="start">
+                      <IonThumbnail slot="start">
                         <img alt="picture of medal" src={personalrecord} />
-                        </IonThumbnail>
-                        <IonLabel>Your personal record was on <b>{maxStepsDate}</b> where you walked <b>{maxSteps}</b> steps!</IonLabel>
+                      </IonThumbnail>
+                      <IonLabel>
+                        Your personal record was on <b>{data?.maxStepDate}</b>{' '}
+                        where you walked <b>{data?.maxSteps}</b> steps!
+                      </IonLabel>
                     </IonItem>
-                </IonList>
+                  </IonList>
                 </IonCardContent>
               </IonCard>
             </IonCol>
-          </IonRow>        
+          </IonRow>
 
           <IonRow>
             <IonCol className="results-col">
               <LeaderBoardChart></LeaderBoardChart>
             </IonCol>
-   
           </IonRow>
         </IonGrid>
       </IonContent>

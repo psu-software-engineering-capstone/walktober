@@ -18,6 +18,7 @@ import {
 } from 'ionicons/icons';
 
 /* Pages */
+import landing404 from './pages/404landing/landing404';
 import HomePage from './pages/homePage/homePage';
 import Profile from './pages/profile/profile';
 import newPassword from './pages/profile/newPassword';
@@ -29,8 +30,8 @@ import TeamCreation from './pages/teamCreation/teamCreation';
 import Admin from './pages/admin/admin';
 import StepsCalculator from './pages/stepsCalculator/stepsCalculator';
 import AuthContext from './store/auth-context';
-import landing404 from './pages/404landing/landing404';
 import Results from './pages/results/results';
+import AdminSteps from './pages/adminSteps/adminSteps';
 
 /* Routes */
 import ToLogin from './routes/ToLogin';
@@ -46,14 +47,13 @@ import { useContext } from 'react';
 
 const Dashboard: React.FC = () => {
   const ctx = useContext(AuthContext);
-  const isAdmin = ctx.admin;
 
   const tabsVisible = isPlatform('android') || isPlatform('ios');
 
   return (
     <IonTabs>
       <IonRouterOutlet>
-        <Route path="/" component={landing404}></Route>
+        <Route component={landing404} />
         <Route exact path="/app/home" component={ctx.user ? HomePage : ToLogin} />
         <Route exact path="/app/profile" component={ctx.user ? Profile : ToLogin} />
         <Route exact path="/app/profile/passwordChange" component={ctx.user ? newPassword : ToLogin} />
@@ -65,6 +65,7 @@ const Dashboard: React.FC = () => {
         <Route exact path="/app/team/join" component={ctx.user && ctx.team === '' ? TeamJoin : ctx.user && ctx.team !== '' ? ToTeamHome : ToLogin} />
         <Route exact path="/app/admin" component={ctx.user && ctx.admin === true ? Admin : ctx.user && ctx.admin === false ? ToHome : ToLogin} />
         <Route exact path="/app/results" component={ctx.user ? Results : ToLogin} />
+        <Route path="/app/adminSteps/:email" component={ctx.user && ctx.admin === true ? AdminSteps : ctx.user && ctx.admin === false ? ToHome : ToLogin} />
         <Route exact path="/app">
           <Redirect to="/app/home" />
         </Route>
@@ -93,7 +94,7 @@ const Dashboard: React.FC = () => {
           <IonIcon icon={people} />
           <IonLabel>Team</IonLabel>
         </IonTabButton>
-        {isAdmin && (
+        {ctx.admin && (
           <IonTabButton tab="admin" href="/app/admin">
             <IonIcon icon={construct} />
             <IonLabel>Admin</IonLabel>

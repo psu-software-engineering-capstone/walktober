@@ -2,6 +2,7 @@
 import { useContext, useEffect, useState } from 'react';
 import {
   IonButton,
+  IonCard,
   IonCol,
   IonContent,
   IonFooter,
@@ -17,7 +18,8 @@ import {
   IonRouterOutlet,
   IonRow,
   IonTitle,
-  RefresherEventDetail
+  RefresherEventDetail,
+  useIonLoading
 } from '@ionic/react';
 import { Route } from 'react-router-dom';
 import { auth, FirestoreDB, storage } from '../../firebase';
@@ -29,11 +31,25 @@ import AuthContext from '../../store/auth-context';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
 import CalendarLeafs from '../../components/CalendarLeafs';
+import AdminContext from '../../store/admin-context';
 import './profile.css';
 
+interface StepLog {
+  date: string;
+  steps: number;
+  color: string;
+}
+
 const Profile: React.FC = () => {
-  const history = useHistory();
-  const ctx = useContext(AuthContext);
+  const history = useHistory(); // for routing
+
+  const ctx = useContext(AuthContext); // auth context
+
+  const adData = useContext(AdminContext); // admin context
+
+  const [present] = useIonLoading(); // for loading screen
+
+  // state variables //
   const [email, setEmail] = useState('');
   const [joinDate, setJoinDate] = useState('');
   const [name, setName] = useState('');
@@ -43,6 +59,8 @@ const Profile: React.FC = () => {
   const [stepGoal, setStepGoal] = useState(0);
   const [photo, setPhoto] = useState<any>(null);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
+  const [stepLogs, setStepLogs] = useState<StepLog[]>([]);
+  const [calanderLogs, setCalanderLogs] = useState<StepLog[]>([]);
 
   // update profile data when the page loads
   // update profile data when the profile data changes
@@ -51,17 +69,76 @@ const Profile: React.FC = () => {
       doc(FirestoreDB, 'users', auth.currentUser.email as string),
       (doc: any) => {
         if (doc.exists()) {
-          GetRecords(doc.data());
+          getData(doc.data());
         }
       }
     );
     return () => {
+      console.log('unsubscribing from profile page');
       unsubscribe();
     };
   }, [ctx.user]);
 
+  // step logs with colors from event start date to event end date
+  useEffect(() => {
+    if (stepLogs.length === 0) {
+      return;
+    }
+    stepLogs.forEach((log: StepLog) => {
+      console.log(log);
+    });
+  }, [stepLogs]);
+
+  // step logs with colors from event start date to event end date
+  // including the days with 0 steps
+  useEffect(() => {
+    const start = new Date(adData.startDate);
+    for (let i = 0; i < 31; i++) {
+      setCalanderLogs((prev) => [
+        ...prev,
+        {
+          // starting from event start date to event end date
+          date: new Date(start.getTime() + i * (1000 * 60 * 60 * 24))
+            .toISOString()
+            .slice(0, 10),
+          steps: 0,
+          color: 'null'
+        }
+      ]);
+    }
+    if (stepLogs.length !== 0) {
+      stepLogs.forEach((log: StepLog) => {
+        calanderLogs.forEach((calLog: StepLog) => {
+          if (log.date === calLog.date) {
+            calLog.steps = log.steps;
+            calLog.color = log.color;
+          }
+        });
+      });
+    }
+  }, [stepLogs]);
+
   // set the data
-  async function GetRecords(userData: any): Promise<void> {
+  async function getData(userData: any): Promise<void> {
+    const holdStep = userData.stepsByDate;
+    const stepLogsWithColors: StepLog[] = [];
+    holdStep.forEach((log: { date: string; steps: number }) => {
+      if (
+        new Date(adData.startDate) <= new Date(log.date) &&
+        new Date(log.date) <= new Date(adData.endDate)
+      ) {
+        let color = 'null';
+        if (log.steps >= 10000) color = 'green';
+        else if (log.steps >= 7500 && log.steps < 10000) color = 'yellow';
+        else if (log.steps >= 5000 && log.steps < 7500) color = 'orange';
+        stepLogsWithColors.push({
+          date: log.date,
+          steps: log.steps,
+          color
+        });
+      }
+    });
+    setStepLogs(stepLogsWithColors);
     setProfilePic(userData.profile_pic);
     setName(userData.name);
     setEmail(userData.email);
@@ -85,6 +162,10 @@ const Profile: React.FC = () => {
 
   // handle image upload
   const handleSubmit = async () => {
+    if (photo === null) {
+      alert('Please select an image to upload');
+      return;
+    }
     const imageRef = ref(storage, auth.currentUser.email + '.png');
     await uploadBytes(imageRef, photo);
     const photoURL = await getDownloadURL(imageRef);
@@ -112,28 +193,24 @@ const Profile: React.FC = () => {
   // display team
   function teamDisplay() {
     if (team === '') {
-      return (
-        <>
-          <IonItem>You have not joined a team yet</IonItem>
-        </>
-      );
+      return "You have not joined a team yet";
     } else {
-      return (
-        <>
-          <IonItem>Team: {team}</IonItem>
-        </>
-      );
+      return `Team: ${team}`;
     }
   }
 
   // sign out
   const signOut = async () => {
-    try {
+    // delay 1 second to allow firebase to update auth state //
+    present({
+      message: 'Loading...',
+      duration: 1000,
+      spinner: 'circles'
+    });
+    setTimeout(async () => {
       await auth.signOut();
       history.push('/');
-    } catch (error) {
-      console.log('Error signing out:', error);
-    }
+    }, 1000);
   };
 
   // handle refresher
@@ -175,79 +252,105 @@ const Profile: React.FC = () => {
             <IonTitle>Profile</IonTitle>
           </NavBar>
         </IonHeader>
-        <IonContent>
+        <IonContent className='walktober-background'>
           <IonGrid>
             <IonRow>
-              <IonCol size="auto">
-                <IonItem>
+              <IonCol
+                sizeXs="12"
+                sizeSm="12"
+                sizeMd="auto"
+                sizeLg="auto"
+                sizeXl="auto">
+                <IonCard>
                   <IonImg
-                    className="profile_pic"
+                    className="profile-pic"
                     src={profilePic}
                     alt="Profile picture for the user signed in"
                   ></IonImg>
-                </IonItem>
-                <IonItem>
-                  <input
-                    type="file"
-                    id="img"
-                    name="img"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                  />
-                </IonItem>
-                <IonItem>
-                  <IonButton onClick={handleSubmit}>
-                    Change Profile Picture
-                  </IonButton>
-                </IonItem>
-                <IonItem>
-                  <h2>{name}</h2>
-                </IonItem>
-                <IonItem>
-                  <p>{email}</p>
-                </IonItem>
-                {teamDisplay()}
-                {!isGoogleUser && (
                   <IonItem>
-                    <IonButton onClick={changePassword}>
-                      Change Password
+                    <input
+                      type="file"
+                      id="img"
+                      name="img"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                    />
+                  </IonItem>
+                  <IonItem>
+                    <IonButton onClick={handleSubmit}>
+                      Change Profile Picture
                     </IonButton>
                   </IonItem>
-                )}
-                <IonItem>
-                  <IonButton onClick={signOut}>Sign Out</IonButton>
-                </IonItem>
+                  <IonItem>
+                    <h2>{name}</h2>
+                  </IonItem>
+                  <IonItem>
+                    <p>{email}</p>
+                  </IonItem>
+                  <IonItem>
+                    {teamDisplay()}
+                  </IonItem>
+                  {!isGoogleUser && (
+                    <IonItem>
+                      <IonButton onClick={changePassword}>
+                        Change Password
+                      </IonButton>
+                    </IonItem>
+                  )}
+                  <IonItem>
+                    <IonButton onClick={signOut}>Sign Out</IonButton>
+                  </IonItem>
+                </IonCard>
               </IonCol>
               <IonCol>
-                <IonItem>
-                  <p>Joined on {joinDate}</p>
-                </IonItem>
-                <IonItem>
-                  <p>{totalDistance} miles walked in total</p>
-                </IonItem>
-                <form onSubmit={handleSubmitStepGoal}>
-                  <IonLabel position="stacked">Set Your Step Goal for today:</IonLabel>
-                  <IonInput
-                    min="0"
-                    type="number"
-                    value={stepGoal}
-                    onInput={(event: any) => {
-                      setStepGoal(Number(event.target.value));
-                    }}
-                  />
-                  <IonButton expand="block" type="submit">
-                    Save
-                  </IonButton>
-                </form>
-                <p>Today&apos;s step goal is: {stepGoal} steps!</p>
-                <IonItem>
-                  <h6>Badges:</h6>
-                </IonItem>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol sizeLg="6" sizeMd="8" sizeSm="12">
-                <CalendarLeafs></CalendarLeafs>
+                <IonRow>
+                  <IonCol>
+                    <IonCard>
+                      <IonItem>
+                        <p>Joined on {joinDate}</p>
+                      </IonItem>
+                      <IonItem>
+                        <p>{totalDistance.toLocaleString()} miles walked in total</p>
+                      </IonItem>
+                      <IonItem>
+                        <form onSubmit={handleSubmitStepGoal} className="step-form">
+                          <IonLabel position="stacked">
+                            Set your step goal for today:
+                          </IonLabel>
+                          <IonInput
+                            min="0"
+                            type="number"
+                            value={stepGoal}
+                            onInput={(event: any) => {
+                              setStepGoal(Number(event.target.value));
+                            }}
+                          />
+                          <IonButton expand="block" type="submit">
+                            Save
+                          </IonButton>
+                        </form>
+                      </IonItem>
+                      <IonItem>
+                        <p>Today&apos;s step goal is: {stepGoal.toLocaleString()} steps!</p>
+                      </IonItem>
+                      <IonItem>
+                        <h6>Badges:</h6>
+                      </IonItem>
+                    </IonCard>
+                  </IonCol>
+                </IonRow>
+                <IonRow>
+                  <IonCol
+                    sizeXs="12"
+                    sizeSm="12"
+                    sizeMd="12"
+                    sizeLg="12"
+                    sizeXl="12">
+                    <IonCard>
+                      <CalendarLeafs data={calanderLogs}></CalendarLeafs>
+                    </IonCard>
+                  </IonCol>
+                </IonRow>
               </IonCol>
             </IonRow>
           </IonGrid>
@@ -256,34 +359,23 @@ const Profile: React.FC = () => {
           </IonRefresher>
         </IonContent>
         <IonFooter>
-          <ul>
-            <li>
-              <a
+          <IonItem>
+            <IonLabel className='attribution-list'>
+              Leaf icons created by <a
                 href="https://www.flaticon.com/free-icons/leaf"
-                title="leaf icons"
-              >
-                Leaf icons created by Freepik - Flaticon
-              </a>
-            </li>
-
-            <li>
-              <a
+                title="leaf icons">
+                  Freepik - Flaticon
+              </a> &bull; <a
                 href="https://www.flaticon.com/free-icons/leaf"
-                title="leaf icons"
-              >
-                Leaf icons created by Pixel perfect - Flaticon
-              </a>
-            </li>
-
-            <li>
-              <a
+                title="leaf icons">
+                Pixel perfect - Flaticon
+              </a> &bull; <a
                 href="https://www.flaticon.com/free-icons/leaf"
-                title="leaf icons"
-              >
-                Leaf icons created by Good Ware - Flaticon
+                title="leaf icons">
+                Good Ware - Flaticon
               </a>
-            </li>
-          </ul>
+            </IonLabel>
+          </IonItem>
         </IonFooter>
       </IonPage>
     </>

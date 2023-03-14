@@ -1,5 +1,7 @@
 import {
   IonButton,
+  IonCard,
+  IonCardContent,
   IonCol,
   IonContent,
   IonGrid,
@@ -19,6 +21,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  limit,
   onSnapshot,
   query,
   updateDoc,
@@ -32,7 +35,6 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import AdminContext from '../../store/admin-context';
 import AuthContext from '../../store/auth-context';
 import TeamLeaderBoardChart from '../../components/LeaderBoard/TeamLeaderboardChart';
-import { ChannelData } from "../sampleData";
 import WidgetBot from '@widgetbot/react-embed';
 import './teamHome.scss';
 
@@ -55,6 +57,7 @@ const TeamHome: React.FC = () => {
   const [photo, setPhoto] = useState<any>(null);
   const [userTotalSteps, setUserTotalSteps] = useState(0);
   const [teamTotalSteps, setTeamTotalSteps] = useState(0);
+  const [teamLeaderEmail, setTeamLeaderEmail] = useState('');
 
   const history = useHistory(); // for routing
 
@@ -67,33 +70,50 @@ const TeamHome: React.FC = () => {
       return (
         <>
           <IonGrid>
-            <IonRow class="top">
+            <IonRow className="top">
               <IonCol
                 size="12"
+                offset="0"
                 align-self-center="true"
                 class="header-col admin-col"
               >
                 Teammates
               </IonCol>
             </IonRow>
-            <IonRow class="header-row">
-              <IonCol size="6" class="header-col admin-col">
+            <IonRow className="header-row">
+              <IonCol size="6" offset="0" className="header-col admin-col">
                 Members Name
               </IonCol>
-              <IonCol size="6" class="header-col admin-col">
+              <IonCol size="6" offset="0" className="header-col admin-col">
                 Members email
               </IonCol>
             </IonRow>
-            {team.map((item: { name: string; email: string }) => (
-              <IonRow key={Math.random()}>
-                <IonCol size="6" class="admin-col">
-                  {item.name}
-                </IonCol>
-                <IonCol size="6" class="admin-col">
-                  {item.email}
-                </IonCol>
-              </IonRow>
-            ))}
+            {team.map((item: { name: string; email: string }) =>
+              teamLeaderEmail === item.email ? (
+                <IonRow key={Math.random()}>
+                  <IonCol size="6" offset="0" className="admin-col team-lead">
+                    {item.name}*
+                  </IonCol>
+                  <IonCol size="6" offset="0" className="admin-col team-lead">
+                    {item.email}
+                  </IonCol>
+                </IonRow>
+              ) : (
+                <IonRow key={Math.random()}>
+                  <IonCol size="6" offset="0" className="admin-col">
+                    {item.name}
+                  </IonCol>
+                  <IonCol size="6" offset="0" className="admin-col">
+                    {item.email}
+                  </IonCol>
+                </IonRow>
+              )
+            )}
+            <IonRow>
+              <IonCol size="12" className="foot-note">
+                *Team Leader
+              </IonCol>
+            </IonRow>
           </IonGrid>
         </>
       );
@@ -112,23 +132,29 @@ const TeamHome: React.FC = () => {
     setUserRef(currentUserRef);
     const userSnap = await getDoc(currentUserRef); // grab the user document
     const userData = userSnap.data(); // get the user data
-    const dbChannelId =
-      ChannelData.find(c => c.team == ctx.team)?.id; // get the team channel id
-    let channelId = "";
+    let teamChannelId = ''; //temp string
+    const chanQuery = query(
+      collection(FirestoreDB, 'channelIDs'),
+      where('team', '==', ctx.team),
+      limit(1)
+    );//query to see if there is a document with the team name assigned to it
+    const chanIdSnap = await getDocs(chanQuery);//get results (has to be getDoccs because using query)
+    chanIdSnap.forEach(async (doc: any) => {
+      teamChannelId = doc.id;//get the document name (which is the channel id)
+    });
     // if channel not set up with id in database, default to #general
-    if(dbChannelId) {
-      channelId = dbChannelId;
-    }
-    else {
-      channelId = "1068966009106600110"; // #general channel id
+    if (channelId != '') {
+      setChannelId(teamChannelId);
+    } else {
+      setChannelId('1068966009106600110'); // #general channel id
     }
     setUserTotalSteps(userData.totalStep);
     setIsLeader(userData.team_leader);
-    setChannelId(channelId);
     const teamRef = doc(FirestoreDB, 'teams', ctx.team); // get team reference
     setTeamRef(teamRef); // set team reference
     setProfilePic(teamData.profile_pic);
     setTeamTotalSteps(teamData.totalStep);
+    setTeamLeaderEmail(teamData.leader);
     // get all the users in the team
     const usersRef = collection(FirestoreDB, 'users'); // get all users reference
     const q = query(usersRef, where('team', '==', ctx.team)); // query team members
@@ -149,7 +175,8 @@ const TeamHome: React.FC = () => {
     setTeamMembers(emailList); // set team members
     const today = new Date();
     const deadline = new Date(adData.teamDate);
-    if (deadline < today) { // deadline check
+    if (deadline < today) {
+      // deadline check
       setValid(true);
     } else {
       setValid(false);
@@ -165,6 +192,10 @@ const TeamHome: React.FC = () => {
 
   // handle image upload
   const handleSubmit = async () => {
+    if (photo === null) {
+      alert('Please select an image to upload');
+      return;
+    }
     const imageRef = ref(storage, ctx.team + '.png');
     await uploadBytes(imageRef, photo);
     const photoURL = await getDownloadURL(imageRef);
@@ -178,6 +209,7 @@ const TeamHome: React.FC = () => {
   };
 
   // display the change picture button if the user is the leader
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function changePicture() {
     if (isLeader === true) {
       return (
@@ -232,6 +264,10 @@ const TeamHome: React.FC = () => {
           team_leader: false,
           team: ''
         });
+        //Update the channel id document and allow it to be reused by another team
+        await updateDoc(doc(FirestoreDB, 'channelIDs', channelId), {
+          team: ''
+        });
         // if the user is not the only member of the team
       } else {
         const newLead = teamMembers[1]; // get the new team leader
@@ -279,6 +315,7 @@ const TeamHome: React.FC = () => {
       }
     );
     return () => {
+      console.log('unsubscribing from team home page');
       unsubscribe();
     };
   }, [ctx.user, ctx.team]);
@@ -304,9 +341,27 @@ const TeamHome: React.FC = () => {
           <IonTitle> {ctx.team} </IonTitle>
         </NavBar>
       </IonHeader>
-      <IonContent>
+      <IonContent className="walktober-background">
         <IonGrid>
           <IonRow>
+            <IonCol
+              className="boxSize "
+              sizeSm="12"
+              sizeLg="4"
+              sizeMd="6"
+              sizeXs="12"
+            >
+              <TeamLeaderBoardChart
+                data={leaderboardData}
+              ></TeamLeaderBoardChart>
+            </IonCol>
+            <IonCol sizeSm="12" sizeLg="4" sizeMd="6" sizeXs="12" className="">
+              <WidgetBot
+                className="discord-widget"
+                server="1068966007886069841"
+                channel={channelId}
+              />
+            </IonCol>
             <IonCol
               className="boxSize"
               sizeSm="12"
@@ -314,37 +369,42 @@ const TeamHome: React.FC = () => {
               sizeMd="6"
               sizeXs="12"
             >
-              <TeamLeaderBoardChart data={leaderboardData}></TeamLeaderBoardChart>
-            </IonCol>
-            <IonCol
-              sizeSm="12"
-              sizeLg="4"
-              sizeMd="6"
-              sizeXs="12"
-            >
-              <WidgetBot
-                className="discord-widget"
-                server="1068966007886069841"
-                channel={channelId}
-              />
-            </IonCol>
-            <IonCol>
-              <IonItem>
-                <IonImg
-                  className="profile_pic"
-                  src={profilePic}
-                  alt="Profile picture for the team the user is a part of"
-                >
-                  {' '}
-                </IonImg>
-              </IonItem>
-              <IonItem> {ctx.team} Profile Picture </IonItem>
-              {changePicture()}
-              <IonItem>
-                <IonButton onClick={leaveTeam}> Leave team </IonButton>{' '}
-              </IonItem>
-              <IonItem>{verifyCount()}</IonItem>
-              <IonItem>{DisplayTeam(leaderboardData)}</IonItem>
+              <IonCard className="card-padding-team-home box-size">
+                <IonHeader>
+                  <IonTitle className="text-center">{`Team ${ctx.team}`}</IonTitle>
+                </IonHeader>
+                <IonCardContent className="card-content-class">
+                  <IonGrid>
+                    <IonRow>
+                      <IonCol size="12" className="col-from-cards">
+                        <IonImg
+                          className="profile_pic"
+                          src={profilePic}
+                          alt={`Profile picture for team ${ctx.team}`}
+                        >
+                          {' '}
+                        </IonImg>
+                      </IonCol>
+                      <IonCol size="12">{changePicture()}</IonCol>
+                      <IonCol size="12" className="col-from-cards">
+                        <IonButton
+                          onClick={leaveTeam}
+                          className="leave-team-button"
+                        >
+                          {' '}
+                          Leave team{' '}
+                        </IonButton>{' '}
+                      </IonCol>
+                      <IonCol size="12" className="col-from-cards">
+                        {verifyCount()}
+                      </IonCol>
+                      <IonCol className="team-list">
+                        {DisplayTeam(leaderboardData)}
+                      </IonCol>
+                    </IonRow>
+                  </IonGrid>
+                </IonCardContent>
+              </IonCard>
             </IonCol>
           </IonRow>
         </IonGrid>

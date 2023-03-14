@@ -5,7 +5,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { createContext, SetStateAction, useContext, useEffect, useState } from 'react';
 import { auth, FirestoreDB } from '../firebase';
 
-const AuthContext = createContext({ user: null, team: '', admin: false });
+const AuthContext = createContext({ user: null, team: '', admin: false, name: '' });
 
 export const useAuthContext = () => useContext(AuthContext);
 
@@ -13,9 +13,10 @@ export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) =
   const [user, setUser] = useState(null);
   const [team, setTeam] = useState('');
   const [admin, setAdmin] = useState(false);
+  const [name, setName] = useState('');
   const [complete, setComplete] = useState(false);
 
-  // update team context whenever there is an update in firestore database
+  // team state change listener
   useEffect(() => {
     if (auth.currentUser !== null) {
       const unsubscribe = onSnapshot(doc(FirestoreDB, "users", auth.currentUser.email as string), (doc: any) => {
@@ -27,12 +28,13 @@ export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) =
     }
   }, [auth.currentUser]);
   
+  // auth state change listener
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(
       async (res: SetStateAction<null>) => {
         res ? setUser(res) : setUser(null); // if user is logged in, set user to the user object, otherwise set user to null
-        await getUserInfo(); // get user info from firestore database
-        setComplete(true); // set complete to true to render the children
+        await getAdminInfo(); // get admin info from firestore database
+        setComplete(true); // set complete to true to render the children components
       }
     );
     return () => {
@@ -40,24 +42,25 @@ export const AuthContextProvider: React.FC<{ children: any }> = ( props: any ) =
     };
   }, [auth]);
 
-  const getUserInfo = async () => {
+  // get admin info from firestore database
+  const getAdminInfo = async () => {
     if (auth.currentUser !== null) {
       const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
       const dbSnap = await getDoc(dbRef);
       const userData = dbSnap.data();
+      setName(userData.name);//grab the user's name
       if (userData.admin === true) {
         setAdmin(true);
       } else {
         setAdmin(false);
       }
-      setTeam(userData.team);
     } else {
       setAdmin(false);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user, team, admin }}>
+    <AuthContext.Provider value={{ user, team, admin, name }}>
       {complete && props.children}
     </AuthContext.Provider>
   );

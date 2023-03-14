@@ -2,3 +2,10 @@
   max-width: 20px;
   max-height: 20px;
 }
+
+.leaf-legend {
+  display: grid;
+  grid-template-columns: auto 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 10px;
+}
