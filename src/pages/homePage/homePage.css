@@ -20,6 +20,19 @@
   right: 0px;
 }
 
+.team-card {
+  --color: var(--ion-color-light-contrast);
+}
+
+.step-title {
+  margin: 0 0 10px 0;
+}
+
+.step-counter {
+  font-size: 2em;
+  text-align: center;
+}
+
 .boxSize {
   width: 500px;
   height: 80vh;
@@ -33,24 +46,6 @@
   float: right;
 }
 
-.localStepsUpdater {
-  display: inline;
-  background: grey;
-  border-radius: 15%;
-  border-color: black;
-  border-style: solid;
-  padding-left: 1em;
-  padding-right: 1em;
-  padding-top: 0.1em;
-  text-align: center;
-  padding-bottom: 0.1em;
-}
-
-.leaderBoard {
-  width: 100%;
-  height: 95vh;
-}
-
 .box-test {
   height: 75.8vh;
   margin-top: -75vh;
@@ -61,8 +56,8 @@
   height: 15vh;
 }
 
-.todaysSteps {
-  padding-left: 1em;
+.restrict-height {
+  max-height: 75vh;
 }
 
 @media (max-width: 991px) {

@@ -1,0 +1,9 @@
+.team-create {
+    --background: url(../../assets/Walktober-graphic.png);
+}
+
+.create-team-card {
+    max-width: 60%;
+    min-width: 60%;
+    margin: 50px auto;
+}

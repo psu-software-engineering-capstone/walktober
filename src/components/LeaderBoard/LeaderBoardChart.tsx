@@ -3,8 +3,8 @@ import {
   IonCardContent,
   IonButton,
   IonCardHeader,
-  IonSpinner,
-  IonCardTitle
+  IonCardTitle,
+  IonSpinner
 } from '@ionic/react';
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import './LeaderBoardChart.scss';
@@ -35,7 +35,7 @@ const LeaderBoardChart: React.FC = () => {
   const contentRef = useRef<HTMLIonCardElement | null>(null);
   const chartHeightMultiplier = 60;
 
-  //Formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
+  // formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
   const chartData = {
     labels: data.map((row) => row.name.split(' ')),
     datasets: [
@@ -53,7 +53,7 @@ const LeaderBoardChart: React.FC = () => {
     ]
   };
 
-  //adds image of users or team to the chart next to the user's/team's name
+  // adds image of users or team to the chart next to the user's/team's name
   const imgItems = {
     id: 'imgItems',
     beforeDatasetsDraw(chart: any) {
@@ -71,12 +71,12 @@ const LeaderBoardChart: React.FC = () => {
         const place = (index + 1).toString() + ordinalNumbers(index + 1);
         profilePic.src = imageLink;
 
-        //sets the stylingfor the place of users, '1st, 2nd, 3rd ect.'
+        // sets the stylingfor the place of users, '1st, 2nd, 3rd ect.'
         ctx.font = 'bold 15px Helvetica';
         ctx.textBaseline = 'bottom';
         ctx.fillStyle = ChartJS.defaults.color;
 
-        //draws the numbers for each place
+        // draws the numbers for each place
         ctx.fillText(
           place,
           0,
@@ -84,7 +84,7 @@ const LeaderBoardChart: React.FC = () => {
           imgSize - 5
         );
 
-        //draws the image of the user's profile picture
+        // draws the image of the user's profile picture
         ctx.drawImage(
           profilePic,
           imgSize,
@@ -96,7 +96,7 @@ const LeaderBoardChart: React.FC = () => {
     }
   };
 
-  //Changes the apearance of the chart
+  // changes the apearance of the chart
   const chartOptions = {
     indexAxis: 'y',
     maintainAspectRatio: false,
@@ -178,7 +178,7 @@ const LeaderBoardChart: React.FC = () => {
     }
   };
 
-  //ajusts the size of the element containing the chart in order to correctly size the chart.
+  // ajusts the size of the element containing the chart in order to correctly size the chart.
   const boxAdjust = (labelLength: number) => {
     const box = document.querySelector('.box');
     if (box != null) {
@@ -187,13 +187,14 @@ const LeaderBoardChart: React.FC = () => {
     }
   };
 
-  //gives leaderboard placement numbers a suffix
+  // gives leaderboard placement numbers a suffix
   const ordinalNumbers = (n: number) => {
     return n > 0
       ? ['th', 'st', 'nd', 'rd'][(n > 3 && n < 21) || n % 10 > 3 ? 0 : n % 10]
       : '';
   };
-  //gets the index to calculate the scoll distance needed to bring the user into view
+
+  // gets the index to calculate the scoll distance needed to bring the user into view
   const scrollToUser = () => {
     const content = contentRef.current;
     let y = 0;
@@ -210,7 +211,7 @@ const LeaderBoardChart: React.FC = () => {
     }
   };
 
-  async function setChartData() {
+  async function getChartData() {
     const indData: Array<Data> = [];
     const teamData: Array<Data> = [];
     const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
@@ -258,7 +259,7 @@ const LeaderBoardChart: React.FC = () => {
   }
 
   //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
-  const getChartData = () => {
+  const setChartData = () => {
     setLoading(true);
     if (dataType == 'individual') {
       setData(indData);
@@ -273,15 +274,18 @@ const LeaderBoardChart: React.FC = () => {
     }, 500);
   };
 
+  // get data from database
   useEffect(() => {
-    setChartData();
+    getChartData();
     setDataType('individual');
   }, []);
-  //do not add data as a redux or you will end up with an infinite loop
+
+  // set data for chart
   useEffect(() => {
-    getChartData(); //go into the firestore and get all the users' names, pictures, and then totalStep
+    setChartData();
   }, [dataType, indData]);
 
+  // auto scroll to user
   useEffect(() => {
     setTimeout(() => {
       scrollToUser();
@@ -298,7 +302,6 @@ const LeaderBoardChart: React.FC = () => {
           onClick={() => {
             setDataType('individual');
           }}
-          disabled={loading}
         >
           Individual
         </IonButton>
@@ -306,7 +309,6 @@ const LeaderBoardChart: React.FC = () => {
           onClick={() => {
             setDataType('teams');
           }}
-          disabled={loading}
         >
           Teams
         </IonButton>

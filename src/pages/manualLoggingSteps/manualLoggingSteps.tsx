@@ -414,10 +414,10 @@ const ManualSteps: React.FC = () => {
       totalStep: totalStep
     })
       .then(() => {
-        console.log('Steps updated!');
+        console.log('Steps updated');
       })
       .catch((error: any) => {
-        console.error('Error updating document: ', error);
+        console.error(error);
       });
     // update team total steps and average steps
     await updateTeam(currentTotalSteps, totalStep);
@@ -440,10 +440,10 @@ const ManualSteps: React.FC = () => {
           avg_steps: newAvgSteps
         })
           .then(() => {
-            console.log('Team total steps and average steps updated!');
+            console.log('Team total steps and average steps updated');
           })
           .catch((error: any) => {
-            console.log('Error updating document: ', error);
+            console.log(error);
           });
       }
     });
@@ -522,7 +522,7 @@ const ManualSteps: React.FC = () => {
                 <IonCol className="log-col-l">
                   {new Date(item.date).toDateString()}
                 </IonCol>
-                <IonCol className="log-col">{item.steps}</IonCol>
+                <IonCol className="log-col">{item.steps.toLocaleString()}</IonCol>
                 <IonCol></IonCol>
               </IonRow>
             ))}

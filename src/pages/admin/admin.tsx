@@ -21,7 +21,17 @@ import NavBar from '../../components/NavBar';
 import { useContext, useEffect, useState } from 'react';
 import AdminContext from '../../store/admin-context';
 import { FirestoreDB } from '../../firebase';
-import { doc, collection, getDocs, updateDoc, setDoc, getDoc } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  limit,
+  query,
+  setDoc,
+  updateDoc,
+  where
+} from 'firebase/firestore';
 import './admin.css';
 import {
   TeamData,
@@ -45,8 +55,12 @@ const Admin: React.FC = () => {
   // used to send new team sizes and team creation date to database (set to data that was previously in the database)
   const [newMaxTeamSize, setNewMaxTeamSize] = useState(adData.maxSize);
   const [newMinTeamSize, setNewMinTeamSize] = useState(adData.minSize);
-  const [newTeamCreationDate, setNewTeamCreationDate] = useState(adData.teamDate);
-  const [newRegistrationDeadline, setNewRegistrationDeadline] = useState(adData.regDate);
+  const [newTeamCreationDate, setNewTeamCreationDate] = useState(
+    adData.teamDate
+  );
+  const [newRegistrationDeadline, setNewRegistrationDeadline] = useState(
+    adData.regDate
+  );
   const [newStartDate, setNewStart] = useState(adData.startDate);
   const [newEndDate, setNewEnd] = useState(adData.endDate);
   const [newEditingLimit, setNewEditingLimit] = useState(adData.priorLogDays);
@@ -103,11 +117,11 @@ const Admin: React.FC = () => {
     const dbSnap = await getDocs(dbRef); // get all the docs
     const teamLogsData: TeamLog[] = []; // emtpy array to gather the required information from the team docs
     dbSnap.forEach((doc: { data: () => any }) => {
-      const data = doc.data();//get data
+      const data = doc.data(); //get data
       if (data) {
         const teamLogData: TeamLog = {
           name: data.name,
-          size: data.members.length, 
+          size: data.members.length,
           avg_step: data.avg_steps,
           totalStep: data.totalStep
         }; // get the necessary info
@@ -137,8 +151,8 @@ const Admin: React.FC = () => {
   const sendNewUserSetting = async () => {
     const dbRef = doc(FirestoreDB, 'admin', 'admin');
     await updateDoc(dbRef, {
-      registration_deadline: newRegistrationDeadline, 
-      event_start_date: newStartDate, 
+      registration_deadline: newRegistrationDeadline,
+      event_start_date: newStartDate,
       event_end_date: newEndDate,
       prior_log_days: Number(newEditingLimit)
     })
@@ -156,8 +170,17 @@ const Admin: React.FC = () => {
     const dbSnap = await getDoc(dbRef);
     if (dbSnap.exists()) {
       alert(`${newOpenTeam} already exists!`);
-    }
-    else {
+    } else {
+      let channelId = ''; //temp array
+      const chanQuery = query(
+        collection(FirestoreDB, 'channelIDs'),
+        where('team', '==', ''),
+        limit(1)
+      ); //find empty channel id document
+      const chanIdSnap = await getDocs(chanQuery); //get results of query
+      chanIdSnap.forEach(async (doc: any) => {
+        channelId = doc.id; //reassign the string to the channel id (which is the document id)
+      });
       setDoc(doc(FirestoreDB, 'teams', newOpenTeam), {
         name: newOpenTeam,
         avg_steps: 0,
@@ -165,11 +188,15 @@ const Admin: React.FC = () => {
         members: [],
         status: 0,
         password: '',
-        profile_pic: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
+        profile_pic:
+          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
         totalStep: 0,
-        channel_id: '' // TODO: create discord channel
+        channel_id: channelId // TODO: create discord channel
       })
         .then(() => {
+          updateDoc(doc(FirestoreDB, 'channelIDs', channelId), {
+            team: newOpenTeam
+          }); //set channel id document to this new open team
           alert('Open Team Created!');
         })
         .catch((error: any) => {
@@ -196,23 +223,43 @@ const Admin: React.FC = () => {
         <>
           <IonGrid fixed={true}>
             <IonRow class="header-row">
-              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="header-col admin-col">
+              <IonCol
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '5'}
+                class="header-col admin-col"
+              >
                 Name
               </IonCol>
 
-              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="header-col admin-col">
+              <IonCol
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '5'}
+                class="header-col admin-col"
+              >
                 Team
               </IonCol>
 
-              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "3" : "6"} class="header-col admin-col">
+              <IonCol
+                sizeMd="4"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '6'}
+                class="header-col admin-col"
+              >
                 Email
               </IonCol>
 
-              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "8"} class="header-col admin-col">
+              <IonCol
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '8'}
+                class="header-col admin-col"
+              >
                 Total Steps
               </IonCol>
 
-              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "4" : "8"} class="header-col admin-col">
+              <IonCol
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '4' : '8'}
+                class="header-col admin-col"
+              >
                 Actions
               </IonCol>
             </IonRow>
@@ -220,20 +267,57 @@ const Admin: React.FC = () => {
             {userLogs.map(
               (item: { name: any; team: any; email: any; steps: any }) => (
                 <IonRow key={item.email}>
-                  <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="admin-col">
+                  <IonCol
+                    sizeMd="3"
+                    size={
+                      isPlatform('ios') || isPlatform('android') ? '3' : '5'
+                    }
+                    class="admin-col"
+                  >
                     {item.name}
                   </IonCol>
-                  <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="admin-col">
+                  <IonCol
+                    sizeMd="3"
+                    size={
+                      isPlatform('ios') || isPlatform('android') ? '3' : '5'
+                    }
+                    class="admin-col"
+                  >
                     {item.team}
                   </IonCol>
-                  <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="admin-col">
+                  <IonCol
+                    sizeMd="4"
+                    size={
+                      isPlatform('ios') || isPlatform('android') ? '3' : '5'
+                    }
+                    class="admin-col"
+                  >
                     {item.email}
                   </IonCol>
-                  <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "8"} class="admin-col">
+                  <IonCol
+                    sizeMd="3"
+                    size={
+                      isPlatform('ios') || isPlatform('android') ? '3' : '8'
+                    }
+                    class="admin-col"
+                  >
                     {item.steps}
                   </IonCol>
-                  <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "4" : "8"} class="admin-col">
-                    <IonButton size="small" onClick={() => goToAdminSteps(item.email)}>{isPlatform('ios') || isPlatform('android') ? "Edit Log" : "Edit Step Log"}</IonButton>
+                  <IonCol
+                    sizeMd="3"
+                    size={
+                      isPlatform('ios') || isPlatform('android') ? '4' : '8'
+                    }
+                    class="admin-col"
+                  >
+                    <IonButton
+                      size="small"
+                      onClick={() => goToAdminSteps(item.email)}
+                    >
+                      {isPlatform('ios') || isPlatform('android')
+                        ? 'Edit Log'
+                        : 'Edit Step Log'}
+                    </IonButton>
                   </IonCol>
                 </IonRow>
               )
@@ -246,23 +330,43 @@ const Admin: React.FC = () => {
         <>
           <IonGrid fixed={true}>
             <IonRow class="header-row">
-              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="header-col">
+              <IonCol
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '5'}
+                class="header-col"
+              >
                 Name
               </IonCol>
 
-              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="header-col">
+              <IonCol
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '5'}
+                class="header-col"
+              >
                 Team
               </IonCol>
 
-              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "3" : "6"} class="header-col">
+              <IonCol
+                sizeMd="4"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '6'}
+                class="header-col"
+              >
                 Email
               </IonCol>
 
-              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "8"} class="header-col">
+              <IonCol
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '8'}
+                class="header-col"
+              >
                 Total Steps
               </IonCol>
 
-              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "4" : "8"} class="header-col">
+              <IonCol
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '4' : '8'}
+                class="header-col"
+              >
                 Actions
               </IonCol>
             </IonRow>
@@ -278,29 +382,69 @@ const Admin: React.FC = () => {
         <>
           <IonGrid fixed={true}>
             <IonRow class="header-row">
-              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="header-col admin-col">
+              <IonCol
+                sizeMd="4"
+                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                class="header-col admin-col"
+              >
                 Team Name
               </IonCol>
 
-              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="header-col admin-col">
+              <IonCol
+                sizeMd="4"
+                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                class="header-col admin-col"
+              >
                 Number of Members
               </IonCol>
 
-              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="header-col admin-col">
+              <IonCol
+                sizeMd="4"
+                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                class="header-col admin-col"
+              >
                 Average Total Steps
               </IonCol>
 
-              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="header-col admin-col">
+              <IonCol
+                sizeMd="4"
+                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                class="header-col admin-col"
+              >
                 Total Steps
               </IonCol>
             </IonRow>
 
             {teamLogs.map((item) => (
               <IonRow key={Math.random()}>
-                <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="admin-col">{item.name}</IonCol>
-                <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="admin-col">{item.size}</IonCol>
-                <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="admin-col">{item.avg_step}</IonCol>
-                <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="admin-col">{item.totalStep}</IonCol>
+                <IonCol
+                  sizeMd="4"
+                  size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                  class="admin-col"
+                >
+                  {item.name}
+                </IonCol>
+                <IonCol
+                  sizeMd="4"
+                  size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                  class="admin-col"
+                >
+                  {item.size}
+                </IonCol>
+                <IonCol
+                  sizeMd="4"
+                  size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                  class="admin-col"
+                >
+                  {item.avg_step}
+                </IonCol>
+                <IonCol
+                  sizeMd="4"
+                  size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                  class="admin-col"
+                >
+                  {item.totalStep}
+                </IonCol>
               </IonRow>
             ))}
           </IonGrid>
@@ -311,15 +455,27 @@ const Admin: React.FC = () => {
         <>
           <IonGrid fixed={true}>
             <IonRow class="header-row">
-              <IonCol sizeMd="6" size={isPlatform('ios') || isPlatform('android') ? "6" : "6"} class="header-col admin-col">
+              <IonCol
+                sizeMd="6"
+                size={isPlatform('ios') || isPlatform('android') ? '6' : '6'}
+                class="header-col admin-col"
+              >
                 Team Name
               </IonCol>
 
-              <IonCol sizeMd="5" size={isPlatform('ios') || isPlatform('android') ? "5" : "5"} class="header-col admin-col">
+              <IonCol
+                sizeMd="5"
+                size={isPlatform('ios') || isPlatform('android') ? '5' : '5'}
+                class="header-col admin-col"
+              >
                 Number of Members
               </IonCol>
 
-              <IonCol sizeMd="5" size={isPlatform('ios') || isPlatform('android') ? "5" : "5"} class="header-col admin-col">
+              <IonCol
+                sizeMd="5"
+                size={isPlatform('ios') || isPlatform('android') ? '5' : '5'}
+                class="header-col admin-col"
+              >
                 Total Steps
               </IonCol>
             </IonRow>
@@ -345,7 +501,6 @@ const Admin: React.FC = () => {
         line += IndividualData[i].totalStep;
         str += line + '\r\n';
       }
-      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -375,7 +530,6 @@ const Admin: React.FC = () => {
         line += TeamData[i].avg_steps;
         str += line + '\r\n';
       }
-      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -408,7 +562,6 @@ const Admin: React.FC = () => {
         line += '"' + PreSurvey[i].rec_center_frequency + '"';
         str += line + '\r\n';
       }
-      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -444,7 +597,6 @@ const Admin: React.FC = () => {
         line += '"' + PostSurvey[i].feedback + '"';
         str += line + '\r\n';
       }
-      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -469,7 +621,6 @@ const Admin: React.FC = () => {
       str += '"Apple Health",' + Devices.apple_health + '\r\n';
       str += '"FitBit",' + Devices.fitbit + '\r\n';
       str += '"Google Health",' + Devices.google_health + '\r\n';
-      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -503,7 +654,11 @@ const Admin: React.FC = () => {
               <IonButton
                 onClick={() => setIsOpenUser(true)}
                 class="admin-button"
-                size={isPlatform('ios') || isPlatform('android') ? 'default' : 'large'}
+                size={
+                  isPlatform('ios') || isPlatform('android')
+                    ? 'default'
+                    : 'large'
+                }
                 expand="block"
               >
                 Event Settings
@@ -513,7 +668,11 @@ const Admin: React.FC = () => {
               <IonButton
                 onClick={() => setIsOpenTeam(true)}
                 class="admin-button"
-                size={isPlatform('ios') || isPlatform('android') ? 'default' : 'large'}
+                size={
+                  isPlatform('ios') || isPlatform('android')
+                    ? 'default'
+                    : 'large'
+                }
                 expand="block"
               >
                 Team Settings
@@ -523,7 +682,11 @@ const Admin: React.FC = () => {
               <IonButton
                 onClick={() => setOpenCreateTeam(true)}
                 class="admin-button"
-                size={isPlatform('ios') || isPlatform('android') ? 'default' : 'large'}
+                size={
+                  isPlatform('ios') || isPlatform('android')
+                    ? 'default'
+                    : 'large'
+                }
                 expand="block"
               >
                 Create Open Team
@@ -533,7 +696,11 @@ const Admin: React.FC = () => {
               <IonButton
                 onClick={() => setIsOpenReport(true)}
                 class="admin-button"
-                size={isPlatform('ios') || isPlatform('android') ? 'default' : 'large'}
+                size={
+                  isPlatform('ios') || isPlatform('android')
+                    ? 'default'
+                    : 'large'
+                }
                 expand="block"
               >
                 Generate Report
@@ -542,7 +709,11 @@ const Admin: React.FC = () => {
             <IonCol class="invis-grid-col">
               <IonButton
                 class="admin-button"
-                size={isPlatform('ios') || isPlatform('android') ? 'default' : 'large'}
+                size={
+                  isPlatform('ios') || isPlatform('android')
+                    ? 'default'
+                    : 'large'
+                }
                 expand="block"
               >
                 Announcements
@@ -585,10 +756,12 @@ const Admin: React.FC = () => {
             </IonItem>
             <IonItem>
               <IonLabel>Step Log Allowed Period</IonLabel>
-              <IonInput 
+              <IonInput
                 type="number"
                 name="editDaysLimit"
-                onIonChange={(e) => setNewEditingLimit(e.target.value as number)}
+                onIonChange={(e) =>
+                  setNewEditingLimit(e.target.value as number)
+                }
               ></IonInput>
             </IonItem>
             <IonItem>
@@ -596,7 +769,7 @@ const Admin: React.FC = () => {
               <IonInput
                 id="time"
                 type="date"
-                onInput={(event:any) => {
+                onInput={(event: any) => {
                   setNewStart(
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
@@ -608,7 +781,7 @@ const Admin: React.FC = () => {
               <IonInput
                 id="time"
                 type="date"
-                onInput={(event:any) => {
+                onInput={(event: any) => {
                   setNewEnd(
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
@@ -706,7 +879,12 @@ const Admin: React.FC = () => {
                 onIonChange={(e) => setOpenTeam(e.target.value as string)}
               ></IonInput>
             </IonItem>
-            <IonButton class="modal-button" size="large" expand="block" onClick={sendNewOpenTeam}>
+            <IonButton
+              class="modal-button"
+              size="large"
+              expand="block"
+              onClick={sendNewOpenTeam}
+            >
               Create Team
             </IonButton>
           </IonContent>
