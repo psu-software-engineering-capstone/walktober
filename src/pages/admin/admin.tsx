@@ -302,7 +302,7 @@ const Admin: React.FC = () => {
                     size={
                       isPlatform('ios') || isPlatform('android') ? '3' : '8'
                     }
-                    class="admin-col"
+                    class="admin-col right-align-num"
                   >
                     {item.steps}
                   </IonCol>
@@ -438,21 +438,21 @@ const Admin: React.FC = () => {
                 <IonCol
                   sizeMd="4"
                   size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
-                  class="admin-col"
+                  class="admin-col right-align-num"
                 >
                   {item.size}
                 </IonCol>
                 <IonCol
                   sizeMd="4"
                   size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
-                  class="admin-col"
+                  class="admin-col right-align-num"
                 >
                   {item.avg_step}
                 </IonCol>
                 <IonCol
                   sizeMd="4"
                   size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
-                  class="admin-col"
+                  class="admin-col right-align-num"
                 >
                   {item.totalStep}
                 </IonCol>

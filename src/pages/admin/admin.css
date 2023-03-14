@@ -7,6 +7,7 @@
     text-align: center;
     vertical-align: middle;
     --ion-grid-columns: 16;
+    font-family: ‘Oswald’, sans-serif;
     border: solid 1px var(--ion-color-light-contrast);
 }
 
@@ -24,6 +25,7 @@
 
 .header-col{
     font-weight: bolder;
+    font-family: ‘Oswald’, sans-serif;
     border: solid var(ion-border-radius) var(--ion-color-light-contrast);
 }
 
@@ -48,12 +50,18 @@
     padding-bottom: 5px;
     --background: var(--ion-color-primary);
     --color: var(--ion-color-primary-contrast);
+    font-family: ‘Oswald’, sans-serif;
     font-weight: bold;
 }
 
 .admin-button-small{
     --background: var(--ion-color-primary);
     --color: var(--ion-color-primary-contrast);
+    font-family: ‘Oswald’, sans-serif;
+}
+
+.right-align-num{
+    text-align: right;
 }
 
 .modal-button{
@@ -74,18 +82,22 @@
 
 .modal-header{
     --ion-background-color: var(--ion-color-light);
+    font-family: ‘Oswald’, sans-serif;
 }
 
 .admin-close-modal{
     color: var(--ion-color-light-contrast);
+    font-family: ‘Oswald’, sans-serif;
 }
 
 .modal-title{
     color: var(--ion-color-light-contrast);
+    font-family: ‘Oswald’, sans-serif;
 }
 
 .modal-content{
     --background: var(--ion-color-light-shade);
+    font-family: ‘Oswald’, sans-serif;
 }
 
 .light-bg{
