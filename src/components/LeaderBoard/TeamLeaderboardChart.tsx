@@ -26,7 +26,7 @@ interface Data {
   highlight: boolean;
 }
 
-const TeamLeaderboard: React.FC<{ memberData: Array<Data> }> = ({
+const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
   memberData
 }) => {
   const [data, setData] = useState(Array<Data>);
@@ -311,4 +311,4 @@ const TeamLeaderboard: React.FC<{ memberData: Array<Data> }> = ({
   );
 };
 
-export default TeamLeaderboard;
+export default TeamLeaderboardChart;
