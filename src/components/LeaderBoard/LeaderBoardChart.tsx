@@ -195,7 +195,6 @@ const LeaderBoardChart: React.FC = () => {
   const scrollToUser = () => {
     const content = contentRef.current;
     let y = 0;
-    console.log(dataType);
     data.every((member: any) => {
       if (!member.highlight) {
         y += 1;
@@ -204,11 +203,11 @@ const LeaderBoardChart: React.FC = () => {
         return false;
       }
     });
-    console.log(y);
     if (content) {
       content.scrollTop = (y+2) * chartHeightMultiplier;
     }
   };
+  
   //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
   async function getData(dataType: string) {
     setLoading(true);

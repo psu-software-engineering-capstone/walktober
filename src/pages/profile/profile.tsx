@@ -80,16 +80,6 @@ const Profile: React.FC = () => {
   }, [ctx.user]);
 
   // step logs with colors from event start date to event end date
-  useEffect(() => {
-    if (stepLogs.length === 0) {
-      return;
-    }
-    stepLogs.forEach((log: StepLog) => {
-      console.log(log);
-    });
-  }, [stepLogs]);
-
-  // step logs with colors from event start date to event end date
   // including the days with 0 steps
   useEffect(() => {
     const start = new Date(adData.startDate);

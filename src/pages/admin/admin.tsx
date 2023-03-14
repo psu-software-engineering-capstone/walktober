@@ -501,7 +501,6 @@ const Admin: React.FC = () => {
         line += IndividualData[i].totalStep;
         str += line + '\r\n';
       }
-      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -531,7 +530,6 @@ const Admin: React.FC = () => {
         line += TeamData[i].avg_steps;
         str += line + '\r\n';
       }
-      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -564,7 +562,6 @@ const Admin: React.FC = () => {
         line += '"' + PreSurvey[i].rec_center_frequency + '"';
         str += line + '\r\n';
       }
-      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -600,7 +597,6 @@ const Admin: React.FC = () => {
         line += '"' + PostSurvey[i].feedback + '"';
         str += line + '\r\n';
       }
-      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -625,7 +621,6 @@ const Admin: React.FC = () => {
       str += '"Apple Health",' + Devices.apple_health + '\r\n';
       str += '"FitBit",' + Devices.fitbit + '\r\n';
       str += '"Google Health",' + Devices.google_health + '\r\n';
-      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);

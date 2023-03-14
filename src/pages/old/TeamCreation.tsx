@@ -83,8 +83,8 @@ const TeamCreation: React.FC = () => {
       ]
     })
       .then(async () => {
-        console.log('Document written successfully');
-        alert('Your team has been created!');
+        console.log('Team created');
+        alert('Your team has been created');
         await updateCurrentUser();
         await updateTeamMembers();
         await setAvgSteps();

@@ -30,26 +30,22 @@ const newPassword: React.FC = () => {
   async function changePass() {
     if (newPassword === '' || veriPassword === '') {
       alert('Please enter a new password');
-      console.log("New password or verifying password is empty");
       return;
     }
     if (newPassword == veriPassword) {
       updatePassword(auth.currentUser, newPassword)
       .then(() => {
         alert('Password change successful');
-        console.log("Password has been changed");
         history.push("/app/profile");
       })
       .catch((error: any) => {
         alert('Something went wrong, please try again.\n If you have been logged in recently, you may have to log back in before attempting this.');
-        console.log("Password has not been changed");
         console.log(error);
       });
     } else {
       alert(
         'The new password does not match the password entered for verification'
       );
-      console.log("New password and verifying password doesn't match");
     }
   }
 
