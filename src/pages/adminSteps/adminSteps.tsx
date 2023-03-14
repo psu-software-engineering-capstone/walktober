@@ -16,6 +16,8 @@ import {
   IonRefresher,
   IonRefresherContent,
   RefresherEventDetail,
+  IonCardContent,
+  IonCard
 } from '@ionic/react';
 import './adminSteps.css';
 import { FirestoreDB } from '../../firebase';
@@ -125,7 +127,7 @@ const AdminSteps: React.FC<{ email: string }> = () => {
           .catch((error: any) => {
             console.log(error);
           });
-      }      
+      }
     });
   };
 
@@ -139,14 +141,20 @@ const AdminSteps: React.FC<{ email: string }> = () => {
         <>
           <IonGrid>
             <IonRow>
-              <IonCol>Date:</IonCol>
-              <IonCol>Steps:</IonCol>
+              <IonCol className="log-col-l">Date:</IonCol>
+              <IonCol className="log-col">Steps:</IonCol>
+              <IonCol></IonCol>
             </IonRow>
 
             {stepLogs.map((item) => (
-              <IonRow key={item.date}>
-                <IonCol>{item.date}</IonCol>
-                <IonCol>{item.steps}</IonCol>
+              <IonRow key={Math.random()}>
+                <IonCol className="log-col-l">
+                  {new Date(item.date).toDateString()}
+                </IonCol>
+                <IonCol className="log-col">
+                  {item.steps.toLocaleString()}
+                </IonCol>
+                <IonCol></IonCol>
               </IonRow>
             ))}
           </IonGrid>
@@ -204,7 +212,7 @@ const AdminSteps: React.FC<{ email: string }> = () => {
   const goToAdmin = () => {
     history.push('/app/admin');
   };
-
+  //
   return (
     <IonPage>
       <IonHeader>
@@ -212,48 +220,57 @@ const AdminSteps: React.FC<{ email: string }> = () => {
           <IonTitle>Steps log</IonTitle>
         </NavBar>
       </IonHeader>
-      <IonContent className="ion-padding">
-        <form
-          id="stepLog"
-          onSubmit={(event: React.FormEvent) => {
-            submitHandler(event);
-          }}
-        >
-          <div className="steps-name">Viewing Steps Log for: {logsName}</div>
-          <IonItem>
-            <IonLabel position="floating">Number of steps</IonLabel>
-            <IonInput
-              min="1"
-              id="steps"
-              type="number"
-              onInput={(event: any) => {
-                setManualSteps(Number(event.target.value));
+      <IonContent className="ion-padding body">
+        <IonCard className="card-body">
+          <IonCardContent className="card-body">
+            {' '}
+            <form
+              id="stepLog"
+              onSubmit={(event: React.FormEvent) => {
+                submitHandler(event);
               }}
-            ></IonInput>
-          </IonItem>
-          <a>
-            <IonRouterLink slot="helper" routerLink="/app/stepscalc">
-              Need help calculating steps?
-            </IonRouterLink>
-          </a>
-          <IonItem>
-            <IonLabel position="floating"></IonLabel>
-            <IonInput
-              id="time"
-              type="date"
-              onInput={(event: any) => {
-                setManualDate(
-                  new Date(event.target.value).toISOString().slice(0, 10)
-                );
-              }}
-            ></IonInput>
-          </IonItem>
-          <IonCol>
-            <IonButton type="submit">Submit</IonButton>
-            <IonButton onClick={goToAdmin}>Back to Admin Page</IonButton>
-          </IonCol>
-        </form>
-        <IonItem>{DisplayRecords()}</IonItem>
+            >
+              <div className="steps-name">
+                Viewing Steps Log for: {logsName}
+              </div>
+              <IonItem>
+                <IonLabel position="floating">Number of steps</IonLabel>
+                <IonInput
+                  min="1"
+                  id="steps"
+                  type="number"
+                  onInput={(event: any) => {
+                    setManualSteps(Number(event.target.value));
+                  }}
+                ></IonInput>
+              </IonItem>
+              <a>
+                <IonRouterLink slot="helper" routerLink="/app/stepscalc">
+                  Need help calculating steps?
+                </IonRouterLink>
+              </a>
+              <IonItem className="calendar-input">
+                <IonLabel position="floating"></IonLabel>
+                <IonInput
+                  id="time"
+                  type="date"
+                  // min={getMinDate()}
+                  // max={getMaxDate()}
+                  onInput={(event: any) => {
+                    setManualDate(
+                      new Date(event.target.value).toISOString().slice(0, 10)
+                    );
+                  }}
+                ></IonInput>
+              </IonItem>
+              <IonCol>
+                <IonButton type="submit">Submit</IonButton>
+                <IonButton onClick={goToAdmin}>Back to Admin Page</IonButton>
+              </IonCol>
+            </form>
+            <IonItem>{DisplayRecords()}</IonItem>
+          </IonCardContent>
+        </IonCard>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
