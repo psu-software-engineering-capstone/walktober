@@ -344,7 +344,7 @@ const Profile: React.FC = () => {
                     sizeLg="12"
                     sizeXl="12"
                   >
-                    <IonCard>
+                    <IonCard className="calendar">
                       <CalendarLeafs data={calanderLogs}></CalendarLeafs>
                     </IonCard>
                   </IonCol>

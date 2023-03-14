@@ -49,8 +49,8 @@
 
 .grid-container {
   display: grid;
-  height: 40vh;
-  width: 40vw;
+  height: auto;
+  width: auto;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: repeat(6, 1fr);
   gap: 2em;
