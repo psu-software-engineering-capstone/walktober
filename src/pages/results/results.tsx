@@ -79,7 +79,6 @@ const Results: React.FC = () => {
         if (day.steps > tempSteps) {
           tempSteps = day.steps; //new  Max step
           tempDate = day.date; // new max date
-          console.log(day.steps, day.date);
         }
         tempTotal += day.steps; //add the total steps
         tempLogged += 1; //increase counter for days active

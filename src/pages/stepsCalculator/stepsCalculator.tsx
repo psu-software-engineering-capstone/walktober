@@ -93,7 +93,6 @@ const StepsCalculator: React.FC = () => {
         } else {
           steps = miles * (5280 / ((heightCm * cmToIn * strideConverter) / 12));
         }
-        console.log(steps);
       }
       if (steps.toString() !== 'NaN' && steps !== 0) {
         updateSteps.innerHTML = Math.round(steps).toString();

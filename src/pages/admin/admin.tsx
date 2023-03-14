@@ -21,16 +21,20 @@ import NavBar from '../../components/NavBar';
 import { useContext, useEffect, useState } from 'react';
 import AdminContext from '../../store/admin-context';
 import { FirestoreDB } from '../../firebase';
-import { doc, collection, getDocs, updateDoc, setDoc, getDoc } from 'firebase/firestore';
-import './admin.css';
 import {
-  TeamData,
-  IndividualData,
-  PreSurvey,
-  PostSurvey,
-  Devices
-} from '../sampleData';
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  limit,
+  query,
+  setDoc,
+  updateDoc,
+  where
+} from 'firebase/firestore';
+import './admin.css';
 import { useHistory } from 'react-router';
+import { getCountFromServer } from 'firebase/firestore';
 
 const Admin: React.FC = () => {
   //used to open and close modals
@@ -45,8 +49,12 @@ const Admin: React.FC = () => {
   // used to send new team sizes and team creation date to database (set to data that was previously in the database)
   const [newMaxTeamSize, setNewMaxTeamSize] = useState(adData.maxSize);
   const [newMinTeamSize, setNewMinTeamSize] = useState(adData.minSize);
-  const [newTeamCreationDate, setNewTeamCreationDate] = useState(adData.teamDate);
-  const [newRegistrationDeadline, setNewRegistrationDeadline] = useState(adData.regDate);
+  const [newTeamCreationDate, setNewTeamCreationDate] = useState(
+    adData.teamDate
+  );
+  const [newRegistrationDeadline, setNewRegistrationDeadline] = useState(
+    adData.regDate
+  );
   const [newStartDate, setNewStart] = useState(adData.startDate);
   const [newEndDate, setNewEnd] = useState(adData.endDate);
   const [newEditingLimit, setNewEditingLimit] = useState(adData.priorLogDays);
@@ -72,8 +80,8 @@ const Admin: React.FC = () => {
 
   const [userReportCheck, setUserReportCheck] = useState(false);
   const [teamReportCheck, setTeamReportCheck] = useState(false);
-  const [preSurveryReportCheck, setpreSurveryReportCheck] = useState(false);
-  const [postSurveryReportCheck, setpostSurveryReportCheck] = useState(false);
+  const [preSurveyReportCheck, setpreSurveyReportCheck] = useState(false);
+  const [postSurveyReportCheck, setpostSurveyReportCheck] = useState(false);
   const [devicesReportCheck, setDevicesReportCheck] = useState(false);
 
   const [userLogs, setUserLogs] = useState<UserLog[]>([]);
@@ -103,11 +111,11 @@ const Admin: React.FC = () => {
     const dbSnap = await getDocs(dbRef); // get all the docs
     const teamLogsData: TeamLog[] = []; // emtpy array to gather the required information from the team docs
     dbSnap.forEach((doc: { data: () => any }) => {
-      const data = doc.data();//get data
+      const data = doc.data(); //get data
       if (data) {
         const teamLogData: TeamLog = {
           name: data.name,
-          size: data.members.length, 
+          size: data.members.length,
           avg_step: data.avg_steps,
           totalStep: data.totalStep
         }; // get the necessary info
@@ -137,8 +145,8 @@ const Admin: React.FC = () => {
   const sendNewUserSetting = async () => {
     const dbRef = doc(FirestoreDB, 'admin', 'admin');
     await updateDoc(dbRef, {
-      registration_deadline: newRegistrationDeadline, 
-      event_start_date: newStartDate, 
+      registration_deadline: newRegistrationDeadline,
+      event_start_date: newStartDate,
       event_end_date: newEndDate,
       prior_log_days: Number(newEditingLimit)
     })
@@ -156,8 +164,17 @@ const Admin: React.FC = () => {
     const dbSnap = await getDoc(dbRef);
     if (dbSnap.exists()) {
       alert(`${newOpenTeam} already exists!`);
-    }
-    else {
+    } else {
+      let channelId = ''; //temp array
+      const chanQuery = query(
+        collection(FirestoreDB, 'channelIDs'),
+        where('team', '==', ''),
+        limit(1)
+      ); //find empty channel id document
+      const chanIdSnap = await getDocs(chanQuery); //get results of query
+      chanIdSnap.forEach(async (doc: any) => {
+        channelId = doc.id; //reassign the string to the channel id (which is the document id)
+      });
       setDoc(doc(FirestoreDB, 'teams', newOpenTeam), {
         name: newOpenTeam,
         avg_steps: 0,
@@ -165,11 +182,15 @@ const Admin: React.FC = () => {
         members: [],
         status: 0,
         password: '',
-        profile_pic: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
+        profile_pic:
+          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
         totalStep: 0,
-        channel_id: '' // TODO: create discord channel
+        channel_id: channelId // TODO: create discord channel
       })
         .then(() => {
+          updateDoc(doc(FirestoreDB, 'channelIDs', channelId), {
+            team: newOpenTeam
+          }); //set channel id document to this new open team
           alert('Open Team Created!');
         })
         .catch((error: any) => {
@@ -196,23 +217,43 @@ const Admin: React.FC = () => {
         <>
           <IonGrid fixed={true}>
             <IonRow class="header-row">
-              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="header-col admin-col">
+              <IonCol
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '5'}
+                class="header-col admin-col"
+              >
                 Name
               </IonCol>
 
-              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="header-col admin-col">
+              <IonCol
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '5'}
+                class="header-col admin-col"
+              >
                 Team
               </IonCol>
 
-              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "3" : "6"} class="header-col admin-col">
+              <IonCol
+                sizeMd="4"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '6'}
+                class="header-col admin-col"
+              >
                 Email
               </IonCol>
 
-              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "8"} class="header-col admin-col">
+              <IonCol
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '8'}
+                class="header-col admin-col"
+              >
                 Total Steps
               </IonCol>
 
-              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "4" : "8"} class="header-col admin-col">
+              <IonCol
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '4' : '8'}
+                class="header-col admin-col"
+              >
                 Actions
               </IonCol>
             </IonRow>
@@ -220,20 +261,57 @@ const Admin: React.FC = () => {
             {userLogs.map(
               (item: { name: any; team: any; email: any; steps: any }) => (
                 <IonRow key={item.email}>
-                  <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="admin-col">
+                  <IonCol
+                    sizeMd="3"
+                    size={
+                      isPlatform('ios') || isPlatform('android') ? '3' : '5'
+                    }
+                    class="admin-col"
+                  >
                     {item.name}
                   </IonCol>
-                  <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="admin-col">
+                  <IonCol
+                    sizeMd="3"
+                    size={
+                      isPlatform('ios') || isPlatform('android') ? '3' : '5'
+                    }
+                    class="admin-col"
+                  >
                     {item.team}
                   </IonCol>
-                  <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="admin-col">
+                  <IonCol
+                    sizeMd="4"
+                    size={
+                      isPlatform('ios') || isPlatform('android') ? '3' : '5'
+                    }
+                    class="admin-col"
+                  >
                     {item.email}
                   </IonCol>
-                  <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "8"} class="admin-col">
+                  <IonCol
+                    sizeMd="3"
+                    size={
+                      isPlatform('ios') || isPlatform('android') ? '3' : '8'
+                    }
+                    class="admin-col"
+                  >
                     {item.steps}
                   </IonCol>
-                  <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "4" : "8"} class="admin-col">
-                    <IonButton size="small" onClick={() => goToAdminSteps(item.email)}>{isPlatform('ios') || isPlatform('android') ? "Edit Log" : "Edit Step Log"}</IonButton>
+                  <IonCol
+                    sizeMd="3"
+                    size={
+                      isPlatform('ios') || isPlatform('android') ? '4' : '8'
+                    }
+                    class="admin-col"
+                  >
+                    <IonButton
+                      size="small"
+                      onClick={() => goToAdminSteps(item.email)}
+                    >
+                      {isPlatform('ios') || isPlatform('android')
+                        ? 'Edit Log'
+                        : 'Edit Step Log'}
+                    </IonButton>
                   </IonCol>
                 </IonRow>
               )
@@ -246,23 +324,43 @@ const Admin: React.FC = () => {
         <>
           <IonGrid fixed={true}>
             <IonRow class="header-row">
-              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="header-col">
+              <IonCol
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '5'}
+                class="header-col"
+              >
                 Name
               </IonCol>
 
-              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "5"} class="header-col">
+              <IonCol
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '5'}
+                class="header-col"
+              >
                 Team
               </IonCol>
 
-              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "3" : "6"} class="header-col">
+              <IonCol
+                sizeMd="4"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '6'}
+                class="header-col"
+              >
                 Email
               </IonCol>
 
-              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "3" : "8"} class="header-col">
+              <IonCol
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '8'}
+                class="header-col"
+              >
                 Total Steps
               </IonCol>
 
-              <IonCol sizeMd="3" size={isPlatform('ios') || isPlatform('android') ? "4" : "8"} class="header-col">
+              <IonCol
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '4' : '8'}
+                class="header-col"
+              >
                 Actions
               </IonCol>
             </IonRow>
@@ -278,29 +376,69 @@ const Admin: React.FC = () => {
         <>
           <IonGrid fixed={true}>
             <IonRow class="header-row">
-              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="header-col admin-col">
+              <IonCol
+                sizeMd="4"
+                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                class="header-col admin-col"
+              >
                 Team Name
               </IonCol>
 
-              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="header-col admin-col">
+              <IonCol
+                sizeMd="4"
+                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                class="header-col admin-col"
+              >
                 Number of Members
               </IonCol>
 
-              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="header-col admin-col">
+              <IonCol
+                sizeMd="4"
+                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                class="header-col admin-col"
+              >
                 Average Total Steps
               </IonCol>
 
-              <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="header-col admin-col">
+              <IonCol
+                sizeMd="4"
+                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                class="header-col admin-col"
+              >
                 Total Steps
               </IonCol>
             </IonRow>
 
             {teamLogs.map((item) => (
               <IonRow key={Math.random()}>
-                <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="admin-col">{item.name}</IonCol>
-                <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="admin-col">{item.size}</IonCol>
-                <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="admin-col">{item.avg_step}</IonCol>
-                <IonCol sizeMd="4" size={isPlatform('ios') || isPlatform('android') ? "4" : "4"} class="admin-col">{item.totalStep}</IonCol>
+                <IonCol
+                  sizeMd="4"
+                  size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                  class="admin-col"
+                >
+                  {item.name}
+                </IonCol>
+                <IonCol
+                  sizeMd="4"
+                  size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                  class="admin-col"
+                >
+                  {item.size}
+                </IonCol>
+                <IonCol
+                  sizeMd="4"
+                  size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                  class="admin-col"
+                >
+                  {item.avg_step}
+                </IonCol>
+                <IonCol
+                  sizeMd="4"
+                  size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                  class="admin-col"
+                >
+                  {item.totalStep}
+                </IonCol>
               </IonRow>
             ))}
           </IonGrid>
@@ -311,15 +449,27 @@ const Admin: React.FC = () => {
         <>
           <IonGrid fixed={true}>
             <IonRow class="header-row">
-              <IonCol sizeMd="6" size={isPlatform('ios') || isPlatform('android') ? "6" : "6"} class="header-col admin-col">
+              <IonCol
+                sizeMd="6"
+                size={isPlatform('ios') || isPlatform('android') ? '6' : '6'}
+                class="header-col admin-col"
+              >
                 Team Name
               </IonCol>
 
-              <IonCol sizeMd="5" size={isPlatform('ios') || isPlatform('android') ? "5" : "5"} class="header-col admin-col">
+              <IonCol
+                sizeMd="5"
+                size={isPlatform('ios') || isPlatform('android') ? '5' : '5'}
+                class="header-col admin-col"
+              >
                 Number of Members
               </IonCol>
 
-              <IonCol sizeMd="5" size={isPlatform('ios') || isPlatform('android') ? "5" : "5"} class="header-col admin-col">
+              <IonCol
+                sizeMd="5"
+                size={isPlatform('ios') || isPlatform('android') ? '5' : '5'}
+                class="header-col admin-col"
+              >
                 Total Steps
               </IonCol>
             </IonRow>
@@ -335,17 +485,17 @@ const Admin: React.FC = () => {
     if (userReportCheck) {
       console.log('Generating user report');
 
-      let str = '"Name","eMail","Team","TotalSteps"\n';
+      let str = '"Name","Email","Team","TotalSteps"\n';
 
-      for (let i = 0; i < IndividualData.length; i++) {
+      const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
+      querySnapshot.forEach((doc: { id: any; data: () => any }) => {
         let line = '';
-        line += '"' + IndividualData[i].name + '",';
-        line += '"' + IndividualData[i].email + '",';
-        line += '"' + IndividualData[i].team + '",';
-        line += IndividualData[i].totalStep;
+        line += '"' + doc.data().name + '",';
+        line += '"' + doc.data().email + '",';
+        line += '"' + doc.data().team + '",';
+        line += doc.data().totalStep;
         str += line + '\r\n';
-      }
-      console.log(str);
+      });
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -365,17 +515,17 @@ const Admin: React.FC = () => {
       console.log('Generating team report');
 
       let str =
-        '"Team Name","Cumulative Steps","Number of Team Members","TotalSteps"\n';
+        '"Team Name","Average Steps","Number of Team Members","TotalSteps"\n';
 
-      for (let i = 0; i < TeamData.length; i++) {
+      const querySnapshot = await getDocs(collection(FirestoreDB, 'teams'));
+      querySnapshot.forEach((doc: { id: any; data: () => any }) => {
         let line = '';
-        line += '"' + TeamData[i].name + '",';
-        line += 0 + ',';
-        line += 0 + ',';
-        line += TeamData[i].avg_steps;
+        line += '"' + doc.data().name + '",';
+        line += doc.data().avg_steps + ',';
+        line += doc.data().members.length + ',';
+        line += doc.data().totalStep;
         str += line + '\r\n';
-      }
-      console.log(str);
+      });
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -391,24 +541,27 @@ const Admin: React.FC = () => {
       }
     }
 
-    if (preSurveryReportCheck) {
+    if (preSurveyReportCheck) {
       console.log('Generating pre survey report');
 
       let str =
-        '"Anonymous ID #","Hours of Physical Activity","Minutes of Physical Activity","TotalSteps"\n';
+        '"Name","Affiliation","Email","Distance From Campus","Heard From","Hours of Physical Activity","Minutes of Physical Activity","Rec Center Usage"\n';
 
-      for (let i = 0; i < PreSurvey.length; i++) {
+      const querySnapshot = await getDocs(
+        collection(FirestoreDB, 'registrationQuestions')
+      );
+      querySnapshot.forEach((doc: { id: any; data: () => any }) => {
         let line = '';
-        line += PreSurvey[i].anonymous_id + ',';
-        line += '"' + PreSurvey[i].psu_affiliation + '",';
-        line += '"' + PreSurvey[i].heard_about + '",';
-        line += PreSurvey[i].weekly_physical_activity_hours + ',';
-        line += PreSurvey[i].weekly_physical_activity_minutes + ',';
-        line += '"' + PreSurvey[i].distance_from_campus + '",';
-        line += '"' + PreSurvey[i].rec_center_frequency + '"';
+        line += '"' + doc.data().name + '",';
+        line += '"' + doc.data().affiliation + '",';
+        line += '"' + doc.data().email + '",';
+        line += '"' + doc.data().distFromCamp + '",';
+        line += '"' + doc.data().heardAboutFrom + '",';
+        line += '"' + doc.data().hoursPhysical + '",';
+        line += '"' + doc.data().minsPhysical + '",';
+        line += doc.data().recCenterUse;
         str += line + '\r\n';
-      }
-      console.log(str);
+      });
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -424,27 +577,29 @@ const Admin: React.FC = () => {
       }
     }
 
-    if (postSurveryReportCheck) {
+    if (postSurveyReportCheck) {
       console.log('Generating post survey report');
 
       let str =
-        '"Team Name","Cumulative Steps","Number of Team Members","TotalSteps"\n';
+        '"Device Used","Walktober Feedback","Future Ideas","Hours Active Per Week","Minutes Active Per Day","Why Not Participate Again","Participation Opinion","Events Participated In","Rec Center Usage","Well-being"\n';
 
-      for (let i = 0; i < PostSurvey.length; i++) {
+      const querySnapshot = await getDocs(
+        collection(FirestoreDB, 'exitQuestions')
+      );
+      querySnapshot.forEach((doc: { id: any; data: () => any }) => {
         let line = '';
-        line += PostSurvey[i].anonymous_id + ',';
-        line += PostSurvey[i].weekly_physical_activity_hours + ',';
-        line += PostSurvey[i].weekly_physical_activity_minutes + ',';
-        line += '"' + PostSurvey[i].participated_events + '",';
-        line += '"' + PostSurvey[i].future_walk_ideas + '",';
-        line += PostSurvey[i].walktober_improved_health + ',';
-        line += PostSurvey[i].walktober_improved_community + ',';
-        line += PostSurvey[i].would_participate_again + ',';
-        line += '"' + PostSurvey[i].if_not_why + '",';
-        line += '"' + PostSurvey[i].feedback + '"';
+        line += '"' + doc.data().device + '",';
+        line += '"' + doc.data().feedback + '",';
+        line += '"' + doc.data().futureIdeas + '",';
+        line += '"' + doc.data().hoursPerWeek + '",';
+        line += '"' + doc.data().minutesPerDay + '",';
+        line += '"' + doc.data().wouldNotParticipateAgain + '",';
+        line += '"' + doc.data().wouldParticipateAgain + '",';
+        line += '"' + doc.data().prevParticipatedEvents + '",';
+        line += '"' + doc.data().recUsage + '",';
+        line += doc.data().wellBeing;
         str += line + '\r\n';
-      }
-      console.log(str);
+      });
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -463,13 +618,23 @@ const Admin: React.FC = () => {
     if (devicesReportCheck) {
       console.log('Generating device usage report');
 
+      // Hardcoded count, should probably give exit survey device question a variable to use
+      const android = query(collection(FirestoreDB, 'exitQuestions'), where("device", "==", "Google Fit"));
+      const androidSnapshot = await getCountFromServer(android);
+      const gFitCount = androidSnapshot.data().count;
+
+      const apple = query(collection(FirestoreDB, 'exitQuestions'), where("device", "==", "Apple Health"));
+      const appleSnapshot = await getCountFromServer(apple);
+      const aHealthCount = appleSnapshot.data().count;
+
+      const neither = query(collection(FirestoreDB, 'exitQuestions'), where("device", "==", "N/A"));
+      const neitherSnapshot = await getCountFromServer(neither);
+      const nCount = neitherSnapshot.data().count;
+
       let str = '';
-      str += '"IPhone",' + Devices.iPhone + '\r\n';
-      str += '"Android",' + Devices.android + '\r\n';
-      str += '"Apple Health",' + Devices.apple_health + '\r\n';
-      str += '"FitBit",' + Devices.fitbit + '\r\n';
-      str += '"Google Health",' + Devices.google_health + '\r\n';
-      console.log(str);
+      str += '"Apple Health",' + aHealthCount + '\r\n';
+      str += '"Google Fit",' + gFitCount + '\r\n';
+      str += '"N/A",' + nCount + '\r\n';
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -503,7 +668,11 @@ const Admin: React.FC = () => {
               <IonButton
                 onClick={() => setIsOpenUser(true)}
                 class="admin-button"
-                size={isPlatform('ios') || isPlatform('android') ? 'default' : 'large'}
+                size={
+                  isPlatform('ios') || isPlatform('android')
+                    ? 'default'
+                    : 'large'
+                }
                 expand="block"
               >
                 Event Settings
@@ -513,7 +682,11 @@ const Admin: React.FC = () => {
               <IonButton
                 onClick={() => setIsOpenTeam(true)}
                 class="admin-button"
-                size={isPlatform('ios') || isPlatform('android') ? 'default' : 'large'}
+                size={
+                  isPlatform('ios') || isPlatform('android')
+                    ? 'default'
+                    : 'large'
+                }
                 expand="block"
               >
                 Team Settings
@@ -523,7 +696,11 @@ const Admin: React.FC = () => {
               <IonButton
                 onClick={() => setOpenCreateTeam(true)}
                 class="admin-button"
-                size={isPlatform('ios') || isPlatform('android') ? 'default' : 'large'}
+                size={
+                  isPlatform('ios') || isPlatform('android')
+                    ? 'default'
+                    : 'large'
+                }
                 expand="block"
               >
                 Create Open Team
@@ -533,7 +710,11 @@ const Admin: React.FC = () => {
               <IonButton
                 onClick={() => setIsOpenReport(true)}
                 class="admin-button"
-                size={isPlatform('ios') || isPlatform('android') ? 'default' : 'large'}
+                size={
+                  isPlatform('ios') || isPlatform('android')
+                    ? 'default'
+                    : 'large'
+                }
                 expand="block"
               >
                 Generate Report
@@ -542,7 +723,11 @@ const Admin: React.FC = () => {
             <IonCol class="invis-grid-col">
               <IonButton
                 class="admin-button"
-                size={isPlatform('ios') || isPlatform('android') ? 'default' : 'large'}
+                size={
+                  isPlatform('ios') || isPlatform('android')
+                    ? 'default'
+                    : 'large'
+                }
                 expand="block"
               >
                 Announcements
@@ -585,10 +770,12 @@ const Admin: React.FC = () => {
             </IonItem>
             <IonItem>
               <IonLabel>Step Log Allowed Period</IonLabel>
-              <IonInput 
+              <IonInput
                 type="number"
                 name="editDaysLimit"
-                onIonChange={(e) => setNewEditingLimit(e.target.value as number)}
+                onIonChange={(e) =>
+                  setNewEditingLimit(e.target.value as number)
+                }
               ></IonInput>
             </IonItem>
             <IonItem>
@@ -596,7 +783,7 @@ const Admin: React.FC = () => {
               <IonInput
                 id="time"
                 type="date"
-                onInput={(event:any) => {
+                onInput={(event: any) => {
                   setNewStart(
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
@@ -608,7 +795,7 @@ const Admin: React.FC = () => {
               <IonInput
                 id="time"
                 type="date"
-                onInput={(event:any) => {
+                onInput={(event: any) => {
                   setNewEnd(
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
@@ -706,7 +893,12 @@ const Admin: React.FC = () => {
                 onIonChange={(e) => setOpenTeam(e.target.value as string)}
               ></IonInput>
             </IonItem>
-            <IonButton class="modal-button" size="large" expand="block" onClick={sendNewOpenTeam}>
+            <IonButton
+              class="modal-button"
+              size="large"
+              expand="block"
+              onClick={sendNewOpenTeam}
+            >
               Create Team
             </IonButton>
           </IonContent>
@@ -754,23 +946,21 @@ const Admin: React.FC = () => {
               </IonItem>
               <IonItem>
                 <IonCheckbox
-                  checked={preSurveryReportCheck}
-                  onIonChange={(e) =>
-                    setpreSurveryReportCheck(e.detail.checked)
-                  }
+                  checked={preSurveyReportCheck}
+                  onIonChange={(e) => setpreSurveyReportCheck(e.detail.checked)}
                   slot="start"
                 ></IonCheckbox>
-                <IonLabel>Pre Survery Report</IonLabel>
+                <IonLabel>Pre Survey Report</IonLabel>
               </IonItem>
               <IonItem>
                 <IonCheckbox
-                  checked={postSurveryReportCheck}
+                  checked={postSurveyReportCheck}
                   onIonChange={(e) =>
-                    setpostSurveryReportCheck(e.detail.checked)
+                    setpostSurveyReportCheck(e.detail.checked)
                   }
                   slot="start"
                 ></IonCheckbox>
-                <IonLabel>Post Survery Report</IonLabel>
+                <IonLabel>Post Survey Report</IonLabel>
               </IonItem>
               <IonItem>
                 <IonCheckbox
