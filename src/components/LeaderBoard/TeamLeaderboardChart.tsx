@@ -88,7 +88,7 @@ const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
         // draws the image of the user's profile picture
         ctx.drawImage(
           profilePic,
-          imgSize,
+          imgSize -10,
           y.getPixelForValue(index) - imgSize / 2,
           imgSize,
           imgSize
@@ -184,8 +184,14 @@ const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
   const boxAdjust = (labelLength: number) => {
     const box = document.querySelector('.team-box');
     if (box != null) {
-      const newHeight = labelLength * chartHeightMultiplier;
-      box.setAttribute('style', 'height: ' + newHeight.toString() + 'px');
+      if(labelLength <= 3){
+        const newHeight = labelLength * (chartHeightMultiplier + 10);
+        box.setAttribute('style', 'height: ' + newHeight.toString() + 'px');
+      }
+      else{
+        const newHeight = labelLength * chartHeightMultiplier;
+        box.setAttribute('style', 'height: ' + newHeight.toString() + 'px');
+      }
     }
   };
 
