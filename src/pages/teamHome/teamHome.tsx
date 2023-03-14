@@ -359,11 +359,15 @@ const TeamHome: React.FC = () => {
               <TeamLeaderboardChart memberData={leaderboardData}></TeamLeaderboardChart>
             </IonCol>
             <IonCol sizeSm="12" sizeLg="4" sizeMd="6" sizeXs="12" className="">
-              <WidgetBot
-                className="discord-widget"
-                server="1068966007886069841"
-                channel={channelId}
-              />
+              <IonCard className='discord-card'>
+                <IonCardContent>
+                  <WidgetBot
+                    className="discord-widget"
+                    server="1068966007886069841"
+                    channel={channelId}
+                  />
+                </IonCardContent>
+              </IonCard>
             </IonCol>
             <IonCol
               className="boxSize"
