@@ -33,10 +33,6 @@ import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
 import PostEventSurvey from '../postEventSurvey/postEventSurvey';
 import './homePage.css';
 
-interface badgeOutline {
-  name: string;
-}
-
 interface StepLog {
   date: string;
   steps: number;
@@ -46,7 +42,6 @@ const HomePage: React.FC = () => {
   const [steps, setSteps] = useState(0);
   const [totalSteps, setTotalSteps] = useState(0);
   const history = useHistory();
-  const [badges, setBadges] = useState(Array<badgeOutline>);
   const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
   const [showPostSurvey, setShowPostSurvey] = useState(false);
   const [stepGoal, setStepGoal] = useState(0);
@@ -153,18 +148,6 @@ const HomePage: React.FC = () => {
               </IonRow>
               <IonRow>
                 <IonCol>
-                  <IonCard className="team-card">
-                    <IonCardHeader>
-                      <IonCardTitle>
-                        Badges Acquired:
-                      </IonCardTitle>
-                    </IonCardHeader>
-                    <IonCardContent>
-                      {badges.map((badge) => (
-                        <IonIcon name={badge.name} key={Math.random()}></IonIcon>
-                      ))}
-                    </IonCardContent>
-                  </IonCard>
                 </IonCol>
               </IonRow>
             </IonCol>
@@ -175,27 +158,6 @@ const HomePage: React.FC = () => {
               sizeLg='6'
               sizeXl='6'>
               <IonRow>
-                <IonCol
-                  sizeXs='12'
-                  sizeSm='12'
-                  sizeMd='12'
-                  sizeLg='6'
-                  sizeXl='6'>
-                  <IonCard className='team-card'>
-                    <IonCardHeader>
-                      <IonCardTitle>
-                        Progress:
-                      </IonCardTitle>
-                    </IonCardHeader>
-                    <IonCardContent>
-                      {pastSevenDaysSteps.length > 1 ? (
-                        <ProgressChart data={pastSevenDaysSteps} todayStep={steps} stepGoal={stepGoal} />
-                      ) : (
-                        ' '
-                      )}
-                    </IonCardContent>
-                  </IonCard>
-                </IonCol>
                 <IonCol
                   sizeXs='12'
                   sizeSm='12'
@@ -219,7 +181,28 @@ const HomePage: React.FC = () => {
                     </IonCardHeader>
                     <IonCardContent>
                       <p>Click <a onClick={moveToManualSteps}>here </a>
-                      to see previous logs.</p>
+                      to add or edit steps.</p>
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+                <IonCol
+                  sizeXs='12'
+                  sizeSm='12'
+                  sizeMd='12'
+                  sizeLg='6'
+                  sizeXl='6'>
+                  <IonCard className='team-card'>
+                    <IonCardHeader>
+                      <IonCardTitle>
+                        Progress:
+                      </IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      {pastSevenDaysSteps.length > 1 ? (
+                        <ProgressChart data={pastSevenDaysSteps} todayStep={steps} stepGoal={stepGoal} />
+                      ) : (
+                        ' '
+                      )}
                     </IonCardContent>
                   </IonCard>
                 </IonCol>

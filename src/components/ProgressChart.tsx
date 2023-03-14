@@ -1,7 +1,6 @@
 // Purpose of this file is to create a React custom element to display a user's current progress in terms of past 7 days steps and or goal steps
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-import { IonLabel, IonProgressBar } from '@ionic/react';
 import './progChart.css';
 
 // below is the interface for the steps log. It reflects the values expected for displaying
@@ -10,10 +9,9 @@ interface StepLog {
   steps: number;
 }
 
-const ProgressChart: React.FC<{ data: Array<StepLog>, todayStep: number, stepGoal: number }> = ({ data, todayStep, stepGoal }) => {
+const ProgressChart: React.FC<{ data: Array<StepLog>, todayStep: number, stepGoal: number }> = ({ data }) => {
 
   // below vars are self documenting
-  const stepsLeft = stepGoal - todayStep;
   const style = getComputedStyle(document.documentElement);
   //primCol contains the color for the text and lines
   const primCol = style.getPropertyValue('--primaryColor');
@@ -22,11 +20,6 @@ const ProgressChart: React.FC<{ data: Array<StepLog>, todayStep: number, stepGoa
   // output is a react element
   return (
     <>
-      <h1>Goal steps: {stepGoal.toLocaleString()}</h1>
-      <IonLabel>
-        <IonProgressBar value={1 - stepsLeft / stepGoal / 1}></IonProgressBar>
-        {todayStep.toLocaleString() + '/' + stepGoal.toLocaleString() + ' steps'}
-      </IonLabel>
       <Bar
         className="box"
         options={{
