@@ -87,7 +87,7 @@ const LeaderBoardChart: React.FC = () => {
         // draws the image of the user's profile picture
         ctx.drawImage(
           profilePic,
-          imgSize,
+          imgSize - 5,
           y.getPixelForValue(index) - imgSize / 2,
           imgSize,
           imgSize
@@ -122,6 +122,11 @@ const LeaderBoardChart: React.FC = () => {
             font: {
               weight: 'bold'
             }
+          }
+        },
+        datasets: {
+          bar: {
+            barThickness: 30
           }
         },
         anchor: 'end',
