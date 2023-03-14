@@ -3,7 +3,6 @@ import {
   IonCardContent,
   IonButton,
   IonCardHeader,
-  IonSpinner,
   IonCardTitle
 } from '@ionic/react';
 import React, { useContext, useEffect, useState, useRef } from 'react';
@@ -27,13 +26,14 @@ interface Data {
 
 const LeaderBoardChart: React.FC = () => {
   const [data, setData] = useState(Array<Data>);
-  const [loading, setLoading] = useState(false);
+  const [indData, setIndData] = useState(Array<Data>);
+  const [teamData, setTeamData] = useState(Array<Data>);
   const [dataType, setDataType] = useState('individual');
   const adData = useContext(AdminContext);
   const contentRef = useRef<HTMLIonCardElement | null>(null);
   const chartHeightMultiplier = 60;
-  
-  //Formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
+
+  // formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
   const chartData = {
     labels: data.map((row) => row.name.split(' ')),
     datasets: [
@@ -51,7 +51,7 @@ const LeaderBoardChart: React.FC = () => {
     ]
   };
 
-  //adds image of users or team to the chart next to the user's/team's name
+  // adds image of users or team to the chart next to the user's/team's name
   const imgItems = {
     id: 'imgItems',
     beforeDatasetsDraw(chart: any) {
@@ -69,12 +69,12 @@ const LeaderBoardChart: React.FC = () => {
         const place = (index + 1).toString() + ordinalNumbers(index + 1);
         profilePic.src = imageLink;
 
-        //sets the stylingfor the place of users, '1st, 2nd, 3rd ect.'
+        // sets the stylingfor the place of users, '1st, 2nd, 3rd ect.'
         ctx.font = 'bold 15px Helvetica';
         ctx.textBaseline = 'bottom';
         ctx.fillStyle = ChartJS.defaults.color;
 
-        //draws the numbers for each place
+        // draws the numbers for each place
         ctx.fillText(
           place,
           0,
@@ -82,7 +82,7 @@ const LeaderBoardChart: React.FC = () => {
           imgSize - 5
         );
 
-        //draws the image of the user's profile picture
+        // draws the image of the user's profile picture
         ctx.drawImage(
           profilePic,
           imgSize,
@@ -94,7 +94,7 @@ const LeaderBoardChart: React.FC = () => {
     }
   };
 
-  //Changes the apearance of the chart
+  // changes the apearance of the chart
   const chartOptions = {
     indexAxis: 'y',
     maintainAspectRatio: false,
@@ -176,7 +176,7 @@ const LeaderBoardChart: React.FC = () => {
     }
   };
 
-  //ajusts the size of the element containing the chart in order to correctly size the chart.
+  // ajusts the size of the element containing the chart in order to correctly size the chart.
   const boxAdjust = (labelLength: number) => {
     const box = document.querySelector('.box');
     if (box != null) {
@@ -185,13 +185,14 @@ const LeaderBoardChart: React.FC = () => {
     }
   };
 
-  //gives leaderboard placement numbers a suffix
+  // gives leaderboard placement numbers a suffix
   const ordinalNumbers = (n: number) => {
     return n > 0
       ? ['th', 'st', 'nd', 'rd'][(n > 3 && n < 21) || n % 10 > 3 ? 0 : n % 10]
       : '';
   };
-  //gets the index to calculate the scoll distance needed to bring the user into view
+
+  // gets the index to calculate the scoll distance needed to bring the user into view
   const scrollToUser = () => {
     const content = contentRef.current;
     let y = 0;
@@ -204,71 +205,81 @@ const LeaderBoardChart: React.FC = () => {
       }
     });
     if (content) {
-      content.scrollTop = (y+2) * chartHeightMultiplier;
+      content.scrollTop = (y + 2) * chartHeightMultiplier;
     }
   };
-  
-  //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
-  async function getData(dataType: string) {
-    setLoading(true);
+
+  // get data from database
+  async function getChartData() {
     const indData: Array<Data> = [];
-    if (dataType == 'individual') {
-      const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
-      querySnapshot.forEach((doc: any) => {
-        const person: Data = {
-          name: doc.data().name as string,
-          profile_pic: doc.data().profile_pic as string,
-          totalStep: doc.data().totalStep as number,
-          highlight:
-            auth.currentUser.email == doc.data().email
-              ? (true as boolean)
-              : (false as boolean)
-        };
-        indData.push(person);
+    const teamData: Array<Data> = [];
+    const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
+    querySnapshot.forEach((doc: any) => {
+      const person: Data = {
+        name: doc.data().name as string,
+        profile_pic: doc.data().profile_pic as string,
+        totalStep: doc.data().totalStep as number,
+        highlight:
+          auth.currentUser.email == doc.data().email
+            ? (true as boolean)
+            : (false as boolean)
+      };
+      indData.push(person);
+    });
+    setIndData(
+      indData.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
+    );
+    const teamquerySnapshot = await getDocs(collection(FirestoreDB, 'teams'));
+    teamquerySnapshot.forEach((doc: any) => {
+      const team: Data = {
+        name: doc.data().name as string,
+        profile_pic: doc.data().profile_pic as string,
+        avg_steps: doc.data().avg_steps as number,
+        highlight: false as boolean
+      };
+      const teamMembers = doc.data().members;
+      teamMembers.forEach((member: string) => {
+        if (auth.currentUser.email == member) team.highlight = true;
       });
-      setData(
-        indData.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
-      );
-    }
-    if (dataType == 'teams') {
-      const querySnapshot = await getDocs(collection(FirestoreDB, 'teams'));
-      querySnapshot.forEach((doc: any) => {
-        const team: Data = {
-          name: doc.data().name as string,
-          profile_pic: doc.data().profile_pic as string,
-          avg_steps: doc.data().avg_steps as number,
-          highlight: false as boolean
-        };
-        const teamMembers = doc.data().members;
-        teamMembers.forEach((member: string) => {
-          if (auth.currentUser.email == member) team.highlight = true;
-        });
-        const today = new Date();
-        const deadline = new Date(adData.teamDate);
-        if (deadline < today) {
-          const membersLength = doc.data().members.length;
-          if (adData.minSize <= membersLength) {
-            indData.push(team);
-          }
-        } else {
-          indData.push(team);
+      const today = new Date();
+      const deadline = new Date(adData.teamDate);
+      if (deadline < today) {
+        const membersLength = doc.data().members.length;
+        if (adData.minSize <= membersLength) {
+          teamData.push(team);
         }
-        setData(
-          indData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
-        );
-      });
-    }
-
-    boxAdjust(indData.length);
-    setTimeout(() => {
-      setLoading(false);
-    }, 0);
+      } else {
+        teamData.push(team);
+      }
+      setTeamData(
+        teamData.sort((a: any, b: any) => (a.avg_steps > b.avg_steps ? -1 : 1))
+      );
+    });
   }
-  //do not add data as a redux or you will end up with an infinite loop
-  useEffect(() => {
-    getData(dataType); //go into the firestore and get all the users' names, pictures, and then totalStep
-  }, [dataType]);
 
+  // set data for chart
+  const setChartData = () => {
+    if (dataType === 'individual') {
+      setData(indData);
+      boxAdjust(indData.length);
+    }
+    if (dataType === 'teams') {
+      setData(teamData);
+      boxAdjust(teamData.length);
+    }
+  };
+
+  // get data from database
+  useEffect(() => {
+    getChartData();
+  }, []);
+
+  // set data for chart
+  useEffect(() => {
+    setChartData();
+  }, [dataType, indData]);
+
+  // auto scroll to user
   useEffect(() => {
     scrollToUser();
   }, [data]);
@@ -283,7 +294,6 @@ const LeaderBoardChart: React.FC = () => {
           onClick={() => {
             setDataType('individual');
           }}
-          disabled={loading}
         >
           Individual
         </IonButton>
@@ -291,21 +301,16 @@ const LeaderBoardChart: React.FC = () => {
           onClick={() => {
             setDataType('teams');
           }}
-          disabled={loading}
         >
           Teams
         </IonButton>
       </div>
       <IonCardContent className="box">
-        {loading ? (
-          <IonSpinner className="spinner" />
-        ) : (
-          <Bar
-            data={chartData}
-            options={chartOptions}
-            plugins={[imgItems, ChartDataLabels]}
-          ></Bar>
-        )}
+        <Bar
+          data={chartData}
+          options={chartOptions}
+          plugins={[imgItems, ChartDataLabels]}
+        ></Bar>
       </IonCardContent>
     </IonCard>
   );
