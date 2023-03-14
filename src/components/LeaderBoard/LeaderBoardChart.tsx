@@ -178,7 +178,7 @@ const LeaderBoardChart: React.FC = () => {
     }
   };
 
-  // ajusts the size of the element containing the chart in order to correctly size the chart.
+  // adjusts the size of the element containing the chart in order to correctly size the chart.
   const boxAdjust = (labelLength: number) => {
     const box = document.querySelector('.box');
     if (box != null) {
@@ -211,6 +211,7 @@ const LeaderBoardChart: React.FC = () => {
     }
   };
 
+  // get data from database
   async function getChartData() {
     const indData: Array<Data> = [];
     const teamData: Array<Data> = [];

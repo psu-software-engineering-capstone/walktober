@@ -497,8 +497,6 @@ const Admin: React.FC = () => {
         str += line + '\r\n';
       });
 
-      console.log(str);
-
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -528,8 +526,6 @@ const Admin: React.FC = () => {
         line += doc.data().totalStep;
         str += line + '\r\n';
       });
-
-      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -566,8 +562,6 @@ const Admin: React.FC = () => {
         line += doc.data().recCenterUse;
         str += line + '\r\n';
       });
-
-      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -606,7 +600,6 @@ const Admin: React.FC = () => {
         line += doc.data().wellBeing;
         str += line + '\r\n';
       });
-      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -642,7 +635,6 @@ const Admin: React.FC = () => {
       str += '"Apple Health",' + aHealthCount + '\r\n';
       str += '"Google Fit",' + gFitCount + '\r\n';
       str += '"N/A",' + nCount + '\r\n';
-      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);

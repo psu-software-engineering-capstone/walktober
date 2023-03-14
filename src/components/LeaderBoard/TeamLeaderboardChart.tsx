@@ -35,7 +35,8 @@ const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
   const adData = useContext(AdminContext);
   const contentRef = useRef<HTMLIonCardElement | null>(null);
   const chartHeightMultiplier = 60;
-  //Formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
+
+  // Formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
   const chartData = {
     labels: data.map((row) => row.name.split(' ')),
     datasets: [
@@ -53,7 +54,7 @@ const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
     ]
   };
 
-  //adds image of users or team to the chart next to the user's/team's name
+  // adds image of users or team to the chart next to the user's/team's name
   const imgItems = {
     id: 'imgItems',
     beforeDatasetsDraw(chart: any) {
@@ -71,12 +72,12 @@ const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
         const place = (index + 1).toString() + ordinalNumbers(index + 1);
         profilePic.src = imageLink;
 
-        //sets the stylingfor the place of users, '1st, 2nd, 3rd ect.'
+        // sets the stylingfor the place of users, '1st, 2nd, 3rd ect.'
         ctx.font = 'bold 15px Helvetica';
         ctx.textBaseline = 'bottom';
         ctx.fillStyle = ChartJS.defaults.color;
 
-        //draws the numbers for each place
+        // draws the numbers for each place
         ctx.fillText(
           place,
           0,
@@ -84,7 +85,7 @@ const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
           imgSize
         );
 
-        //draws the image of the user's profile picture
+        // draws the image of the user's profile picture
         ctx.drawImage(
           profilePic,
           imgSize,
@@ -96,7 +97,7 @@ const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
     }
   };
 
-  //Changes the apearance of the chart
+  // Changes the apearance of the chart
   const chartOptions = {
     indexAxis: 'y',
     maintainAspectRatio: false,
@@ -179,7 +180,7 @@ const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
     }
   };
 
-  //ajusts the size of the element containing the chart in order to correctly size the chart.
+  // adjusts the size of the element containing the chart in order to correctly size the chart.
   const boxAdjust = (labelLength: number) => {
     const box = document.querySelector('.team-box');
     if (box != null) {
@@ -188,13 +189,14 @@ const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
     }
   };
 
-  //gives leaderboard placement numbers a suffix
+  // gives leaderboard placement numbers a suffix
   const ordinalNumbers = (n: number) => {
     return n > 0
       ? ['th', 'st', 'nd', 'rd'][(n > 3 && n < 21) || n % 10 > 3 ? 0 : n % 10]
       : '';
   };
-  //gets the index to calculate the scoll distance needed to bring the user into view
+
+  // gets the index to calculate the scoll distance needed to bring the user into view
   const scrollToUser = () => {
     const content = contentRef.current;
     let y = 0;
@@ -210,7 +212,8 @@ const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
       content.scrollTop = (y + 2) * chartHeightMultiplier;
     }
   };
-  //gets the data from the db for teams, sorts them based on highest to lowest steps, and sets the data
+
+  // gets the data from the db for teams, sorts them based on highest to lowest steps, and sets the data
   async function getChartData() {
     const teamData: Array<Data> = [];
     const teamquerySnapshot = await getDocs(collection(FirestoreDB, 'teams'));
@@ -241,6 +244,7 @@ const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
     });
   }
 
+  // set chart data
   const setChartData = () => {
     setLoading(true);
     if (dataType == 'teamMembers') {
@@ -256,15 +260,17 @@ const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
     }, 500);
   };
 
+  // get data from database (team)
   useEffect(() => {
     getChartData();
-    setDataType('teamMembers');
   }, []);
-  //do not add data as a redux or you will end up with an infinite loop
+
+  // set chart data 
   useEffect(() => {
-    setChartData(); //go into the firestore and get all the users' names, pictures, and then totalStep
+    setChartData();
   }, [dataType, memberData]);
 
+  // auto scroll to user
   useEffect(() => {
     setTimeout(() => {
       scrollToUser();
