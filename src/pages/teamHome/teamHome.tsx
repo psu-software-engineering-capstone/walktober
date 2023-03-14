@@ -21,6 +21,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  limit,
   onSnapshot,
   query,
   updateDoc,
@@ -33,8 +34,7 @@ import { useHistory } from 'react-router';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import AdminContext from '../../store/admin-context';
 import AuthContext from '../../store/auth-context';
-import TeamLeaderBoardChart from '../../components/LeaderBoard/TeamLeaderboardChart';
-import { ChannelData } from '../sampleData';
+import TeamLeaderboardChart from '../../components/LeaderBoard/TeamLeaderboardChart';
 import WidgetBot from '@widgetbot/react-embed';
 import './teamHome.scss';
 
@@ -44,6 +44,7 @@ const TeamHome: React.FC = () => {
     email: string;
     profile_pic: string;
     totalStep: number;
+    highlight: boolean;
   }
 
   const [leaderboardData, setLeaderboardData] = useState(Array<memberData>);
@@ -132,17 +133,24 @@ const TeamHome: React.FC = () => {
     setUserRef(currentUserRef);
     const userSnap = await getDoc(currentUserRef); // grab the user document
     const userData = userSnap.data(); // get the user data
-    const dbChannelId = ChannelData.find((c) => c.team == ctx.team)?.id; // get the team channel id
-    let channelId = '';
+    let teamChannelId = ''; //temp string
+    const chanQuery = query(
+      collection(FirestoreDB, 'channelIDs'),
+      where('team', '==', ctx.team),
+      limit(1)
+    );//query to see if there is a document with the team name assigned to it
+    const chanIdSnap = await getDocs(chanQuery);//get results (has to be getDoccs because using query)
+    chanIdSnap.forEach(async (doc: any) => {
+      teamChannelId = doc.id;//get the document name (which is the channel id)
+    });
     // if channel not set up with id in database, default to #general
-    if (dbChannelId) {
-      channelId = dbChannelId;
+    if (channelId != '') {
+      setChannelId(teamChannelId);
     } else {
-      channelId = '1068966009106600110'; // #general channel id
+      setChannelId('1068966009106600110'); // #general channel id
     }
     setUserTotalSteps(userData.totalStep);
     setIsLeader(userData.team_leader);
-    setChannelId(channelId);
     const teamRef = doc(FirestoreDB, 'teams', ctx.team); // get team reference
     setTeamRef(teamRef); // set team reference
     setProfilePic(teamData.profile_pic);
@@ -157,7 +165,11 @@ const TeamHome: React.FC = () => {
         name: doc.data().name as string,
         email: doc.data().email as string,
         profile_pic: doc.data().profile_pic as string,
-        totalStep: doc.data().totalStep as number
+        totalStep: doc.data().totalStep as number,
+        highlight:
+          auth.currentUser.email == doc.data().email
+            ? (true as boolean)
+            : (false as boolean)
       };
       emailList.push(member.email);
       members.push(member);
@@ -257,6 +269,10 @@ const TeamHome: React.FC = () => {
           team_leader: false,
           team: ''
         });
+        //Update the channel id document and allow it to be reused by another team
+        await updateDoc(doc(FirestoreDB, 'channelIDs', channelId), {
+          team: ''
+        });
         // if the user is not the only member of the team
       } else {
         const newLead = teamMembers[1]; // get the new team leader
@@ -330,19 +346,17 @@ const TeamHome: React.FC = () => {
           <IonTitle> {ctx.team} </IonTitle>
         </NavBar>
       </IonHeader>
-      <IonContent className="body">
+      <IonContent className="walktober-background">
         <IonGrid>
           <IonRow>
             <IonCol
-              className="boxSize "
+              className="leaderboard"
               sizeSm="12"
               sizeLg="4"
               sizeMd="6"
               sizeXs="12"
             >
-              <TeamLeaderBoardChart
-                data={leaderboardData}
-              ></TeamLeaderBoardChart>
+              <TeamLeaderboardChart memberData={leaderboardData}></TeamLeaderboardChart>
             </IonCol>
             <IonCol sizeSm="12" sizeLg="4" sizeMd="6" sizeXs="12" className="">
               <WidgetBot

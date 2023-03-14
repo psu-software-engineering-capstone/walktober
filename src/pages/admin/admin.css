@@ -1,21 +1,30 @@
+
 .admin-content{
     --background: url(../../assets/Walktober-graphic.png) center top;
 }
 
-.admin-col {
-    background-color: var(--ion-color-light);
-    border: solid 1px var(--ion-color-light-contrast);;
-    color: var(--ion-color-light-contrast);
+.admin-col{
     text-align: center;
     vertical-align: middle;
     --ion-grid-columns: 16;
+    border: solid 1px var(--ion-color-light-contrast);
+}
+
+.admin-row:nth-of-type(even) {
+    background-color: var(--ion-color-light);
+    border: solid 1px var(--ion-color-light-contrast);
+    color: var(--ion-color-light-contrast);
+}
+
+.admin-row:nth-of-type(odd) {
+    background-color: var(--ion-color-light-shade);
+    border: solid 1px var(--ion-color-light-contrast);
+    color: var(--ion-color-light-contrast);
 }
 
 .header-col{
     font-weight: bolder;
-    background-color: var(--ion-color-medium);
-    border: solid var(ion-border-radius) var(--ion-color-light-contrast);;
-    color: var(--ion-color-light-contrast);
+    border: solid var(ion-border-radius) var(--ion-color-light-contrast);
 }
 
 .full-grid{
@@ -23,10 +32,8 @@
 }
 
 .grid-title{
-    color: var(--ion-color-light-contrast);
     font-weight: bold;
     font-family: ‘Oswald’, sans-serif;
-    background-color: var(--ion-color-light);
     border: solid 1px var(--ion-color-light-contrast);
 }
 
@@ -78,5 +85,11 @@
 }
 
 .modal-content{
-    --ion-background-color: var(--ion-color-tertiary);
+    --background: var(--ion-color-light-shade);
+}
+
+.light-bg{
+    background-color: var(--ion-color-light);
+    color: var(--ion-color-light-contrast);
+    padding: 10px;
 }

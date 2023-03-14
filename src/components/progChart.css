@@ -2,6 +2,34 @@
   background-color: black;
   margin: auto;
   padding: 0.5em;
-  min-width: 25vw;
+  min-width: 20vw;
   min-height: 15vh;
+}
+:root {
+  --primaryColor: black;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primaryColor: white;
+  }
+}
+
+@media (max-width: 768px) {
+  .box {
+    background-color: black;
+    margin: auto;
+    padding: 0.5em;
+    min-width: 50vw;
+    min-height: 15vh;
+  }
+}
+
+@media (max-width: 1320px) {
+  .box {
+    background-color: black;
+    margin: auto;
+    padding: 0.5em;
+    min-width: 10vw;
+    min-height: 15vh;
+  }
 }
