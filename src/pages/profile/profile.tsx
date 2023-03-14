@@ -183,7 +183,7 @@ const Profile: React.FC = () => {
   // display team
   function teamDisplay() {
     if (team === '') {
-      return "You have not joined a team yet";
+      return 'You have not joined a team yet';
     } else {
       return `Team: ${team}`;
     }
@@ -242,7 +242,7 @@ const Profile: React.FC = () => {
             <IonTitle>Profile</IonTitle>
           </NavBar>
         </IonHeader>
-        <IonContent className='walktober-background'>
+        <IonContent className="walktober-background">
           <IonGrid>
             <IonRow>
               <IonCol
@@ -250,7 +250,8 @@ const Profile: React.FC = () => {
                 sizeSm="12"
                 sizeMd="auto"
                 sizeLg="auto"
-                sizeXl="auto">
+                sizeXl="auto"
+              >
                 <IonCard>
                   <IonImg
                     className="profile-pic"
@@ -277,9 +278,7 @@ const Profile: React.FC = () => {
                   <IonItem>
                     <p>{email}</p>
                   </IonItem>
-                  <IonItem>
-                    {teamDisplay()}
-                  </IonItem>
+                  <IonItem>{teamDisplay()}</IonItem>
                   {!isGoogleUser && (
                     <IonItem>
                       <IonButton onClick={changePassword}>
@@ -300,10 +299,15 @@ const Profile: React.FC = () => {
                         <p>Joined on {joinDate}</p>
                       </IonItem>
                       <IonItem>
-                        <p>{totalDistance.toLocaleString()} miles walked in total</p>
+                        <p>
+                          {totalDistance.toLocaleString()} miles walked in total
+                        </p>
                       </IonItem>
                       <IonItem>
-                        <form onSubmit={handleSubmitStepGoal} className="step-form">
+                        <form
+                          onSubmit={handleSubmitStepGoal}
+                          className="step-form"
+                        >
                           <IonLabel position="stacked">
                             Set your step goal for today:
                           </IonLabel>
@@ -321,7 +325,10 @@ const Profile: React.FC = () => {
                         </form>
                       </IonItem>
                       <IonItem>
-                        <p>Today&apos;s step goal is: {stepGoal.toLocaleString()} steps!</p>
+                        <p>
+                          Today&apos;s step goal is: {stepGoal.toLocaleString()}{' '}
+                          steps!
+                        </p>
                       </IonItem>
                       <IonItem>
                         <h6>Badges:</h6>
@@ -335,8 +342,9 @@ const Profile: React.FC = () => {
                     sizeSm="12"
                     sizeMd="12"
                     sizeLg="12"
-                    sizeXl="12">
-                    <IonCard>
+                    sizeXl="12"
+                  >
+                    <IonCard className="calendar">
                       <CalendarLeafs data={calanderLogs}></CalendarLeafs>
                     </IonCard>
                   </IonCol>
@@ -350,18 +358,26 @@ const Profile: React.FC = () => {
         </IonContent>
         <IonFooter>
           <IonItem>
-            <IonLabel className='attribution-list'>
-              Leaf icons created by <a
+            <IonLabel className="attribution-list">
+              Leaf icons created by{' '}
+              <a
                 href="https://www.flaticon.com/free-icons/leaf"
-                title="leaf icons">
-                  Freepik - Flaticon
-              </a> &bull; <a
+                title="leaf icons"
+              >
+                Freepik - Flaticon
+              </a>{' '}
+              &bull;{' '}
+              <a
                 href="https://www.flaticon.com/free-icons/leaf"
-                title="leaf icons">
+                title="leaf icons"
+              >
                 Pixel perfect - Flaticon
-              </a> &bull; <a
+              </a>{' '}
+              &bull;{' '}
+              <a
                 href="https://www.flaticon.com/free-icons/leaf"
-                title="leaf icons">
+                title="leaf icons"
+              >
                 Good Ware - Flaticon
               </a>
             </IonLabel>
