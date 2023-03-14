@@ -33,7 +33,6 @@ import {
   where
 } from 'firebase/firestore';
 import './admin.css';
-import { Devices } from '../sampleData';
 import { useHistory } from 'react-router';
 import { getCountFromServer } from 'firebase/firestore';
 
