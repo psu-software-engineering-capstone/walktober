@@ -1,11 +1,25 @@
-.profile_pic {
-  max-width: 200px;
-  max-height: 300px;
+.profile-pic::part(image) {
+  width: auto;
+  margin: 15px auto;
+  max-width: calc(100% - 30px);
+}
+
+.attribution-list {
+  text-align: center;
+}
+
+.step-form {
+  width: 100%;
+}
+
+.full-height {
+  height: 100%;
 }
 
 .d-flex {
   display: flex;
 }
+<<<<<<< HEAD
 
 @media (min-width: 1024px) {
   .z {
@@ -49,3 +63,5 @@
   padding-top: 0px;
   padding-bottom: 0px;
 }
+=======
+>>>>>>> 5e00a9363b6269bd96a9704114761223fffcd7a7

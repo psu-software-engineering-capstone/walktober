@@ -6,25 +6,31 @@ import { useState, useContext, useEffect } from 'react';
 import {
   IonContent,
   IonHeader,
-  IonLabel,
   IonPage,
   IonTitle,
   IonIcon,
+  IonModal,
   IonGrid,
   IonRow,
   IonCol,
+  IonCard,
   RefresherEventDetail,
   IonRefresher,
-  IonRefresherContent
+  IonRefresherContent,
+  IonCardHeader,
+  IonCardContent,
+  IonCardTitle
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import ProgressChart from '../../components/ProgressChart';
 import AuthContext from '../../store/auth-context';
+import AdminContext from '../../store/admin-context';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
+import PostEventSurvey from '../postEventSurvey/postEventSurvey';
 import './homePage.css';
 
 interface badgeOutline {
@@ -42,9 +48,11 @@ const HomePage: React.FC = () => {
   const history = useHistory();
   const [badges, setBadges] = useState(Array<badgeOutline>);
   const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
+  const [showPostSurvey, setShowPostSurvey] = useState(false);
   const [stepGoal, setStepGoal] = useState(0);
 
   const ctx = useContext(AuthContext); // auth context
+  const adminInfo = useContext(AdminContext);
 
   // update profile data when the page loads
   // update profile data when the profile data changes
@@ -62,6 +70,12 @@ const HomePage: React.FC = () => {
       unsubscribe();
     };
   }, [ctx.user]);
+
+  useEffect(() => {
+    const today = new Date();
+    const end = new Date(adminInfo.endDate);
+    setShowPostSurvey(today > end);
+  }, []);
 
   // get past seven days of steps from firestore
   const getPastSevenDaysSteps = async (userData: any) => {
@@ -115,7 +129,6 @@ const HomePage: React.FC = () => {
     history.push('/app/manualsteps');
   };
 
-
   return (
     <IonPage>
       <IonHeader>
@@ -124,78 +137,108 @@ const HomePage: React.FC = () => {
         </NavBar>
       </IonHeader>
       <IonContent fullscreen={true} className="ion-padding testing">
+        {showPostSurvey ? <PostEventSurvey/> : ''}
         <IonGrid>
           <IonRow>
             <IonCol
-              sizeSm="6"
-              sizeXs="12"
-              sizeMd="6"
-              sizeLg="4"
-              className="leaderBoard"
-            >
-              <LeaderBoardChart></LeaderBoardChart>
+              sizeXs='12'
+              sizeSm='12'
+              sizeMd='6'
+              sizeLg='6'
+              sizeXl='6'>
+              <IonRow>
+                <IonCol className='restrict-height'>
+                  <LeaderBoardChart></LeaderBoardChart>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <IonCard className="team-card">
+                    <IonCardHeader>
+                      <IonCardTitle>
+                        Badges Acquired:
+                      </IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      {badges.map((badge) => (
+                        <IonIcon name={badge.name} key={Math.random()}></IonIcon>
+                      ))}
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+              </IonRow>
             </IonCol>
             <IonCol
-              sizeSm="6"
-              sizeXs="12"
-              sizeMd="6"
-              sizeLg="4"
-              className="todaysSteps"
-            >
-              <IonLabel className="">
-                Todays Steps: <div className="localStepsUpdater">{steps.toLocaleString()}</div>
-              </IonLabel>
-              <br />
-              <br />
-              <IonLabel className="">
-                Total Steps: <div className="localStepsUpdater">{totalSteps.toLocaleString()}</div>
-              </IonLabel>
-              <br />
-              <br />
-              click
-              <a onClick={moveToManualSteps}> here </a>
-              to see previous logs
-            </IonCol>
-            <IonCol
-              sizeSm="6"
-              sizeXs="12"
-              sizeMd="6"
-              sizeLg="4"
-              className="personalProgress"
-            >
-              {pastSevenDaysSteps.length > 1 ? (
-                <ProgressChart data={pastSevenDaysSteps} todayStep = {steps} stepGoal = {stepGoal} />
-              ) : (
-                ' '
-              )}
-            </IonCol>
-            <IonCol
-              size="3"
-              sizeSm="6"
-              sizeXs="12"
-              sizeMd="6"
-              sizeLg="8"
-              offsetLg="4"
-              className="box-test"
-            >
-              <WidgetBot
-                className="discord-widget"
-                server="1068966007886069841"
-                channel="1068966009106600110"
-              />
+              sizeXs='12'
+              sizeSm='12'
+              sizeMd='6'
+              sizeLg='6'
+              sizeXl='6'>
+              <IonRow>
+                <IonCol
+                  sizeXs='12'
+                  sizeSm='12'
+                  sizeMd='12'
+                  sizeLg='6'
+                  sizeXl='6'>
+                  <IonCard className='team-card'>
+                    <IonCardHeader>
+                      <IonCardTitle>
+                        Progress:
+                      </IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      {pastSevenDaysSteps.length > 1 ? (
+                        <ProgressChart data={pastSevenDaysSteps} todayStep={steps} stepGoal={stepGoal} />
+                      ) : (
+                        ' '
+                      )}
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+                <IonCol
+                  sizeXs='12'
+                  sizeSm='12'
+                  sizeMd='12'
+                  sizeLg='6'
+                  sizeXl='6'>
+                  <IonCard className='team-card'>
+                    <IonCardHeader>
+                      <IonCardTitle>
+                        <p className="step-title">Today&apos;s Steps:</p>
+                        <div className='step-counter'>
+                          {steps.toLocaleString()}
+                        </div>
+                      </IonCardTitle>
+                      <IonCardTitle>
+                        <p className="step-title">Total Steps:</p>
+                        <div className='step-counter'>
+                          {totalSteps.toLocaleString()}
+                        </div>
+                      </IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      <p>Click <a onClick={moveToManualSteps}>here </a>
+                      to see previous logs.</p>
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <IonCard className='team-card'>
+                    <IonCardContent>
+                      <WidgetBot
+                        className="discord-widget"
+                        server="1068966007886069841"
+                        channel="1068966009106600110"
+                      />
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+              </IonRow>
             </IonCol>
           </IonRow>
-
-          <IonCol sizeMd="12">
-            <IonLabel>
-              Badges Acquired:
-              <div>
-                {badges.map((badge) => (
-                  <IonIcon name={badge.name} key={Math.random()}></IonIcon>
-                ))}
-              </div>
-            </IonLabel>
-          </IonCol>
         </IonGrid>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>

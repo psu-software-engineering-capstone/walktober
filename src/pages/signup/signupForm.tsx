@@ -76,17 +76,6 @@ const SignupForm: React.FC = () => {
   };
 
   const submitRegistration = () => {
-    console.log(
-      'hello',
-      newEmail,
-      newName,
-      newAffiliation,
-      newDistFromCamp,
-      newHeardAboutFrom,
-      newHoursPhysical,
-      newMinPhysical,
-      newRecCenterUse
-    );
     createRegistrationQuestions();
     history.push('/app');
   };
