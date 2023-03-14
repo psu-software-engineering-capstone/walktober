@@ -199,10 +199,18 @@ const ManualSteps: React.FC = () => {
       alert('Error: Unknown Platform');
       return;
     }
+    const today = new Date();
+    const eventStartDate = new Date(adData.startDate);
+    if (today < eventStartDate) {
+      presentToast('This event is not started yet!');
+      return;
+    }
+    const eventEndDate = new Date(adData.endDate);
+    const maxDate = today < eventEndDate ? today : eventEndDate; 
     if (isPlatform('android')) {
       const stepOptions: object = {
-        startDate: new Date(adData.startDate),
-        endDate: new Date(),
+        startDate: eventStartDate,
+        endDate: maxDate,
         dataType: 'steps',
         filtered: true
       };
@@ -300,8 +308,8 @@ const ManualSteps: React.FC = () => {
         .catch((error: any) => alert(error));
     } else if (isPlatform('ios')) {
       const stepOptions = {
-        startDate: new Date(adData.startDate),
-        endDate: new Date(),
+        startDate: eventStartDate,
+        endDate: maxDate,
         unit: 'count',
         sampleType: 'HKQuantityTypeIdentifierStepCount',
         ascending: true
