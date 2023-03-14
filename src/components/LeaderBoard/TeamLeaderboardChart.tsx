@@ -213,7 +213,7 @@ const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
     }
   };
   //gets the data from the db for teams, sorts them based on highest to lowest steps, and sets the data
-  async function setChartData() {
+  async function getChartData() {
     const teamData: Array<Data> = [];
     const teamquerySnapshot = await getDocs(collection(FirestoreDB, 'teams'));
     teamquerySnapshot.forEach((doc: any) => {
@@ -243,7 +243,7 @@ const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
     });
   }
 
-  const getChartData = () => {
+  const setChartData = () => {
     setLoading(true);
     if (dataType == 'teamMembers') {
       setData(memberData);
@@ -259,12 +259,12 @@ const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
   };
 
   useEffect(() => {
-    setChartData();
+    getChartData();
     setDataType('teamMembers');
   }, []);
   //do not add data as a redux or you will end up with an infinite loop
   useEffect(() => {
-    getChartData(); //go into the firestore and get all the users' names, pictures, and then totalStep
+    setChartData(); //go into the firestore and get all the users' names, pictures, and then totalStep
   }, [dataType, memberData]);
 
   useEffect(() => {
