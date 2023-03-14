@@ -120,7 +120,7 @@ const AdminSteps: React.FC<{ email: string }> = () => {
           avg_steps: newAvgSteps
         })
           .then(() => {
-            console.log('Team total steps and average steps updated!');
+            console.log('Team total steps and average steps updated');
           })
           .catch((error: any) => {
             console.log(error);
@@ -168,7 +168,6 @@ const AdminSteps: React.FC<{ email: string }> = () => {
 
   // handle refresh
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
-    console.log("handlerec");
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
     getData();
     event.detail.complete(); // Notify the refresher that loading is complete

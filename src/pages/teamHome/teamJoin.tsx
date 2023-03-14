@@ -255,8 +255,6 @@ const TeamJoin: React.FC = () => {
           };
           teams.push(temp); // push the data to the array
         }
-      } else {
-        console.log(doc.data().name, ' is full'); // if the team is full
       }
     });
     teams.sort((a: any, b: any) =>

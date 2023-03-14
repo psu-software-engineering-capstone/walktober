@@ -98,8 +98,8 @@ const TeamCreation: React.FC = () => {
       channel_id: '' // TODO: create discord channel
     })
       .then(async () => {
-        console.log('Document written successfully');
-        alert('Your team has been created!');
+        console.log('Team created');
+        alert('Your team has been created');
         await updateCurrentUser();
         history.push('/app/team');
       })
