@@ -33,14 +33,8 @@ import {
   where
 } from 'firebase/firestore';
 import './admin.css';
-import {
-  TeamData,
-  IndividualData,
-  PreSurvey,
-  PostSurvey,
-  Devices
-} from '../sampleData';
 import { useHistory } from 'react-router';
+import { getCountFromServer } from 'firebase/firestore';
 
 const Admin: React.FC = () => {
   //used to open and close modals
@@ -86,8 +80,8 @@ const Admin: React.FC = () => {
 
   const [userReportCheck, setUserReportCheck] = useState(false);
   const [teamReportCheck, setTeamReportCheck] = useState(false);
-  const [preSurveryReportCheck, setpreSurveryReportCheck] = useState(false);
-  const [postSurveryReportCheck, setpostSurveryReportCheck] = useState(false);
+  const [preSurveyReportCheck, setpreSurveyReportCheck] = useState(false);
+  const [postSurveyReportCheck, setpostSurveyReportCheck] = useState(false);
   const [devicesReportCheck, setDevicesReportCheck] = useState(false);
 
   const [userLogs, setUserLogs] = useState<UserLog[]>([]);
@@ -491,16 +485,19 @@ const Admin: React.FC = () => {
     if (userReportCheck) {
       console.log('Generating user report');
 
-      let str = '"Name","eMail","Team","TotalSteps"\n';
+      let str = '"Name","Email","Team","TotalSteps"\n';
 
-      for (let i = 0; i < IndividualData.length; i++) {
+      const querySnapshot = await getDocs(collection(FirestoreDB, 'users'));
+      querySnapshot.forEach((doc: { id: any; data: () => any }) => {
         let line = '';
-        line += '"' + IndividualData[i].name + '",';
-        line += '"' + IndividualData[i].email + '",';
-        line += '"' + IndividualData[i].team + '",';
-        line += IndividualData[i].totalStep;
+        line += '"' + doc.data().name + '",';
+        line += '"' + doc.data().email + '",';
+        line += '"' + doc.data().team + '",';
+        line += doc.data().totalStep;
         str += line + '\r\n';
-      }
+      });
+
+      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -520,16 +517,19 @@ const Admin: React.FC = () => {
       console.log('Generating team report');
 
       let str =
-        '"Team Name","Cumulative Steps","Number of Team Members","TotalSteps"\n';
+        '"Team Name","Average Steps","Number of Team Members","TotalSteps"\n';
 
-      for (let i = 0; i < TeamData.length; i++) {
+      const querySnapshot = await getDocs(collection(FirestoreDB, 'teams'));
+      querySnapshot.forEach((doc: { id: any; data: () => any }) => {
         let line = '';
-        line += '"' + TeamData[i].name + '",';
-        line += 0 + ',';
-        line += 0 + ',';
-        line += TeamData[i].avg_steps;
+        line += '"' + doc.data().name + '",';
+        line += doc.data().avg_steps + ',';
+        line += doc.data().members.length + ',';
+        line += doc.data().totalStep;
         str += line + '\r\n';
-      }
+      });
+
+      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -545,23 +545,29 @@ const Admin: React.FC = () => {
       }
     }
 
-    if (preSurveryReportCheck) {
+    if (preSurveyReportCheck) {
       console.log('Generating pre survey report');
 
       let str =
-        '"Anonymous ID #","Hours of Physical Activity","Minutes of Physical Activity","TotalSteps"\n';
+        '"Name","Affiliation","Email","Distance From Campus","Heard From","Hours of Physical Activity","Minutes of Physical Activity","Rec Center Usage"\n';
 
-      for (let i = 0; i < PreSurvey.length; i++) {
+      const querySnapshot = await getDocs(
+        collection(FirestoreDB, 'registrationQuestions')
+      );
+      querySnapshot.forEach((doc: { id: any; data: () => any }) => {
         let line = '';
-        line += PreSurvey[i].anonymous_id + ',';
-        line += '"' + PreSurvey[i].psu_affiliation + '",';
-        line += '"' + PreSurvey[i].heard_about + '",';
-        line += PreSurvey[i].weekly_physical_activity_hours + ',';
-        line += PreSurvey[i].weekly_physical_activity_minutes + ',';
-        line += '"' + PreSurvey[i].distance_from_campus + '",';
-        line += '"' + PreSurvey[i].rec_center_frequency + '"';
+        line += '"' + doc.data().name + '",';
+        line += '"' + doc.data().affiliation + '",';
+        line += '"' + doc.data().email + '",';
+        line += '"' + doc.data().distFromCamp + '",';
+        line += '"' + doc.data().heardAboutFrom + '",';
+        line += '"' + doc.data().hoursPhysical + '",';
+        line += '"' + doc.data().minsPhysical + '",';
+        line += doc.data().recCenterUse;
         str += line + '\r\n';
-      }
+      });
+
+      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -577,26 +583,30 @@ const Admin: React.FC = () => {
       }
     }
 
-    if (postSurveryReportCheck) {
+    if (postSurveyReportCheck) {
       console.log('Generating post survey report');
 
       let str =
-        '"Team Name","Cumulative Steps","Number of Team Members","TotalSteps"\n';
+        '"Device Used","Walktober Feedback","Future Ideas","Hours Active Per Week","Minutes Active Per Day","Why Not Participate Again","Participation Opinion","Events Participated In","Rec Center Usage","Well-being"\n';
 
-      for (let i = 0; i < PostSurvey.length; i++) {
+      const querySnapshot = await getDocs(
+        collection(FirestoreDB, 'exitQuestions')
+      );
+      querySnapshot.forEach((doc: { id: any; data: () => any }) => {
         let line = '';
-        line += PostSurvey[i].anonymous_id + ',';
-        line += PostSurvey[i].weekly_physical_activity_hours + ',';
-        line += PostSurvey[i].weekly_physical_activity_minutes + ',';
-        line += '"' + PostSurvey[i].participated_events + '",';
-        line += '"' + PostSurvey[i].future_walk_ideas + '",';
-        line += PostSurvey[i].walktober_improved_health + ',';
-        line += PostSurvey[i].walktober_improved_community + ',';
-        line += PostSurvey[i].would_participate_again + ',';
-        line += '"' + PostSurvey[i].if_not_why + '",';
-        line += '"' + PostSurvey[i].feedback + '"';
+        line += '"' + doc.data().device + '",';
+        line += '"' + doc.data().feedback + '",';
+        line += '"' + doc.data().futureIdeas + '",';
+        line += '"' + doc.data().hoursPerWeek + '",';
+        line += '"' + doc.data().minutesPerDay + '",';
+        line += '"' + doc.data().wouldNotParticipateAgain + '",';
+        line += '"' + doc.data().wouldParticipateAgain + '",';
+        line += '"' + doc.data().prevParticipatedEvents + '",';
+        line += '"' + doc.data().recUsage + '",';
+        line += doc.data().wellBeing;
         str += line + '\r\n';
-      }
+      });
+      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -615,12 +625,24 @@ const Admin: React.FC = () => {
     if (devicesReportCheck) {
       console.log('Generating device usage report');
 
+      // Hardcoded count, should probably give exit survey device question a variable to use
+      const android = query(collection(FirestoreDB, 'exitQuestions'), where("device", "==", "Google Fit"));
+      const androidSnapshot = await getCountFromServer(android);
+      const gFitCount = androidSnapshot.data().count;
+
+      const apple = query(collection(FirestoreDB, 'exitQuestions'), where("device", "==", "Apple Health"));
+      const appleSnapshot = await getCountFromServer(apple);
+      const aHealthCount = appleSnapshot.data().count;
+
+      const neither = query(collection(FirestoreDB, 'exitQuestions'), where("device", "==", "N/A"));
+      const neitherSnapshot = await getCountFromServer(neither);
+      const nCount = neitherSnapshot.data().count;
+
       let str = '';
-      str += '"IPhone",' + Devices.iPhone + '\r\n';
-      str += '"Android",' + Devices.android + '\r\n';
-      str += '"Apple Health",' + Devices.apple_health + '\r\n';
-      str += '"FitBit",' + Devices.fitbit + '\r\n';
-      str += '"Google Health",' + Devices.google_health + '\r\n';
+      str += '"Apple Health",' + aHealthCount + '\r\n';
+      str += '"Google Fit",' + gFitCount + '\r\n';
+      str += '"N/A",' + nCount + '\r\n';
+      console.log(str);
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -932,23 +954,21 @@ const Admin: React.FC = () => {
               </IonItem>
               <IonItem>
                 <IonCheckbox
-                  checked={preSurveryReportCheck}
-                  onIonChange={(e) =>
-                    setpreSurveryReportCheck(e.detail.checked)
-                  }
+                  checked={preSurveyReportCheck}
+                  onIonChange={(e) => setpreSurveyReportCheck(e.detail.checked)}
                   slot="start"
                 ></IonCheckbox>
-                <IonLabel>Pre Survery Report</IonLabel>
+                <IonLabel>Pre Survey Report</IonLabel>
               </IonItem>
               <IonItem>
                 <IonCheckbox
-                  checked={postSurveryReportCheck}
+                  checked={postSurveyReportCheck}
                   onIonChange={(e) =>
-                    setpostSurveryReportCheck(e.detail.checked)
+                    setpostSurveyReportCheck(e.detail.checked)
                   }
                   slot="start"
                 ></IonCheckbox>
-                <IonLabel>Post Survery Report</IonLabel>
+                <IonLabel>Post Survey Report</IonLabel>
               </IonItem>
               <IonItem>
                 <IonCheckbox
