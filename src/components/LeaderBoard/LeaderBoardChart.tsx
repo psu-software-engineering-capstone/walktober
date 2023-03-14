@@ -30,10 +30,11 @@ const LeaderBoardChart: React.FC = () => {
   const [indData, setIndData] = useState(Array<Data>);
   const [teamData, setTeamData] = useState(Array<Data>);
   const [dataType, setDataType] = useState('');
+  const [loading, setLoading] = useState(false);
   const adData = useContext(AdminContext);
   const contentRef = useRef<HTMLIonCardElement | null>(null);
   const chartHeightMultiplier = 60;
-  
+
   //Formats the chart to use user/team names as the labels, and graphs the steps taken by each team/user.
   const chartData = {
     labels: data.map((row) => row.name.split(' ')),
@@ -205,7 +206,7 @@ const LeaderBoardChart: React.FC = () => {
       }
     });
     if (content) {
-      content.scrollTop = (y+2) * chartHeightMultiplier;
+      content.scrollTop = (y + 2) * chartHeightMultiplier;
     }
   };
 
@@ -258,28 +259,33 @@ const LeaderBoardChart: React.FC = () => {
 
   //gets the data from the db for users or teams, sorts them based on highest to lowest steps, and sets the data
   const getChartData = () => {
+    setLoading(true);
     if (dataType == 'individual') {
       setData(indData);
-      console.log(indData);
       boxAdjust(indData.length);
     }
     if (dataType == 'teams') {
       setData(teamData);
       boxAdjust(teamData.length);
     }
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
   };
 
   useEffect(() => {
     setChartData();
     setDataType('individual');
-  },[]);
+  }, []);
   //do not add data as a redux or you will end up with an infinite loop
   useEffect(() => {
     getChartData(); //go into the firestore and get all the users' names, pictures, and then totalStep
   }, [dataType, indData]);
 
   useEffect(() => {
-    scrollToUser();
+    setTimeout(() => {
+      scrollToUser();
+    }, 500);
   }, [data]);
 
   return (
@@ -292,6 +298,7 @@ const LeaderBoardChart: React.FC = () => {
           onClick={() => {
             setDataType('individual');
           }}
+          disabled={loading}
         >
           Individual
         </IonButton>
@@ -299,16 +306,21 @@ const LeaderBoardChart: React.FC = () => {
           onClick={() => {
             setDataType('teams');
           }}
+          disabled={loading}
         >
           Teams
         </IonButton>
       </div>
       <IonCardContent className="box">
+      {loading ? (
+          <IonSpinner className="spinner" />
+        ) : (
           <Bar
             data={chartData}
             options={chartOptions}
             plugins={[imgItems, ChartDataLabels]}
           ></Bar>
+        )}
       </IonCardContent>
     </IonCard>
   );
