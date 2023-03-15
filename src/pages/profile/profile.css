@@ -1,7 +1,7 @@
 .profile-pic::part(image) {
   width: auto;
   margin: 15px auto;
-  max-width: calc(100% - 30px);
+  max-width: 300px;
 }
 
 .attribution-list {

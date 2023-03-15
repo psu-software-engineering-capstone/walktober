@@ -33,3 +33,13 @@ ion-header {
   height: 0;
   min-height: 50vh;
 }
+
+@media (prefers-color-scheme: light) {
+  a:link {
+    color: darkgreen;
+  }
+  
+  u {
+    color: darkgreen;
+  }
+}

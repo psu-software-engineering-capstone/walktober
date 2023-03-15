@@ -9,7 +9,6 @@ import {
   IonGrid,
   IonHeader,
   IonImg,
-  IonInput,
   IonItem,
   IonLabel,
   IonPage,
@@ -56,7 +55,6 @@ const Profile: React.FC = () => {
   const [profilePic, setProfilePic] = useState('');
   const [team, setTeam] = useState('');
   const [totalDistance, setTotalDistance] = useState(0);
-  const [stepGoal, setStepGoal] = useState(0);
   const [photo, setPhoto] = useState<any>(null);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [stepLogs, setStepLogs] = useState<StepLog[]>([]);
@@ -137,7 +135,6 @@ const Profile: React.FC = () => {
       new Date(auth.currentUser.metadata.creationTime).toLocaleDateString()
     );
     setTotalDistance(userData.totalStep / 2000);
-    setStepGoal(userData.step_goal);
     setIsGoogleUser(
       auth.currentUser.providerData[0]?.providerId === 'google.com'
     );
@@ -208,24 +205,6 @@ const Profile: React.FC = () => {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
     event.detail.complete(); // Notify the refresher that loading is complete
   }
-
-  // Function to update the step goal in the database
-  const updateStepGoal = async (stepGoal: number) => {
-    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-    await updateDoc(dbRef, { step_goal: stepGoal })
-      .then(() => {
-        alert('Step Goal updated!');
-      })
-      .catch((error: any) => {
-        alert(error);
-      });
-  };
-
-  // Function to handle the step goal submission
-  const handleSubmitStepGoal = async (event: React.FormEvent) => {
-    event.preventDefault();
-    updateStepGoal(stepGoal);
-  };
 
   return (
     <>
@@ -300,33 +279,6 @@ const Profile: React.FC = () => {
                     <p>
                       {totalDistance.toLocaleString()} miles walked in total
                     </p>
-                  </IonItem>
-                  <IonItem>
-                    <form onSubmit={handleSubmitStepGoal} className="step-form">
-                      <IonLabel position="stacked">
-                        Set your step goal for today:
-                      </IonLabel>
-                      <IonInput
-                        min="0"
-                        type="number"
-                        value={stepGoal}
-                        onInput={(event: any) => {
-                          setStepGoal(Number(event.target.value));
-                        }}
-                      />
-                      <IonButton expand="block" type="submit">
-                        Save
-                      </IonButton>
-                    </form>
-                  </IonItem>
-                  <IonItem>
-                    <p>
-                      Today&apos;s step goal is: {stepGoal.toLocaleString()}{' '}
-                      steps!
-                    </p>
-                  </IonItem>
-                  <IonItem>
-                    <h6>Badges:</h6>
                   </IonItem>
                 </IonCard>
 
