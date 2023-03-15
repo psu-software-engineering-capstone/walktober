@@ -15,16 +15,11 @@
   grid-area: item;
   grid-row: span 1;
   grid-column: span 1;
-  /* background-color: var(--ion-item-background); removed as it make it look bad when on ios */
   padding: 0.5em;
   max-width: fit-content;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* min-width: 10vw;
-  min-height: 5vh;
-  max-width: 10vw;
-  max-height: 5vh; */
   font-size: 1.5em;
 }
 
@@ -90,6 +85,22 @@
   .leafImg {
     max-width: 15px;
     max-height: 15px;
+    margin-left: 0em;
+  }
+}
+
+@media (max-width: 350px) {
+  .grid-container {
+    gap: 0em;
+  }
+  .grid-item {
+    min-height: auto;
+    font-size: 1.3em;
+    padding: 0em;
+  }
+  .leafImg {
+    max-width: 12px;
+    max-height: 12px;
     margin-left: 0em;
   }
 }
