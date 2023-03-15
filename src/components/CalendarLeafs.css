@@ -21,10 +21,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 10vw;
+  /* min-width: 10vw;
   min-height: 5vh;
   max-width: 10vw;
-  max-height: 5vh;
+  max-height: 5vh; */
   font-size: 1.5em;
 }
 
@@ -49,8 +49,9 @@
 
 .grid-container {
   display: grid;
-  height: auto;
-  width: auto;
+  height: 100%;
+  width: 100%;
+  font-size: 0.75em;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: repeat(6, 1fr);
   gap: 2em;
@@ -65,9 +66,17 @@
     'label';
 }
 
+@media (max-width: 1024px) {
+  .grid-container {
+    gap: 0.5em;
+    font-size: 0.5em;
+  }
+}
+
 @media (max-width: 768px) {
   .grid-container {
-    gap: 1.5em;
+    gap: 1em;
+    font-size: 0.8em;
   }
 }
 
