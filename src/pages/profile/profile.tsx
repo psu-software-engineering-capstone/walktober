@@ -245,7 +245,7 @@ const Profile: React.FC = () => {
         <IonContent className="walktober-background">
           <IonGrid>
             <IonRow>
-              <IonCol sizeXs="12" sizeSm="12" sizeMd="4" sizeLg="4" sizeXl="4">
+              <IonCol sizeXs="12" sizeSm="12" sizeMd="auto" sizeLg="auto" sizeXl="auto">
                 <IonCard>
                   <IonImg
                     className="profile-pic"
@@ -285,7 +285,7 @@ const Profile: React.FC = () => {
                   </IonItem>
                 </IonCard>
               </IonCol>
-              <IonCol sizeXs="12" sizeSm="12" sizeMd="8" sizeLg="8" sizeXl="8">
+              <IonCol>
                 <IonCard>
                   <IonItem>
                     <p>Joined on {joinDate}</p>
