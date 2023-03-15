@@ -1,7 +1,7 @@
 .leafImg {
   max-width: 20px;
   max-height: 20px;
-  margin-right: 0.5em;
+  margin-left: 0.5em;
 }
 
 .grid-item-label {
@@ -90,7 +90,7 @@
   .leafImg {
     max-width: 15px;
     max-height: 15px;
-    margin-right: 0em;
+    margin-left: 0em;
   }
 }
 
