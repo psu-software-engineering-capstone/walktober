@@ -247,7 +247,7 @@ const Login: React.FC = () => {
               routerLink="/password/reset"
               onClick={moveToForgotPassword}
             >
-              <u color="tertiary" className="forgot-password-text">Forgot Password?</u>
+              <u>Forgot Password?</u>
             </IonRouterLink>
 
             <IonButton id="login" expand="block" color="primary" onClick={signInEmailPassword}>
