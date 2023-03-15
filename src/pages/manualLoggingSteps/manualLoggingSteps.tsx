@@ -422,7 +422,7 @@ const ManualSteps: React.FC = () => {
       totalStep: totalStep
     })
       .then(() => {
-        console.log('Steps updated!');
+        console.log('Steps updated');
       })
       .catch((error: any) => {
         console.error('Error updating document: ', error);
@@ -448,10 +448,10 @@ const ManualSteps: React.FC = () => {
           avg_steps: newAvgSteps
         })
           .then(() => {
-            console.log('Team total steps and average steps updated!');
+            console.log('Team total steps and average steps updated');
           })
           .catch((error: any) => {
-            console.log('Error updating document: ', error);
+            console.log(error);
           });
       }
     });
@@ -478,7 +478,8 @@ const ManualSteps: React.FC = () => {
       if (existingIndex !== -1) {
         const newLogs = prev.map((log, index) => {
           if (index === existingIndex) {
-            return { ...log, steps: log.steps + manualSteps };
+            // return { ...log, steps: log.steps + manualSteps };
+            return { ...log, steps: manualSteps };
           }
           return log;
         });
@@ -510,7 +511,7 @@ const ManualSteps: React.FC = () => {
     return maxDate.toISOString().slice(0, 10);
   }
 
-  //This function is for the displaying of the date in the step log. Previously, toDateString would provide the wrong date
+  // This function is for the displaying of the date in the step log. Previously, toDateString would provide the wrong date
   function returnDate(item: string): string {
     const originalDate = new Date(item);
     originalDate.setDate(originalDate.getDate() + 1);
