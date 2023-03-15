@@ -325,9 +325,6 @@ const Profile: React.FC = () => {
                       steps!
                     </p>
                   </IonItem>
-                  <IonItem>
-                    <h6>Badges:</h6>
-                  </IonItem>
                 </IonCard>
 
                 <IonCol
