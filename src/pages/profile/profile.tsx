@@ -245,7 +245,13 @@ const Profile: React.FC = () => {
         <IonContent className="walktober-background">
           <IonGrid>
             <IonRow>
-              <IonCol sizeXs="12" sizeSm="12" sizeMd="auto" sizeLg="auto" sizeXl="auto">
+              <IonCol
+                sizeXs="12"
+                sizeSm="12"
+                sizeMd="auto"
+                sizeLg="auto"
+                sizeXl="auto"
+              >
                 <IonCard>
                   <IonImg
                     className="profile-pic"
@@ -332,7 +338,7 @@ const Profile: React.FC = () => {
                   sizeXl="8"
                 >
                   {' '}
-                  <IonCard>
+                  <IonCard className="calendar">
                     <CalendarLeafs data={calanderLogs}></CalendarLeafs>
                   </IonCard>
                 </IonCol>
