@@ -209,7 +209,7 @@ const HomePage: React.FC = () => {
               </IonRow>
               <IonRow>
                 <IonCol>
-                  <IonCard className='team-card'>
+                  <IonCard className='team-card discord-card'>
                     <IonCardContent>
                       <WidgetBot
                         className="discord-widget"

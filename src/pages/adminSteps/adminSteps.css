@@ -4,3 +4,78 @@
   justify-content: center;
   align-items: center;
 }
+/* sadsadsad */
+.body {
+  --background: url(../../assets/Walktober-graphic.png);
+}
+
+.card-body {
+  margin: 0px;
+}
+
+.calendar-input {
+  padding-right: 20%;
+}
+
+.card-body {
+  width: 80vw;
+  margin: auto;
+}
+
+@media (min-width: 414px) {
+  .calendar-input {
+    padding-right: 40%;
+  }
+  .card-body {
+    width: 70vw;
+    margin: auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .calendar-input {
+    padding-right: 50%;
+  }
+  .card-body {
+    width: 60vw;
+    margin: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .calendar-input {
+    padding-right: 60%;
+  }
+  .card-body {
+    width: 50vw;
+    margin: auto;
+  }
+}
+
+.button-form {
+  margin-left: 1em;
+}
+
+.button-form-sync {
+  margin-left: 1.3em;
+}
+
+.anchor {
+  margin-left: 1.1em;
+}
+
+.log-col {
+  text-align: right;
+}
+
+.log-col-l {
+  text-align: left;
+}
+
+.dow {
+  padding-left: 10px;
+}
+
+.month {
+  font-size: 2em;
+}
