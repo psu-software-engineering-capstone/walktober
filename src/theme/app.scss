@@ -25,7 +25,10 @@ ion-header {
 
 .discord-card ion-card-content {
   padding: 0;
-  background-color: none;
+}
+
+.discord-card {
+  --background: transparent;
 }
 
 .discord-widget {
