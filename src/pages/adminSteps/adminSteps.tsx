@@ -130,6 +130,12 @@ const AdminSteps: React.FC<{ email: string }> = () => {
       }
     });
   };
+  // This function is for the displaying of the date in the step log. Previously, toDateString would provide the wrong date due to difference in time zone coversions
+  function returnDate(item: string): string {
+    const originalDate = new Date(item);
+    originalDate.setDate(originalDate.getDate() + 1);
+    return originalDate.toDateString();
+  }
 
   // display records
   function DisplayRecords(): any {
@@ -148,9 +154,7 @@ const AdminSteps: React.FC<{ email: string }> = () => {
 
             {stepLogs.map((item) => (
               <IonRow key={Math.random()}>
-                <IonCol className="log-col-l">
-                  {new Date(item.date).toDateString()}
-                </IonCol>
+                <IonCol className="log-col-l">{returnDate(item.date)}</IonCol>
                 <IonCol className="log-col">
                   {item.steps.toLocaleString()}
                 </IonCol>
