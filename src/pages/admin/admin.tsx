@@ -898,23 +898,25 @@ const Admin: React.FC = () => {
           </IonHeader>
           <IonContent className="ion-padding" class="modal-content">
             <IonItem>
-              <IonLabel>Minimum Team Size</IonLabel>
+              <IonLabel>Minimum Team Size: </IonLabel>
               <IonInput
                 type="number"
                 name="minTeamSize"
                 onIonChange={(e) => setNewMinTeamSize(e.target.value as number)}
+                placeholder={adData.minSize.toString()}
               ></IonInput>
             </IonItem>
             <IonItem>
-              <IonLabel>Maxiumum Team Size</IonLabel>
+              <IonLabel>Maxiumum Team Size: </IonLabel>
               <IonInput
                 type="number"
                 name="maxTeamSize"
                 onIonChange={(e) => setNewMaxTeamSize(e.target.value as number)}
+                placeholder={adData.maxSize.toString()}
               ></IonInput>
             </IonItem>
             <IonItem>
-              <IonLabel>Set Team Deadline</IonLabel>
+              <IonLabel>Set Team Deadline: </IonLabel>
               <IonInput
                 id="time"
                 type="date"
@@ -923,6 +925,7 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
+                value={adData.regDate}
               ></IonInput>
             </IonItem>
             <IonButton
