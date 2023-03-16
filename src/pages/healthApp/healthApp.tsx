@@ -422,14 +422,14 @@ const HealthApp: React.FC = () => {
           <IonItem>
             <h2>Fitbit</h2>
           </IonItem>
-          <IonButton expand="block" className="health-app-button">Implementing..</IonButton>
+          <IonButton expand="block" className="health-app-button" disabled={true}>Coming soon!</IonButton>
         </IonCard>
         { isPlatform('android') ? 
           <IonCard className="health-app-card">
             <IonItem>
               <h2>Samsung Health</h2>
             </IonItem>
-            <IonButton expand="block" className="health-app-button">Implementing...</IonButton>
+            <IonButton expand="block" className="health-app-button" disabled={true}>Coming soon!</IonButton>
           </IonCard>
         : "" }
       </IonContent>
