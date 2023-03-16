@@ -308,7 +308,7 @@ const Admin: React.FC = () => {
                     }
                     class="admin-col right-align-num"
                   >
-                    {item.steps}
+                    {item.steps.toLocaleString()}
                   </IonCol>
                   <IonCol
                     sizeMd="3"
@@ -451,14 +451,14 @@ const Admin: React.FC = () => {
                   size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
                   class="admin-col right-align-num"
                 >
-                  {item.avg_step}
+                  {item.avg_step.toLocaleString()}
                 </IonCol>
                 <IonCol
                   sizeMd="4"
                   size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
                   class="admin-col right-align-num"
                 >
-                  {item.totalStep}
+                  {item.totalStep.toLocaleString()}
                 </IonCol>
               </IonRow>
             ))}
