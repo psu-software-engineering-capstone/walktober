@@ -809,7 +809,7 @@ const Admin: React.FC = () => {
         <IonModal isOpen={isOpenUser} backdropDismiss={false}>
           <IonHeader class="modal-header">
             <IonToolbar>
-              <IonTitle class="modal-title">Event Settings</IonTitle>
+              <IonTitle class="modal-title">Event Settings: </IonTitle>
               <IonButtons slot="end">
                 <IonButton
                   onClick={() => setIsOpenUser(false)}
@@ -822,7 +822,7 @@ const Admin: React.FC = () => {
           </IonHeader>
           <IonContent className="ion-padding" class="modal-content">
             <IonItem>
-              <IonLabel>Set Registration Deadline</IonLabel>
+              <IonLabel>Set Registration Deadline: </IonLabel>
               <IonInput
                 id="time"
                 type="date"
@@ -831,20 +831,22 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
+                value={adData.regDate}
               ></IonInput>
             </IonItem>
             <IonItem>
-              <IonLabel>Step Log Allowed Period</IonLabel>
+              <IonLabel>Step Log Allowed Period: </IonLabel>
               <IonInput
                 type="number"
                 name="editDaysLimit"
                 onIonChange={(e) =>
                   setNewEditingLimit(e.target.value as number)
                 }
+                placeholder={adData.priorLogDays.toString()}
               ></IonInput>
             </IonItem>
             <IonItem>
-              <IonLabel>Event Start Date</IonLabel>
+              <IonLabel>Event Start Date: </IonLabel>
               <IonInput
                 id="time"
                 type="date"
@@ -853,10 +855,11 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
+                value={adData.startDate}
               ></IonInput>
             </IonItem>
             <IonItem>
-              <IonLabel>Event End Date</IonLabel>
+              <IonLabel>Event End Date: </IonLabel>
               <IonInput
                 id="time"
                 type="date"
@@ -865,6 +868,7 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
+                value={adData.endDate}
               ></IonInput>
             </IonItem>
             <IonButton
