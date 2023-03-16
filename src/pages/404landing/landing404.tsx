@@ -32,7 +32,7 @@ const landing404: React.FC = () => {
             </p>
           </IonCardHeader>
           <IonCardContent>
-            <a onClick={HomePage} className="error-info" href="/app/home">
+            <a onClick={HomePage} className="error-link" href="/app/home">
               {' '}
               Click Here to return home.
             </a>
