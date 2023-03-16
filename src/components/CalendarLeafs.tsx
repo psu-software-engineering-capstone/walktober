@@ -32,17 +32,19 @@ const populateCalendar = (data: StepLog[]) => {
         <h3 className="grid-item-dow">Th</h3>
         <h3 className="grid-item-dow">F</h3>
         <h3 className="grid-item-dow">Sa</h3>
+
         <div className="grid-item">
+        {monthStart.getDay() == 0 ? day++ : ''}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -54,20 +56,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {monthStart.getDay() == 0 ? day++ : ''}
         </div>
 
         <div className="grid-item">
+        {monthStart.getDay() == 1 || day > 1 ? day++ : ''}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -79,20 +81,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {monthStart.getDay() == 1 || day > 1 ? day++ : ''}
         </div>
 
         <div className="grid-item">
+        {monthStart.getDay() == 2 || day > 1 ? day++ : ''}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -104,20 +106,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {monthStart.getDay() == 2 || day > 1 ? day++ : ''}
         </div>
 
         <div className="grid-item">
+        {monthStart.getDay() == 3 || day > 1 ? day++ : ''}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -129,20 +131,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {monthStart.getDay() == 3 || day > 1 ? day++ : ''}
         </div>
 
         <div className="grid-item">
+        {monthStart.getDay() == 4 || day > 1 ? day++ : ''}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -154,20 +156,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {monthStart.getDay() == 4 || day > 1 ? day++ : ''}
         </div>
 
         <div className="grid-item">
+        {monthStart.getDay() == 5 || day > 1 ? day++ : ''}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -179,20 +181,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {monthStart.getDay() == 5 || day > 1 ? day++ : ''}
         </div>
 
         <div className="grid-item">
+        {monthStart.getDay() == 6 || day > 1 ? day++ : ''}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -204,20 +206,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {monthStart.getDay() == 6 || day > 1 ? day++ : ''}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -229,20 +231,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -254,20 +256,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -279,20 +281,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -304,20 +306,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -329,20 +331,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -354,20 +356,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -379,20 +381,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -404,20 +406,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -429,20 +431,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -454,20 +456,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -479,20 +481,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -504,20 +506,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -529,20 +531,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -554,20 +556,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -579,20 +581,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -604,20 +606,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -629,20 +631,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -654,20 +656,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -679,20 +681,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -704,20 +706,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day++}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -729,20 +731,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day++}
         </div>
 
         <div className="grid-item">
+        {day <= 31 ? day++ : ''}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -754,20 +756,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day <= 31 ? day++ : ''}
         </div>
 
         <div className="grid-item">
+        {day <= 31 ? day++ : ''}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -779,20 +781,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day <= 31 ? day++ : ''}
         </div>
 
         <div className="grid-item">
+        {day <= 31 ? day++ : ''}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -804,20 +806,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day <= 31 ? day++ : ''}
         </div>
 
         <div className="grid-item">
+        {day <= 31 ? day++ : ''}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -829,20 +831,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day <= 31 ? day++ : ''}
         </div>
 
         <div className="grid-item">
+        {day <= 31 ? day++ : ''}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -854,20 +856,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day <= 31 ? day++ : ''}
         </div>
 
         <div className="grid-item">
+        {day <= 31 ? day++ : ''}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -879,20 +881,20 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day <= 31 ? day++ : ''}
         </div>
 
         <div className="grid-item">
+        {day <= 31 ? day++ : ''}
           {day < 31 ? (
-            data[day].color !== 'null' ? (
+            data[day-2].color !== 'null' ? (
               <img
-                alt={data[day].color}
+                alt={data[day-2].color + ' leaf'}
                 src={
-                  data[day].color === 'green'
+                  data[day-2].color === 'green'
                     ? GreenLeaf
-                    : data[day].color === 'yellow'
+                    : data[day-2].color === 'yellow'
                     ? YellowLeaf
-                    : data[day].color === 'orange'
+                    : data[day-2].color === 'orange'
                     ? OrangeLeaf
                     : ''
                 }
@@ -904,15 +906,15 @@ const populateCalendar = (data: StepLog[]) => {
           ) : (
             ' '
           )}
-          {day <= 31 ? day++ : ''}
         </div>
+        
         <div className="grid-item-label">
           <img alt="Orange leaf" src={OrangeLeaf} className="leafImg mx" />
           5,000-7,499 steps
           <img alt="Yellow leaf" src={YellowLeaf} className="leafImg mx" />
           7,500-9,999 steps
           <img alt="Green leaf" src={GreenLeaf} className="leafImg mx" />
-          10,000 steps
+          10,000+ steps
         </div>
       </IonGrid>
     </>

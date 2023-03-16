@@ -78,3 +78,13 @@
     height: auto;
   }
 }
+
+.link-color{
+  cursor: pointer;
+}
+
+@media (prefers-color-scheme: light) {
+  .link-color {
+    color: darkgreen;
+  }
+}

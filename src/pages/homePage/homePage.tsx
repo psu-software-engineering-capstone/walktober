@@ -180,7 +180,7 @@ const HomePage: React.FC = () => {
                       </IonCardTitle>
                     </IonCardHeader>
                     <IonCardContent>
-                      <p>Click <a onClick={moveToManualSteps}>here </a>
+                      <p>Click <a onClick={moveToManualSteps} className="link-color">here </a>
                       to add or edit steps.</p>
                     </IonCardContent>
                   </IonCard>
@@ -209,7 +209,7 @@ const HomePage: React.FC = () => {
               </IonRow>
               <IonRow>
                 <IonCol>
-                  <IonCard className='team-card'>
+                  <IonCard className='team-card discord-card'>
                     <IonCardContent>
                       <WidgetBot
                         className="discord-widget"

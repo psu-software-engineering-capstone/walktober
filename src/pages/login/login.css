@@ -37,3 +37,8 @@
 .forgot-password-text{
    color: var(--ion-color-secondary);
 }
+
+.password-show{
+   --padding-top: 25px;
+   --padding-bottom: 20px;
+}

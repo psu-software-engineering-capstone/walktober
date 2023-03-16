@@ -230,19 +230,24 @@ const Login: React.FC = () => {
                 type={passwordShown ? 'text' : 'password'}
                 onIonInput={(event: any) => setPassword(event.target.value)}
               ></IonInput>
-              <IonIcon
-                icon={passwordShown ? eyeOff : eye}
-                slot="end"
-                onClick={togglePasswordVisibility}
-              ></IonIcon>
+              <IonButton 
+                fill="clear" 
+                color="medium" 
+                slot="end" 
+                onClick={togglePasswordVisibility} 
+                className="password-show">
+                <IonIcon 
+                  slot="icon-only" 
+                  icon={passwordShown ? eyeOff : eye}></IonIcon>
+              </IonButton>
             </IonItem>
-
+            
             <IonRouterLink
               slot="helper"
               routerLink="/password/reset"
               onClick={moveToForgotPassword}
             >
-              <u color="tertiary" className="forgot-password-text">Forgot Password?</u>
+              <u>Forgot Password?</u>
             </IonRouterLink>
 
             <IonButton id="login" expand="block" color="primary" onClick={signInEmailPassword}>

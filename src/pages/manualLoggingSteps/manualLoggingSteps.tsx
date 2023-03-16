@@ -199,10 +199,18 @@ const ManualSteps: React.FC = () => {
       alert('Error: Unknown Platform');
       return;
     }
+    const today = new Date();
+    const eventStartDate = new Date(adData.startDate);
+    if (today < eventStartDate) {
+      presentToast('This event is not started yet!');
+      return;
+    }
+    const eventEndDate = new Date(adData.endDate);
+    const maxDate = today < eventEndDate ? today : eventEndDate; 
     if (isPlatform('android')) {
       const stepOptions: object = {
-        startDate: new Date(adData.startDate),
-        endDate: new Date(),
+        startDate: eventStartDate,
+        endDate: maxDate,
         dataType: 'steps',
         filtered: true
       };
@@ -300,8 +308,8 @@ const ManualSteps: React.FC = () => {
         .catch((error: any) => alert(error));
     } else if (isPlatform('ios')) {
       const stepOptions = {
-        startDate: new Date(adData.startDate),
-        endDate: new Date(),
+        startDate: eventStartDate,
+        endDate: maxDate,
         unit: 'count',
         sampleType: 'HKQuantityTypeIdentifierStepCount',
         ascending: true
@@ -417,7 +425,7 @@ const ManualSteps: React.FC = () => {
         console.log('Steps updated');
       })
       .catch((error: any) => {
-        console.error(error);
+        console.error('Error updating document: ', error);
       });
     // update team total steps and average steps
     await updateTeam(currentTotalSteps, totalStep);
@@ -470,7 +478,8 @@ const ManualSteps: React.FC = () => {
       if (existingIndex !== -1) {
         const newLogs = prev.map((log, index) => {
           if (index === existingIndex) {
-            return { ...log, steps: log.steps + manualSteps };
+            // return { ...log, steps: log.steps + manualSteps };
+            return { ...log, steps: manualSteps };
           }
           return log;
         });
@@ -502,6 +511,13 @@ const ManualSteps: React.FC = () => {
     return maxDate.toISOString().slice(0, 10);
   }
 
+  // This function is for the displaying of the date in the step log. Previously, toDateString would provide the wrong date
+  function returnDate(item: string): string {
+    const originalDate = new Date(item);
+    originalDate.setDate(originalDate.getDate() + 1);
+    return originalDate.toDateString();
+  }
+
   // display steps logs
   function DisplayRecords(): any {
     if (stepLogs.length > 0) {
@@ -519,10 +535,10 @@ const ManualSteps: React.FC = () => {
 
             {stepLogs.map((item) => (
               <IonRow key={Math.random()}>
-                <IonCol className="log-col-l">
-                  {new Date(item.date).toDateString()}
+                <IonCol className="log-col-l">{returnDate(item.date)}</IonCol>
+                <IonCol className="log-col">
+                  {item.steps.toLocaleString()}
                 </IonCol>
-                <IonCol className="log-col">{item.steps.toLocaleString()}</IonCol>
                 <IonCol></IonCol>
               </IonRow>
             ))}
