@@ -236,8 +236,8 @@ const Signup: React.FC = () => {
       <IonContent fullscreen className="signup">
         <IonCard className="signup-card">
           <IonCardHeader>
-            <img alt="Walktober logo" src={logo} />
             <IonCardTitle class="ion-text-center">
+              <img alt="Walktober logo" src={logo} />
               Sign up for the free 31-day walking challenge! Open to the entire
               PSU community.
             </IonCardTitle>
