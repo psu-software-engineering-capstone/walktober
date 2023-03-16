@@ -114,28 +114,36 @@ const TeamJoin: React.FC = () => {
     for (let i = 0; i < allTeams.length; i++) {
       if (allTeams[i].name === joinTeam) {
         // check if the team name entered matches a team in the database
-        if (allTeams[i].type === 'Private') {
-          // check if the team is private
-          if (teamPass === '') {
-            // private team but no password entered
-            alert(
-              'A password needs to be entered as this team is private. Please enter the password and try again.'
-            );
-            return;
-          } else if (allTeams[i].password === teamPass) {
-            joined(); // password is correct
-            return;
+        if(allTeams[i].size === adData.maxSize) {
+          // check if the team is full 
+          alert(
+            'This team is already full. Please pick a different one and try again.'
+          );
+          return;
+        } else {
+          if (allTeams[i].type === 'Private') {
+            // check if the team is private
+            if (teamPass === '') {
+              // private team but no password entered
+              alert(
+                'A password needs to be entered as this team is private. Please enter the password and try again.'
+              );
+              return;
+            } else if (allTeams[i].password === teamPass) {
+              joined(); // password is correct
+              return;
+            } else {
+              // incorrect password
+              alert(
+                'The password entered does not match the password for the team. Please try again'
+              );
+              return;
+            }
           } else {
-            // incorrect password
-            alert(
-              'The password entered does not match the password for the team. Please try again'
-            );
+            // public team
+            joined();
             return;
           }
-        } else {
-          // public team
-          joined();
-          return;
         }
       }
     }
@@ -189,7 +197,7 @@ const TeamJoin: React.FC = () => {
                       {item.leader}
                     </IonCol>
                     <IonCol sizeMd="4" size="4" class="admin-col">
-                      {item.size} / {adData.maxSize}
+                      {item.size===adData.maxSize ? item.size + "/" + adData.maxSize + " (FULL!)": item.size + "/" + adData.maxSize}
                     </IonCol>
                     <IonCol sizeMd="4" size="4" class="admin-col">
                       {item.type}
@@ -227,34 +235,32 @@ const TeamJoin: React.FC = () => {
       setValid(false);
     }
     teamList.forEach((doc: any) => {
-      if (doc.data().members.length < adData.maxSize) {
-        const allNames: selectFormat = {
-          // for selection drop down method
-          text: doc.data().name,
-          value: doc.data().name
+      const allNames: selectFormat = {
+        // for selection drop down method
+        text: doc.data().name,
+        value: doc.data().name
+      };
+      teamNames.push(allNames); // push the data to the array
+      if (doc.data().status === '1') {
+        // private team
+        const temp: teamData = {
+          name: doc.data().name as string,
+          leader: doc.data().leader as string,
+          size: doc.data().members.length as number,
+          type: 'Private',
+          password: doc.data().password
         };
-        teamNames.push(allNames); // push the data to the array
-        if (doc.data().status === '1') {
-          // private team
-          const temp: teamData = {
-            name: doc.data().name as string,
-            leader: doc.data().leader as string,
-            size: doc.data().members.length as number,
-            type: 'Private',
-            password: doc.data().password
-          };
-          teams.push(temp); // push the data to the array
-        } else {
-          // public team
-          const temp: teamData = {
-            name: doc.data().name as string,
-            leader: doc.data().leader as string,
-            size: doc.data().members.length as number,
-            type: 'Public',
-            password: doc.data().password
-          };
-          teams.push(temp); // push the data to the array
-        }
+        teams.push(temp); // push the data to the array
+      } else {
+        // public team
+        const temp: teamData = {
+          name: doc.data().name as string,
+          leader: doc.data().leader as string,
+          size: doc.data().members.length as number,
+          type: 'Public',
+          password: doc.data().password
+        };
+        teams.push(temp); // push the data to the array
       }
     });
     teams.sort((a: any, b: any) =>
