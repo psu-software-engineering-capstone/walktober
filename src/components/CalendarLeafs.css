@@ -1,7 +1,7 @@
 .leafImg {
-  max-width: 20px;
-  max-height: 20px;
-  margin-right: 0.5em;
+  max-width: 25px;
+  max-height: 25px;
+  margin-left: 0.5em;
 }
 
 .grid-item-label {
@@ -15,16 +15,11 @@
   grid-area: item;
   grid-row: span 1;
   grid-column: span 1;
-  background-color: var(--ion-item-background);
   padding: 0.5em;
   max-width: fit-content;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 10vw;
-  min-height: 5vh;
-  max-width: 10vw;
-  max-height: 5vh;
   font-size: 1.5em;
 }
 
@@ -49,8 +44,9 @@
 
 .grid-container {
   display: grid;
-  height: auto;
-  width: auto;
+  height: 100%;
+  width: 100%;
+  font-size: 1.2em;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: repeat(6, 1fr);
   gap: 2em;
@@ -65,9 +61,17 @@
     'label';
 }
 
+@media (max-width: 1024px) {
+  .grid-container {
+    gap: 0.5em;
+    font-size: 1.2em;
+  }
+}
+
 @media (max-width: 768px) {
   .grid-container {
-    gap: 1.5em;
+    gap: 1em;
+    font-size: 0.8em;
   }
 }
 
@@ -79,9 +83,25 @@
     min-height: auto;
   }
   .leafImg {
-    max-width: 20px;
-    max-height: 20px;
-    margin-right: 0em;
+    max-width: 15px;
+    max-height: 15px;
+    margin-left: 0em;
+  }
+}
+
+@media (max-width: 350px) {
+  .grid-container {
+    gap: 0em;
+  }
+  .grid-item {
+    min-height: auto;
+    font-size: 1.3em;
+    padding: 0em;
+  }
+  .leafImg {
+    max-width: 12px;
+    max-height: 12px;
+    margin-left: 0em;
   }
 }
 
