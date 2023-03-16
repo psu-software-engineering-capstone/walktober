@@ -75,6 +75,7 @@ const Admin: React.FC = () => {
   //used to log information on teams
   interface TeamLog {
     name: string;
+    status: string;
     size: number;
     avg_step: number;
     totalStep: number;
@@ -121,6 +122,7 @@ const Admin: React.FC = () => {
       if (data) {
         const teamLogData: TeamLog = {
           name: data.name,
+          status: data.status,
           size: data.members.length,
           avg_step: data.avg_steps,
           totalStep: data.totalStep
@@ -410,20 +412,28 @@ const Admin: React.FC = () => {
                 size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
                 class="header-col admin-col"
               >
+                Privacy
+              </IonCol>
+
+              <IonCol
+                sizeMd="2"
+                size={isPlatform('ios') || isPlatform('android') ? '2' : '2'}
+                class="header-col admin-col"
+              >
                 Number of Members
               </IonCol>
 
               <IonCol
-                sizeMd="4"
-                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '3'}
                 class="header-col admin-col"
               >
                 Average Total Steps
               </IonCol>
 
               <IonCol
-                sizeMd="4"
-                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '3'}
                 class="header-col admin-col"
               >
                 Total Steps
@@ -439,23 +449,32 @@ const Admin: React.FC = () => {
                 >
                   {item.name}
                 </IonCol>
+
                 <IonCol
                   sizeMd="4"
                   size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                  class="admin-col"
+                >
+                  {(item.status==="1") ? "Private" : "Public"}
+                </IonCol>
+
+                <IonCol
+                  sizeMd="2"
+                  size={isPlatform('ios') || isPlatform('android') ? '2' : '2'}
                   class="admin-col right-align-num"
                 >
                   {item.size}
                 </IonCol>
                 <IonCol
-                  sizeMd="4"
-                  size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                  sizeMd="3"
+                  size={isPlatform('ios') || isPlatform('android') ? '3' : '3'}
                   class="admin-col right-align-num"
                 >
                   {item.avg_step.toLocaleString()}
                 </IonCol>
                 <IonCol
-                  sizeMd="4"
-                  size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                  sizeMd="3"
+                  size={isPlatform('ios') || isPlatform('android') ? '3' : '3'}
                   class="admin-col right-align-num"
                 >
                   {item.totalStep.toLocaleString()}
@@ -474,24 +493,40 @@ const Admin: React.FC = () => {
             </IonRow>
             <IonRow class="header-row admin-row">
               <IonCol
-                sizeMd="6"
-                size={isPlatform('ios') || isPlatform('android') ? '6' : '6'}
+                sizeMd="4"
+                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
                 class="header-col admin-col"
               >
                 Team Name
               </IonCol>
 
               <IonCol
-                sizeMd="5"
-                size={isPlatform('ios') || isPlatform('android') ? '5' : '5'}
+                sizeMd="4"
+                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                class="header-col admin-col"
+              >
+                Privacy
+              </IonCol>
+
+              <IonCol
+                sizeMd="2"
+                size={isPlatform('ios') || isPlatform('android') ? '2' : '2'}
                 class="header-col admin-col"
               >
                 Number of Members
               </IonCol>
 
               <IonCol
-                sizeMd="5"
-                size={isPlatform('ios') || isPlatform('android') ? '5' : '5'}
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '3'}
+                class="header-col admin-col"
+              >
+                Average Total Steps
+              </IonCol>
+
+              <IonCol
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '3'}
                 class="header-col admin-col"
               >
                 Total Steps
@@ -774,7 +809,7 @@ const Admin: React.FC = () => {
         <IonModal isOpen={isOpenUser} backdropDismiss={false}>
           <IonHeader class="modal-header">
             <IonToolbar>
-              <IonTitle class="modal-title">Event Settings</IonTitle>
+              <IonTitle class="modal-title">Event Settings: </IonTitle>
               <IonButtons slot="end">
                 <IonButton
                   onClick={() => setIsOpenUser(false)}
@@ -787,7 +822,7 @@ const Admin: React.FC = () => {
           </IonHeader>
           <IonContent className="ion-padding" class="modal-content">
             <IonItem>
-              <IonLabel>Set Registration Deadline</IonLabel>
+              <IonLabel>Set Registration Deadline: </IonLabel>
               <IonInput
                 id="time"
                 type="date"
@@ -796,20 +831,22 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
+                value={adData.regDate}
               ></IonInput>
             </IonItem>
             <IonItem>
-              <IonLabel>Step Log Allowed Period</IonLabel>
+              <IonLabel>Step Log Allowed Period: </IonLabel>
               <IonInput
                 type="number"
                 name="editDaysLimit"
                 onIonChange={(e) =>
                   setNewEditingLimit(e.target.value as number)
                 }
+                placeholder={adData.priorLogDays.toString()}
               ></IonInput>
             </IonItem>
             <IonItem>
-              <IonLabel>Event Start Date</IonLabel>
+              <IonLabel>Event Start Date: </IonLabel>
               <IonInput
                 id="time"
                 type="date"
@@ -818,10 +855,11 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
+                value={adData.startDate}
               ></IonInput>
             </IonItem>
             <IonItem>
-              <IonLabel>Event End Date</IonLabel>
+              <IonLabel>Event End Date: </IonLabel>
               <IonInput
                 id="time"
                 type="date"
@@ -830,6 +868,7 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
+                value={adData.endDate}
               ></IonInput>
             </IonItem>
             <IonButton
@@ -859,23 +898,25 @@ const Admin: React.FC = () => {
           </IonHeader>
           <IonContent className="ion-padding" class="modal-content">
             <IonItem>
-              <IonLabel>Minimum Team Size</IonLabel>
+              <IonLabel>Minimum Team Size: </IonLabel>
               <IonInput
                 type="number"
                 name="minTeamSize"
                 onIonChange={(e) => setNewMinTeamSize(e.target.value as number)}
+                placeholder={adData.minSize.toString()}
               ></IonInput>
             </IonItem>
             <IonItem>
-              <IonLabel>Maxiumum Team Size</IonLabel>
+              <IonLabel>Maxiumum Team Size: </IonLabel>
               <IonInput
                 type="number"
                 name="maxTeamSize"
                 onIonChange={(e) => setNewMaxTeamSize(e.target.value as number)}
+                placeholder={adData.maxSize.toString()}
               ></IonInput>
             </IonItem>
             <IonItem>
-              <IonLabel>Set Team Deadline</IonLabel>
+              <IonLabel>Set Team Deadline: </IonLabel>
               <IonInput
                 id="time"
                 type="date"
@@ -884,6 +925,7 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
+                value={adData.teamDate}
               ></IonInput>
             </IonItem>
             <IonButton
