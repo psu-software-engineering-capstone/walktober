@@ -365,6 +365,7 @@ const TeamHome: React.FC = () => {
                     className="discord-widget"
                     server="1068966007886069841"
                     channel={channelId}
+                    height="600"
                   />
                 </IonCardContent>
               </IonCard>
