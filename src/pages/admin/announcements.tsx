@@ -16,9 +16,6 @@ import {
   IonTitle
 } from '@ionic/react';
 import NavBar from '../../components/NavBar';
-import { useContext, useEffect } from 'react';
-import AuthContext from '../../store/auth-context';
-import { useHistory } from 'react-router-dom';
 import './announcements.scss';
 import choose from '../../assets/announcementWalkthrough/serverselect.png';
 import manageserver from '../../assets/announcementWalkthrough/manageservers.png';
@@ -35,22 +32,6 @@ import plainmsg from '../../assets/announcementWalkthrough/plainmsg.png';
 import embededoption from '../../assets/announcementWalkthrough/embededoptions.png';
 
 const Announcements: React.FC = () => {
-  const history = useHistory();
-  const ctx = useContext(AuthContext);
-  const isAdmin = ctx.admin;
-
-  const loadUser = async () => {
-    // prevents the user from entering the admin page from the url if they are not an admin
-    if (isAdmin === false) {
-      history.push('/app');
-      return;
-    }
-  };
-
-  useEffect(() => {
-    loadUser();
-  }, []);
-
   return (
     <IonPage>
       <IonHeader>
@@ -187,4 +168,5 @@ const Announcements: React.FC = () => {
     </IonPage>
   );
 };
+
 export default Announcements;
