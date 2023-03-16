@@ -1,25 +1,32 @@
+
 .admin-content{
-    --ion-background-color: #fff;
+    --background: url(../../assets/Walktober-graphic.png) center top;
 }
 
-.admin-col {
-    background-color: #fff;
-    border: solid 1px #000;
-    color: #000;
+.admin-col{
     text-align: center;
     vertical-align: middle;
     --ion-grid-columns: 16;
+    font-family: ‘Oswald’, sans-serif;
+    border: solid 1px var(--ion-color-light-contrast);
+    color: #000
 }
 
-.invis-announcements{
-    border: solid 0px #fff;
-    background-color: #fff;
-    text-align: center;
-    vertical-align: middle;
+.admin-row:nth-of-type(even) {
+    background-color: var(--ion-color-light);
+    color: var(--ion-color-light-contrast);
+}
+
+.admin-row:nth-of-type(odd) {
+    background-color: var(--ion-color-light-shade);
+    color: var(--ion-color-light-contrast);
 }
 
 .header-col{
     font-weight: bolder;
+    font-family: ‘Oswald’, sans-serif;
+    border: solid var(ion-border-radius) var(--ion-color-light-contrast);
+    background-color: var(--ion-color-primary);
 }
 
 .full-grid{
@@ -27,8 +34,13 @@
 }
 
 .grid-title{
-    color: #fff;
     font-weight: bold;
+    font-family: ‘Oswald’, sans-serif;
+    border: solid 1px var(--ion-color-light-contrast);
+}
+
+.transparent-item{
+    --ion-background-color: transparent;
 }
 
 .admin-button{
@@ -36,41 +48,61 @@
     padding-right: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
-    --background: #e17e26;
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-primary-contrast);
+    font-family: ‘Oswald’, sans-serif;
     font-weight: bold;
 }
 
+.admin-button-small{
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-primary-contrast);
+    font-family: ‘Oswald’, sans-serif;
+}
+
+.right-align-num{
+    text-align: right;
+}
+
 .modal-button{
-    --background: #e17e26;
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-primary-contrast);
     position: fixed;
     padding-left: 20px;
     padding-right: 20px;
     left: 0;
     bottom: 10px;
     right: 0;
+    --ion-background-color: var(--ion-color-secondary);
 }
 
 .invis-grid-col{
     border: solid 0px #fff;
-    background-color: #4d5123;
-}
-
-.header-col{
-    background-color: var(--ion-color-primary);
+    background-color: transparent;
 }
 
 .modal-header{
-    --ion-background-color: var(--ion-color-secondary);
+    --ion-background-color: var(--ion-color-light);
+    font-family: ‘Oswald’, sans-serif;
 }
 
 .admin-close-modal{
-    color: #fff;
+    color: var(--ion-color-light-contrast);
+    font-family: ‘Oswald’, sans-serif;
 }
 
 .modal-title{
-    color: #fff;
+    color: var(--ion-color-light-contrast);
+    font-family: ‘Oswald’, sans-serif;
 }
 
 .modal-content{
-    --ion-background-color: #fff;
+    --background: var(--ion-color-light-shade);
+    font-family: ‘Oswald’, sans-serif;
+}
+
+.light-bg{
+    background-color: var(--ion-color-light);
+    color: var(--ion-color-light-contrast);
+    padding: 10px;
 }

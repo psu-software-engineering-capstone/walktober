@@ -64,6 +64,7 @@ const Admin: React.FC = () => {
 
   const history = useHistory(); // for routing
 
+  //user to log information on users
   interface UserLog {
     name: string;
     team: string;
@@ -71,6 +72,7 @@ const Admin: React.FC = () => {
     steps: number;
   }
 
+  //used to log information on teams
   interface TeamLog {
     name: string;
     size: number;
@@ -78,15 +80,18 @@ const Admin: React.FC = () => {
     totalStep: number;
   }
 
+  //these are used to check which reports an admin wants to create
   const [userReportCheck, setUserReportCheck] = useState(false);
   const [teamReportCheck, setTeamReportCheck] = useState(false);
   const [preSurveyReportCheck, setpreSurveyReportCheck] = useState(false);
   const [postSurveyReportCheck, setpostSurveyReportCheck] = useState(false);
   const [devicesReportCheck, setDevicesReportCheck] = useState(false);
 
+  //used to for reatrieving data for tables on admin page
   const [userLogs, setUserLogs] = useState<UserLog[]>([]);
   const [teamLogs, setTeamLogs] = useState<TeamLog[]>([]);
 
+  //loads in the information on the users from the database
   const loadUserLogs = async () => {
     const dbRef = collection(FirestoreDB, 'users');
     const dbSnap = await getDocs(dbRef);
@@ -106,6 +111,7 @@ const Admin: React.FC = () => {
     setUserLogs(userLogsData);
   };
 
+  //loads in information on teams from the database
   const loadTeamLogs = async () => {
     const dbRef = collection(FirestoreDB, 'teams'); // create reference to access the whole team collection
     const dbSnap = await getDocs(dbRef); // get all the docs
@@ -204,19 +210,26 @@ const Admin: React.FC = () => {
     history.push(`/app/adminSteps/${email}`);
   };
 
+  const goToAnnouncement = () => {
+    history.push(`/app/admin/announcements`);
+  };
+
   useEffect(() => {
     loadUserLogs();
     loadTeamLogs();
   }, []);
 
-  // creates the grid, if the sample data has users in the individual data collection, it pulls the relevant information
-  // and adds it into rows
+  //creates a grid for information on users, pulls from the information that was pulled from the database, for each user it creates a new row
+  //in the table that will display the information relevant to that user
   function DisplayUsers(userLogs: UserLog[]): any {
     if (userLogs.length > 0) {
       return (
         <>
-          <IonGrid fixed={true}>
-            <IonRow class="header-row">
+          <IonGrid fixed={true} class="info-grid">
+            <IonRow class="admin-row">
+              <IonCol class="grid-title">Users</IonCol>
+            </IonRow>
+            <IonRow class="header-row admin-row">
               <IonCol
                 sizeMd="3"
                 size={isPlatform('ios') || isPlatform('android') ? '3' : '5'}
@@ -260,7 +273,7 @@ const Admin: React.FC = () => {
 
             {userLogs.map(
               (item: { name: any; team: any; email: any; steps: any }) => (
-                <IonRow key={item.email}>
+                <IonRow key={item.email} class="admin-row">
                   <IonCol
                     sizeMd="3"
                     size={
@@ -293,7 +306,7 @@ const Admin: React.FC = () => {
                     size={
                       isPlatform('ios') || isPlatform('android') ? '3' : '8'
                     }
-                    class="admin-col"
+                    class="admin-col right-align-num"
                   >
                     {item.steps}
                   </IonCol>
@@ -322,7 +335,10 @@ const Admin: React.FC = () => {
     } else {
       return (
         <>
-          <IonGrid fixed={true}>
+          <IonGrid fixed={true} class="info-grid">
+            <IonRow class="admin-row">
+              <IonCol class="grid-title">Users</IonCol>
+            </IonRow>
             <IonRow class="header-row">
               <IonCol
                 sizeMd="3"
@@ -370,12 +386,17 @@ const Admin: React.FC = () => {
     }
   }
 
+  //creates a grid for information on teams, pulls from the information that was pulled from the database, for each team it creates a new row
+  //in the table that will display the information relevant to that team
   function DisplayTeams(): any {
     if (teamLogs.length > 0) {
       return (
         <>
-          <IonGrid fixed={true}>
-            <IonRow class="header-row">
+          <IonGrid fixed={true} class="info-grid">
+            <IonRow class="admin-row">
+              <IonCol class="grid-title">Teams</IonCol>
+            </IonRow>
+            <IonRow class="header-row admin-row">
               <IonCol
                 sizeMd="4"
                 size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
@@ -410,7 +431,7 @@ const Admin: React.FC = () => {
             </IonRow>
 
             {teamLogs.map((item) => (
-              <IonRow key={Math.random()}>
+              <IonRow key={Math.random()} class="admin-row">
                 <IonCol
                   sizeMd="4"
                   size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
@@ -421,21 +442,21 @@ const Admin: React.FC = () => {
                 <IonCol
                   sizeMd="4"
                   size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
-                  class="admin-col"
+                  class="admin-col right-align-num"
                 >
                   {item.size}
                 </IonCol>
                 <IonCol
                   sizeMd="4"
                   size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
-                  class="admin-col"
+                  class="admin-col right-align-num"
                 >
                   {item.avg_step}
                 </IonCol>
                 <IonCol
                   sizeMd="4"
                   size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
-                  class="admin-col"
+                  class="admin-col right-align-num"
                 >
                   {item.totalStep}
                 </IonCol>
@@ -447,8 +468,11 @@ const Admin: React.FC = () => {
     } else {
       return (
         <>
-          <IonGrid fixed={true}>
-            <IonRow class="header-row">
+          <IonGrid fixed={true} class="info-grid">
+            <IonRow class="admin-row">
+              <IonCol class="grid-title">Teams</IonCol>
+            </IonRow>
+            <IonRow class="header-row admin-row">
               <IonCol
                 sizeMd="6"
                 size={isPlatform('ios') || isPlatform('android') ? '6' : '6'}
@@ -479,9 +503,11 @@ const Admin: React.FC = () => {
     }
   }
 
+  //when the generate reports button is pressed, this generates csv files based on what reports the user has checked
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
 
+    //report for information on users
     if (userReportCheck) {
       console.log('Generating user report');
 
@@ -511,6 +537,7 @@ const Admin: React.FC = () => {
       }
     }
 
+    //report for information on teams
     if (teamReportCheck) {
       console.log('Generating team report');
 
@@ -541,6 +568,7 @@ const Admin: React.FC = () => {
       }
     }
 
+    //report for pre-survey
     if (preSurveyReportCheck) {
       console.log('Generating pre survey report');
 
@@ -577,6 +605,7 @@ const Admin: React.FC = () => {
       }
     }
 
+    //report for post-survery
     if (postSurveyReportCheck) {
       console.log('Generating post survey report');
 
@@ -615,6 +644,7 @@ const Admin: React.FC = () => {
       }
     }
 
+    //report for device usage
     if (devicesReportCheck) {
       console.log('Generating device usage report');
 
@@ -722,6 +752,7 @@ const Admin: React.FC = () => {
             </IonCol>
             <IonCol class="invis-grid-col">
               <IonButton
+                onClick={()=>goToAnnouncement()}
                 class="admin-button"
                 size={
                   isPlatform('ios') || isPlatform('android')
@@ -736,10 +767,9 @@ const Admin: React.FC = () => {
           </IonRow>
         </IonGrid>
 
-        <IonItem class="grid-title">Users</IonItem>
-        <IonItem>{DisplayUsers(userLogs)}</IonItem>
-        <IonItem class="grid-title">Teams</IonItem>
-        <IonItem>{DisplayTeams()}</IonItem>
+        <IonItem lines="none" class="transparent-item">{DisplayUsers(userLogs)}</IonItem>
+        <IonItem lines="none" class="transparent-item"></IonItem>
+        <IonItem lines="none" class="transparent-item">{DisplayTeams()}</IonItem>
 
         <IonModal isOpen={isOpenUser} backdropDismiss={false}>
           <IonHeader class="modal-header">
@@ -919,7 +949,7 @@ const Admin: React.FC = () => {
             </IonToolbar>
           </IonHeader>
           <IonItem class="modal-content">
-            <IonLabel>Select Reports to Generate</IonLabel>
+            <IonLabel class="light-bg">Select Reports to Generate</IonLabel>
           </IonItem>
           <IonContent className="ion-padding" class="modal-content">
             <form
