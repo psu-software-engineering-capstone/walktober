@@ -75,6 +75,7 @@ const Admin: React.FC = () => {
   //used to log information on teams
   interface TeamLog {
     name: string;
+    status: string;
     size: number;
     avg_step: number;
     totalStep: number;
@@ -121,6 +122,7 @@ const Admin: React.FC = () => {
       if (data) {
         const teamLogData: TeamLog = {
           name: data.name,
+          status: data.status,
           size: data.members.length,
           avg_step: data.avg_steps,
           totalStep: data.totalStep
@@ -410,20 +412,28 @@ const Admin: React.FC = () => {
                 size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
                 class="header-col admin-col"
               >
+                Privacy
+              </IonCol>
+
+              <IonCol
+                sizeMd="2"
+                size={isPlatform('ios') || isPlatform('android') ? '2' : '2'}
+                class="header-col admin-col"
+              >
                 Number of Members
               </IonCol>
 
               <IonCol
-                sizeMd="4"
-                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '3'}
                 class="header-col admin-col"
               >
                 Average Total Steps
               </IonCol>
 
               <IonCol
-                sizeMd="4"
-                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '3'}
                 class="header-col admin-col"
               >
                 Total Steps
@@ -439,23 +449,32 @@ const Admin: React.FC = () => {
                 >
                   {item.name}
                 </IonCol>
+
                 <IonCol
                   sizeMd="4"
                   size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                  class="admin-col"
+                >
+                  {(item.status==="1") ? "Private" : "Public"}
+                </IonCol>
+
+                <IonCol
+                  sizeMd="2"
+                  size={isPlatform('ios') || isPlatform('android') ? '2' : '2'}
                   class="admin-col right-align-num"
                 >
                   {item.size}
                 </IonCol>
                 <IonCol
-                  sizeMd="4"
-                  size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                  sizeMd="3"
+                  size={isPlatform('ios') || isPlatform('android') ? '3' : '3'}
                   class="admin-col right-align-num"
                 >
                   {item.avg_step.toLocaleString()}
                 </IonCol>
                 <IonCol
-                  sizeMd="4"
-                  size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                  sizeMd="3"
+                  size={isPlatform('ios') || isPlatform('android') ? '3' : '3'}
                   class="admin-col right-align-num"
                 >
                   {item.totalStep.toLocaleString()}
@@ -474,24 +493,40 @@ const Admin: React.FC = () => {
             </IonRow>
             <IonRow class="header-row admin-row">
               <IonCol
-                sizeMd="6"
-                size={isPlatform('ios') || isPlatform('android') ? '6' : '6'}
+                sizeMd="4"
+                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
                 class="header-col admin-col"
               >
                 Team Name
               </IonCol>
 
               <IonCol
-                sizeMd="5"
-                size={isPlatform('ios') || isPlatform('android') ? '5' : '5'}
+                sizeMd="4"
+                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                class="header-col admin-col"
+              >
+                Privacy
+              </IonCol>
+
+              <IonCol
+                sizeMd="2"
+                size={isPlatform('ios') || isPlatform('android') ? '2' : '2'}
                 class="header-col admin-col"
               >
                 Number of Members
               </IonCol>
 
               <IonCol
-                sizeMd="5"
-                size={isPlatform('ios') || isPlatform('android') ? '5' : '5'}
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '3'}
+                class="header-col admin-col"
+              >
+                Average Total Steps
+              </IonCol>
+
+              <IonCol
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '3'}
                 class="header-col admin-col"
               >
                 Total Steps
