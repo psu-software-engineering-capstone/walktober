@@ -8,8 +8,6 @@ import {
   IonHeader,
   IonPage,
   IonTitle,
-  IonIcon,
-  IonModal,
   IonGrid,
   IonRow,
   IonCol,
@@ -75,7 +73,6 @@ const HomePage: React.FC = () => {
   // get past seven days of steps from firestore
   const getPastSevenDaysSteps = async (userData: any) => {
     const stepsByDate = userData.stepsByDate;
-    const stepGoal = userData.step_goal;
     setTotalSteps(userData.totalStep);
     //Add today's step count
     if (stepsByDate.length > 0) {
