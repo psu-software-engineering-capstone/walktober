@@ -73,7 +73,7 @@ const TeamHome: React.FC = () => {
           <IonGrid>
             <IonRow className="top">
               <IonCol
-                size="12"
+                size="16"
                 offset="0"
                 align-self-center="true"
                 class="header-col admin-col"
@@ -82,29 +82,29 @@ const TeamHome: React.FC = () => {
               </IonCol>
             </IonRow>
             <IonRow className="header-row">
-              <IonCol size="6" offset="0" className="header-col admin-col">
+              <IonCol size="8" offset="0" className="header-col admin-col">
                 Members Name
               </IonCol>
-              <IonCol size="6" offset="0" className="header-col admin-col">
+              <IonCol size="8" offset="0" className="header-col admin-col">
                 Members email
               </IonCol>
             </IonRow>
             {team.map((item: { name: string; email: string }) =>
               teamLeaderEmail === item.email ? (
                 <IonRow key={Math.random()}>
-                  <IonCol size="6" offset="0" className="admin-col team-lead">
+                  <IonCol size="8" offset="0" className="admin-col team-lead">
                     {item.name}*
                   </IonCol>
-                  <IonCol size="6" offset="0" className="admin-col team-lead">
+                  <IonCol size="8" offset="0" className="admin-col team-lead">
                     {item.email}
                   </IonCol>
                 </IonRow>
               ) : (
                 <IonRow key={Math.random()}>
-                  <IonCol size="6" offset="0" className="admin-col">
+                  <IonCol size="8" offset="0" className="admin-col">
                     {item.name}
                   </IonCol>
-                  <IonCol size="6" offset="0" className="admin-col">
+                  <IonCol size="8" offset="0" className="admin-col">
                     {item.email}
                   </IonCol>
                 </IonRow>
@@ -365,6 +365,7 @@ const TeamHome: React.FC = () => {
                     className="discord-widget"
                     server="1068966007886069841"
                     channel={channelId}
+                    height="600"
                   />
                 </IonCardContent>
               </IonCard>
