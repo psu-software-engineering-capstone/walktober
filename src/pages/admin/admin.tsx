@@ -210,6 +210,10 @@ const Admin: React.FC = () => {
     history.push(`/app/adminSteps/${email}`);
   };
 
+  const goToAnnouncement = () => {
+    history.push(`/app/admin/announcements`);
+  };
+
   useEffect(() => {
     loadUserLogs();
     loadTeamLogs();
@@ -748,6 +752,7 @@ const Admin: React.FC = () => {
             </IonCol>
             <IonCol class="invis-grid-col">
               <IonButton
+                onClick={()=>goToAnnouncement()}
                 class="admin-button"
                 size={
                   isPlatform('ios') || isPlatform('android')
