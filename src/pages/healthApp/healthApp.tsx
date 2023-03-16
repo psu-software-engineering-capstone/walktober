@@ -376,7 +376,7 @@ const HealthApp: React.FC = () => {
           <IonTitle>Health App Integration</IonTitle>
         </NavBar>
       </IonHeader>
-      <IonContent fullscreen={true} className="ion-padding">
+      <IonContent fullscreen={true} className="ion-padding walktober-background">
         <IonCard className="health-app-card">
           <IonItem>
             <h2>Apple Health</h2>
