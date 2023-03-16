@@ -197,8 +197,8 @@ const Login: React.FC = () => {
       <IonContent fullscreen className="login">
         <IonCard className="signup-card">
           <IonCardHeader>
-            <img alt="Walktober logo" src={smallLogo} />
             <IonCardTitle class="ion-text-center">
+              <img alt="Walktober logo" src={smallLogo} />
               Welcome to Walktober! Please log in to continue!
             </IonCardTitle>
           </IonCardHeader>
