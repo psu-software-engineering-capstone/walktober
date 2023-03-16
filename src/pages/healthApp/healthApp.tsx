@@ -4,12 +4,14 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import {
+  IonCard,
   IonContent,
   IonHeader,
   IonPage,
   IonTitle,
   IonButton,
-  isPlatform
+  isPlatform,
+  IonItem
 } from '@ionic/react';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
 import { auth, FirestoreDB } from '../../firebase';
@@ -375,39 +377,55 @@ const HealthApp: React.FC = () => {
         </NavBar>
       </IonHeader>
       <IonContent fullscreen={true} className="ion-padding">
-        <h2>Apple Health</h2>
-        <IonButton expand="block" onClick={available}>
-          Health Available?
-        </IonButton>
-        <IonButton expand="block" onClick={requestAuthorization}>
-          Request Auth
-        </IonButton>
-        <IonButton expand="block" onClick={checkAuthStatus}>
-          Check Auth Status
-        </IonButton>
-        <IonButton expand="block" onClick={updateSteps}>
-          Update Step Count
-        </IonButton>
-        <h2>Google Fit</h2>
-        <IonButton expand="block" onClick={GFavailable}>
-          Health Available?
-        </IonButton>
-        <IonButton expand="block" onClick={GFrequestAuthorization}>
-          Request Auth
-        </IonButton>
-        <IonButton expand="block" onClick={GFcheckAuthStatus}>
-          Check Auth Statu
-        </IonButton>
-        <IonButton expand="block" onClick={GFupdateSteps}>
-          Update Step Count
-        </IonButton>
-        <IonButton expand="block" onClick={GFdisconnect}>
-          Disconnect
-        </IonButton>
-        <h2>Fitbit</h2>
-        <IonButton expand="block">Implementing..</IonButton>
-        <h2>Samsung Health</h2>
-        <IonButton expand="block">Implementing...</IonButton>
+        <IonCard className="health-app-card">
+          <IonItem>
+            <h2>Apple Health</h2>
+          </IonItem>
+          <IonButton expand="block" onClick={available} className="health-app-button">
+            Health Available?
+          </IonButton>
+          <IonButton expand="block" onClick={requestAuthorization} className="health-app-button">
+            Request Auth
+          </IonButton>
+          <IonButton expand="block" onClick={checkAuthStatus} className="health-app-button">
+            Check Auth Status
+          </IonButton>
+          <IonButton expand="block" onClick={updateSteps} className="health-app-button">
+            Update Step Count
+          </IonButton>
+        </IonCard>
+        <IonCard className="health-app-card">
+          <IonItem>
+            <h2>Google Fit</h2>
+          </IonItem>
+          <IonButton expand="block" onClick={GFavailable} className="health-app-button">
+            Health Available?
+          </IonButton>
+          <IonButton expand="block" onClick={GFrequestAuthorization} className="health-app-button">
+            Request Auth
+          </IonButton>
+          <IonButton expand="block" onClick={GFcheckAuthStatus} className="health-app-button">
+            Check Auth Statu
+          </IonButton>
+          <IonButton expand="block" onClick={GFupdateSteps} className="health-app-button">
+            Update Step Count
+          </IonButton>
+          <IonButton expand="block" onClick={GFdisconnect} className="health-app-button">
+            Disconnect
+          </IonButton>
+        </IonCard>
+        <IonCard className="health-app-card">
+          <IonItem>
+            <h2>Fitbit</h2>
+          </IonItem>
+          <IonButton expand="block" className="health-app-button">Implementing..</IonButton>
+        </IonCard>
+        <IonCard className="health-app-card">
+          <IonItem>
+            <h2>Samsung Health</h2>
+          </IonItem>
+          <IonButton expand="block" className="health-app-button">Implementing...</IonButton>
+        </IonCard>
       </IonContent>
     </IonPage>
   );
