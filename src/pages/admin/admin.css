@@ -1,7 +1,6 @@
 
 .admin-content{
     --background: url(../../assets/Walktober-graphic.png) center top;
-    --ion-background-color: #fff;
 }
 
 .admin-col{
@@ -10,7 +9,6 @@
     --ion-grid-columns: 16;
     font-family: ‘Oswald’, sans-serif;
     border: solid 1px var(--ion-color-light-contrast);
-    background-color: #fff;
     color: #000
 }
 
@@ -103,7 +101,6 @@
 .modal-content{
     --background: var(--ion-color-light-shade);
     font-family: ‘Oswald’, sans-serif;
-    --ion-background-color: #fff;
 }
 
 .light-bg{
