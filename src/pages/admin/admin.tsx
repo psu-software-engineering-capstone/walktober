@@ -925,7 +925,7 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
-                value={adData.regDate}
+                value={adData.teamDate}
               ></IonInput>
             </IonItem>
             <IonButton
