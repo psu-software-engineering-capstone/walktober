@@ -65,7 +65,7 @@ const Dashboard: React.FC = () => {
         <Route exact path="/app/team" component={ctx.user && ctx.team !== '' ? TeamHome : ctx.user && ctx.team === '' ? ToTeamJoin : ToLogin} />
         <Route exact path="/app/team/join" component={ctx.user && ctx.team === '' ? TeamJoin : ctx.user && ctx.team !== '' ? ToTeamHome : ToLogin} />
         <Route exact path="/app/admin" component={ctx.user && ctx.admin === true ? Admin : ctx.user && ctx.admin === false ? ToHome : ToLogin} />
-        <Route exact path="/app/admin/announcements" component={Announcements}/>
+        <Route exact path="/app/admin/announcements" component={ctx.user && ctx.admin === true ? Announcements : ctx.user && ctx.admin === false ? ToHome : ToLogin} />
         <Route exact path="/app/results" component={ctx.user ? Results : ToLogin} />
         <Route path="/app/adminSteps/:email" component={ctx.user && ctx.admin === true ? AdminSteps : ctx.user && ctx.admin === false ? ToHome : ToLogin} />
         <Route exact path="/app">
