@@ -178,7 +178,8 @@ const TeamHome: React.FC = () => {
       members.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
     ); // set leaderboard data
     setTeamMembers(emailList); // set team members
-    const today = new Date();
+    const now = Date.now();
+    const today = new Date(now);
     const deadline = new Date(adData.teamDate);
     if (deadline < today) {
       // deadline check
@@ -206,7 +207,7 @@ const TeamHome: React.FC = () => {
     const photoURL = await getDownloadURL(imageRef);
     await updateDoc(teamReference, { profile_pic: photoURL })
       .then(() => {
-        alert('Team profile picture updated!');
+        alert('Team profile picture updated');
       })
       .catch((error: any) => {
         alert(error);

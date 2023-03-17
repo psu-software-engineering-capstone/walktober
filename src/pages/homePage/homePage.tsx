@@ -65,7 +65,8 @@ const HomePage: React.FC = () => {
   }, [ctx.user]);
 
   useEffect(() => {
-    const today = new Date();
+    const now = Date.now();
+    const today = new Date(now);
     const end = new Date(adminInfo.endDate);
     setShowPostSurvey(today > end);
   }, []);
@@ -76,11 +77,12 @@ const HomePage: React.FC = () => {
     setTotalSteps(userData.totalStep);
     //Add today's step count
     if (stepsByDate.length > 0) {
-      const today = new Date().toISOString().slice(0, 10);
-      if (stepsByDate[0].date == today) {
+      const now = Date.now();
+      const today = new Date(now).toISOString().slice(0, 10);
+      if (stepsByDate[0].date === today) {
         setSteps(stepsByDate[0].steps);
       }
-      else if (stepsByDate[stepsByDate.length - 1].date == today) {
+      else if (stepsByDate[stepsByDate.length - 1].date === today) {
         setSteps(stepsByDate[stepsByDate.length - 1].steps);
       }
       else{
@@ -91,7 +93,8 @@ const HomePage: React.FC = () => {
     // Create an array of the last seven dates (including today)
     const pastSevenDaysDates = [];
     for (let i = 1; i < 8; i++) {
-      const date = new Date();
+      const now = Date.now();
+      const date = new Date(now);
       date.setDate(date.getDate() - i);
       pastSevenDaysDates.push(date.toISOString().slice(0, 10));
     }

@@ -106,7 +106,8 @@ const Signup: React.FC = () => {
 
   // sign up with google //
   const googleAuth = async () => {
-    const currentDate: Date = new Date();
+    const now = Date.now();
+    const currentDate: Date = new Date(now);
     const userCreationDeadline: Date = new Date(adData.regDate);
     if (currentDate > userCreationDeadline) {
       alert(
@@ -178,7 +179,8 @@ const Signup: React.FC = () => {
 
   // sign up with email and password (web & ios & android) //
   const signUpEmailPassword = () => {
-    const currentDate: Date = new Date();
+    const now = Date.now();
+    const currentDate: Date = new Date(now);
     const userCreationDeadline: Date = new Date(adData.regDate);
     if (currentDate > userCreationDeadline) {
       alert(
@@ -208,14 +210,14 @@ const Signup: React.FC = () => {
           alert(error);
         });
     } else {
-      alert('Passwords are not matching');
+      alert('Passwords do not match');
     }
   };
 
   // sends a verication link to the user's email //
   const emailVerification = () => {
     sendEmailVerification(auth.currentUser)
-    .then(alert("Verification link has been sent to email!"))
+    .then(alert("Verification link has been sent to email"))
     .catch((error: unknown) => {
       console.log(error);
       alert(error);

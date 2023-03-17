@@ -98,7 +98,7 @@ const AdminSteps: React.FC<{ email: string }> = () => {
     })
       .then(() => {
         updateTeam(currentTotalSteps, totalStep); // update team total steps and average steps
-        alert('Steps Updated!');
+        alert('Steps Updated');
       })
       .catch((error: any) => {
         alert(error);

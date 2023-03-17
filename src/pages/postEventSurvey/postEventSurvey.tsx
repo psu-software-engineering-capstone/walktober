@@ -56,7 +56,8 @@ function PostEventSurvey() {
   };
 
   useEffect(() => {
-    const today = new Date();
+    const now = Date.now();
+    const today = new Date(now);
     const eventEnd = new Date(adminInfo.endDate);
     setShowPostSurvey(today > eventEnd);
   }, []);

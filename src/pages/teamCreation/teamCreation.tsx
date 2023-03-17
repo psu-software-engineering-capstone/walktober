@@ -17,8 +17,7 @@ import {
   IonLabel,
   IonList,
   IonPage,
-  IonTitle,
-  IonToolbar
+  IonTitle
 } from '@ionic/react';
 import { useContext, useState } from 'react';
 import { auth, FirestoreDB } from '../../firebase';
@@ -61,13 +60,13 @@ const TeamCreation: React.FC = () => {
     const userSnap = await getDoc(userRef);
     const userData = userSnap.data();
     if (newTeamName === '') {
-      alert('Team name cannot be an empty!');
+      alert('You must enter a team name');
       return;
     } else {
       const dbRef = doc(FirestoreDB, 'teams', newTeamName);
       const dbSnap = await getDoc(dbRef);
       if (dbSnap.exists()) {
-        alert(`${newTeamName} already exists!`);
+        alert(`${newTeamName} already exists`);
         return;
       }
     }
@@ -77,20 +76,20 @@ const TeamCreation: React.FC = () => {
     }
 
     if (newTeamStatus == 1 && newTeamPassword === '') {
-      alert('You must create a password for a private team!');
+      alert('You must create a password for a private team');
       return;
     }
 
     if (newTeamStatus == 1 && newTeamPassword != confirmNewTeamPassword) {
-      alert('Team passwords must match!');
+      alert('Team passwords must match');
       return;
     }
-
-    const currentDate: Date = new Date();
+    const now = Date.now();
+    const currentDate: Date = new Date(now);
     const teamCreationDeadline: Date = new Date(adData.teamDate);
     if (currentDate > teamCreationDeadline) {
       alert(
-        `The team creation deadline is: ${teamCreationDeadline}. You cannot create a team now.`
+        `The team creation deadline is: ${teamCreationDeadline}`
       );
       return;
     }
@@ -125,7 +124,7 @@ const TeamCreation: React.FC = () => {
         history.push('/app/team');
       })
       .catch((error: unknown) => {
-        console.error('Error writing document: ', error);
+        console.error(error);
       });
   };
 
@@ -150,11 +149,6 @@ const TeamCreation: React.FC = () => {
         </NavBar>
       </IonHeader>
       <IonContent fullscreen className="team-create">
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Team Creation</IonTitle>
-          </IonToolbar>
-        </IonHeader>
         <IonCard className="create-team-card">
           <IonCardHeader style={{ display: 'flex', justifyContent: 'center' }}>
             <img

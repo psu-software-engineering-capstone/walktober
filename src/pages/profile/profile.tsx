@@ -162,7 +162,7 @@ const Profile: React.FC = () => {
     const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
     await updateDoc(dbRef, { profile_pic: photoURL })
       .then(() => {
-        alert('profile picture updated!');
+        alert('Profile picture updated');
       })
       .catch((error: any) => {
         alert(error);
