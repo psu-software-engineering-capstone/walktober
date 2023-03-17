@@ -297,7 +297,7 @@ const Admin: React.FC = () => {
                   <IonCol
                     sizeMd="4"
                     size={
-                      isPlatform('ios') || isPlatform('android') ? '3' : '5'
+                      isPlatform('ios') || isPlatform('android') ? '3' : '6'
                     }
                     class="admin-col"
                   >
@@ -400,32 +400,32 @@ const Admin: React.FC = () => {
             </IonRow>
             <IonRow class="header-row admin-row">
               <IonCol
-                sizeMd="4"
-                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '5'}
                 class="header-col admin-col"
               >
                 Team Name
               </IonCol>
 
               <IonCol
-                sizeMd="4"
-                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '5'}
                 class="header-col admin-col"
               >
                 Privacy
               </IonCol>
 
               <IonCol
-                sizeMd="2"
-                size={isPlatform('ios') || isPlatform('android') ? '2' : '2'}
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '6'}
                 class="header-col admin-col"
               >
                 Number of Members
               </IonCol>
 
               <IonCol
-                sizeMd="3"
-                size={isPlatform('ios') || isPlatform('android') ? '3' : '3'}
+                sizeMd="4"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '8'}
                 class="header-col admin-col"
               >
                 Average Total Steps
@@ -433,7 +433,7 @@ const Admin: React.FC = () => {
 
               <IonCol
                 sizeMd="3"
-                size={isPlatform('ios') || isPlatform('android') ? '3' : '3'}
+                size={isPlatform('ios') || isPlatform('android') ? '4' : '8'}
                 class="header-col admin-col"
               >
                 Total Steps
@@ -443,38 +443,38 @@ const Admin: React.FC = () => {
             {teamLogs.map((item) => (
               <IonRow key={Math.random()} class="admin-row">
                 <IonCol
-                  sizeMd="4"
-                  size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                  sizeMd="3"
+                  size={isPlatform('ios') || isPlatform('android') ? '3' : '5'}
                   class="admin-col"
                 >
                   {item.name}
                 </IonCol>
 
                 <IonCol
-                  sizeMd="4"
-                  size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                  sizeMd="3"
+                  size={isPlatform('ios') || isPlatform('android') ? '3' : '5'}
                   class="admin-col"
                 >
                   {item.status === '1' ? 'Private' : 'Public'}
                 </IonCol>
 
                 <IonCol
-                  sizeMd="2"
-                  size={isPlatform('ios') || isPlatform('android') ? '2' : '2'}
+                  sizeMd="3"
+                  size={isPlatform('ios') || isPlatform('android') ? '3' : '6'}
                   class="admin-col right-align-num"
                 >
                   {item.size}
                 </IonCol>
                 <IonCol
-                  sizeMd="3"
-                  size={isPlatform('ios') || isPlatform('android') ? '3' : '3'}
+                  sizeMd="4"
+                  size={isPlatform('ios') || isPlatform('android') ? '3' : '8'}
                   class="admin-col right-align-num"
                 >
                   {item.avg_step.toLocaleString()}
                 </IonCol>
                 <IonCol
                   sizeMd="3"
-                  size={isPlatform('ios') || isPlatform('android') ? '3' : '3'}
+                  size={isPlatform('ios') || isPlatform('android') ? '4' : '8'}
                   class="admin-col right-align-num"
                 >
                   {item.totalStep.toLocaleString()}
@@ -493,32 +493,32 @@ const Admin: React.FC = () => {
             </IonRow>
             <IonRow class="header-row admin-row">
               <IonCol
-                sizeMd="4"
-                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '5'}
                 class="header-col admin-col"
               >
                 Team Name
               </IonCol>
 
               <IonCol
-                sizeMd="4"
-                size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '5'}
                 class="header-col admin-col"
               >
                 Privacy
               </IonCol>
 
               <IonCol
-                sizeMd="2"
-                size={isPlatform('ios') || isPlatform('android') ? '2' : '2'}
+                sizeMd="3"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '6'}
                 class="header-col admin-col"
               >
                 Number of Members
               </IonCol>
 
               <IonCol
-                sizeMd="3"
-                size={isPlatform('ios') || isPlatform('android') ? '3' : '3'}
+                sizeMd="4"
+                size={isPlatform('ios') || isPlatform('android') ? '3' : '8'}
                 class="header-col admin-col"
               >
                 Average Total Steps
@@ -526,7 +526,7 @@ const Admin: React.FC = () => {
 
               <IonCol
                 sizeMd="3"
-                size={isPlatform('ios') || isPlatform('android') ? '3' : '3'}
+                size={isPlatform('ios') || isPlatform('android') ? '4' : '8'}
                 class="header-col admin-col"
               >
                 Total Steps
