@@ -104,7 +104,6 @@ const Profile: React.FC = () => {
         });
       });
     }
-
   }, [stepLogs]);
 
   // set the data
