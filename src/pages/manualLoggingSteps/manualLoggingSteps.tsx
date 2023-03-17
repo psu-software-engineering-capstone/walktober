@@ -126,8 +126,8 @@ const ManualSteps: React.FC = () => {
           if (!data) {
             alert('Please install Google Fit!');
             Health.promptInstallFit()
-              .then((data: any) => presentToast(JSON.stringify(data)))
-              .catch((error: any) => alert(JSON.stringify(error)));
+              .then()
+              .catch((error: any) => alert(error));
           } else {
             Health.requestAuthorization(supportedTypes)
               .then((data: any) => {
@@ -136,11 +136,11 @@ const ManualSteps: React.FC = () => {
                   updateSteps();
                 } else alert('Request for Authentication Failed.');
               })
-              .catch((error: any) => alert(JSON.stringify(error)));
+              .catch((error: any) => alert(error));
           }
           return;
         })
-        .catch((error: any) => alert(JSON.stringify(error)));
+        .catch((error: any) => alert(error));
     } else if (isPlatform('ios')) {
       await HealthKit.available()
         .then(async (data: any) => {
@@ -150,7 +150,7 @@ const ManualSteps: React.FC = () => {
           })
             .then((data: any) => {
               const authStatus = data;
-              if (!hkAvail) alert('Apple Health Undetected!');
+              if (!hkAvail) alert('Apple Health is not available!');
               else if (authStatus == 'authorized') {
                 presentToast('Updating Steps...');
                 updateSteps();
@@ -158,10 +158,10 @@ const ManualSteps: React.FC = () => {
               // alert('Please Enable Permissions for Apple Health (need to deal with first time asking permisssions IOS Specific)');
               else requestAuthorization();
             })
-            .catch((error: any) => alert(JSON.stringify(error)));
+            .catch((error: any) => alert(error));
           return;
         })
-        .catch((error: any) => alert(JSON.stringify(error)));
+        .catch((error: any) => alert(error));
     } else alert('Error: Unsupported Platform');
     return;
   };
@@ -172,9 +172,9 @@ const ManualSteps: React.FC = () => {
       await Health.requestAuthorization(supportedTypes)
         .then((data: any) => {
           if (data) updateSteps();
-          else alert('Error GFit: Authorization Failed');
+          else alert('Error Google Fit: Authorization Failed');
         })
-        .catch((error: any) => alert(JSON.stringify(error)));
+        .catch((error: any) => alert(error));
       return;
     }
     // quirk with IOS: if authorization was denied once, it won't/can't ask again
@@ -185,9 +185,9 @@ const ManualSteps: React.FC = () => {
       })
         .then((data: any) => {
           if (data == 'authorized') updateSteps();
-          else alert('Error AHealth: Please Enable Apple Health Permissions');
+          else alert('Error Apple Health: Authorization Failed');
         })
-        .catch((error: any) => alert(JSON.stringify(error)));
+        .catch((error: any) => alert(error));
       return;
     } else alert('Error: Unknown Platform');
     return;
@@ -202,7 +202,7 @@ const ManualSteps: React.FC = () => {
     const today = new Date();
     const eventStartDate = new Date(adData.startDate);
     if (today < eventStartDate) {
-      presentToast('This event is not started yet!');
+      presentToast('The event is not started yet!');
       return;
     }
     const eventEndDate = new Date(adData.endDate);
@@ -425,7 +425,7 @@ const ManualSteps: React.FC = () => {
         console.log('Steps updated');
       })
       .catch((error: any) => {
-        console.error('Error updating document: ', error);
+        console.error(error);
       });
     // update team total steps and average steps
     await updateTeam(currentTotalSteps, totalStep);
