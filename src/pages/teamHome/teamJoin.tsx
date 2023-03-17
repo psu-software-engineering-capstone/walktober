@@ -108,7 +108,7 @@ const TeamJoin: React.FC = () => {
   // join the team
   const toJoin = () => {
     if (joinTeam === '') {
-      alert('No team name has been entered as of yet');
+      alert('Please enter the team name.');
       return; // team name cannot be empty
     }
     for (let i = 0; i < allTeams.length; i++) {
@@ -117,7 +117,7 @@ const TeamJoin: React.FC = () => {
         if(allTeams[i].size === adData.maxSize) {
           // check if the team is full 
           alert(
-            'This team is already full. Please pick a different one and try again.'
+            'This team is full.'
           );
           return;
         } else {
@@ -126,7 +126,7 @@ const TeamJoin: React.FC = () => {
             if (teamPass === '') {
               // private team but no password entered
               alert(
-                'A password needs to be entered as this team is private. Please enter the password and try again.'
+                'Please enter the password.'
               );
               return;
             } else if (allTeams[i].password === teamPass) {
@@ -135,7 +135,7 @@ const TeamJoin: React.FC = () => {
             } else {
               // incorrect password
               alert(
-                'The password entered does not match the password for the team. Please try again'
+                'Incorrect password. Please try again.'
               );
               return;
             }
@@ -147,7 +147,7 @@ const TeamJoin: React.FC = () => {
         }
       }
     }
-    alert('No team was found that matched what was entered'); // no team was found
+    alert('No team was found.'); // no team was found
     return;
   };
 

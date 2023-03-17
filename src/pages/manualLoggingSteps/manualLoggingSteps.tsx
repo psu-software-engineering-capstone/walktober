@@ -103,7 +103,7 @@ const ManualSteps: React.FC = () => {
       totalStep: totalStep
     })
       .then(() => {
-        alert('Steps Updated!');
+        alert('Steps Updated');
       })
       .catch((error: any) => {
         alert(error);
@@ -124,7 +124,7 @@ const ManualSteps: React.FC = () => {
       await Health.isAvailable()
         .then((data: any) => {
           if (!data) {
-            alert('Please install Google Fit!');
+            alert('Please install Google Fit');
             Health.promptInstallFit()
               .then()
               .catch((error: any) => alert(error));
@@ -155,7 +155,6 @@ const ManualSteps: React.FC = () => {
                 presentToast('Updating Steps...');
                 updateSteps();
               }
-              // alert('Please Enable Permissions for Apple Health (need to deal with first time asking permisssions IOS Specific)');
               else requestAuthorization();
             })
             .catch((error: any) => alert(error));

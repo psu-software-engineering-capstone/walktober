@@ -142,7 +142,7 @@ const Admin: React.FC = () => {
       team_creation_due: newTeamCreationDate
     })
       .then(() => {
-        alert('Team Settings Updated!');
+        alert('Team Settings Updated');
       })
       .catch((error: any) => {
         alert(error);
@@ -159,7 +159,7 @@ const Admin: React.FC = () => {
       prior_log_days: Number(newEditingLimit)
     })
       .then(() => {
-        alert('User Settings Updated!');
+        alert('User Settings Updated');
       })
       .catch((error: any) => {
         alert(error);
@@ -171,7 +171,7 @@ const Admin: React.FC = () => {
     const dbRef = doc(FirestoreDB, 'teams', newOpenTeam);
     const dbSnap = await getDoc(dbRef);
     if (dbSnap.exists()) {
-      alert(`${newOpenTeam} already exists!`);
+      alert(`${newOpenTeam} already exists`);
     } else {
       let channelId = ''; //temp array
       const chanQuery = query(
@@ -199,7 +199,7 @@ const Admin: React.FC = () => {
           updateDoc(doc(FirestoreDB, 'channelIDs', channelId), {
             team: newOpenTeam
           }); //set channel id document to this new open team
-          alert('Open Team Created!');
+          alert('Open Team Created');
         })
         .catch((error: any) => {
           alert(error);

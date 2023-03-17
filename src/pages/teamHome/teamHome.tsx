@@ -199,7 +199,7 @@ const TeamHome: React.FC = () => {
   // handle image upload
   const handleSubmit = async () => {
     if (photo === null) {
-      alert('Please select an image to upload');
+      alert('Please select an image to upload.');
       return;
     }
     const imageRef = ref(storage, ctx.team + '.png');
@@ -207,7 +207,7 @@ const TeamHome: React.FC = () => {
     const photoURL = await getDownloadURL(imageRef);
     await updateDoc(teamReference, { profile_pic: photoURL })
       .then(() => {
-        alert('Team profile picture updated!');
+        alert('Team profile picture updated.');
       })
       .catch((error: any) => {
         alert(error);
