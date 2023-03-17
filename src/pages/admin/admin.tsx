@@ -455,7 +455,7 @@ const Admin: React.FC = () => {
                   size={isPlatform('ios') || isPlatform('android') ? '4' : '4'}
                   class="admin-col"
                 >
-                  {(item.status==="1") ? "Private" : "Public"}
+                  {item.status === '1' ? 'Private' : 'Public'}
                 </IonCol>
 
                 <IonCol
@@ -684,15 +684,24 @@ const Admin: React.FC = () => {
       console.log('Generating device usage report');
 
       // Hardcoded count, should probably give exit survey device question a variable to use
-      const android = query(collection(FirestoreDB, 'exitQuestions'), where("device", "==", "Google Fit"));
+      const android = query(
+        collection(FirestoreDB, 'exitQuestions'),
+        where('device', '==', 'Google Fit')
+      );
       const androidSnapshot = await getCountFromServer(android);
       const gFitCount = androidSnapshot.data().count;
 
-      const apple = query(collection(FirestoreDB, 'exitQuestions'), where("device", "==", "Apple Health"));
+      const apple = query(
+        collection(FirestoreDB, 'exitQuestions'),
+        where('device', '==', 'Apple Health')
+      );
       const appleSnapshot = await getCountFromServer(apple);
       const aHealthCount = appleSnapshot.data().count;
 
-      const neither = query(collection(FirestoreDB, 'exitQuestions'), where("device", "==", "N/A"));
+      const neither = query(
+        collection(FirestoreDB, 'exitQuestions'),
+        where('device', '==', 'N/A')
+      );
       const neitherSnapshot = await getCountFromServer(neither);
       const nCount = neitherSnapshot.data().count;
 
@@ -717,7 +726,26 @@ const Admin: React.FC = () => {
 
     console.log('Reports have been generated');
   };
-
+  function reportDisplay() {
+    if (isPlatform('desktop')) {
+      return (
+        <>
+        <IonCol class="invis-grid-col">
+          <IonButton
+            onClick={() => setIsOpenReport(true)}
+            class="admin-button"
+            size={
+              isPlatform('ios') || isPlatform('android') ? 'default' : 'large'
+            }
+            expand="block"
+          >
+            Generate Report
+          </IonButton>
+        </IonCol>
+        </>
+      );
+    }
+  }
   return (
     <IonPage>
       <IonHeader>
@@ -771,23 +799,10 @@ const Admin: React.FC = () => {
                 Create Open Team
               </IonButton>
             </IonCol>
+            {reportDisplay()}
             <IonCol class="invis-grid-col">
               <IonButton
-                onClick={() => setIsOpenReport(true)}
-                class="admin-button"
-                size={
-                  isPlatform('ios') || isPlatform('android')
-                    ? 'default'
-                    : 'large'
-                }
-                expand="block"
-              >
-                Generate Report
-              </IonButton>
-            </IonCol>
-            <IonCol class="invis-grid-col">
-              <IonButton
-                onClick={()=>goToAnnouncement()}
+                onClick={() => goToAnnouncement()}
                 class="admin-button"
                 size={
                   isPlatform('ios') || isPlatform('android')
@@ -802,9 +817,13 @@ const Admin: React.FC = () => {
           </IonRow>
         </IonGrid>
 
-        <IonItem lines="none" class="transparent-item">{DisplayUsers(userLogs)}</IonItem>
+        <IonItem lines="none" class="transparent-item">
+          {DisplayUsers(userLogs)}
+        </IonItem>
         <IonItem lines="none" class="transparent-item"></IonItem>
-        <IonItem lines="none" class="transparent-item">{DisplayTeams()}</IonItem>
+        <IonItem lines="none" class="transparent-item">
+          {DisplayTeams()}
+        </IonItem>
 
         <IonModal isOpen={isOpenUser} backdropDismiss={false}>
           <IonHeader class="modal-header">
