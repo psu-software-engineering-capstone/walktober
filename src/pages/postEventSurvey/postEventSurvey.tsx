@@ -56,8 +56,7 @@ function PostEventSurvey() {
   };
 
   useEffect(() => {
-    const todayLocale = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }).slice(0, 10);
-    const today = new Date(todayLocale);
+    const today = new Date();
     const eventEnd = new Date(adminInfo.endDate);
     setShowPostSurvey(today > eventEnd);
   }, []);

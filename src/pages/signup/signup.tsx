@@ -106,8 +106,7 @@ const Signup: React.FC = () => {
 
   // sign up with google //
   const googleAuth = async () => {
-    const todayLocale = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }).slice(0, 10);
-    const currentDate: Date = new Date(todayLocale);
+    const currentDate: Date = new Date();
     const userCreationDeadline: Date = new Date(adData.regDate);
     if (currentDate > userCreationDeadline) {
       alert(
@@ -179,8 +178,7 @@ const Signup: React.FC = () => {
 
   // sign up with email and password (web & ios & android) //
   const signUpEmailPassword = () => {
-    const todayLocale = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }).slice(0, 10);
-    const currentDate: Date = new Date(todayLocale);
+    const currentDate: Date = new Date();
     const userCreationDeadline: Date = new Date(adData.regDate);
     if (currentDate > userCreationDeadline) {
       alert(

@@ -84,8 +84,7 @@ const TeamCreation: React.FC = () => {
       alert('Team passwords must match!');
       return;
     }
-    const todayLocale = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }).slice(0, 10);
-    const currentDate: Date = new Date(todayLocale);
+    const currentDate: Date = new Date();
     const teamCreationDeadline: Date = new Date(adData.teamDate);
     if (currentDate > teamCreationDeadline) {
       alert(

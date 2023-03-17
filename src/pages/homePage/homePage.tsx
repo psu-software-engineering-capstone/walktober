@@ -65,8 +65,7 @@ const HomePage: React.FC = () => {
   }, [ctx.user]);
 
   useEffect(() => {
-    const todayLocale = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }).slice(0, 10);
-    const today = new Date(todayLocale);
+    const today = new Date();
     const end = new Date(adminInfo.endDate);
     setShowPostSurvey(today > end);
   }, []);
@@ -94,8 +93,7 @@ const HomePage: React.FC = () => {
     // Create an array of the last seven dates (including today)
     const pastSevenDaysDates = [];
     for (let i = 1; i < 8; i++) {
-      const todayLocale = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }).slice(0, 10);
-      const date = new Date(todayLocale);
+      const date = new Date();
       date.setDate(date.getDate() - i);
       pastSevenDaysDates.push(date.toISOString().slice(0, 10));
     }

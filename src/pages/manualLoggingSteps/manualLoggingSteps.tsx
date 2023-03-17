@@ -199,8 +199,7 @@ const ManualSteps: React.FC = () => {
       alert('Error: Unknown Platform');
       return;
     }
-    const todayLocale = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }).slice(0, 10);
-    const today = new Date(todayLocale);
+    const today = new Date();
     const eventStartDate = new Date(adData.startDate);
     if (today < eventStartDate) {
       presentToast('The event is not started yet!');
@@ -506,8 +505,7 @@ const ManualSteps: React.FC = () => {
 
   // Get the latest date allowed for the user to log the steps
   function getMaxDate(): string {
-    const todayLocale = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }).slice(0, 10);
-    const today = new Date(todayLocale);
+    const today = new Date();
     const eventEndDate = new Date(adData.endDate);
     const maxDate = eventEndDate < today ? eventEndDate : today;
     return maxDate.toISOString().slice(0, 10);

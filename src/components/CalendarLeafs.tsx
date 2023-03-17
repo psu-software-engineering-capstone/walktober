@@ -5,8 +5,7 @@ import YellowLeaf from '../assets/yellowLeaf.png';
 import GreenLeaf from '../assets/GreenLeaf.png';
 import './CalendarLeafs.css';
 
-const todayLocale = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }).slice(0, 10);
-const currentDate = new Date(todayLocale);
+const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
 const monthStart = new Date(`October 1, ${currentYear}`);
 

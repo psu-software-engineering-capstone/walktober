@@ -234,8 +234,7 @@ const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
       teamMembers.forEach((member: string) => {
         if (auth.currentUser.email == member) team.highlight = true;
       });
-      const todayLocale = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }).slice(0, 10);
-      const today = new Date(todayLocale);
+      const today = new Date();
       const deadline = new Date(adData.teamDate);
       if (deadline < today) {
         const membersLength = doc.data().members.length;

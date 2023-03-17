@@ -4,8 +4,7 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { IonItem, IonProgressBar } from '@ionic/react';
 
 
-const todayLocale = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }).slice(0, 10);
-const today = new Date(todayLocale);
+const today = new Date();
 const daysLeft = 31 - today.getUTCDate(); // 31 days in october
 
 const PersonalProgress: React.FC<{}> = (): ReactElement => {
