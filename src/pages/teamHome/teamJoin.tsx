@@ -108,7 +108,7 @@ const TeamJoin: React.FC = () => {
   // join the team
   const toJoin = () => {
     if (joinTeam === '') {
-      alert('Please enter the team name.');
+      alert('Please enter the team name');
       return; // team name cannot be empty
     }
     for (let i = 0; i < allTeams.length; i++) {
@@ -117,7 +117,7 @@ const TeamJoin: React.FC = () => {
         if(allTeams[i].size === adData.maxSize) {
           // check if the team is full 
           alert(
-            'This team is full.'
+            'This team is full'
           );
           return;
         } else {
@@ -126,7 +126,7 @@ const TeamJoin: React.FC = () => {
             if (teamPass === '') {
               // private team but no password entered
               alert(
-                'Please enter the password.'
+                'Please enter the password'
               );
               return;
             } else if (allTeams[i].password === teamPass) {
@@ -147,7 +147,7 @@ const TeamJoin: React.FC = () => {
         }
       }
     }
-    alert('No team was found.'); // no team was found
+    alert('No team was found'); // no team was found
     return;
   };
 

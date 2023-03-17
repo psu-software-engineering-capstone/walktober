@@ -210,14 +210,14 @@ const Signup: React.FC = () => {
           alert(error);
         });
     } else {
-      alert('Passwords do not match.');
+      alert('Passwords do not match');
     }
   };
 
   // sends a verication link to the user's email //
   const emailVerification = () => {
     sendEmailVerification(auth.currentUser)
-    .then(alert("Verification link has been sent to email."))
+    .then(alert("Verification link has been sent to email"))
     .catch((error: unknown) => {
       console.log(error);
       alert(error);

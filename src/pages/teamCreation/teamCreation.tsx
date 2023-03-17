@@ -60,13 +60,13 @@ const TeamCreation: React.FC = () => {
     const userSnap = await getDoc(userRef);
     const userData = userSnap.data();
     if (newTeamName === '') {
-      alert('You must enter a team name.');
+      alert('You must enter a team name');
       return;
     } else {
       const dbRef = doc(FirestoreDB, 'teams', newTeamName);
       const dbSnap = await getDoc(dbRef);
       if (dbSnap.exists()) {
-        alert(`${newTeamName} already exists.`);
+        alert(`${newTeamName} already exists`);
         return;
       }
     }
@@ -76,12 +76,12 @@ const TeamCreation: React.FC = () => {
     }
 
     if (newTeamStatus == 1 && newTeamPassword === '') {
-      alert('You must create a password for a private team.');
+      alert('You must create a password for a private team');
       return;
     }
 
     if (newTeamStatus == 1 && newTeamPassword != confirmNewTeamPassword) {
-      alert('Team passwords must match.');
+      alert('Team passwords must match');
       return;
     }
     const now = Date.now();
@@ -89,7 +89,7 @@ const TeamCreation: React.FC = () => {
     const teamCreationDeadline: Date = new Date(adData.teamDate);
     if (currentDate > teamCreationDeadline) {
       alert(
-        `The team creation deadline is: ${teamCreationDeadline}.`
+        `The team creation deadline is: ${teamCreationDeadline}`
       );
       return;
     }
@@ -119,7 +119,7 @@ const TeamCreation: React.FC = () => {
         await updateDoc(doc(FirestoreDB, 'channelIDs', channelId), {
           team: newTeamName
         }); //set channel id document to this new open team
-        alert('Your team has been created.');
+        alert('Your team has been created');
         await updateCurrentUser();
         history.push('/app/team');
       })
