@@ -1,1 +1,11 @@
+.health-app-card {
 
+}
+
+.health-app-button {
+    width: 225px;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    size: "small";
+}

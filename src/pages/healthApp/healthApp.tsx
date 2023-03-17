@@ -4,12 +4,14 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import {
+  IonCard,
   IonContent,
   IonHeader,
   IonPage,
   IonTitle,
   IonButton,
-  isPlatform
+  isPlatform,
+  IonItem
 } from '@ionic/react';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
 import { auth, FirestoreDB } from '../../firebase';
@@ -385,40 +387,65 @@ const HealthApp: React.FC = () => {
           <IonTitle>Health App Integration</IonTitle>
         </NavBar>
       </IonHeader>
-      <IonContent fullscreen={true} className="ion-padding">
-        <h2>Apple Health</h2>
-        <IonButton expand="block" onClick={available}>
-          Health Available?
-        </IonButton>
-        <IonButton expand="block" onClick={requestAuthorization}>
-          Request Auth
-        </IonButton>
-        <IonButton expand="block" onClick={checkAuthStatus}>
-          Check Auth Status
-        </IonButton>
-        <IonButton expand="block" onClick={updateSteps}>
-          Update Step Count
-        </IonButton>
-        <h2>Google Fit</h2>
-        <IonButton expand="block" onClick={GFavailable}>
-          Health Available?
-        </IonButton>
-        <IonButton expand="block" onClick={GFrequestAuthorization}>
-          Request Auth
-        </IonButton>
-        <IonButton expand="block" onClick={GFcheckAuthStatus}>
-          Check Auth Statu
-        </IonButton>
-        <IonButton expand="block" onClick={GFupdateSteps}>
-          Update Step Count
-        </IonButton>
-        <IonButton expand="block" onClick={GFdisconnect}>
-          Disconnect
-        </IonButton>
-        <h2>Fitbit</h2>
-        <IonButton expand="block">Implementing..</IonButton>
-        <h2>Samsung Health</h2>
-        <IonButton expand="block">Implementing...</IonButton>
+      <IonContent fullscreen={true} className="ion-padding walktober-background">
+        { isPlatform('ios') ? 
+          <IonCard className="health-app-card">
+            <IonItem>
+              <h2>Apple Health</h2>
+            </IonItem>
+            <IonButton expand="block" onClick={available} className="health-app-button" size="small">
+              Apple Health Available?
+            </IonButton>
+            <IonButton expand="block" onClick={requestAuthorization} className="health-app-button" size="small">
+              Connect
+            </IonButton>
+            <IonButton expand="block" onClick={checkAuthStatus} className="health-app-button" size="small">
+              Check Connection Status
+            </IonButton>
+            <IonButton expand="block" onClick={updateSteps} className="health-app-button" size="small">
+              Update Step Count
+            </IonButton>
+          </IonCard> 
+        : ""}
+        
+        { isPlatform('android') ? 
+          <IonCard className="health-app-card">
+            <IonItem>
+              <h2>Google Fit</h2>
+            </IonItem>
+            <IonButton expand="block" onClick={GFavailable} className="health-app-button" size="small">
+              Google Fit Available? 
+            </IonButton>
+            <IonButton expand="block" onClick={GFrequestAuthorization} className="health-app-button" size="small">
+              Connect
+            </IonButton>
+            <IonButton expand="block" onClick={GFcheckAuthStatus} className="health-app-button" size="small">
+              Check Connection Status
+            </IonButton>
+            <IonButton expand="block" onClick={GFupdateSteps} className="health-app-button" size="small">
+              Update Step Count
+            </IonButton>
+            <IonButton expand="block" onClick={GFdisconnect} className="health-app-button" size="small">
+              Disconnect
+            </IonButton>
+          </IonCard>
+        : "" }
+
+        <IonCard className="health-app-card">
+          <IonItem>
+            <h2>Fitbit</h2>
+          </IonItem>
+          <IonButton expand="block" className="health-app-button" disabled={true} size="small">Coming soon!</IonButton>
+        </IonCard>
+
+        { isPlatform('android') ? 
+          <IonCard className="health-app-card">
+            <IonItem>
+              <h2>Samsung Health</h2>
+            </IonItem>
+            <IonButton expand="block" className="health-app-button" disabled={true} size="small">Coming soon!</IonButton>
+          </IonCard>
+        : "" }
       </IonContent>
     </IonPage>
   );
