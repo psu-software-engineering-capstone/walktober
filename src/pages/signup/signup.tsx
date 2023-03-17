@@ -106,7 +106,8 @@ const Signup: React.FC = () => {
 
   // sign up with google //
   const googleAuth = async () => {
-    const currentDate: Date = new Date();
+    const now = Date.now();
+    const currentDate: Date = new Date(now);
     const userCreationDeadline: Date = new Date(adData.regDate);
     if (currentDate > userCreationDeadline) {
       alert(
@@ -178,7 +179,8 @@ const Signup: React.FC = () => {
 
   // sign up with email and password (web & ios & android) //
   const signUpEmailPassword = () => {
-    const currentDate: Date = new Date();
+    const now = Date.now();
+    const currentDate: Date = new Date(now);
     const userCreationDeadline: Date = new Date(adData.regDate);
     if (currentDate > userCreationDeadline) {
       alert(

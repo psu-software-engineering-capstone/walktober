@@ -199,14 +199,15 @@ const ManualSteps: React.FC = () => {
       alert('Error: Unknown Platform');
       return;
     }
-    const today = new Date();
+    const now = Date.now();
+    const today = new Date(now);
     const eventStartDate = new Date(adData.startDate);
     if (today < eventStartDate) {
       presentToast('The event is not started yet!');
       return;
     }
     const eventEndDate = new Date(adData.endDate);
-    const maxDate = today < eventEndDate ? today : eventEndDate; 
+    const maxDate = today < eventEndDate ? today : eventEndDate;
     if (isPlatform('android')) {
       const stepOptions: object = {
         startDate: eventStartDate,
@@ -505,7 +506,8 @@ const ManualSteps: React.FC = () => {
 
   // Get the latest date allowed for the user to log the steps
   function getMaxDate(): string {
-    const today = new Date();
+    const now = Date.now();
+    const today = new Date(now);
     const eventEndDate = new Date(adData.endDate);
     const maxDate = eventEndDate < today ? eventEndDate : today;
     return maxDate.toISOString().slice(0, 10);

@@ -84,7 +84,8 @@ const TeamCreation: React.FC = () => {
       alert('Team passwords must match!');
       return;
     }
-    const currentDate: Date = new Date();
+    const now = Date.now();
+    const currentDate: Date = new Date(now);
     const teamCreationDeadline: Date = new Date(adData.teamDate);
     if (currentDate > teamCreationDeadline) {
       alert(

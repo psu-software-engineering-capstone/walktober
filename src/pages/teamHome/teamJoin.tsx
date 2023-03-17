@@ -226,7 +226,8 @@ const TeamJoin: React.FC = () => {
   async function getData(teamList: any) {
     const teams: Array<teamData> = []; // array of teams
     const teamNames: Array<selectFormat> = []; // array of team names
-    const today = new Date();
+    const now = Date.now();
+    const today = new Date(now);
     const deadline = new Date(adData.teamDate);
     if (deadline < today) {
       // if the deadline has passed
