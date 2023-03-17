@@ -87,6 +87,7 @@ const Admin: React.FC = () => {
   const [preSurveyReportCheck, setpreSurveyReportCheck] = useState(false);
   const [postSurveyReportCheck, setpostSurveyReportCheck] = useState(false);
   const [devicesReportCheck, setDevicesReportCheck] = useState(false);
+  const [regDate, setRegDate] = useState('');
 
   //used to for reatrieving data for tables on admin page
   const [userLogs, setUserLogs] = useState<UserLog[]>([]);
@@ -131,6 +132,8 @@ const Admin: React.FC = () => {
       }
     });
     setTeamLogs(teamLogsData); // reassign the data to a more global variable
+    const registerDate = new Date(adData.regDate).toISOString().slice(0,10);
+    setRegDate(registerDate);
   };
 
   // in team setting module, when user presses save setting, sends the data to database.
@@ -850,7 +853,7 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
-                value={adData.regDate}
+                value={regDate}
               ></IonInput>
             </IonItem>
             <IonItem>
