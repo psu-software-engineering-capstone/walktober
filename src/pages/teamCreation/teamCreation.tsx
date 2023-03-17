@@ -17,8 +17,7 @@ import {
   IonLabel,
   IonList,
   IonPage,
-  IonTitle,
-  IonToolbar
+  IonTitle
 } from '@ionic/react';
 import { useContext, useState } from 'react';
 import { auth, FirestoreDB } from '../../firebase';
@@ -150,11 +149,6 @@ const TeamCreation: React.FC = () => {
         </NavBar>
       </IonHeader>
       <IonContent fullscreen className="team-create">
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Team Creation</IonTitle>
-          </IonToolbar>
-        </IonHeader>
         <IonCard className="create-team-card">
           <IonCardHeader style={{ display: 'flex', justifyContent: 'center' }}>
             <img
