@@ -139,7 +139,7 @@ const Admin: React.FC = () => {
     await updateDoc(dbRef, {
       min_team_size: Number(newMinTeamSize),
       max_team_size: Number(newMaxTeamSize),
-      team_creation_due: newTeamCreationDate
+      team_creation_due: newTeamCreationDate.slice(0,10) + "T23:59"
     })
       .then(() => {
         alert('Team Settings Updated');
@@ -153,9 +153,9 @@ const Admin: React.FC = () => {
   const sendNewUserSetting = async () => {
     const dbRef = doc(FirestoreDB, 'admin', 'admin');
     await updateDoc(dbRef, {
-      registration_deadline: newRegistrationDeadline,
-      event_start_date: newStartDate,
-      event_end_date: newEndDate,
+      registration_deadline: newRegistrationDeadline.slice(0,10)+"T23:59",
+      event_start_date: newStartDate.slice(0,10) + "T00:00",
+      event_end_date: newEndDate.slice(0,10) + "T23:59",
       prior_log_days: Number(newEditingLimit)
     })
       .then(() => {
@@ -850,7 +850,7 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
-                value={adData.regDate}
+                value={adData.regDate.slice(0,10)}
               ></IonInput>
             </IonItem>
             <IonItem>
@@ -874,7 +874,7 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
-                value={adData.startDate}
+                value={adData.startDate.slice(0,10)}
               ></IonInput>
             </IonItem>
             <IonItem>
@@ -887,7 +887,7 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
-                value={adData.endDate}
+                value={adData.endDate.slice(0,10)}
               ></IonInput>
             </IonItem>
             <IonButton
@@ -944,7 +944,7 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
-                value={adData.teamDate}
+                value={adData.teamDate.slice(0,10)}
               ></IonInput>
             </IonItem>
             <IonButton
