@@ -1,3 +1,4 @@
+// File created by NathanMoes, aim is to create a ionic frame work progress bar showing the progress user has made on daily goal
 /* eslint-disable multiline-ternary */
 /* eslint-disable @typescript-eslint/ban-types */
 import React, { ReactElement, useEffect, useState } from 'react';
