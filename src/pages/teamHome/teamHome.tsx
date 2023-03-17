@@ -378,11 +378,11 @@ const TeamHome: React.FC = () => {
               sizeMd="6"
               sizeXs="12"
             >
-              <IonCard className="card-padding-team-home box-size">
+              <IonCard className="card-padding-team-home ">
                 <IonHeader>
                   <IonTitle className="text-center">{`Team ${ctx.team}`}</IonTitle>
                 </IonHeader>
-                <IonCardContent className="card-content-class">
+                <IonCardContent>
                   <IonGrid>
                     <IonRow>
                       <IonCol size="12" className="col-from-cards">
