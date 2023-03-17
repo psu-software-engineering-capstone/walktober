@@ -26,16 +26,18 @@ const HealthApp: React.FC = () => {
     steps: number;
   }
 
+  // apple health (health available?)
   const available = async () => {
     if (!isPlatform('ios')) {
       alert('Apple Health is only available on iOS');
       return;
     }
     await HealthKit.available()
-      .then((data: any) => alert(JSON.stringify(data)))
-      .catch((error: any) => alert(JSON.stringify(error)));
+      .then(() => alert('Apple Health is available'))
+      .catch((error: any) => alert(error));
   };
 
+  // apple health (request authorization)
   const requestAuthorization = async () => {
     if (!isPlatform('ios')) {
       alert('Apple Health is only available on iOS');
@@ -53,10 +55,11 @@ const HealthApp: React.FC = () => {
       readTypes: supportedTypes,
       writeTypes: supportedTypes
     })
-      .then((data: any) => alert(JSON.stringify(data)))
-      .catch((error: any) => alert(JSON.stringify(error)));
+      .then(() => alert('Authorization request successful'))
+      .catch((error: any) => alert(error));
   };
 
+  // apple health (check authorization status)
   const checkAuthStatus = async () => {
     if (!isPlatform('ios')) {
       alert('Apple Health is only available on iOS');
@@ -65,10 +68,11 @@ const HealthApp: React.FC = () => {
     HealthKit.checkAuthStatus({
       type: 'HKQuantityTypeIdentifierHeight'
     })
-      .then((data: any) => alert(JSON.stringify(data)))
-      .catch((error: any) => alert(JSON.stringify(error)));
+      .then(() => alert('Authorized'))
+      .catch((error: any) => alert(error));
   };
 
+  // apple health (update step count)
   const updateSteps = async () => {
     if (!isPlatform('ios')) {
       alert('Apple Health is only available on iOS');
@@ -198,59 +202,63 @@ const HealthApp: React.FC = () => {
     }
   ];
 
+  // google fit (health available?)
   const GFavailable = async () => {
     if (!isPlatform('android')) {
-      alert('Google Fit is only available on android.');
+      alert('Google Fit is only available on android');
       return;
     }
     await Health.isAvailable()
       .then((data: any) => {
         if (!data) {
-          alert('Please install Google Fit!');
+          alert('Please install Google Fit');
           if (isPlatform('android')) {
             Health.promptInstallFit()
               .then()
-              .catch((error: any) => alert(JSON.stringify(error)));
+              .catch((error: any) => alert(error));
           }
         }
         else
-          alert('Compatible Health App available!');
+          alert('Google Fit is available');
         return;
       })
-      .catch((error: any) => alert(JSON.stringify(error)));
+      .catch((error: any) => alert(error));
   };
 
+  // google fit (request authorization)
   const GFrequestAuthorization = async () => {
     if (!isPlatform('android')) {
-      alert('Google Fit is only available on android.');
+      alert('Google Fit is only available on android');
       return;
     }
     await Health.requestAuthorization(supportedTypes)
       .then((data: any) => {
         if (data)
-          alert('Authorized');
+          alert('Authorization request successful');
         else
           alert('Failed to Authorize');
         return;
       })
-      .catch((error: any) => alert(JSON.stringify(error)));
+      .catch((error: any) => alert(error));
 
     return;
   };
 
+  // google fit (check authorization)
   const GFcheckAuthStatus = async () => {
     if (!isPlatform('android')) {
       alert('Google Fit is only available on android.');
       return;
     }
     Health.isAuthorized(supportedTypes)
-      .then((data: any) => alert(JSON.stringify(data)))
-      .catch((error: any) => alert(JSON.stringify(error)));
+      .then(() => alert('Authorized'))
+      .catch((error: any) => alert(error));
   };
 
+  // google fit (update step count)
   const GFupdateSteps = async () => {
     if (!isPlatform('android')) {
-      alert('Google Fit is only available on android.');
+      alert('Google Fit is only available on android');
       return;
     }
     const date = new Date();
@@ -353,16 +361,17 @@ const HealthApp: React.FC = () => {
         await updateCurrentUser(stepsByDate, totalStep);
         alert('Steps Updated!');
       })
-      .catch((error: any) => alert(JSON.stringify(error) + 'query failed'));
+      .catch((error: any) => alert(error));
   };
 
+  // google fit (disconnect)
   const GFdisconnect = async () => {
     if (!isPlatform('android'))
-      alert('Only available on Android.');
+      alert('Google Fit is only available on Android');
 
     await Health.disconnect()
-      .then((data: any) => alert(JSON.stringify(data)))
-      .catch((error: any) => alert(JSON.stringify(error)));
+      .then(() => alert('Disconnected'))
+      .catch((error: any) => alert(error));
     
     return;
   };

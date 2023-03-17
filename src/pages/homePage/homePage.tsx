@@ -77,10 +77,10 @@ const HomePage: React.FC = () => {
     //Add today's step count
     if (stepsByDate.length > 0) {
       const today = new Date().toISOString().slice(0, 10);
-      if (stepsByDate[0].date == today) {
+      if (stepsByDate[0].date === today) {
         setSteps(stepsByDate[0].steps);
       }
-      else if (stepsByDate[stepsByDate.length - 1].date == today) {
+      else if (stepsByDate[stepsByDate.length - 1].date === today) {
         setSteps(stepsByDate[stepsByDate.length - 1].steps);
       }
       else{
