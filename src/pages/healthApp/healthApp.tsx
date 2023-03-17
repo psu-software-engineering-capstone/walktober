@@ -78,10 +78,11 @@ const HealthApp: React.FC = () => {
       alert('Apple Health is only available on iOS');
       return;
     }
-    const date = new Date();
+    const todayLocale = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }).slice(0, 10);
+    const date = new Date(todayLocale);
     const stepOptions = {
       startDate: new Date(date.getFullYear(), date.getMonth(), 1),
-      endDate: new Date(),
+      endDate: new Date(todayLocale),
       unit: 'count',
       sampleType: 'HKQuantityTypeIdentifierStepCount',
       ascending: true
@@ -261,11 +262,12 @@ const HealthApp: React.FC = () => {
       alert('Google Fit is only available on android');
       return;
     }
-    const date = new Date();
+    const todayLocale = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }).slice(0, 10);
+    const date = new Date(todayLocale);
     const stepOptions: object = {
       // note I change it from HealthQueryOptions to object as HealthQueryOptions is not valid typing
       startDate: new Date(date.getFullYear(), date.getMonth(), 1),
-      endDate: new Date(),
+      endDate: new Date(todayLocale),
       dataType: 'steps',
       filtered: true
     };

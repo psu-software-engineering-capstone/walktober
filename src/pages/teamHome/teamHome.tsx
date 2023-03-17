@@ -178,7 +178,8 @@ const TeamHome: React.FC = () => {
       members.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
     ); // set leaderboard data
     setTeamMembers(emailList); // set team members
-    const today = new Date();
+    const todayLocale = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }).slice(0, 10);
+    const today = new Date(todayLocale);
     const deadline = new Date(adData.teamDate);
     if (deadline < today) {
       // deadline check
