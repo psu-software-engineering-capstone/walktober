@@ -78,7 +78,6 @@ const HomePage: React.FC = () => {
     if (stepsByDate.length > 0) {
       const todayLocale = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }).slice(0, 10);
       const today = new Date(todayLocale).toISOString().slice(0, 10);
-      console.log(today, stepsByDate[0].date, stepsByDate[stepsByDate.length - 1].date);
       if (stepsByDate[0].date === today) {
         setSteps(stepsByDate[0].steps);
       }
