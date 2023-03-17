@@ -1,4 +1,4 @@
-// File created by Bailee Crandley
+// File created by Bailee Crandley, aim is exactly as it seems. It is the profile page for a given user
 /* eslint-disable @typescript-eslint/space-before-function-paren */
 import { useContext, useEffect, useState } from 'react';
 import {
