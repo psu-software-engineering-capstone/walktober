@@ -382,6 +382,9 @@ const HealthApp: React.FC = () => {
             <IonItem>
               <h2>Apple Health</h2>
             </IonItem>
+            <IonButton expand="block" onClick={available} className="health-app-button" size="small">
+              Apple Health Available?
+            </IonButton>
             <IonButton expand="block" onClick={requestAuthorization} className="health-app-button" size="small">
               Connect
             </IonButton>
@@ -399,6 +402,9 @@ const HealthApp: React.FC = () => {
             <IonItem>
               <h2>Google Fit</h2>
             </IonItem>
+            <IonButton expand="block" onClick={GFavailable} className="health-app-button" size="small">
+              Google Fit Available? 
+            </IonButton>
             <IonButton expand="block" onClick={GFrequestAuthorization} className="health-app-button" size="small">
               Connect
             </IonButton>
