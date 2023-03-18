@@ -90,11 +90,11 @@ const Dashboard: React.FC = () => {
         </IonTabButton>
         <IonTabButton tab="manualsteps" href="/app/manualsteps">
           <IonIcon icon={footsteps} />
-          <IonLabel>Steps Log</IonLabel>
+          <IonLabel>Steps</IonLabel>
         </IonTabButton>
         <IonTabButton tab="healthapp" href="/app/healthapp">
           <IonIcon icon={fitness} />
-          <IonLabel>Health App</IonLabel>
+          <IonLabel>Health</IonLabel>
         </IonTabButton>
         {ctx.admin && (
           <IonTabButton tab="admin" href="/app/admin">
