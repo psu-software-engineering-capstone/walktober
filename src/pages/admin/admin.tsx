@@ -622,8 +622,8 @@ const Admin: React.FC = () => {
         line += '"' + doc.data().heardAboutFrom + '",';
         line += '"' + doc.data().hoursPhysical + '",';
         line += '"' + doc.data().minsPhysical + '",';
-        line += doc.data().recCenterUse + '",';
-        line += '"' + doc.data().device;
+        line += '"' + doc.data().recCenterUse + '",';
+        line += doc.data().device;
         str += line + '\r\n';
       });
 
