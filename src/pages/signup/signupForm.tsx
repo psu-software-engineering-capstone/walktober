@@ -255,7 +255,7 @@ const SignupForm: React.FC = () => {
                 </IonSelect>
               </IonItem>
 
-              <IonItem className="modal-field">
+              <IonItem className="signup-card-field">
                 <IonLabel position="floating">
                   Please select a step-tracking method that you will be using
                 </IonLabel>
