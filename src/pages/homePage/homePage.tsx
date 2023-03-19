@@ -78,7 +78,10 @@ const HomePage: React.FC = () => {
     //Add today's step count
     if (stepsByDate.length > 0) {
       const now = Date.now();
-      const today = new Date(now).toISOString().slice(0, 10);
+      const todayNow = new Date(now);
+      todayNow.setHours(0, 0, 0, 0);
+      const today = todayNow.toISOString().slice(0, 10);
+      console.log(today);
       if (stepsByDate[0].date === today) {
         setSteps(stepsByDate[0].steps);
       }
@@ -96,6 +99,7 @@ const HomePage: React.FC = () => {
       const now = Date.now();
       const date = new Date(now);
       date.setDate(date.getDate() - i);
+      date.setHours(0, 0, 0, 0);
       pastSevenDaysDates.push(date.toISOString().slice(0, 10));
     }
     // Populate pastSevenDays with step count or 0 for each date
