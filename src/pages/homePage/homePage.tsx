@@ -81,7 +81,6 @@ const HomePage: React.FC = () => {
       const todayNow = new Date(now);
       todayNow.setHours(0, 0, 0, 0);
       const today = todayNow.toISOString().slice(0, 10);
-      console.log(today);
       if (stepsByDate[0].date === today) {
         setSteps(stepsByDate[0].steps);
       }

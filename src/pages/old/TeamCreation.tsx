@@ -90,7 +90,7 @@ const TeamCreation: React.FC = () => {
         await setAvgSteps();
       })
       .catch((error: unknown) => {
-        console.error('Error writing document: ', error);
+        console.error(error);
       });
   };
 
