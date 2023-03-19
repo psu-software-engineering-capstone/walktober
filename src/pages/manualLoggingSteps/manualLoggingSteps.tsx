@@ -500,6 +500,7 @@ const ManualSteps: React.FC = () => {
     );
     const eventStartDate = new Date(adData.startDate);
     const minDate = eventStartDate > priorDate ? eventStartDate : priorDate;
+    minDate.setHours(0, 0, 0, 0);
     return minDate.toISOString().slice(0, 10);
   }
 
@@ -509,6 +510,7 @@ const ManualSteps: React.FC = () => {
     const today = new Date(now);
     const eventEndDate = new Date(adData.endDate);
     const maxDate = eventEndDate < today ? eventEndDate : today;
+    maxDate.setHours(0, 0, 0, 0);
     return maxDate.toISOString().slice(0, 10);
   }
 
