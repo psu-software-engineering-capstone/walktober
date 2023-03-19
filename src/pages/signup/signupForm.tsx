@@ -34,6 +34,7 @@ const SignupForm: React.FC = () => {
   const [newMinPhysical, setMinPhysical] = useState('');
   const [newRecCenterUse, setRecCenterUse] = useState('');
   const [newDistFromCamp, setDistFromCamp] = useState('');
+  const [device, setDevice] = useState('');
 
   // for routing
   const history = useHistory();
@@ -50,7 +51,8 @@ const SignupForm: React.FC = () => {
       hoursPhysical: newHoursPhysical,
       minsPhysical: newMinPhysical,
       recCenterUse: newRecCenterUse,
-      distFromCamp: newDistFromCamp
+      distFromCamp: newDistFromCamp,
+      device: device,
     });
   };
 
@@ -70,9 +72,11 @@ const SignupForm: React.FC = () => {
   const recCenterUsage = {
     header: 'How often, on average, do you use the Rec Center?'
   };
-
   const distFromCampus = {
     header: 'How far do you live from campus?'
+  };
+  const deviceWillBeUsed = {
+    header: 'Please select a step-tracking method that you will be using'
   };
 
   const submitRegistration = () => {
@@ -248,6 +252,26 @@ const SignupForm: React.FC = () => {
                   <IonSelectOption value="4+-times-per-week">
                     4+ times per week
                   </IonSelectOption>
+                </IonSelect>
+              </IonItem>
+
+              <IonItem className="modal-field">
+                <IonLabel position="floating">
+                  Please select a step-tracking method that you will be using
+                </IonLabel>
+                <IonSelect
+                  interfaceOptions={deviceWillBeUsed}
+                  interface="action-sheet"
+                  placeholder="Select One"
+                  onIonChange={(e) => setDevice(e.target.value as string)}
+                >
+                  <IonSelectOption value="Apple Health">Apple Health</IonSelectOption>
+                  <IonSelectOption value="Google Fit">Google Fit</IonSelectOption>
+                  <IonSelectOption value="Samsung Health">Samsung Health</IonSelectOption>
+                  <IonSelectOption value="Fitbit">Fitbit</IonSelectOption>
+                  <IonSelectOption value="Garmin">Garmin</IonSelectOption>
+                  <IonSelectOption value="Other">Other</IonSelectOption>
+                  <IonSelectOption value="None">None</IonSelectOption>
                 </IonSelect>
               </IonItem>
 

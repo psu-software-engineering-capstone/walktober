@@ -30,7 +30,6 @@ function PostEventSurvey() {
   const [recUse, setRecUse] = useState('');
   const [wellBeingOpinion, setWellBeingOpinion] = useState('');
   const [wouldParticipateOpinion, setWouldParticipateOpinion] = useState('');
-  const [deviceUsed, setDeviceUsed] = useState('');
   const [whyNotParticipate, setWhyNotParticipate] = useState('');
   const [participatedEvents, setParticipatedEvents] = useState('');
   const [walktoberIdeas, setWalktoberIdeas] = useState('');
@@ -46,7 +45,6 @@ function PostEventSurvey() {
         recUsage: recUse,
         wellBeing: wellBeingOpinion,
         wouldParticipateAgain: wouldParticipateOpinion,
-        device: deviceUsed,
         wouldNotParticipateAgain: whyNotParticipate,
         prevParticipatedEvents: participatedEvents,
         futureIdeas: walktoberIdeas,
@@ -81,9 +79,6 @@ function PostEventSurvey() {
   const participateAgain = {
     header:
       'Please select the response that most accurately depicts your thoughts to the statement: I would participate in Walktober again!'
-  };
-  const deviceWasUsed = {
-    header: 'Please select the type of device you used for Walktober!'
   };
 
   const submitExitForm = () => {
@@ -214,24 +209,6 @@ function PostEventSurvey() {
               </IonSelectOption>
               <IonSelectOption value="4">Agree</IonSelectOption>
               <IonSelectOption value="5">Strongly Agree</IonSelectOption>
-            </IonSelect>
-          </IonItem>
-
-          <IonItem className="modal-field">
-            <IonLabel position="floating">
-              What app did you use for Walktober?
-            </IonLabel>
-            <IonSelect
-              interfaceOptions={deviceWasUsed}
-              interface="action-sheet"
-              placeholder="Select One"
-              onIonChange={(e) => setDeviceUsed(e.target.value as string)}
-            >
-              <IonSelectOption value="Apple Health">
-                Apple Health
-              </IonSelectOption>
-              <IonSelectOption value="Google Fit">Google Fit</IonSelectOption>
-              <IonSelectOption value="N/A">N/A</IonSelectOption>
             </IonSelect>
           </IonItem>
 

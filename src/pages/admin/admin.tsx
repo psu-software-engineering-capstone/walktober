@@ -608,7 +608,7 @@ const Admin: React.FC = () => {
       console.log('Generating pre survey report');
 
       let str =
-        '"Name","Affiliation","Email","Distance From Campus","Heard From","Hours of Physical Activity","Minutes of Physical Activity","Rec Center Usage"\n';
+        '"Name","Affiliation","Email","Distance From Campus","Heard From","Hours of Physical Activity","Minutes of Physical Activity","Rec Center Usage","Device Usage"\n';
 
       const querySnapshot = await getDocs(
         collection(FirestoreDB, 'registrationQuestions')
@@ -622,7 +622,8 @@ const Admin: React.FC = () => {
         line += '"' + doc.data().heardAboutFrom + '",';
         line += '"' + doc.data().hoursPhysical + '",';
         line += '"' + doc.data().minsPhysical + '",';
-        line += doc.data().recCenterUse;
+        line += doc.data().recCenterUse + '",';
+        line += '"' + doc.data().device;
         str += line + '\r\n';
       });
 
@@ -645,14 +646,13 @@ const Admin: React.FC = () => {
       console.log('Generating post survey report');
 
       let str =
-        '"Device Used","Walktober Feedback","Future Ideas","Hours Active Per Week","Minutes Active Per Day","Why Not Participate Again","Participation Opinion","Events Participated In","Rec Center Usage","Well-being"\n';
+        '"Walktober Feedback","Future Ideas","Hours Active Per Week","Minutes Active Per Day","Why Not Participate Again","Participation Opinion","Events Participated In","Rec Center Usage","Well-being"\n';
 
       const querySnapshot = await getDocs(
         collection(FirestoreDB, 'exitQuestions')
       );
       querySnapshot.forEach((doc: { id: any; data: () => any }) => {
         let line = '';
-        line += '"' + doc.data().device + '",';
         line += '"' + doc.data().feedback + '",';
         line += '"' + doc.data().futureIdeas + '",';
         line += '"' + doc.data().hoursPerWeek + '",';
@@ -684,31 +684,63 @@ const Admin: React.FC = () => {
       console.log('Generating device usage report');
 
       // Hardcoded count, should probably give exit survey device question a variable to use
-      const android = query(
-        collection(FirestoreDB, 'exitQuestions'),
-        where('device', '==', 'Google Fit')
-      );
-      const androidSnapshot = await getCountFromServer(android);
-      const gFitCount = androidSnapshot.data().count;
-
       const apple = query(
-        collection(FirestoreDB, 'exitQuestions'),
+        collection(FirestoreDB, 'registrationQuestions'),
         where('device', '==', 'Apple Health')
       );
       const appleSnapshot = await getCountFromServer(apple);
       const aHealthCount = appleSnapshot.data().count;
 
-      const neither = query(
-        collection(FirestoreDB, 'exitQuestions'),
-        where('device', '==', 'N/A')
+      const google = query(
+        collection(FirestoreDB, 'registrationQuestions'),
+        where('device', '==', 'Google Fit')
       );
-      const neitherSnapshot = await getCountFromServer(neither);
-      const nCount = neitherSnapshot.data().count;
+      const androidSnapshot = await getCountFromServer(google);
+      const gFitCount = androidSnapshot.data().count;
+
+      const samsung = query(
+        collection(FirestoreDB, 'registrationQuestions'),
+        where('device', '==', 'Samsung Health')
+      );
+      const samsungSnapshot = await getCountFromServer(samsung);
+      const samsungCount = samsungSnapshot.data().count;
+
+      const fitbit = query(
+        collection(FirestoreDB, 'registrationQuestions'),
+        where('device', '==', 'Fitbit')
+      );
+      const fitbitSnapshot = await getCountFromServer(fitbit);
+      const fitbitCount = fitbitSnapshot.data().count;
+
+      const garmin = query(
+        collection(FirestoreDB, 'registrationQuestions'),
+        where('device', '==', 'Garmin')
+      );
+      const garminSnapshot = await getCountFromServer(garmin);
+      const garminCount = garminSnapshot.data().count;
+
+      const other = query(
+        collection(FirestoreDB, 'registrationQuestions'),
+        where('device', '==', 'Other')
+      );
+      const otherSnapshot = await getCountFromServer(other);
+      const otherCount = otherSnapshot.data().count;
+
+      const none = query(
+        collection(FirestoreDB, 'registrationQuestions'),
+        where('device', '==', 'None')
+      );
+      const noneSnapshot = await getCountFromServer(none);
+      const nCount = noneSnapshot.data().count;
 
       let str = '';
       str += '"Apple Health",' + aHealthCount + '\r\n';
       str += '"Google Fit",' + gFitCount + '\r\n';
-      str += '"N/A",' + nCount + '\r\n';
+      str += '"Samsung Health",' + samsungCount + '\r\n';
+      str += '"Fitbit",' + fitbitCount + '\r\n';
+      str += '"Garmin",' + garminCount + '\r\n';
+      str += '"Other",' + otherCount + '\r\n';
+      str += '"None",' + nCount + '\r\n';
 
       const blob = new Blob([str], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
