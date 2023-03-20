@@ -886,7 +886,7 @@ const Admin: React.FC = () => {
               ></IonInput>
             </IonItem>
             <IonItem>
-              <IonLabel>Step Log Allowed Period: </IonLabel>
+              <IonLabel>Step Backlog Period: </IonLabel>
               <IonInput
                 type="number"
                 name="editDaysLimit"
