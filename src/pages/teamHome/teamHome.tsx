@@ -86,7 +86,7 @@ const TeamHome: React.FC = () => {
                 Members Name
               </IonCol>
               <IonCol size="8" offset="0" className="header-col admin-col">
-                Members email
+                Members Email
               </IonCol>
             </IonRow>
             {team.map((item: { name: string; email: string }) =>
