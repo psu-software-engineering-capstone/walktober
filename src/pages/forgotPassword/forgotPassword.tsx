@@ -81,7 +81,6 @@ const ForgotPassword: React.FC = () => {
           </IonCardHeader>
           <IonCardContent>
             <IonItem
-              fill="solid"
               className={`${(isValid ?? false) && 'ion-valid'} ${
                 isValid === false && 'ion-invalid'
               } ${isTouched && 'ion-touched'}` + " signup-card-field"} >
