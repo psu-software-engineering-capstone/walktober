@@ -54,11 +54,6 @@ const NavBar: React.FC<NavBarProps> = ({
             <NavLink id="nav-team" text="Team" href={ctx.team === '' ? '/app/team/join' : '/app/team'} />
             <NavLink id="nav-profile" text="Profile" href="/app/profile">
               <NavLink id="nav-steps-log" text="Steps Log" href="/app/manualsteps" />
-              <NavLink
-                id="nav-steps-calc"
-                text="Steps Calculator"
-                href="/app/stepscalc"
-              />
             </NavLink>
             {isAdmin && (
               <NavLink id="nav-admin" text="Admin" href="/app/admin">
