@@ -269,7 +269,7 @@ const TeamHome: React.FC = () => {
       );
     }
   }
-  
+
   //Make the password visible to the user instead of a password type (aka just dots)
   const togglePasswordVisibility = () => {
     setPasswordShown(!passwordShown);
@@ -278,18 +278,43 @@ const TeamHome: React.FC = () => {
   //Check the new passwords and if they match eachother then change the password in the database
   async function submitPasswordChange() {
     setIsOpen(false);
+    if (newPassword === '' && verifyPassword === '') {
+      alert(
+        'Both the new password and the verification password has not been entered. Please try again'
+      );
+      setNewPassword('');
+      setVeriPassword('');
+      return;
+    } else if (newPassword === '') {
+      alert('The new password has not been enetered. Please try again');
+      setNewPassword('');
+      setVeriPassword('');
+      return;
+    } else if (verifyPassword === '') {
+      alert('The verification password has not been entered. Please try again');
+      setNewPassword('');
+      setVeriPassword('');
+
+      return;
+    }
     if (newPassword === verifyPassword) {
       await updateDoc(teamReference, { password: newPassword })
         .then(() => {
           alert('Team Password updated');
+          setNewPassword('');
+          setVeriPassword('');
         })
         .catch((error: any) => {
           alert(error);
+          setNewPassword('');
+          setVeriPassword('');
         });
     } else {
       alert(
         'The new password and password entered for verification are not the same. Please try again'
       );
+      setNewPassword('');
+      setVeriPassword('');
       return;
     }
   }
