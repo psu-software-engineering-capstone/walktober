@@ -7,9 +7,8 @@ import YellowLeaf from '../assets/yellowLeaf.png'; // import for yellow leaf
 import GreenLeaf from '../assets/GreenLeaf.png'; // import for green leaf
 import './CalendarLeafs.css';
 
-// below are vars to get the current date running on the system, then get the current year from it, then using that to find the exact start date for october
-// this is done to ensure that the calendar is always properly rendered for each year
-const currentDate = new Date();
+const now = Date.now();
+const currentDate = new Date(now);
 const currentYear = currentDate.getFullYear();
 const monthStart = new Date(`October 1, ${currentYear}`);
 

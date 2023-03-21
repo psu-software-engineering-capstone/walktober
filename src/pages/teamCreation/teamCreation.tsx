@@ -18,7 +18,7 @@ import {
   IonList,
   IonPage,
   IonTitle,
-  IonToolbar
+  IonIcon
 } from '@ionic/react';
 import { useContext, useState } from 'react';
 import { auth, FirestoreDB } from '../../firebase';
@@ -38,6 +38,8 @@ import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import './teamCreation.css';
 import create from '../../assets/create-team.png';
+import { eyeOff } from 'ionicons/icons';
+import { eye } from 'ionicons/icons';
 
 const TeamCreation: React.FC = () => {
   const [newTeamName, setNewTeamName] = useState('');
@@ -45,10 +47,16 @@ const TeamCreation: React.FC = () => {
   const [confirmNewTeamPassword, setConfirmNewTeamPassword] = useState('');
   const [newTeamStatus, setNewTeamStatus] = useState(0);
   const [showTeamPassword, setShowTeamPassword] = useState(false);
+  const [passwordShown, setPasswordShown] = useState(false);
 
   const handleTeamChange = (e: any) => {
     setNewTeamStatus(e.detail.value);
     setShowTeamPassword(e.detail.value == 1 ? true : false);
+  };
+
+  // toggle password visibility
+  const togglePasswordVisibility = () => {
+    setPasswordShown(!passwordShown);
   };
 
   const history = useHistory(); // for routing
@@ -61,13 +69,13 @@ const TeamCreation: React.FC = () => {
     const userSnap = await getDoc(userRef);
     const userData = userSnap.data();
     if (newTeamName === '') {
-      alert('Team name cannot be an empty!');
+      alert('You must enter a team name');
       return;
     } else {
       const dbRef = doc(FirestoreDB, 'teams', newTeamName);
       const dbSnap = await getDoc(dbRef);
       if (dbSnap.exists()) {
-        alert(`${newTeamName} already exists!`);
+        alert(`${newTeamName} already exists`);
         return;
       }
     }
@@ -77,20 +85,20 @@ const TeamCreation: React.FC = () => {
     }
 
     if (newTeamStatus == 1 && newTeamPassword === '') {
-      alert('You must create a password for a private team!');
+      alert('You must create a password for a private team');
       return;
     }
 
     if (newTeamStatus == 1 && newTeamPassword != confirmNewTeamPassword) {
-      alert('Team passwords must match!');
+      alert('Team passwords must match');
       return;
     }
-
-    const currentDate: Date = new Date();
+    const now = Date.now();
+    const currentDate: Date = new Date(now);
     const teamCreationDeadline: Date = new Date(adData.teamDate);
     if (currentDate > teamCreationDeadline) {
       alert(
-        `The team creation deadline is: ${teamCreationDeadline}. You cannot create a team now.`
+        `The team creation deadline is: ${teamCreationDeadline}`
       );
       return;
     }
@@ -125,7 +133,7 @@ const TeamCreation: React.FC = () => {
         history.push('/app/team');
       })
       .catch((error: unknown) => {
-        console.error('Error writing document: ', error);
+        console.error(error);
       });
   };
 
@@ -150,11 +158,6 @@ const TeamCreation: React.FC = () => {
         </NavBar>
       </IonHeader>
       <IonContent fullscreen className="team-create">
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Team Creation</IonTitle>
-          </IonToolbar>
-        </IonHeader>
         <IonCard className="create-team-card">
           <IonCardHeader style={{ display: 'flex', justifyContent: 'center' }}>
             <img
@@ -196,12 +199,20 @@ const TeamCreation: React.FC = () => {
                   <IonItem>
                     <IonLabel position="floating">Team Password</IonLabel>
                     <IonInput
-                      type="password"
+                      type={passwordShown ? 'text' : 'password'}
                       name="Team Password"
-                      onIonChange={(e) =>
-                        setNewTeamPassword(e.target.value as string)
-                      }
+                      onIonChange={(e) => setNewTeamPassword(e.target.value as string)}
                     ></IonInput>
+                    <IonButton 
+                      fill="clear" 
+                      color="medium" 
+                      slot="end" 
+                      onClick={togglePasswordVisibility} 
+                      className="password-show">
+                      <IonIcon 
+                        slot="icon-only" 
+                        icon={passwordShown ? eyeOff : eye}></IonIcon>
+                    </IonButton>
                   </IonItem>
 
                   <IonItem>
@@ -209,12 +220,20 @@ const TeamCreation: React.FC = () => {
                       Confirm Team Password
                     </IonLabel>
                     <IonInput
-                      type="password"
+                      type={passwordShown ? 'text' : 'password'}
                       name="Confirm Team Password"
-                      onIonChange={(e) =>
-                        setConfirmNewTeamPassword(e.target.value as string)
-                      }
+                      onIonChange={(e) => setConfirmNewTeamPassword(e.target.value as string)}
                     ></IonInput>
+                    <IonButton 
+                      fill="clear" 
+                      color="medium" 
+                      slot="end" 
+                      onClick={togglePasswordVisibility} 
+                      className="password-show">
+                      <IonIcon 
+                        slot="icon-only" 
+                        icon={passwordShown ? eyeOff : eye}></IonIcon>
+                    </IonButton>
                   </IonItem>
                 </>
               )}

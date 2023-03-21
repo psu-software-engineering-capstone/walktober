@@ -86,7 +86,7 @@ const TeamHome: React.FC = () => {
                 Members Name
               </IonCol>
               <IonCol size="8" offset="0" className="header-col admin-col">
-                Members email
+                Members Email
               </IonCol>
             </IonRow>
             {team.map((item: { name: string; email: string }) =>
@@ -178,7 +178,8 @@ const TeamHome: React.FC = () => {
       members.sort((a: any, b: any) => (a.totalStep > b.totalStep ? -1 : 1))
     ); // set leaderboard data
     setTeamMembers(emailList); // set team members
-    const today = new Date();
+    const now = Date.now();
+    const today = new Date(now);
     const deadline = new Date(adData.teamDate);
     if (deadline < today) {
       // deadline check
@@ -206,7 +207,7 @@ const TeamHome: React.FC = () => {
     const photoURL = await getDownloadURL(imageRef);
     await updateDoc(teamReference, { profile_pic: photoURL })
       .then(() => {
-        alert('Team profile picture updated!');
+        alert('Team profile picture updated');
       })
       .catch((error: any) => {
         alert(error);
@@ -377,11 +378,11 @@ const TeamHome: React.FC = () => {
               sizeMd="6"
               sizeXs="12"
             >
-              <IonCard className="card-padding-team-home box-size">
+              <IonCard className="card-padding-team-home ">
                 <IonHeader>
                   <IonTitle className="text-center">{`Team ${ctx.team}`}</IonTitle>
                 </IonHeader>
-                <IonCardContent className="card-content-class">
+                <IonCardContent>
                   <IonGrid>
                     <IonRow>
                       <IonCol size="12" className="col-from-cards">

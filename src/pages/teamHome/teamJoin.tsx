@@ -17,7 +17,8 @@ import {
   IonRow,
   IonTitle,
   RefresherEventDetail,
-  IonCardSubtitle
+  IonCardSubtitle,
+  IonIcon
 } from '@ionic/react';
 import {
   getDoc,
@@ -29,6 +30,7 @@ import {
   onSnapshot
 } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
+import { eye, eyeOff} from 'ionicons/icons';
 import NavBar from '../../components/NavBar';
 import { auth, FirestoreDB } from '../../firebase';
 import { useHistory } from 'react-router';
@@ -62,6 +64,8 @@ const TeamJoin: React.FC = () => {
 
   const adData = useContext(AdminContext); // admin context
   const ctx = useContext(AuthContext); // auth context
+
+  const [passwordShown, setPasswordShown] = useState(false);
 
   // join the team
   const joined = async () => {
@@ -108,7 +112,7 @@ const TeamJoin: React.FC = () => {
   // join the team
   const toJoin = () => {
     if (joinTeam === '') {
-      alert('No team name has been entered as of yet');
+      alert('Please enter the team name');
       return; // team name cannot be empty
     }
     for (let i = 0; i < allTeams.length; i++) {
@@ -117,7 +121,7 @@ const TeamJoin: React.FC = () => {
         if(allTeams[i].size === adData.maxSize) {
           // check if the team is full 
           alert(
-            'This team is already full. Please pick a different one and try again.'
+            'This team is full'
           );
           return;
         } else {
@@ -126,7 +130,7 @@ const TeamJoin: React.FC = () => {
             if (teamPass === '') {
               // private team but no password entered
               alert(
-                'A password needs to be entered as this team is private. Please enter the password and try again.'
+                'Please enter the password'
               );
               return;
             } else if (allTeams[i].password === teamPass) {
@@ -135,7 +139,7 @@ const TeamJoin: React.FC = () => {
             } else {
               // incorrect password
               alert(
-                'The password entered does not match the password for the team. Please try again'
+                'Incorrect password. Please try again.'
               );
               return;
             }
@@ -147,7 +151,7 @@ const TeamJoin: React.FC = () => {
         }
       }
     }
-    alert('No team was found that matched what was entered'); // no team was found
+    alert('No team was found'); // no team was found
     return;
   };
 
@@ -226,7 +230,8 @@ const TeamJoin: React.FC = () => {
   async function getData(teamList: any) {
     const teams: Array<teamData> = []; // array of teams
     const teamNames: Array<selectFormat> = []; // array of team names
-    const today = new Date();
+    const now = Date.now();
+    const today = new Date(now);
     const deadline = new Date(adData.teamDate);
     if (deadline < today) {
       // if the deadline has passed
@@ -304,6 +309,11 @@ const TeamJoin: React.FC = () => {
     }
   }
 
+  // toggle password visibility
+  const togglePasswordVisibility = () => {
+    setPasswordShown(!passwordShown);
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -336,16 +346,29 @@ const TeamJoin: React.FC = () => {
                       ></IonInput>
                     </IonItem>
                   </IonCol>
-                  <IonCol sizeXs="6" sizeMd="4">
+                  <IonCol sizeXs="6" sizeMd="5">
                     <IonItem>
                       <IonLabel position="floating">Team Password</IonLabel>
                       <IonInput
-                        name="password"
-                        onIonChange={(e) => setPass(e.target.value as string)}
+                        type={passwordShown ? 'text' : 'password'}
+                        name="cpassword"
+                        onIonChange={(e) =>
+                          setPass(e.target.value as string)
+                        }
                       ></IonInput>
+                      <IonButton 
+                        fill="clear" 
+                        color="medium" 
+                        slot="end" 
+                        onClick={togglePasswordVisibility} 
+                        className="password-show">
+                        <IonIcon 
+                          slot="icon-only" 
+                          icon={passwordShown ? eyeOff : eye}></IonIcon>
+                      </IonButton>
                     </IonItem>
                   </IonCol>
-                  <IonCol className="join-create-button" sizeXs="12" sizeMd="4">
+                  <IonCol className="join-create-button" sizeXs="12" sizeMd="3">
                     <IonButton disabled={buttonValid} onClick={toJoin}>
                       Join Team
                     </IonButton>

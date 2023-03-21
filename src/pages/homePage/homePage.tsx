@@ -1,4 +1,3 @@
-// File is the home page React feature component created by NathanMoes
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-types */
@@ -7,79 +6,99 @@ import { useState, useContext, useEffect } from 'react';
 import {
   IonContent,
   IonHeader,
-  IonLabel,
   IonPage,
   IonTitle,
-  IonIcon,
   IonGrid,
   IonRow,
   IonCol,
+  IonCard,
   RefresherEventDetail,
   IonRefresher,
-  IonRefresherContent
+  IonRefresherContent,
+  IonCardHeader,
+  IonCardContent,
+  IonCardTitle
 } from '@ionic/react';
 import WidgetBot from '@widgetbot/react-embed';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import ProgressChart from '../../components/ProgressChart';
 import AuthContext from '../../store/auth-context';
-import { getDoc, doc } from 'firebase/firestore';
+import AdminContext from '../../store/admin-context';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { auth, FirestoreDB } from '../../firebase';
 import LeaderBoardChart from '../../components/LeaderBoard/LeaderBoardChart';
+import PostEventSurvey from '../postEventSurvey/postEventSurvey';
 import './homePage.css';
 
-// below is the outline for badges, a non developed part of the project
-interface badgeOutline {
-  name: string;
-}
-
-// below is the outline for step logs for displaying. Needed prototype for typescript
 interface StepLog {
   date: string;
   steps: number;
 }
 
-// below is the feature component for the home page
 const HomePage: React.FC = () => {
-  const [steps, setSteps] = useState(0); // steps to be used for current days steps
-  const history = useHistory(); // history for routing
-  const [badges, setBadges] = useState(Array<badgeOutline>); // badges for non implemented feature
-  const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>); // As the variable says, it is the var to store and access the current user's past seven days steps for use in personal progress chart
+  const [steps, setSteps] = useState(0);
+  const [totalSteps, setTotalSteps] = useState(0);
+  const history = useHistory();
+  const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
+  const [showPostSurvey, setShowPostSurvey] = useState(false);
+  const [stepGoal, setStepGoal] = useState(0);
 
-  const ctx = useContext(AuthContext); // context hook for user data
+  const ctx = useContext(AuthContext); // auth context
+  const adminInfo = useContext(AdminContext);
 
-  // load in user data and set it
+  // update profile data when the page loads
+  // update profile data when the profile data changes
   useEffect(() => {
-    if (ctx.user) {
-      console.log('get past seven days steps');
-      getPastSevenDaysSteps();
-    }
+    const unsubscribe = onSnapshot(
+      doc(FirestoreDB, 'users', auth.currentUser.email as string),
+      (doc: any) => {
+        if (doc.exists()) {
+          getPastSevenDaysSteps(doc.data());
+        }
+      }
+    );
+    return () => {
+      console.log('unsubscribing from home page');
+      unsubscribe();
+    };
   }, [ctx.user]);
 
-  // get past seven days of steps from firestore
-  // even though the user does not have seven days of steps
-  // the chart will still render with seven days of steps
-  // each day will have 0 steps
-  const getPastSevenDaysSteps = async () => {
-    if (ctx.user === null) {
-      alert('You are not logged in!');
-      history.push('/login');
-      return;
-    }
+  useEffect(() => {
+    const now = Date.now();
+    const today = new Date(now);
+    const end = new Date(adminInfo.endDate);
+    setShowPostSurvey(today > end);
+  }, []);
 
-    const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
-    const dbSnap = await getDoc(dbRef);
-    const userData = dbSnap.data();
+  // get past seven days of steps from firestore
+  const getPastSevenDaysSteps = async (userData: any) => {
     const stepsByDate = userData.stepsByDate;
+    setTotalSteps(userData.totalStep);
+    //Add today's step count
+    if (stepsByDate.length > 0) {
+      const now = Date.now();
+      const todayNow = new Date(now);
+      todayNow.setHours(0, 0, 0, 0);
+      const today = todayNow.toISOString().slice(0, 10);
+      if (stepsByDate[0].date === today) {
+        setSteps(stepsByDate[0].steps);
+      } else if (stepsByDate[stepsByDate.length - 1].date === today) {
+        setSteps(stepsByDate[stepsByDate.length - 1].steps);
+      } else {
+        setSteps(0);
+      }
+    }
 
     // Create an array of the last seven dates (including today)
     const pastSevenDaysDates = [];
     for (let i = 1; i < 8; i++) {
-      const date = new Date();
+      const now = Date.now();
+      const date = new Date(now);
       date.setDate(date.getDate() - i);
+      date.setHours(0, 0, 0, 0);
       pastSevenDaysDates.push(date.toISOString().slice(0, 10));
     }
-
     // Populate pastSevenDays with step count or 0 for each date
     const pastSevenDays = pastSevenDaysDates.map((date) => {
       const stepLog = stepsByDate.find(
@@ -91,26 +110,17 @@ const HomePage: React.FC = () => {
         return { date: date, steps: 0 };
       }
     });
-
-    setPastSevenDaysSteps(pastSevenDays);
+    setPastSevenDaysSteps(pastSevenDays.reverse());
+    setStepGoal(stepGoal);
   };
-
-  // const stepUpdateHandler = (event: any): void => {
-  //   const newValue = document.querySelector('#stepsUpdate') as HTMLInputElement;
-  //   const newSteps = Number(newValue.value);
-  //   if (newSteps > 0) {
-  //     setSteps(newSteps);
-  //   }
-  // };
 
   // handle refresher
   async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay execution for 2 seconds
-    getPastSevenDaysSteps(); // Refresh data
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 
-  // changes naviagtion to the manual steps recording page
+  // move to manual steps page
   const moveToManualSteps = () => {
     history.push('/app/manualsteps');
   };
@@ -123,77 +133,94 @@ const HomePage: React.FC = () => {
         </NavBar>
       </IonHeader>
       <IonContent fullscreen={true} className="ion-padding testing">
+        {showPostSurvey ? <PostEventSurvey /> : ''}
         <IonGrid>
           <IonRow>
-            <IonCol
-              sizeSm="6"
-              sizeXs="12"
-              sizeMd="6"
-              sizeLg="4"
-              className="leaderBoard"
-            >
-              <LeaderBoardChart></LeaderBoardChart>
+            <IonCol sizeXs="12" sizeSm="12" sizeMd="6" sizeLg="6" sizeXl="6">
+              <IonRow>
+                <IonCol className="restrict-height">
+                  <LeaderBoardChart></LeaderBoardChart>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol></IonCol>
+              </IonRow>
             </IonCol>
-            <IonCol
-              sizeSm="6"
-              sizeXs="12"
-              sizeMd="6"
-              sizeLg="4"
-              className="todaysSteps"
-            >
-              <IonLabel className="">
-                Todays Steps:{' '}
-                <div className="localStepsUpdater">{steps.toString()}</div>
-              </IonLabel>
-              <br />
-              click
-              <a onClick={moveToManualSteps}> here </a>
-              to see previous logs
-            </IonCol>
-            <IonCol
-              sizeSm="6"
-              sizeXs="12"
-              sizeMd="6"
-              sizeLg="4"
-              className="personalProgress"
-            >
-              {pastSevenDaysSteps.length > 1 ? (
-                <ProgressChart
-                  data={pastSevenDaysSteps.reverse()}
-                  todayStep={0}
-                  stepGoal={0}
-                />
-              ) : (
-                ' '
-              )}
-            </IonCol>
-            <IonCol
-              size="3"
-              sizeSm="6"
-              sizeXs="12"
-              sizeMd="6"
-              sizeLg="8"
-              offsetLg="4"
-              className="box-test"
-            >
-              <WidgetBot
-                className="discord-widget"
-                server="1068966007886069841"
-                channel="1068966009106600110"
-              />
+            <IonCol sizeXs="12" sizeSm="12" sizeMd="6" sizeLg="6" sizeXl="6">
+              <IonRow>
+                <IonCol
+                  sizeXs="12"
+                  sizeSm="12"
+                  sizeMd="12"
+                  sizeLg="6"
+                  sizeXl="6"
+                >
+                  <IonCard className="team-card">
+                    <IonCardHeader>
+                      <IonCardTitle>
+                        <p className="step-title">Today&apos;s Steps:</p>
+                        <div className="step-counter">
+                          {steps.toLocaleString()}
+                        </div>
+                      </IonCardTitle>
+                      <IonCardTitle>
+                        <p className="step-title">Total Steps:</p>
+                        <div className="step-counter">
+                          {totalSteps.toLocaleString()}
+                        </div>
+                      </IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      <p>
+                        Click{' '}
+                        <a onClick={moveToManualSteps} className="link-color">
+                          here{' '}
+                        </a>
+                        to add or edit steps.
+                      </p>
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+                <IonCol
+                  sizeXs="12"
+                  sizeSm="12"
+                  sizeMd="12"
+                  sizeLg="6"
+                  sizeXl="6"
+                >
+                  <IonCard className="team-card">
+                    <IonCardHeader>
+                      <IonCardTitle>Progress:</IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      {pastSevenDaysSteps.length > 1 ? (
+                        <ProgressChart
+                          data={pastSevenDaysSteps}
+                          todayStep={steps}
+                          stepGoal={stepGoal}
+                        />
+                      ) : (
+                        ' '
+                      )}
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <IonCard className="team-card discord-card">
+                    <IonCardContent>
+                      <WidgetBot
+                        className="discord-widget"
+                        server="1068966007886069841"
+                        channel="1068966009106600110"
+                      />
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+              </IonRow>
             </IonCol>
           </IonRow>
-
-          <IonCol sizeMd="12">
-            <IonLabel>
-              Badges Acquired:
-              <div>
-                {badges.map((badge) => (
-                  <IonIcon name={badge.name} key={Math.random()}></IonIcon>
-                ))}
-              </div>
-            </IonLabel>
-          </IonCol>
         </IonGrid>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>

@@ -4,12 +4,14 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import {
+  IonCard,
   IonContent,
   IonHeader,
   IonPage,
   IonTitle,
   IonButton,
-  isPlatform
+  isPlatform,
+  IonItem
 } from '@ionic/react';
 import { HealthKit } from '@awesome-cordova-plugins/health-kit';
 import { auth, FirestoreDB } from '../../firebase';
@@ -26,16 +28,18 @@ const HealthApp: React.FC = () => {
     steps: number;
   }
 
+  // apple health (health available?)
   const available = async () => {
     if (!isPlatform('ios')) {
       alert('Apple Health is only available on iOS');
       return;
     }
     await HealthKit.available()
-      .then((data: any) => alert(JSON.stringify(data)))
-      .catch((error: any) => alert(JSON.stringify(error)));
+      .then(() => alert('Apple Health is available'))
+      .catch((error: any) => alert(error));
   };
 
+  // apple health (request authorization)
   const requestAuthorization = async () => {
     if (!isPlatform('ios')) {
       alert('Apple Health is only available on iOS');
@@ -53,10 +57,11 @@ const HealthApp: React.FC = () => {
       readTypes: supportedTypes,
       writeTypes: supportedTypes
     })
-      .then((data: any) => alert(JSON.stringify(data)))
-      .catch((error: any) => alert(JSON.stringify(error)));
+      .then(() => alert('Authorization request successful'))
+      .catch((error: any) => alert(error));
   };
 
+  // apple health (check authorization status)
   const checkAuthStatus = async () => {
     if (!isPlatform('ios')) {
       alert('Apple Health is only available on iOS');
@@ -65,19 +70,21 @@ const HealthApp: React.FC = () => {
     HealthKit.checkAuthStatus({
       type: 'HKQuantityTypeIdentifierHeight'
     })
-      .then((data: any) => alert(JSON.stringify(data)))
-      .catch((error: any) => alert(JSON.stringify(error)));
+      .then(() => alert('Authorized'))
+      .catch((error: any) => alert(error));
   };
 
+  // apple health (update step count)
   const updateSteps = async () => {
     if (!isPlatform('ios')) {
       alert('Apple Health is only available on iOS');
       return;
     }
-    const date = new Date();
+    const now = Date.now();
+    const date = new Date(now);
     const stepOptions = {
       startDate: new Date(date.getFullYear(), date.getMonth(), 1),
-      endDate: new Date(),
+      endDate: date,
       unit: 'count',
       sampleType: 'HKQuantityTypeIdentifierStepCount',
       ascending: true
@@ -198,66 +205,71 @@ const HealthApp: React.FC = () => {
     }
   ];
 
+  // google fit (health available?)
   const GFavailable = async () => {
     if (!isPlatform('android')) {
-      alert('Google Fit is only available on android.');
+      alert('Google Fit is only available on android');
       return;
     }
     await Health.isAvailable()
       .then((data: any) => {
         if (!data) {
-          alert('Please install Google Fit!');
+          alert('Please install Google Fit');
           if (isPlatform('android')) {
             Health.promptInstallFit()
               .then()
-              .catch((error: any) => alert(JSON.stringify(error)));
+              .catch((error: any) => alert(error));
           }
         }
         else
-          alert('Compatible Health App available!');
+          alert('Google Fit is available');
         return;
       })
-      .catch((error: any) => alert(JSON.stringify(error)));
+      .catch((error: any) => alert(error));
   };
 
+  // google fit (request authorization)
   const GFrequestAuthorization = async () => {
     if (!isPlatform('android')) {
-      alert('Google Fit is only available on android.');
+      alert('Google Fit is only available on android');
       return;
     }
     await Health.requestAuthorization(supportedTypes)
       .then((data: any) => {
         if (data)
-          alert('Authorized');
+          alert('Authorization request successful');
         else
           alert('Failed to Authorize');
         return;
       })
-      .catch((error: any) => alert(JSON.stringify(error)));
+      .catch((error: any) => alert(error));
 
     return;
   };
 
+  // google fit (check authorization)
   const GFcheckAuthStatus = async () => {
     if (!isPlatform('android')) {
       alert('Google Fit is only available on android.');
       return;
     }
     Health.isAuthorized(supportedTypes)
-      .then((data: any) => alert(JSON.stringify(data)))
-      .catch((error: any) => alert(JSON.stringify(error)));
+      .then(() => alert('Authorized'))
+      .catch((error: any) => alert(error));
   };
 
+  // google fit (update step count)
   const GFupdateSteps = async () => {
     if (!isPlatform('android')) {
-      alert('Google Fit is only available on android.');
+      alert('Google Fit is only available on android');
       return;
     }
-    const date = new Date();
+    const now = Date.now();
+    const date = new Date(now);
     const stepOptions: object = {
       // note I change it from HealthQueryOptions to object as HealthQueryOptions is not valid typing
       startDate: new Date(date.getFullYear(), date.getMonth(), 1),
-      endDate: new Date(),
+      endDate: date,
       dataType: 'steps',
       filtered: true
     };
@@ -353,16 +365,17 @@ const HealthApp: React.FC = () => {
         await updateCurrentUser(stepsByDate, totalStep);
         alert('Steps Updated!');
       })
-      .catch((error: any) => alert(JSON.stringify(error) + 'query failed'));
+      .catch((error: any) => alert(error));
   };
 
+  // google fit (disconnect)
   const GFdisconnect = async () => {
     if (!isPlatform('android'))
-      alert('Only available on Android.');
+      alert('Google Fit is only available on Android');
 
     await Health.disconnect()
-      .then((data: any) => alert(JSON.stringify(data)))
-      .catch((error: any) => alert(JSON.stringify(error)));
+      .then(() => alert('Disconnected'))
+      .catch((error: any) => alert(error));
     
     return;
   };
@@ -374,40 +387,65 @@ const HealthApp: React.FC = () => {
           <IonTitle>Health App Integration</IonTitle>
         </NavBar>
       </IonHeader>
-      <IonContent fullscreen={true} className="ion-padding">
-        <h2>Apple Health</h2>
-        <IonButton expand="block" onClick={available}>
-          Health Available?
-        </IonButton>
-        <IonButton expand="block" onClick={requestAuthorization}>
-          Request Auth
-        </IonButton>
-        <IonButton expand="block" onClick={checkAuthStatus}>
-          Check Auth Status
-        </IonButton>
-        <IonButton expand="block" onClick={updateSteps}>
-          Update Step Count
-        </IonButton>
-        <h2>Google Fit</h2>
-        <IonButton expand="block" onClick={GFavailable}>
-          Health Available?
-        </IonButton>
-        <IonButton expand="block" onClick={GFrequestAuthorization}>
-          Request Auth
-        </IonButton>
-        <IonButton expand="block" onClick={GFcheckAuthStatus}>
-          Check Auth Statu
-        </IonButton>
-        <IonButton expand="block" onClick={GFupdateSteps}>
-          Update Step Count
-        </IonButton>
-        <IonButton expand="block" onClick={GFdisconnect}>
-          Disconnect
-        </IonButton>
-        <h2>Fitbit</h2>
-        <IonButton expand="block">Implementing..</IonButton>
-        <h2>Samsung Health</h2>
-        <IonButton expand="block">Implementing...</IonButton>
+      <IonContent fullscreen={true} className="ion-padding walktober-background">
+        { isPlatform('ios') ? 
+          <IonCard className="health-app-card">
+            <IonItem>
+              <h2>Apple Health</h2>
+            </IonItem>
+            <IonButton expand="block" onClick={available} className="health-app-button" size="small">
+              Apple Health Available?
+            </IonButton>
+            <IonButton expand="block" onClick={requestAuthorization} className="health-app-button" size="small">
+              Connect
+            </IonButton>
+            <IonButton expand="block" onClick={checkAuthStatus} className="health-app-button" size="small">
+              Check Connection Status
+            </IonButton>
+            <IonButton expand="block" onClick={updateSteps} className="health-app-button" size="small">
+              Update Step Count
+            </IonButton>
+          </IonCard> 
+        : ""}
+        
+        { isPlatform('android') ? 
+          <IonCard className="health-app-card">
+            <IonItem>
+              <h2>Google Fit</h2>
+            </IonItem>
+            <IonButton expand="block" onClick={GFavailable} className="health-app-button" size="small">
+              Google Fit Available? 
+            </IonButton>
+            <IonButton expand="block" onClick={GFrequestAuthorization} className="health-app-button" size="small">
+              Connect
+            </IonButton>
+            <IonButton expand="block" onClick={GFcheckAuthStatus} className="health-app-button" size="small">
+              Check Connection Status
+            </IonButton>
+            <IonButton expand="block" onClick={GFupdateSteps} className="health-app-button" size="small">
+              Update Step Count
+            </IonButton>
+            <IonButton expand="block" onClick={GFdisconnect} className="health-app-button" size="small">
+              Disconnect
+            </IonButton>
+          </IonCard>
+        : "" }
+
+        <IonCard className="health-app-card">
+          <IonItem>
+            <h2>Fitbit</h2>
+          </IonItem>
+          <IonButton expand="block" className="health-app-button" disabled={true} size="small">Coming soon!</IonButton>
+        </IonCard>
+
+        { isPlatform('android') ? 
+          <IonCard className="health-app-card">
+            <IonItem>
+              <h2>Samsung Health</h2>
+            </IonItem>
+            <IonButton expand="block" className="health-app-button" disabled={true} size="small">Coming soon!</IonButton>
+          </IonCard>
+        : "" }
       </IonContent>
     </IonPage>
   );

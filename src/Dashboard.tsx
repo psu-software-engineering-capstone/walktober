@@ -77,24 +77,24 @@ const Dashboard: React.FC = () => {
           <IonIcon icon={home} />
           <IonLabel>Home</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="profile" href="/app/profile">
-          <IonIcon icon={person} />
-          <IonLabel>Profile</IonLabel>
-        </IonTabButton>
-        <IonTabButton tab="manualsteps" href="/app/manualsteps">
-          <IonIcon icon={footsteps} />
-          <IonLabel>Steps Log</IonLabel>
-        </IonTabButton>
-        <IonTabButton tab="healthapp" href="/app/healthapp">
-          <IonIcon icon={fitness} />
-          <IonLabel>Health App</IonLabel>
-        </IonTabButton>
         <IonTabButton
           tab="team"
           href={ctx.team === '' ? '/app/team/join' : '/app/team'}
         >
           <IonIcon icon={people} />
           <IonLabel>Team</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="profile" href="/app/profile">
+          <IonIcon icon={person} />
+          <IonLabel>Profile</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="manualsteps" href="/app/manualsteps">
+          <IonIcon icon={footsteps} />
+          <IonLabel>Steps</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="healthapp" href="/app/healthapp">
+          <IonIcon icon={fitness} />
+          <IonLabel>Health</IonLabel>
         </IonTabButton>
         {ctx.admin && (
           <IonTabButton tab="admin" href="/app/admin">

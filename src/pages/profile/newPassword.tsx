@@ -39,7 +39,7 @@ const newPassword: React.FC = () => {
         history.push("/app/profile");
       })
       .catch((error: any) => {
-        alert('Something went wrong, please try again.\n If you have been logged in recently, you may have to log back in before attempting this.');
+        alert('Something went wrong. Please try again.');
         console.log(error);
       });
     } else {
