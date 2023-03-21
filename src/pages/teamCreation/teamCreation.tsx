@@ -17,7 +17,8 @@ import {
   IonLabel,
   IonList,
   IonPage,
-  IonTitle
+  IonTitle,
+  IonIcon
 } from '@ionic/react';
 import { useContext, useState } from 'react';
 import { auth, FirestoreDB } from '../../firebase';
@@ -37,6 +38,8 @@ import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import './teamCreation.css';
 import create from '../../assets/create-team.png';
+import { eyeOff } from 'ionicons/icons';
+import { eye } from 'ionicons/icons';
 
 const TeamCreation: React.FC = () => {
   const [newTeamName, setNewTeamName] = useState('');
@@ -44,10 +47,16 @@ const TeamCreation: React.FC = () => {
   const [confirmNewTeamPassword, setConfirmNewTeamPassword] = useState('');
   const [newTeamStatus, setNewTeamStatus] = useState(0);
   const [showTeamPassword, setShowTeamPassword] = useState(false);
+  const [passwordShown, setPasswordShown] = useState(false);
 
   const handleTeamChange = (e: any) => {
     setNewTeamStatus(e.detail.value);
     setShowTeamPassword(e.detail.value == 1 ? true : false);
+  };
+
+  // toggle password visibility
+  const togglePasswordVisibility = () => {
+    setPasswordShown(!passwordShown);
   };
 
   const history = useHistory(); // for routing
@@ -190,12 +199,20 @@ const TeamCreation: React.FC = () => {
                   <IonItem>
                     <IonLabel position="floating">Team Password</IonLabel>
                     <IonInput
-                      type="password"
+                      type={passwordShown ? 'text' : 'password'}
                       name="Team Password"
-                      onIonChange={(e) =>
-                        setNewTeamPassword(e.target.value as string)
-                      }
+                      onIonChange={(e) => setNewTeamPassword(e.target.value as string)}
                     ></IonInput>
+                    <IonButton 
+                      fill="clear" 
+                      color="medium" 
+                      slot="end" 
+                      onClick={togglePasswordVisibility} 
+                      className="password-show">
+                      <IonIcon 
+                        slot="icon-only" 
+                        icon={passwordShown ? eyeOff : eye}></IonIcon>
+                    </IonButton>
                   </IonItem>
 
                   <IonItem>
@@ -203,12 +220,20 @@ const TeamCreation: React.FC = () => {
                       Confirm Team Password
                     </IonLabel>
                     <IonInput
-                      type="password"
+                      type={passwordShown ? 'text' : 'password'}
                       name="Confirm Team Password"
-                      onIonChange={(e) =>
-                        setConfirmNewTeamPassword(e.target.value as string)
-                      }
+                      onIonChange={(e) => setConfirmNewTeamPassword(e.target.value as string)}
                     ></IonInput>
+                    <IonButton 
+                      fill="clear" 
+                      color="medium" 
+                      slot="end" 
+                      onClick={togglePasswordVisibility} 
+                      className="password-show">
+                      <IonIcon 
+                        slot="icon-only" 
+                        icon={passwordShown ? eyeOff : eye}></IonIcon>
+                    </IonButton>
                   </IonItem>
                 </>
               )}

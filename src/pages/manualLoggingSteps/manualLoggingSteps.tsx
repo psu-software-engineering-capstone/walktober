@@ -8,7 +8,6 @@ import {
   IonInput,
   IonItem,
   IonLabel,
-  IonRouterLink,
   IonTitle,
   IonGrid,
   IonRow,
@@ -590,11 +589,6 @@ const ManualSteps: React.FC = () => {
                   }}
                 ></IonInput>
               </IonItem>
-              <a className="anchor">
-                <IonRouterLink slot="helper" routerLink="/app/stepscalc">
-                  Need help calculating steps?
-                </IonRouterLink>
-              </a>
               <IonItem className="calendar-input">
                 <IonLabel position="floating"></IonLabel>
                 <IonInput

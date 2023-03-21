@@ -55,6 +55,7 @@ const Profile: React.FC = () => {
   const [profilePic, setProfilePic] = useState('');
   const [team, setTeam] = useState('');
   const [totalDistance, setTotalDistance] = useState(0);
+  const [totalSteps, setTotalSteps] = useState(0);
   const [photo, setPhoto] = useState<any>(null);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [stepLogs, setStepLogs] = useState<StepLog[]>([]);
@@ -135,6 +136,7 @@ const Profile: React.FC = () => {
       new Date(auth.currentUser.metadata.creationTime).toLocaleDateString()
     );
     setTotalDistance(userData.totalStep / 2000);
+    setTotalSteps(userData.totalStep);
     setIsGoogleUser(
       auth.currentUser.providerData[0]?.providerId === 'google.com'
     );
@@ -278,6 +280,8 @@ const Profile: React.FC = () => {
                   <IonItem>
                     <p>
                       {totalDistance.toLocaleString()} miles walked in total
+                      <br></br>
+                      {totalSteps.toLocaleString()} steps walked in total
                     </p>
                   </IonItem>
                 </IonCard>
