@@ -505,7 +505,11 @@ const TeamHome: React.FC = () => {
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
-        <IonModal isOpen={isOpen} backdropDismiss={false} className="password-Change">
+        <IonModal
+          isOpen={isOpen}
+          backdropDismiss={false}
+          className="password-Change"
+        >
           <IonHeader className="modal-header">
             <IonToolbar className="password-toolbar">
               <IonTitle class="ion-text-center">Change Team Password</IonTitle>
