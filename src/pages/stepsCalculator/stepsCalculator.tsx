@@ -1,3 +1,4 @@
+// File created by NathanMoes, aim is to create a page to help users to calculate number of steps. Main implementation desire is for wheelchair to steps conversion
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useState } from 'react';
@@ -146,10 +147,7 @@ const StepsCalculator: React.FC = () => {
             </IonRow>
             <IonRow>
               <a>
-                <IonRouterLink
-                  slot="helper"
-                  routerLink="/app/manualsteps"
-                >
+                <IonRouterLink slot="helper" routerLink="/app/manualsteps">
                   Return to steps logging
                 </IonRouterLink>
               </a>

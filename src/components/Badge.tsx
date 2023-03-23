@@ -1,3 +1,5 @@
+// File is created for the display of badges, currently non implemented function
+
 import {
   IonItem,
   IonLabel,

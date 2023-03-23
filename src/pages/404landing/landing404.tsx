@@ -1,3 +1,4 @@
+// File created by NathanMoes, aim is to create a 404 landing page for invalid addresses.
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-types */

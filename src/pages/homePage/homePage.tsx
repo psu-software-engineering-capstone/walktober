@@ -83,11 +83,9 @@ const HomePage: React.FC = () => {
       const today = todayNow.toISOString().slice(0, 10);
       if (stepsByDate[0].date === today) {
         setSteps(stepsByDate[0].steps);
-      }
-      else if (stepsByDate[stepsByDate.length - 1].date === today) {
+      } else if (stepsByDate[stepsByDate.length - 1].date === today) {
         setSteps(stepsByDate[stepsByDate.length - 1].steps);
-      }
-      else{
+      } else {
         setSteps(0);
       }
     }
@@ -135,74 +133,72 @@ const HomePage: React.FC = () => {
         </NavBar>
       </IonHeader>
       <IonContent fullscreen={true} className="ion-padding testing">
-        {showPostSurvey ? <PostEventSurvey/> : ''}
+        {showPostSurvey ? <PostEventSurvey /> : ''}
         <IonGrid>
           <IonRow>
-            <IonCol
-              sizeXs='12'
-              sizeSm='12'
-              sizeMd='6'
-              sizeLg='6'
-              sizeXl='6'>
+            <IonCol sizeXs="12" sizeSm="12" sizeMd="6" sizeLg="6" sizeXl="6">
               <IonRow>
-                <IonCol className='restrict-height'>
+                <IonCol className="restrict-height">
                   <LeaderBoardChart></LeaderBoardChart>
                 </IonCol>
               </IonRow>
               <IonRow>
-                <IonCol>
-                </IonCol>
+                <IonCol></IonCol>
               </IonRow>
             </IonCol>
-            <IonCol
-              sizeXs='12'
-              sizeSm='12'
-              sizeMd='6'
-              sizeLg='6'
-              sizeXl='6'>
+            <IonCol sizeXs="12" sizeSm="12" sizeMd="6" sizeLg="6" sizeXl="6">
               <IonRow>
                 <IonCol
-                  sizeXs='12'
-                  sizeSm='12'
-                  sizeMd='12'
-                  sizeLg='6'
-                  sizeXl='6'>
-                  <IonCard className='team-card'>
+                  sizeXs="12"
+                  sizeSm="12"
+                  sizeMd="12"
+                  sizeLg="6"
+                  sizeXl="6"
+                >
+                  <IonCard className="team-card">
                     <IonCardHeader>
                       <IonCardTitle>
                         <p className="step-title">Today&apos;s Steps:</p>
-                        <div className='step-counter'>
+                        <div className="step-counter">
                           {steps.toLocaleString()}
                         </div>
                       </IonCardTitle>
                       <IonCardTitle>
                         <p className="step-title">Total Steps:</p>
-                        <div className='step-counter'>
+                        <div className="step-counter">
                           {totalSteps.toLocaleString()}
                         </div>
                       </IonCardTitle>
                     </IonCardHeader>
                     <IonCardContent>
-                      <p>Click <a onClick={moveToManualSteps} className="link-color">here </a>
-                      to add or edit steps.</p>
+                      <p>
+                        Click{' '}
+                        <a onClick={moveToManualSteps} className="link-color">
+                          here{' '}
+                        </a>
+                        to add or edit steps.
+                      </p>
                     </IonCardContent>
                   </IonCard>
                 </IonCol>
                 <IonCol
-                  sizeXs='12'
-                  sizeSm='12'
-                  sizeMd='12'
-                  sizeLg='6'
-                  sizeXl='6'>
-                  <IonCard className='team-card'>
+                  sizeXs="12"
+                  sizeSm="12"
+                  sizeMd="12"
+                  sizeLg="6"
+                  sizeXl="6"
+                >
+                  <IonCard className="team-card">
                     <IonCardHeader>
-                      <IonCardTitle>
-                        Progress:
-                      </IonCardTitle>
+                      <IonCardTitle>Progress:</IonCardTitle>
                     </IonCardHeader>
                     <IonCardContent>
                       {pastSevenDaysSteps.length > 1 ? (
-                        <ProgressChart data={pastSevenDaysSteps} todayStep={steps} stepGoal={stepGoal} />
+                        <ProgressChart
+                          data={pastSevenDaysSteps}
+                          todayStep={steps}
+                          stepGoal={stepGoal}
+                        />
                       ) : (
                         ' '
                       )}
@@ -212,7 +208,7 @@ const HomePage: React.FC = () => {
               </IonRow>
               <IonRow>
                 <IonCol>
-                  <IonCard className='team-card discord-card'>
+                  <IonCard className="team-card discord-card">
                     <IonCardContent>
                       <WidgetBot
                         className="discord-widget"
