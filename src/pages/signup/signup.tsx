@@ -28,7 +28,6 @@ import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithCredential,
-  sendEmailVerification
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
@@ -190,7 +189,7 @@ const Signup: React.FC = () => {
     }
     if (newPassword === newConfirmPassword) {
       createUserWithEmailAndPassword(auth, newEmail, newPassword)
-        .then((data: unknown) => {
+        .then(() => {
           createUser();
           /// delay 1 second to allow firebase to update auth state //
           present({
