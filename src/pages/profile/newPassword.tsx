@@ -1,12 +1,16 @@
 import {
   IonButton,
+  IonCard,
+  IonCol,
   IonContent,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonInput,
   IonItem,
   IonLabel,
   IonPage,
+  IonRow,
   IonTitle
 } from '@ionic/react';
 import { updatePassword } from 'firebase/auth';
@@ -15,7 +19,7 @@ import { useState } from 'react';
 import { useHistory } from 'react-router';
 import NavBar from '../../components/NavBar';
 import { auth } from '../../firebase';
-import '../old/Tab1.css';
+import './newPassword.css';
 
 const newPassword: React.FC = () => {
   const [newPassword, setNewPassword] = useState('');
@@ -60,36 +64,58 @@ const newPassword: React.FC = () => {
           <IonTitle> Change Password </IonTitle>
         </NavBar>
       </IonHeader>
-      <IonContent fullscreen>
-        <IonItem>
-          <IonLabel position="floating">New Password</IonLabel>
-          <IonInput
-            type={passwordShown ? 'text' : 'password'}
-            name="password"
-            onIonChange={(e) => setNewPassword(e.target.value as string)}
-          ></IonInput>
-          <IonIcon
-            icon={passwordShown ? eyeOff : eye}
-            slot="end"
-            onClick={togglePasswordVisibility}
-          ></IonIcon>
-        </IonItem>
+      <IonContent fullscreen className="ion-padding body">
+        <IonCard className="password-change-card">
+          <IonItem>
+            <IonLabel position="floating">New Password</IonLabel>
+            <IonInput
+              type={passwordShown ? 'text' : 'password'}
+              name="password"
+              onIonChange={(e) => setNewPassword(e.target.value as string)}
+            ></IonInput>
+            <IonButton 
+              fill="clear" 
+              color="medium" 
+              slot="end" 
+              onClick={togglePasswordVisibility} 
+              className="password-show">
+              <IonIcon 
+                slot="icon-only" 
+                icon={passwordShown ? eyeOff : eye}>
+              </IonIcon>
+            </IonButton>
+          </IonItem>
 
-        <IonItem>
-          <IonLabel position="floating">Verify New Password</IonLabel>
-          <IonInput
-            type={passwordShown ? 'text' : 'password'}
-            name="password"
-            onIonChange={(e) => setVeriPassword(e.target.value as string)}
-          ></IonInput>
-          <IonIcon
-            icon={passwordShown ? eyeOff : eye}
-            slot="end"
-            onClick={togglePasswordVisibility}
-          ></IonIcon>
-        </IonItem>
-        <IonButton onClick={changePass}> Submit </IonButton>
-        <IonButton onClick={backToProfile}> Back to Profile </IonButton>
+          <IonItem>
+            <IonLabel position="floating">Verify New Password</IonLabel>
+            <IonInput
+              type={passwordShown ? 'text' : 'password'}
+              name="password"
+              onIonChange={(e) => setVeriPassword(e.target.value as string)}
+            ></IonInput>
+            <IonButton 
+              fill="clear" 
+              color="medium" 
+              slot="end" 
+              onClick={togglePasswordVisibility} 
+              className="password-show">
+              <IonIcon 
+                slot="icon-only" 
+                icon={passwordShown ? eyeOff : eye}>
+              </IonIcon>
+            </IonButton>
+          </IonItem>
+          <IonGrid>
+            <IonRow className="button-col">
+              <IonCol size="5">
+                <IonButton onClick={changePass}> Submit </IonButton>
+              </IonCol>
+              <IonCol size="7">
+                <IonButton onClick={backToProfile}> Back to Profile </IonButton>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </IonCard>
       </IonContent>
     </IonPage>
   );
