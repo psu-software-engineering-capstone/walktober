@@ -1,4 +1,3 @@
-
 .leaderboard{
   width: 100%;
   max-height: 95vh;
@@ -73,4 +72,33 @@ h1 {
   .profile_pic {
     max-width: 200px;
   }
+}
+
+.password-Change {
+  --height: 30%;
+  --border-radius: 16px;
+  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.password-Change::part(backdrop) {
+  background: rgba(209, 213, 219);
+}
+
+.password-Change ion-toolbar {
+  --background: rgb(100 116 144);
+  --color: white;
+}
+
+.modal-field {
+  --pading-start: 0px;
+  --height: auto;
+}
+
+.modal-submit {
+  margin: 15px;
+}
+
+.password-toolbar {
+  --background: none !important;
 }

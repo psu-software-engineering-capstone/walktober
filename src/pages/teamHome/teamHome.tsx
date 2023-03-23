@@ -1,18 +1,25 @@
 import {
   IonButton,
+  IonButtons,
   IonCard,
   IonCardContent,
   IonCol,
   IonContent,
   IonGrid,
   IonHeader,
+  IonIcon,
   IonImg,
+  IonInput,
   IonItem,
+  IonLabel,
+  IonList,
+  IonModal,
   IonPage,
   IonRefresher,
   IonRefresherContent,
   IonRow,
   IonTitle,
+  IonToolbar,
   RefresherEventDetail
 } from '@ionic/react';
 import {
@@ -36,6 +43,7 @@ import AdminContext from '../../store/admin-context';
 import AuthContext from '../../store/auth-context';
 import TeamLeaderboardChart from '../../components/LeaderBoard/TeamLeaderboardChart';
 import WidgetBot from '@widgetbot/react-embed';
+import { eyeOff, eye } from 'ionicons/icons';
 import './teamHome.scss';
 
 const TeamHome: React.FC = () => {
@@ -52,9 +60,14 @@ const TeamHome: React.FC = () => {
   const [profilePic, setProfilePic] = useState('');
   const [userReference, setUserRef] = useState('');
   const [teamReference, setTeamRef] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [verifyPassword, setVeriPassword] = useState('');
   const [channelId, setChannelId] = useState({});
+  const [passwordShown, setPasswordShown] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [isLeader, setIsLeader] = useState(false);
   const [buttonValid, setValid] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
   const [photo, setPhoto] = useState<any>(null);
   const [userTotalSteps, setUserTotalSteps] = useState(0);
   const [teamTotalSteps, setTeamTotalSteps] = useState(0);
@@ -138,10 +151,10 @@ const TeamHome: React.FC = () => {
       collection(FirestoreDB, 'channelIDs'),
       where('team', '==', ctx.team),
       limit(1)
-    );//query to see if there is a document with the team name assigned to it
-    const chanIdSnap = await getDocs(chanQuery);//get results (has to be getDoccs because using query)
+    ); //query to see if there is a document with the team name assigned to it
+    const chanIdSnap = await getDocs(chanQuery); //get results (has to be getDoccs because using query)
     chanIdSnap.forEach(async (doc: any) => {
-      teamChannelId = doc.id;//get the document name (which is the channel id)
+      teamChannelId = doc.id; //get the document name (which is the channel id)
     });
     // if channel not set up with id in database, default to #general
     if (channelId != '') {
@@ -156,6 +169,9 @@ const TeamHome: React.FC = () => {
     setProfilePic(teamData.profile_pic);
     setTeamTotalSteps(teamData.totalStep);
     setTeamLeaderEmail(teamData.leader);
+    if (teamData.status === '1') {
+      setIsPrivate(true);
+    }
     // get all the users in the team
     const usersRef = collection(FirestoreDB, 'users'); // get all users reference
     const q = query(usersRef, where('team', '==', ctx.team)); // query team members
@@ -234,6 +250,72 @@ const TeamHome: React.FC = () => {
           </IonItem>
         </>
       );
+    }
+  }
+
+  //Makes a button to allow the team leader that is the leader for a private team to change the password
+  function changePassword() {
+    if (isLeader === true && isPrivate === true) {
+      return (
+        <>
+          <IonItem>
+            {' '}
+            <IonButton onClick={() => setIsOpen(!isOpen)}>
+              {' '}
+              Change Team Password
+            </IonButton>
+          </IonItem>
+        </>
+      );
+    }
+  }
+
+  //Make the password visible to the user instead of a password type (aka just dots)
+  const togglePasswordVisibility = () => {
+    setPasswordShown(!passwordShown);
+  };
+
+  //Check the new passwords and if they match eachother then change the password in the database
+  async function submitPasswordChange() {
+    setIsOpen(false);
+    if (newPassword === '' && verifyPassword === '') {
+      alert(
+        'Both the new password and the verification password has not been entered. Please try again'
+      );
+      setNewPassword('');
+      setVeriPassword('');
+      return;
+    } else if (newPassword === '') {
+      alert('The new password has not been enetered. Please try again');
+      setNewPassword('');
+      setVeriPassword('');
+      return;
+    } else if (verifyPassword === '') {
+      alert('The verification password has not been entered. Please try again');
+      setNewPassword('');
+      setVeriPassword('');
+
+      return;
+    }
+    if (newPassword === verifyPassword) {
+      await updateDoc(teamReference, { password: newPassword })
+        .then(() => {
+          alert('Team Password updated');
+          setNewPassword('');
+          setVeriPassword('');
+        })
+        .catch((error: any) => {
+          alert(error);
+          setNewPassword('');
+          setVeriPassword('');
+        });
+    } else {
+      alert(
+        'The new password and password entered for verification are not the same. Please try again'
+      );
+      setNewPassword('');
+      setVeriPassword('');
+      return;
     }
   }
 
@@ -357,10 +439,12 @@ const TeamHome: React.FC = () => {
               sizeMd="6"
               sizeXs="12"
             >
-              <TeamLeaderboardChart memberData={leaderboardData}></TeamLeaderboardChart>
+              <TeamLeaderboardChart
+                memberData={leaderboardData}
+              ></TeamLeaderboardChart>
             </IonCol>
             <IonCol sizeSm="12" sizeLg="4" sizeMd="6" sizeXs="12" className="">
-              <IonCard className='discord-card'>
+              <IonCard className="discord-card">
                 <IonCardContent>
                   <WidgetBot
                     className="discord-widget"
@@ -395,6 +479,7 @@ const TeamHome: React.FC = () => {
                         </IonImg>
                       </IonCol>
                       <IonCol size="12">{changePicture()}</IonCol>
+                      <IonCol size="12">{changePassword()}</IonCol>
                       <IonCol size="12" className="col-from-cards">
                         <IonButton
                           onClick={leaveTeam}
@@ -420,6 +505,59 @@ const TeamHome: React.FC = () => {
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
+        <IonModal
+          isOpen={isOpen}
+          backdropDismiss={false}
+          className="password-Change"
+        >
+          <IonHeader className="modal-header">
+            <IonToolbar className="password-toolbar">
+              <IonTitle class="ion-text-center">Change Team Password</IonTitle>
+              <IonButtons slot="end">
+                <IonButton onClick={() => setIsOpen(false)}> Close </IonButton>
+              </IonButtons>
+            </IonToolbar>
+          </IonHeader>
+          <IonList>
+            <IonItem className="modal-field">
+              <IonLabel position="floating">New Password</IonLabel>
+              <IonInput
+                type={passwordShown ? 'text' : 'password'}
+                name="newPassword"
+                onIonChange={(e) => setNewPassword(e.target.value as string)}
+              ></IonInput>
+              <IonIcon
+                icon={passwordShown ? eyeOff : eye}
+                slot="end"
+                onClick={togglePasswordVisibility}
+              ></IonIcon>
+            </IonItem>
+            <IonItem className="modal-field">
+              <IonLabel position="floating">Verify New Password</IonLabel>
+              <IonInput
+                type={passwordShown ? 'text' : 'password'}
+                name="verifyPassword"
+                onIonChange={(e) => setVeriPassword(e.target.value as string)}
+              ></IonInput>
+              <IonIcon
+                icon={passwordShown ? eyeOff : eye}
+                slot="end"
+                onClick={togglePasswordVisibility}
+              ></IonIcon>
+            </IonItem>
+          </IonList>
+          <h2 className="divider">
+            <span></span>
+          </h2>
+          <IonButton
+            className="modal-submit"
+            expand="block"
+            onClick={submitPasswordChange}
+          >
+            {' '}
+            Submit Password Change{' '}
+          </IonButton>
+        </IonModal>
       </IonContent>
     </IonPage>
   );
