@@ -526,11 +526,16 @@ const TeamHome: React.FC = () => {
                 name="newPassword"
                 onIonChange={(e) => setNewPassword(e.target.value as string)}
               ></IonInput>
-              <IonIcon
-                icon={passwordShown ? eyeOff : eye}
-                slot="end"
-                onClick={togglePasswordVisibility}
-              ></IonIcon>
+              <IonButton 
+                fill="clear" 
+                color="medium" 
+                slot="end" 
+                onClick={togglePasswordVisibility} 
+                className="password-show">
+                <IonIcon 
+                  slot="icon-only" 
+                  icon={passwordShown ? eyeOff : eye}></IonIcon>
+              </IonButton>
             </IonItem>
             <IonItem className="modal-field">
               <IonLabel position="floating">Verify New Password</IonLabel>
@@ -539,11 +544,16 @@ const TeamHome: React.FC = () => {
                 name="verifyPassword"
                 onIonChange={(e) => setVeriPassword(e.target.value as string)}
               ></IonInput>
-              <IonIcon
-                icon={passwordShown ? eyeOff : eye}
-                slot="end"
-                onClick={togglePasswordVisibility}
-              ></IonIcon>
+              <IonButton 
+                fill="clear" 
+                color="medium" 
+                slot="end" 
+                onClick={togglePasswordVisibility} 
+                className="password-show">
+                <IonIcon 
+                  slot="icon-only" 
+                  icon={passwordShown ? eyeOff : eye}></IonIcon>
+              </IonButton>
             </IonItem>
           </IonList>
           <h2 className="divider">
