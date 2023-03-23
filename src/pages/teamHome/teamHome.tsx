@@ -146,15 +146,15 @@ const TeamHome: React.FC = () => {
     setUserRef(currentUserRef);
     const userSnap = await getDoc(currentUserRef); // grab the user document
     const userData = userSnap.data(); // get the user data
-    let teamChannelId = ''; //temp string
+    let teamChannelId = ''; // temp string
     const chanQuery = query(
       collection(FirestoreDB, 'channelIDs'),
       where('team', '==', ctx.team),
       limit(1)
-    ); //query to see if there is a document with the team name assigned to it
-    const chanIdSnap = await getDocs(chanQuery); //get results (has to be getDoccs because using query)
+    ); // query to see if there is a document with the team name assigned to it
+    const chanIdSnap = await getDocs(chanQuery); // get results (has to be getDoccs because using query)
     chanIdSnap.forEach(async (doc: any) => {
-      teamChannelId = doc.id; //get the document name (which is the channel id)
+      teamChannelId = doc.id; // get the document name (which is the channel id)
     });
     // if channel not set up with id in database, default to #general
     if (channelId != '') {
@@ -253,7 +253,7 @@ const TeamHome: React.FC = () => {
     }
   }
 
-  //Makes a button to allow the team leader that is the leader for a private team to change the password
+  // Makes a button to allow the team leader that is the leader for a private team to change the password
   function changePassword() {
     if (isLeader === true && isPrivate === true) {
       return (
@@ -270,12 +270,12 @@ const TeamHome: React.FC = () => {
     }
   }
 
-  //Make the password visible to the user instead of a password type (aka just dots)
+  // Make the password visible to the user instead of a password type (aka just dots)
   const togglePasswordVisibility = () => {
     setPasswordShown(!passwordShown);
   };
 
-  //Check the new passwords and if they match eachother then change the password in the database
+  // Check the new passwords and if they match eachother then change the password in the database
   async function submitPasswordChange() {
     setIsOpen(false);
     if (newPassword === '' && verifyPassword === '') {
@@ -294,7 +294,6 @@ const TeamHome: React.FC = () => {
       alert('The verification password has not been entered. Please try again');
       setNewPassword('');
       setVeriPassword('');
-
       return;
     }
     if (newPassword === verifyPassword) {
@@ -309,6 +308,7 @@ const TeamHome: React.FC = () => {
           setNewPassword('');
           setVeriPassword('');
         });
+        return;
     } else {
       alert(
         'The new password and password entered for verification are not the same. Please try again'
@@ -327,9 +327,9 @@ const TeamHome: React.FC = () => {
 
   // leave team
   async function leaveTeam() {
-    const newTotalStep = teamTotalSteps - userTotalSteps; //new total step for team
-    const newAvg = newTotalStep / (teamMembers.length - 1); //new average step for team
-    const newMembers: Array<string> = []; //array for members field
+    const newTotalStep = teamTotalSteps - userTotalSteps; // new total step for team
+    const newAvg = newTotalStep / (teamMembers.length - 1); // new average step for team
+    const newMembers: Array<string> = []; // array for members field
     // set new members array
     for (let i = 0; i < teamMembers.length; i++) {
       if (teamMembers[i] !== auth.currentUser.email) {
@@ -352,7 +352,7 @@ const TeamHome: React.FC = () => {
           team_leader: false,
           team: ''
         });
-        //Update the channel id document and allow it to be reused by another team
+        // Update the channel id document and allow it to be reused by another team
         await updateDoc(doc(FirestoreDB, 'channelIDs', channelId), {
           team: ''
         });
