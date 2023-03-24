@@ -51,6 +51,8 @@ const newPassword: React.FC = () => {
         'The new password does not match the password entered for verification'
       );
     }
+    setNewPassword('');
+    setVeriPassword('');
   }
 
   const backToProfile = () => {
@@ -71,6 +73,7 @@ const newPassword: React.FC = () => {
             <IonInput
               type={passwordShown ? 'text' : 'password'}
               name="password"
+              value={newPassword}
               onIonChange={(e) => setNewPassword(e.target.value as string)}
             ></IonInput>
             <IonButton 
@@ -91,6 +94,7 @@ const newPassword: React.FC = () => {
             <IonInput
               type={passwordShown ? 'text' : 'password'}
               name="password"
+              value={veriPassword}
               onIonChange={(e) => setVeriPassword(e.target.value as string)}
             ></IonInput>
             <IonButton 
@@ -108,7 +112,7 @@ const newPassword: React.FC = () => {
           <IonGrid>
             <IonRow className="button-col">
               <IonCol size="5">
-                <IonButton onClick={changePass}> Submit </IonButton>
+                <IonButton type="submit" onClick={changePass}> Submit </IonButton>
               </IonCol>
               <IonCol size="7">
                 <IonButton onClick={backToProfile}> Back to Profile </IonButton>
