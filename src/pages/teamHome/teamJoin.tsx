@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   IonButton,
   IonCard,
@@ -30,7 +31,7 @@ import {
   onSnapshot
 } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
-import { eye, eyeOff} from 'ionicons/icons';
+import { eye, eyeOff } from 'ionicons/icons';
 import NavBar from '../../components/NavBar';
 import { auth, FirestoreDB } from '../../firebase';
 import { useHistory } from 'react-router';
@@ -118,29 +119,23 @@ const TeamJoin: React.FC = () => {
     for (let i = 0; i < allTeams.length; i++) {
       if (allTeams[i].name === joinTeam) {
         // check if the team name entered matches a team in the database
-        if(allTeams[i].size === adData.maxSize) {
-          // check if the team is full 
-          alert(
-            'This team is full'
-          );
+        if (allTeams[i].size === adData.maxSize) {
+          // check if the team is full
+          alert('This team is full');
           return;
         } else {
           if (allTeams[i].type === 'Private') {
             // check if the team is private
             if (teamPass === '') {
               // private team but no password entered
-              alert(
-                'Please enter the password'
-              );
+              alert('Please enter the password');
               return;
             } else if (allTeams[i].password === teamPass) {
               joined(); // password is correct
               return;
             } else {
               // incorrect password
-              alert(
-                'Incorrect password. Please try again.'
-              );
+              alert('Incorrect password. Please try again.');
               return;
             }
           } else {
@@ -201,7 +196,9 @@ const TeamJoin: React.FC = () => {
                       {item.leader}
                     </IonCol>
                     <IonCol sizeMd="4" size="4" class="admin-col">
-                      {item.size===adData.maxSize ? item.size + "/" + adData.maxSize + " (FULL!)": item.size + "/" + adData.maxSize}
+                      {item.size === adData.maxSize
+                        ? item.size + '/' + adData.maxSize + ' (FULL!)'
+                        : item.size + '/' + adData.maxSize}
                     </IonCol>
                     <IonCol sizeMd="4" size="4" class="admin-col">
                       {item.type}
@@ -328,7 +325,10 @@ const TeamJoin: React.FC = () => {
               <IonCardHeader
                 style={{ display: 'flex', justifyContent: 'center' }}
               >
-                <img alt="Art depicting 6 team members in a team huddle" src={team} />
+                <img
+                  alt="Art depicting 6 team members in a team huddle"
+                  src={team}
+                />
               </IonCardHeader>
               <IonCardTitle class="ion-text-center">
                 Join an Existing Team!
@@ -352,19 +352,19 @@ const TeamJoin: React.FC = () => {
                       <IonInput
                         type={passwordShown ? 'text' : 'password'}
                         name="cpassword"
-                        onIonChange={(e) =>
-                          setPass(e.target.value as string)
-                        }
+                        onIonChange={(e) => setPass(e.target.value as string)}
                       ></IonInput>
-                      <IonButton 
-                        fill="clear" 
-                        color="medium" 
-                        slot="end" 
-                        onClick={togglePasswordVisibility} 
-                        className="password-show">
-                        <IonIcon 
-                          slot="icon-only" 
-                          icon={passwordShown ? eyeOff : eye}></IonIcon>
+                      <IonButton
+                        fill="clear"
+                        color="medium"
+                        slot="end"
+                        onClick={togglePasswordVisibility}
+                        className="password-show"
+                      >
+                        <IonIcon
+                          slot="icon-only"
+                          icon={passwordShown ? eyeOff : eye}
+                        ></IonIcon>
                       </IonButton>
                     </IonItem>
                   </IonCol>
@@ -383,7 +383,10 @@ const TeamJoin: React.FC = () => {
               <IonCardHeader
                 style={{ display: 'flex', justifyContent: 'center' }}
               >
-                <img alt="Art depicting a team leader raising their fist in triumph" src={solo} />
+                <img
+                  alt="Art depicting a team leader raising their fist in triumph"
+                  src={solo}
+                />
               </IonCardHeader>
               <IonCardTitle class="ion-text-center">
                 Create a New Team!

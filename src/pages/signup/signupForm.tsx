@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+import React from 'react';
 import {
   IonContent,
   IonHeader,
@@ -52,7 +53,7 @@ const SignupForm: React.FC = () => {
       minsPhysical: newMinPhysical,
       recCenterUse: newRecCenterUse,
       distFromCamp: newDistFromCamp,
-      device: device,
+      device: device
     });
   };
 
@@ -63,7 +64,8 @@ const SignupForm: React.FC = () => {
     header: 'How did you hear about Walktober?'
   };
   const hoursPhysicallyActive = {
-    header: 'On average, how many hours per week are you currently physically active?'
+    header:
+      'On average, how many hours per week are you currently physically active?'
   };
   const minutesPhysicallyActive = {
     header:
@@ -265,9 +267,15 @@ const SignupForm: React.FC = () => {
                   placeholder="Select One"
                   onIonChange={(e) => setDevice(e.target.value as string)}
                 >
-                  <IonSelectOption value="Apple Health">Apple Health</IonSelectOption>
-                  <IonSelectOption value="Google Fit">Google Fit</IonSelectOption>
-                  <IonSelectOption value="Samsung Health">Samsung Health</IonSelectOption>
+                  <IonSelectOption value="Apple Health">
+                    Apple Health
+                  </IonSelectOption>
+                  <IonSelectOption value="Google Fit">
+                    Google Fit
+                  </IonSelectOption>
+                  <IonSelectOption value="Samsung Health">
+                    Samsung Health
+                  </IonSelectOption>
                   <IonSelectOption value="Fitbit">Fitbit</IonSelectOption>
                   <IonSelectOption value="Garmin">Garmin</IonSelectOption>
                   <IonSelectOption value="Other">Other</IonSelectOption>

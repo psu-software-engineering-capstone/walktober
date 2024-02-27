@@ -308,7 +308,7 @@ const TeamHome: React.FC = () => {
           setNewPassword('');
           setVeriPassword('');
         });
-        return;
+      return;
     } else {
       alert(
         'The new password and password entered for verification are not the same. Please try again'
@@ -526,15 +526,17 @@ const TeamHome: React.FC = () => {
                 name="newPassword"
                 onIonChange={(e) => setNewPassword(e.target.value as string)}
               ></IonInput>
-              <IonButton 
-                fill="clear" 
-                color="medium" 
-                slot="end" 
-                onClick={togglePasswordVisibility} 
-                className="password-show">
-                <IonIcon 
-                  slot="icon-only" 
-                  icon={passwordShown ? eyeOff : eye}></IonIcon>
+              <IonButton
+                fill="clear"
+                color="medium"
+                slot="end"
+                onClick={togglePasswordVisibility}
+                className="password-show"
+              >
+                <IonIcon
+                  slot="icon-only"
+                  icon={passwordShown ? eyeOff : eye}
+                ></IonIcon>
               </IonButton>
             </IonItem>
             <IonItem className="modal-field">
@@ -544,15 +546,17 @@ const TeamHome: React.FC = () => {
                 name="verifyPassword"
                 onIonChange={(e) => setVeriPassword(e.target.value as string)}
               ></IonInput>
-              <IonButton 
-                fill="clear" 
-                color="medium" 
-                slot="end" 
-                onClick={togglePasswordVisibility} 
-                className="password-show">
-                <IonIcon 
-                  slot="icon-only" 
-                  icon={passwordShown ? eyeOff : eye}></IonIcon>
+              <IonButton
+                fill="clear"
+                color="medium"
+                slot="end"
+                onClick={togglePasswordVisibility}
+                className="password-show"
+              >
+                <IonIcon
+                  slot="icon-only"
+                  icon={passwordShown ? eyeOff : eye}
+                ></IonIcon>
               </IonButton>
             </IonItem>
           </IonList>

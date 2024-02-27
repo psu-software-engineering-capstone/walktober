@@ -1,6 +1,6 @@
 // File created by NathanMoes, aim is to create a page to help users to calculate number of steps. Main implementation desire is for wheelchair to steps conversion
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
+import React from 'react';
 import { useState } from 'react';
 import {
   IonButton,

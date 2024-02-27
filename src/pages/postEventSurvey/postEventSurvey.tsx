@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import React from 'react';
 import {
   IonButton,
   IonButtons,
@@ -11,7 +12,7 @@ import {
   IonToolbar,
   IonSelectOption,
   IonSelect,
-  IonInput,
+  IonInput
 } from '@ionic/react';
 import './postEventSurvey.scss';
 import { useHistory } from 'react-router';

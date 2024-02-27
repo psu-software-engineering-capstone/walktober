@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+import React from 'react';
 import {
   IonRadioGroup,
   IonRadio,
@@ -97,9 +98,7 @@ const TeamCreation: React.FC = () => {
     const currentDate: Date = new Date(now);
     const teamCreationDeadline: Date = new Date(adData.teamDate);
     if (currentDate > teamCreationDeadline) {
-      alert(
-        `The team creation deadline is: ${teamCreationDeadline}`
-      );
+      alert(`The team creation deadline is: ${teamCreationDeadline}`);
       return;
     }
     let channelId = ''; //temp array
@@ -201,17 +200,21 @@ const TeamCreation: React.FC = () => {
                     <IonInput
                       type={passwordShown ? 'text' : 'password'}
                       name="Team Password"
-                      onIonChange={(e) => setNewTeamPassword(e.target.value as string)}
+                      onIonChange={(e) =>
+                        setNewTeamPassword(e.target.value as string)
+                      }
                     ></IonInput>
-                    <IonButton 
-                      fill="clear" 
-                      color="medium" 
-                      slot="end" 
-                      onClick={togglePasswordVisibility} 
-                      className="password-show">
-                      <IonIcon 
-                        slot="icon-only" 
-                        icon={passwordShown ? eyeOff : eye}></IonIcon>
+                    <IonButton
+                      fill="clear"
+                      color="medium"
+                      slot="end"
+                      onClick={togglePasswordVisibility}
+                      className="password-show"
+                    >
+                      <IonIcon
+                        slot="icon-only"
+                        icon={passwordShown ? eyeOff : eye}
+                      ></IonIcon>
                     </IonButton>
                   </IonItem>
 
@@ -222,17 +225,21 @@ const TeamCreation: React.FC = () => {
                     <IonInput
                       type={passwordShown ? 'text' : 'password'}
                       name="Confirm Team Password"
-                      onIonChange={(e) => setConfirmNewTeamPassword(e.target.value as string)}
+                      onIonChange={(e) =>
+                        setConfirmNewTeamPassword(e.target.value as string)
+                      }
                     ></IonInput>
-                    <IonButton 
-                      fill="clear" 
-                      color="medium" 
-                      slot="end" 
-                      onClick={togglePasswordVisibility} 
-                      className="password-show">
-                      <IonIcon 
-                        slot="icon-only" 
-                        icon={passwordShown ? eyeOff : eye}></IonIcon>
+                    <IonButton
+                      fill="clear"
+                      color="medium"
+                      slot="end"
+                      onClick={togglePasswordVisibility}
+                      className="password-show"
+                    >
+                      <IonIcon
+                        slot="icon-only"
+                        icon={passwordShown ? eyeOff : eye}
+                      ></IonIcon>
                     </IonButton>
                   </IonItem>
                 </>
