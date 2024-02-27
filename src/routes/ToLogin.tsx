@@ -1,12 +1,12 @@
-
-import { Redirect } from "react-router";
+import React from 'react';
+import { Redirect } from 'react-router';
 
 const ToLogin: React.FC = () => {
   return (
-        <>
-            <Redirect to ="/login" />
-        </>
-    );
+    <>
+      <Redirect to="/login" />
+    </>
+  );
 };
-    
+
 export default ToLogin;
