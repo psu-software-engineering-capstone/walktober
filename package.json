@@ -7,7 +7,7 @@
     "@awesome-cordova-plugins/core": "6.2.0",
     "@awesome-cordova-plugins/health": "^6.3.0",
     "@awesome-cordova-plugins/health-kit": "^6.2.0",
-    "@babel/core": "7.23.9",
+    "@babel/core": "7.19.6",
     "@capacitor/android": "5.0.0",
     "@capacitor/app": "5.0.0",
     "@capacitor/browser": "5.0.0",
@@ -76,8 +76,8 @@
     "workbox-streams": "^5.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-scripts --openssl-legacy-provider start",
+    "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!(@ionic/react|@ionic/react-router|@ionic/core|@stencil/core|ionicons)/)'",
     "eject": "react-scripts eject",
     "prettier-format": "prettier --config .prettierrc '/src/pages/tab1.tsx' --write"
