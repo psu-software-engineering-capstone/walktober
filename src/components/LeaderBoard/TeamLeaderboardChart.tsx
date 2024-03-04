@@ -28,8 +28,8 @@ interface Data {
 const TeamLeaderboardChart: React.FC<{ memberData: Array<Data> }> = ({
   memberData
 }) => {
-  const [data, setData] = useState(Array<Data>);
-  const [teamData, setTeamData] = useState(Array<Data>);
+  const [data, setData] = useState<Array<Data>>([]);
+  const [teamData, setTeamData] = useState<Array<Data>>([]);
   const [dataType, setDataType] = useState('teamMembers');
   const [loading, setLoading] = useState(false);
   const adData = useContext(AdminContext);

@@ -60,7 +60,7 @@ const TeamJoin: React.FC = () => {
   const history = useHistory(); // used to move to different pages
   const [joinTeam, setJoin] = useState(''); // variable to get the team that the user chooses from the drop down menu
   const [teamPass, setPass] = useState(''); // variable to collect team password
-  const [allTeams, setTeams] = useState(Array<teamData>); // array of teams from database
+  const [allTeams, setTeams] = useState<Array<teamData>>([]); // array of teams from database
   const [buttonValid, setValid] = useState(false); // to check if the button should be enabled or not
 
   const adData = useContext(AdminContext); // admin context

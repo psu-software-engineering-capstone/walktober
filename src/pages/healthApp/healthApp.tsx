@@ -264,7 +264,7 @@ const HealthApp: React.FC = () => {
     }
     const now = Date.now();
     const date = new Date(now);
-    const stepOptions: object = {
+    const stepOptions: Record<string, unknown>  = { // object type "hard to use" TypeScript/issues/21732
       // note I change it from HealthQueryOptions to object as HealthQueryOptions is not valid typing
       startDate: new Date(date.getFullYear(), date.getMonth(), 1),
       endDate: date,

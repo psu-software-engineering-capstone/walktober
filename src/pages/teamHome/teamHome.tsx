@@ -55,8 +55,8 @@ const TeamHome: React.FC = () => {
     highlight: boolean;
   }
 
-  const [leaderboardData, setLeaderboardData] = useState(Array<memberData>);
-  const [teamMembers, setTeamMembers] = useState(Array<string>);
+  const [leaderboardData, setLeaderboardData] = useState<Array<memberData>>([]);
+  const [teamMembers, setTeamMembers] = useState<Array<string>>([]);
   const [profilePic, setProfilePic] = useState('');
   const [userReference, setUserRef] = useState('');
   const [teamReference, setTeamRef] = useState('');

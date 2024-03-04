@@ -7,7 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import { AuthContextProvider } from './store/auth-context';
 import { AdminContextProvider } from './store/admin-context';
 
-const container = document.getElementById('root');
+const container = document.getElementById('message'); // originally this was 'root' which threw error element does not exist
 const root = createRoot(container!);
 root.render(
   <AuthContextProvider>
@@ -26,3 +26,11 @@ serviceWorkerRegistration.unregister();
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+// createRoot(document.getElementById('root')!).render(
+//   <AuthContextProvider>
+//   <AdminContextProvider>
+//     <App />
+//   </AdminContextProvider>
+// </AuthContextProvider>
+// );

@@ -82,18 +82,11 @@
     "eject": "react-scripts eject",
     "prettier-format": "prettier --config .prettierrc '/src/pages/tab1.tsx' --write"
   },
-  "browserslist": {
-    "production": [
+  "browserslist": [
       ">0.2%",
       "not dead",
       "not op_mini all"
     ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "devDependencies": {
     "@capacitor/cli": "^4.8.1",
     "@ionic/cli": "6.20.3",

@@ -207,7 +207,7 @@ const ManualSteps: React.FC = () => {
     const eventEndDate = new Date(adData.endDate);
     const maxDate = today < eventEndDate ? today : eventEndDate;
     if (isPlatform('android')) {
-      const stepOptions: object = {
+      const stepOptions: Record<string, unknown>  = {
         startDate: eventStartDate,
         endDate: maxDate,
         dataType: 'steps',
