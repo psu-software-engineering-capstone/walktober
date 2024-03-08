@@ -41,7 +41,10 @@ const populateCalendar = (data: StepLog[]) => {
         <h3 className="grid-item-dow">Sa</h3>
 
         {/* {as you will see below inside each div is the image and the number with a ternary operator}
-        The index is day-2 as it starts at 1 and is incremented with postfix after each day. Thus the first access with data[day] would be index = 2 and not 0. Thus, -2. There is a cap on day < 31 to ensure that data is not read beyond and to ensure that only 31 days (number) are displayed. As october always has 31 days*/}
+        The index is day-2 as it starts at 1 and is incremented with postfix after each day. 
+        Thus the first access with data[day] would be index = 2 and not 0. 
+        Thus, -2. There is a cap on day < 31 to ensure that data is not read beyond and to ensure that only 31 days (number) are displayed. 
+        As october always has 31 days*/}
         <div className="grid-item">
           {monthStart.getDay() == 0 ? day++ : ''}
           {day < 31 ? (
