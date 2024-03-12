@@ -78,7 +78,11 @@ const TeamHome: React.FC = () => {
   const ctx = useContext(AuthContext); // auth context
   const adData = useContext(AdminContext); // admin context
 
-  // display team members
+  /**
+   * display team members
+   * @param team the team members as an array of memberData
+   * @returns react component with the team members
+   */
   const DisplayTeam = (team: memberData[]): any => {
     if (team.length > 0) {
       return (
@@ -134,8 +138,11 @@ const TeamHome: React.FC = () => {
     }
   };
 
-  // get the data from the database
-  async function getData(teamData: any) {
+  /**
+   * gets the data from the database for the team
+   * @param teamData the data for the team by member
+   */
+  async function getTeamData(teamData: any) {
     const members: Array<memberData> = [];
     const emailList: Array<string> = [];
     const currentUserRef = doc(
@@ -398,7 +405,7 @@ const TeamHome: React.FC = () => {
       doc(FirestoreDB, 'teams', ctx.team),
       (doc: any) => {
         if (doc.data() !== undefined) {
-          getData(doc.data());
+          getTeamData(doc.data());
         }
       }
     );
