@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-
+import React from 'react';
 import {
   IonCard,
   IonContent,
@@ -20,7 +20,6 @@ import { updateDoc } from 'firebase/firestore';
 import { Health } from '@awesome-cordova-plugins/health';
 import NavBar from '../../components/NavBar';
 import './healthApp.css';
-
 
 const HealthApp: React.FC = () => {
   interface StepLog {
@@ -91,7 +90,11 @@ const HealthApp: React.FC = () => {
     };
     await HealthKit.querySampleType(stepOptions)
       .then(async (data: any) => {
-        const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
+        const dbRef = doc(
+          FirestoreDB,
+          'users',
+          auth.currentUser.email as string
+        );
         const dbSnap = await getDoc(dbRef);
         const dbStepsByDate: StepLog[] = dbSnap.data().stepsByDate;
         if (dbStepsByDate.length > 0) {
@@ -109,8 +112,7 @@ const HealthApp: React.FC = () => {
           const prevDate = data[prevIndex].startDate.toString().slice(0, 10);
           if (date === prevDate && i != 0) {
             healthAppData[dayCount - 1].steps += steps;
-          }
-          else {
+          } else {
             healthAppData[dayCount] = { date, steps };
             dayCount++;
           }
@@ -127,14 +129,14 @@ const HealthApp: React.FC = () => {
         } else if (healthAppData.length === 0) {
           flag = 0;
         }
-        while(flag === -1) {
+        while (flag === -1) {
           const healthAppDateString = healthAppData[healthAppIndex].date;
           const healthAppSteps = healthAppData[healthAppIndex].steps;
           const dbDateString = dbStepsByDate[dbIndex].date;
           const dbSteps = dbStepsByDate[dbIndex].steps;
           const healthAppDate = new Date(healthAppDateString);
           const dbDate = new Date(dbDateString);
-          if (healthAppDate < dbDate){
+          if (healthAppDate < dbDate) {
             const date = healthAppDateString;
             const steps = healthAppSteps;
             totalStep += steps;
@@ -162,7 +164,7 @@ const HealthApp: React.FC = () => {
           }
         }
         if (flag === 0) {
-          for(; dbIndex < dbStepsByDate.length; dbIndex++) {
+          for (; dbIndex < dbStepsByDate.length; dbIndex++) {
             const date = dbStepsByDate[dbIndex].date;
             const steps = dbStepsByDate[dbIndex].steps;
             totalStep += steps;
@@ -170,7 +172,7 @@ const HealthApp: React.FC = () => {
             i++;
           }
         } else if (flag === 1) {
-          for(; healthAppIndex < healthAppData.length; healthAppIndex++) {
+          for (; healthAppIndex < healthAppData.length; healthAppIndex++) {
             const date = healthAppData[healthAppIndex].date;
             const steps = healthAppData[healthAppIndex].steps;
             totalStep += steps;
@@ -220,9 +222,7 @@ const HealthApp: React.FC = () => {
               .then()
               .catch((error: any) => alert(error));
           }
-        }
-        else
-          alert('Google Fit is available');
+        } else alert('Google Fit is available');
         return;
       })
       .catch((error: any) => alert(error));
@@ -236,10 +236,8 @@ const HealthApp: React.FC = () => {
     }
     await Health.requestAuthorization(supportedTypes)
       .then((data: any) => {
-        if (data)
-          alert('Authorization request successful');
-        else
-          alert('Failed to Authorize');
+        if (data) alert('Authorization request successful');
+        else alert('Failed to Authorize');
         return;
       })
       .catch((error: any) => alert(error));
@@ -266,7 +264,7 @@ const HealthApp: React.FC = () => {
     }
     const now = Date.now();
     const date = new Date(now);
-    const stepOptions: object = {
+    const stepOptions: Record<string, unknown>  = { // object type "hard to use" TypeScript/issues/21732
       // note I change it from HealthQueryOptions to object as HealthQueryOptions is not valid typing
       startDate: new Date(date.getFullYear(), date.getMonth(), 1),
       endDate: date,
@@ -275,7 +273,11 @@ const HealthApp: React.FC = () => {
     };
     await Health.query(stepOptions)
       .then(async (data: any) => {
-        const dbRef = doc(FirestoreDB, 'users', auth.currentUser.email as string);
+        const dbRef = doc(
+          FirestoreDB,
+          'users',
+          auth.currentUser.email as string
+        );
         const dbSnap = await getDoc(dbRef);
         const dbStepsByDate: StepLog[] = dbSnap.data().stepsByDate;
         if (dbStepsByDate.length > 0) {
@@ -291,10 +293,9 @@ const HealthApp: React.FC = () => {
           const steps = current.value;
           const date = current.startDate.toISOString().slice(0, 10);
           const prevDate = data[prevIndex].startDate.toISOString().slice(0, 10);
-          if (date === prevDate && i != 0){
+          if (date === prevDate && i != 0) {
             healthAppData[dayCount - 1].steps += steps;
-          }
-          else {
+          } else {
             healthAppData[dayCount] = { date, steps };
             dayCount++;
           }
@@ -311,14 +312,14 @@ const HealthApp: React.FC = () => {
         } else if (healthAppData.length === 0) {
           flag = 0;
         }
-        while(flag === -1) {
+        while (flag === -1) {
           const healthAppDateString = healthAppData[healthAppIndex].date;
           const healthAppSteps = healthAppData[healthAppIndex].steps;
           const dbDateString = dbStepsByDate[dbIndex].date;
           const dbSteps = dbStepsByDate[dbIndex].steps;
           const healthAppDate = new Date(healthAppDateString);
           const dbDate = new Date(dbDateString);
-          if (healthAppDate < dbDate){
+          if (healthAppDate < dbDate) {
             const date = healthAppDateString;
             const steps = healthAppSteps;
             totalStep += steps;
@@ -346,7 +347,7 @@ const HealthApp: React.FC = () => {
           }
         }
         if (flag === 0) {
-          for(; dbIndex < dbStepsByDate.length; dbIndex++) {
+          for (; dbIndex < dbStepsByDate.length; dbIndex++) {
             const date = dbStepsByDate[dbIndex].date;
             const steps = dbStepsByDate[dbIndex].steps;
             totalStep += steps;
@@ -354,7 +355,7 @@ const HealthApp: React.FC = () => {
             i++;
           }
         } else if (flag === 1) {
-          for(; healthAppIndex < healthAppData.length; healthAppIndex++) {
+          for (; healthAppIndex < healthAppData.length; healthAppIndex++) {
             const date = healthAppData[healthAppIndex].date;
             const steps = healthAppData[healthAppIndex].steps;
             totalStep += steps;
@@ -376,7 +377,7 @@ const HealthApp: React.FC = () => {
     await Health.disconnect()
       .then(() => alert('Disconnected'))
       .catch((error: any) => alert(error));
-    
+
     return;
   };
 
@@ -387,65 +388,133 @@ const HealthApp: React.FC = () => {
           <IonTitle>Health App Integration</IonTitle>
         </NavBar>
       </IonHeader>
-      <IonContent fullscreen={true} className="ion-padding walktober-background">
-        { isPlatform('ios') ? 
+      <IonContent
+        fullscreen={true}
+        className="ion-padding walktober-background"
+      >
+        {isPlatform('ios') ? (
           <IonCard className="health-app-card">
             <IonItem>
               <h2>Apple Health</h2>
             </IonItem>
-            <IonButton expand="block" onClick={available} className="health-app-button" size="small">
+            <IonButton
+              expand="block"
+              onClick={available}
+              className="health-app-button"
+              size="small"
+            >
               Apple Health Available?
             </IonButton>
-            <IonButton expand="block" onClick={requestAuthorization} className="health-app-button" size="small">
+            <IonButton
+              expand="block"
+              onClick={requestAuthorization}
+              className="health-app-button"
+              size="small"
+            >
               Connect
             </IonButton>
-            <IonButton expand="block" onClick={checkAuthStatus} className="health-app-button" size="small">
+            <IonButton
+              expand="block"
+              onClick={checkAuthStatus}
+              className="health-app-button"
+              size="small"
+            >
               Check Connection Status
             </IonButton>
-            <IonButton expand="block" onClick={updateSteps} className="health-app-button" size="small">
+            <IonButton
+              expand="block"
+              onClick={updateSteps}
+              className="health-app-button"
+              size="small"
+            >
               Update Step Count
             </IonButton>
-          </IonCard> 
-        : ""}
-        
-        { isPlatform('android') ? 
+          </IonCard>
+        ) : (
+          ''
+        )}
+
+        {isPlatform('android') ? (
           <IonCard className="health-app-card">
             <IonItem>
               <h2>Google Fit</h2>
             </IonItem>
-            <IonButton expand="block" onClick={GFavailable} className="health-app-button" size="small">
-              Google Fit Available? 
+            <IonButton
+              expand="block"
+              onClick={GFavailable}
+              className="health-app-button"
+              size="small"
+            >
+              Google Fit Available?
             </IonButton>
-            <IonButton expand="block" onClick={GFrequestAuthorization} className="health-app-button" size="small">
+            <IonButton
+              expand="block"
+              onClick={GFrequestAuthorization}
+              className="health-app-button"
+              size="small"
+            >
               Connect
             </IonButton>
-            <IonButton expand="block" onClick={GFcheckAuthStatus} className="health-app-button" size="small">
+            <IonButton
+              expand="block"
+              onClick={GFcheckAuthStatus}
+              className="health-app-button"
+              size="small"
+            >
               Check Connection Status
             </IonButton>
-            <IonButton expand="block" onClick={GFupdateSteps} className="health-app-button" size="small">
+            <IonButton
+              expand="block"
+              onClick={GFupdateSteps}
+              className="health-app-button"
+              size="small"
+            >
               Update Step Count
             </IonButton>
-            <IonButton expand="block" onClick={GFdisconnect} className="health-app-button" size="small">
+            <IonButton
+              expand="block"
+              onClick={GFdisconnect}
+              className="health-app-button"
+              size="small"
+            >
               Disconnect
             </IonButton>
           </IonCard>
-        : "" }
+        ) : (
+          ''
+        )}
 
         <IonCard className="health-app-card">
           <IonItem>
             <h2>Fitbit</h2>
           </IonItem>
-          <IonButton expand="block" className="health-app-button" disabled={true} size="small">Coming soon!</IonButton>
+          <IonButton
+            expand="block"
+            className="health-app-button"
+            disabled={true}
+            size="small"
+          >
+            Coming soon!
+          </IonButton>
         </IonCard>
 
-        { isPlatform('android') ? 
+        {isPlatform('android') ? (
           <IonCard className="health-app-card">
             <IonItem>
               <h2>Samsung Health</h2>
             </IonItem>
-            <IonButton expand="block" className="health-app-button" disabled={true} size="small">Coming soon!</IonButton>
+            <IonButton
+              expand="block"
+              className="health-app-button"
+              disabled={true}
+              size="small"
+            >
+              Coming soon!
+            </IonButton>
           </IonCard>
-        : "" }
+        ) : (
+          ''
+        )}
       </IonContent>
     </IonPage>
   );

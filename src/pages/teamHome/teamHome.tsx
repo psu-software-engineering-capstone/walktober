@@ -55,8 +55,8 @@ const TeamHome: React.FC = () => {
     highlight: boolean;
   }
 
-  const [leaderboardData, setLeaderboardData] = useState(Array<memberData>);
-  const [teamMembers, setTeamMembers] = useState(Array<string>);
+  const [leaderboardData, setLeaderboardData] = useState<Array<memberData>>([]);
+  const [teamMembers, setTeamMembers] = useState<Array<string>>([]);
   const [profilePic, setProfilePic] = useState('');
   const [userReference, setUserRef] = useState('');
   const [teamReference, setTeamRef] = useState('');
@@ -78,7 +78,11 @@ const TeamHome: React.FC = () => {
   const ctx = useContext(AuthContext); // auth context
   const adData = useContext(AdminContext); // admin context
 
-  // display team members
+  /**
+   * display team members
+   * @param team the team members as an array of memberData
+   * @returns react component with the team members
+   */
   const DisplayTeam = (team: memberData[]): any => {
     if (team.length > 0) {
       return (
@@ -134,8 +138,11 @@ const TeamHome: React.FC = () => {
     }
   };
 
-  // get the data from the database
-  async function getData(teamData: any) {
+  /**
+   * gets the data from the database for the team
+   * @param teamData the data for the team by member
+   */
+  async function getTeamData(teamData: any) {
     const members: Array<memberData> = [];
     const emailList: Array<string> = [];
     const currentUserRef = doc(
@@ -308,7 +315,7 @@ const TeamHome: React.FC = () => {
           setNewPassword('');
           setVeriPassword('');
         });
-        return;
+      return;
     } else {
       alert(
         'The new password and password entered for verification are not the same. Please try again'
@@ -398,7 +405,7 @@ const TeamHome: React.FC = () => {
       doc(FirestoreDB, 'teams', ctx.team),
       (doc: any) => {
         if (doc.data() !== undefined) {
-          getData(doc.data());
+          getTeamData(doc.data());
         }
       }
     );
@@ -526,15 +533,17 @@ const TeamHome: React.FC = () => {
                 name="newPassword"
                 onIonChange={(e) => setNewPassword(e.target.value as string)}
               ></IonInput>
-              <IonButton 
-                fill="clear" 
-                color="medium" 
-                slot="end" 
-                onClick={togglePasswordVisibility} 
-                className="password-show">
-                <IonIcon 
-                  slot="icon-only" 
-                  icon={passwordShown ? eyeOff : eye}></IonIcon>
+              <IonButton
+                fill="clear"
+                color="medium"
+                slot="end"
+                onClick={togglePasswordVisibility}
+                className="password-show"
+              >
+                <IonIcon
+                  slot="icon-only"
+                  icon={passwordShown ? eyeOff : eye}
+                ></IonIcon>
               </IonButton>
             </IonItem>
             <IonItem className="modal-field">
@@ -544,15 +553,17 @@ const TeamHome: React.FC = () => {
                 name="verifyPassword"
                 onIonChange={(e) => setVeriPassword(e.target.value as string)}
               ></IonInput>
-              <IonButton 
-                fill="clear" 
-                color="medium" 
-                slot="end" 
-                onClick={togglePasswordVisibility} 
-                className="password-show">
-                <IonIcon 
-                  slot="icon-only" 
-                  icon={passwordShown ? eyeOff : eye}></IonIcon>
+              <IonButton
+                fill="clear"
+                color="medium"
+                slot="end"
+                onClick={togglePasswordVisibility}
+                className="password-show"
+              >
+                <IonIcon
+                  slot="icon-only"
+                  icon={passwordShown ? eyeOff : eye}
+                ></IonIcon>
               </IonButton>
             </IonItem>
           </IonList>

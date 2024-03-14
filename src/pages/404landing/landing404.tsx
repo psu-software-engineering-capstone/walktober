@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable multiline-ternary */
+import React from 'react';
 import {
   IonContent,
   IonHeader,

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
@@ -6,7 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import { AuthContextProvider } from './store/auth-context';
 import { AdminContextProvider } from './store/admin-context';
 
-const container = document.getElementById('root');
+const container = document.getElementById('message'); // originally this was 'root' which threw error element does not exist
 const root = createRoot(container!);
 root.render(
   <AuthContextProvider>

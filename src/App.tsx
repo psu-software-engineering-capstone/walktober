@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
@@ -83,4 +84,3 @@ function App() {
 }
 
 export default App;
-

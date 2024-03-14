@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import React from 'react';
 import { useState, useEffect, useContext } from 'react';
 import {
   IonButton,
@@ -153,8 +154,7 @@ const ManualSteps: React.FC = () => {
               else if (authStatus == 'authorized') {
                 presentToast('Updating Steps...');
                 updateSteps();
-              }
-              else requestAuthorization();
+              } else requestAuthorization();
             })
             .catch((error: any) => alert(error));
           return;
@@ -207,7 +207,7 @@ const ManualSteps: React.FC = () => {
     const eventEndDate = new Date(adData.endDate);
     const maxDate = today < eventEndDate ? today : eventEndDate;
     if (isPlatform('android')) {
-      const stepOptions: object = {
+      const stepOptions: Record<string, unknown>  = {
         startDate: eventStartDate,
         endDate: maxDate,
         dataType: 'steps',
