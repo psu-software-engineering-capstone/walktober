@@ -110,12 +110,13 @@ const Signup: React.FC = () => {
     const now = Date.now();
     const currentDate: Date = new Date(now);
     const userCreationDeadline: Date = new Date(adData.regDate);
-    if (currentDate > userCreationDeadline) {
-      alert(
-        `The user sign-up deadline is: ${userCreationDeadline}. You cannot register for an account now.`
-      );
-      return;
-    }
+    /* Removing deadline for sign up */
+    // if (currentDate > userCreationDeadline) {
+    //   alert(
+    //     `The user sign-up deadline is: ${userCreationDeadline}. You cannot register for an account now.`
+    //   );
+    //   return;
+    // }
     // web //
     if (!isPlatform('capacitor')) {
       signInWithPopup(auth, provider)
@@ -183,12 +184,13 @@ const Signup: React.FC = () => {
     const now = Date.now();
     const currentDate: Date = new Date(now);
     const userCreationDeadline: Date = new Date(adData.regDate);
-    if (currentDate > userCreationDeadline) {
-      alert(
-        `The user sign-up deadline is: ${userCreationDeadline}. You cannot register for an account now.`
-      );
-      return;
-    }
+    /* Removing deadline for sign up */
+    // if (currentDate > userCreationDeadline) {
+    //   alert(
+    //     `The user sign-up deadline is: ${userCreationDeadline}. You cannot register for an account now.`
+    //   );
+    //   return;
+    // }
     if (newPassword === newConfirmPassword) {
       createUserWithEmailAndPassword(auth, newEmail, newPassword)
         .then(() => {
