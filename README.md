@@ -1,6 +1,6 @@
 # Walktober
 
-Welcome to the Walktober project! Walktober is a yearly fitness challenge at PSU, and this project aims to design and implement a new software platform to support the event. The new platform should have a modern look and feel, be responsive and accessible on different devices, and have improved design, graphics, and branding. It should also have better controls, analytics, and be more fun for participants. Additionally, it should have a simpler configuration for PSU administrators, with a focus on how PSU runs the Walktober event, and provide backend reports.
+Walktober is an annual fitness challenge at Portland State University designed to promote community wellness through engaging activities and friendly competition. This project delivers a modern, cross-platform software platform that enhances the Walktober experience for participants and simplifies event management for PSU administrators. With a responsive design and improved graphics, the platform offers intuitive controls, robust analytics, and comprehensive backend reporting—all while keeping the fun and competitive spirit alive.
 
 ![Ionic App](https://user-images.githubusercontent.com/94903612/223044951-6cdbdd99-067d-41ca-98e4-2333ebf3ffd9.jpg)
 
@@ -20,10 +20,10 @@ Welcome to the Walktober project! Walktober is a yearly fitness challenge at PSU
 
 To run Walktober, follow these steps:
 
-- Start the app in the browser: ```ionic serve``` or ```npm run start```
-- Start the app on a specific platform (iOS/Android): ```ionic cap run ios/android```
+- To run the app in the browser: ```ionic serve``` or ```npm run start```
+- To run the app on a specific platform (iOS/Android): ```ionic cap run ios/android```
 
-Note: To run the app on a mobile device, make sure that you have the necessary development environment set up for the chosen platform (e.g. Xcode for iOS or Android Studio for Android).
+Note: Ensure your development environment is properly set up (e.g., Xcode for iOS or Android Studio for Android).
 
 The deployed version of Walktober can be accessed at (https://psuwalktober.web.app/)
 
