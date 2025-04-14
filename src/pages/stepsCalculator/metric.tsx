@@ -1,5 +1,5 @@
 // File created by NathanMoes, aim is to create both metric and imperial input and calculation for steps based on height
-
+import React from 'react';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ReactElement } from 'react';
 

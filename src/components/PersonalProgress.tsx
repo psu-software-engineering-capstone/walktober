@@ -12,10 +12,10 @@ const daysLeft = 31 - today.getUTCDate(); // 31 days in october
 const PersonalProgress: React.FC<{}> = (): ReactElement => {
   const goalSteps = 100000;
   useEffect(() => {}, []); // will be used to pull the persons goal steps
-  const currentSteps = 2000;
+  const currentSteps = 2000; /* mock data */
   useEffect(() => {}, []); // will be used to get the persons current steps
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [stepsLeft, setStepsLeft] = useState(goalSteps - currentSteps);
+  const [stepsLeft, setStepsLeft] = useState(goalSteps - currentSteps); /* the second value returned, setStepsLeft, is a function you can use to update the state variable*/
   return (
     <>
       <IonItem>

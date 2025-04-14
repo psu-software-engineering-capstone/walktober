@@ -1,10 +1,10 @@
-
-import { Redirect } from "react-router";
+import React from 'react';
+import { Redirect } from 'react-router';
 
 const ToHome: React.FC = () => {
   return (
     <>
-        <Redirect to="/app/home" />
+      <Redirect to="/app/home" />
     </>
   );
 };

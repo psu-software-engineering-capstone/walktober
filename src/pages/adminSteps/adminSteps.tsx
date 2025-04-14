@@ -1,5 +1,6 @@
 // File created by NathanMoes, aim is to create a manual steps recording page for admin to use in editing the steps of users.
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import React from 'react';
 import { useState, useEffect } from 'react';
 import {
   IonButton,

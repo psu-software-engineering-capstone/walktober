@@ -26,9 +26,9 @@ interface Data {
 }
 
 const LeaderBoardChart: React.FC = () => {
-  const [data, setData] = useState(Array<Data>);
-  const [indData, setIndData] = useState(Array<Data>);
-  const [teamData, setTeamData] = useState(Array<Data>);
+  const [data, setData] = useState<Array<Data>>([]);
+  const [indData, setIndData] = useState<Array<Data>>([]);
+  const [teamData, setTeamData] = useState<Array<Data>>([]);
   const [dataType, setDataType] = useState('');
   const [loading, setLoading] = useState(false);
   const adData = useContext(AdminContext);

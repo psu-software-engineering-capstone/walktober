@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "psuwalktober"
-  }
+    "default": "walk-tober-fix",
+    "CS510": "walk-tober-fix"
+  },
+  "targets": {},
+  "etags": {}
 }

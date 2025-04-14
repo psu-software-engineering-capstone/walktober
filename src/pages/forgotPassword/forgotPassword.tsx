@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+import React from 'react';
 import {
   IonButton,
   IonContent,
@@ -56,18 +57,22 @@ const ForgotPassword: React.FC = () => {
   // sign in with email and password (web & ios & android) //
   const sendResetPassword = async () => {
     return await sendPasswordResetEmail(auth, email)
-      .then(() => alert('A password reset email has been sent to your registered email address. Please follow the instructions in the email to reset your password.'))
+      .then(() =>
+        alert(
+          'A password reset email has been sent to your registered email address. Please follow the instructions in the email to reset your password.'
+        )
+      )
       .catch((err: any) => alert(err));
   };
 
   // move to signup button //
   const moveToSignup = () => {
-    history.push("/signup");
+    history.push('/signup');
   };
 
   // move to login button //
   const moveToLogin = () => {
-    history.push("/login");
+    history.push('/login');
   };
 
   return (
@@ -76,14 +81,22 @@ const ForgotPassword: React.FC = () => {
       <IonContent fullscreen className="login">
         <IonCard className="signup-card">
           <IonCardHeader>
-            <IonCardTitle className="ion-text-center">Forgot Your Password?</IonCardTitle>
-            <IonCardSubtitle className="ion-text-center">Enter your email, and we&apos;ll send you a link to get back into your account.</IonCardSubtitle>
+            <IonCardTitle className="ion-text-center">
+              Forgot Your Password?
+            </IonCardTitle>
+            <IonCardSubtitle className="ion-text-center">
+              Enter your email, and we&apos;ll send you a link to get back into
+              your account.
+            </IonCardSubtitle>
           </IonCardHeader>
           <IonCardContent>
             <IonItem
-              className={`${(isValid ?? false) && 'ion-valid'} ${
-                isValid === false && 'ion-invalid'
-              } ${isTouched && 'ion-touched'}` + " signup-card-field"} >
+              className={
+                `${(isValid ?? false) && 'ion-valid'} ${
+                  isValid === false && 'ion-invalid'
+                } ${isTouched && 'ion-touched'}` + ' signup-card-field'
+              }
+            >
               <IonLabel position="floating">Email</IonLabel>
               <IonInput
                 type="email"
@@ -91,25 +104,32 @@ const ForgotPassword: React.FC = () => {
                   validate(event);
                   setEmail(event.target.value);
                 }}
-                onIonBlur={() => markTouched()} >
-              </IonInput>
+                onIonBlur={() => markTouched()}
+              ></IonInput>
               <IonNote slot="helper">Enter a valid email</IonNote>
               <IonNote slot="error">Invalid email</IonNote>
             </IonItem>
-          <IonButton expand="block" color="primary" onClick={sendResetPassword}>
-            Reset Password
-          </IonButton>
-          <h2 className="or-divider">
-            <span>OR</span>
-          </h2>
-          <IonButton expand="block" onClick={moveToLogin} color="secondary">
-            Return to Login
-          </IonButton>
-        </IonCardContent>
-      </IonCard>
+            <IonButton
+              expand="block"
+              color="primary"
+              onClick={sendResetPassword}
+            >
+              Reset Password
+            </IonButton>
+            <h2 className="or-divider">
+              <span>OR</span>
+            </h2>
+            <IonButton expand="block" onClick={moveToLogin} color="secondary">
+              Return to Login
+            </IonButton>
+          </IonCardContent>
+        </IonCard>
         <IonCard className="signup-card bottom">
-          <IonCardContent className="no-account">Don&apos;t have an account?
-              <IonButton expand="block" onClick={moveToSignup} color="tertiary">Create new account</IonButton>
+          <IonCardContent className="no-account">
+            Don&apos;t have an account?
+            <IonButton expand="block" onClick={moveToSignup} color="tertiary">
+              Create new account
+            </IonButton>
           </IonCardContent>
         </IonCard>
       </IonContent>

@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import React from 'react';
 import { IonToolbar, IonHeader } from '@ionic/react';
 
 /* Components */
@@ -51,9 +52,17 @@ const NavBar: React.FC<NavBarProps> = ({
           {children}
           <div slot="end">
             <NavLink id="nav-home" text="Home" href="/app/home" />
-            <NavLink id="nav-team" text="Team" href={ctx.team === '' ? '/app/team/join' : '/app/team'} />
+            <NavLink
+              id="nav-team"
+              text="Team"
+              href={ctx.team === '' ? '/app/team/join' : '/app/team'}
+            />
             <NavLink id="nav-profile" text="Profile" href="/app/profile">
-              <NavLink id="nav-steps-log" text="Steps Log" href="/app/manualsteps" />
+              <NavLink
+                id="nav-steps-log"
+                text="Steps Log"
+                href="/app/manualsteps"
+              />
             </NavLink>
             {isAdmin && (
               <NavLink id="nav-admin" text="Admin" href="/app/admin">
@@ -64,7 +73,11 @@ const NavBar: React.FC<NavBarProps> = ({
                 />
               </NavLink>
             )}
-            <NavLink id="nav-about" text="About" href="https://www.pdx.edu/recreation/walktober" />
+            <NavLink
+              id="nav-about"
+              text="About"
+              href="https://www.pdx.edu/recreation/walktober"
+            />
           </div>
         </IonToolbar>
       </IonHeader>

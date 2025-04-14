@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+import React from 'react';
 import {
   IonButton,
   IonContent,
@@ -180,7 +181,7 @@ const Login: React.FC = () => {
       }
     });
   }, []);
-  
+
   // move to signup button
   const moveToSignup = () => {
     history.push('/signup');
@@ -230,18 +231,20 @@ const Login: React.FC = () => {
                 type={passwordShown ? 'text' : 'password'}
                 onIonInput={(event: any) => setPassword(event.target.value)}
               ></IonInput>
-              <IonButton 
-                fill="clear" 
-                color="medium" 
-                slot="end" 
-                onClick={togglePasswordVisibility} 
-                className="password-show">
-                <IonIcon 
-                  slot="icon-only" 
-                  icon={passwordShown ? eyeOff : eye}></IonIcon>
+              <IonButton
+                fill="clear"
+                color="medium"
+                slot="end"
+                onClick={togglePasswordVisibility}
+                className="password-show"
+              >
+                <IonIcon
+                  slot="icon-only"
+                  icon={passwordShown ? eyeOff : eye}
+                ></IonIcon>
               </IonButton>
             </IonItem>
-            
+
             <IonRouterLink
               slot="helper"
               routerLink="/password/reset"
@@ -250,7 +253,12 @@ const Login: React.FC = () => {
               <u>Forgot Password?</u>
             </IonRouterLink>
 
-            <IonButton id="login" expand="block" color="primary" onClick={signInEmailPassword}>
+            <IonButton
+              id="login"
+              expand="block"
+              color="primary"
+              onClick={signInEmailPassword}
+            >
               Login
             </IonButton>
             <h2 className="or-divider">
@@ -280,5 +288,3 @@ const Login: React.FC = () => {
 };
 
 export default Login;
-
-

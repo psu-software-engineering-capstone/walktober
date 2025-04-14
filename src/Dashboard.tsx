@@ -1,3 +1,4 @@
+import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonIcon,
@@ -55,19 +56,106 @@ const Dashboard: React.FC = () => {
     <IonTabs>
       <IonRouterOutlet>
         <Route component={landing404} />
-        <Route exact path="/app/home" component={ctx.user ? HomePage : ToLogin} />
-        <Route exact path="/app/profile" component={ctx.user ? Profile : ToLogin} />
-        <Route exact path="/app/profile/passwordChange" component={ctx.user ? newPassword : ToLogin} />
-        <Route exact path="/app/manualsteps" component={ctx.user ? ManualSteps : ToLogin} />
-        <Route exact path="/app/stepscalc" component={ctx.user ? StepsCalculator : ToLogin} />
-        <Route exact path="/app/healthapp" component={ctx.user ? HealthApp : ToLogin} />
-        <Route exact path="/app/teamcreation" component={ctx.user && ctx.team === '' ? TeamCreation : ctx.user && ctx.team !== '' ? ToTeamHome : ToLogin} />
-        <Route exact path="/app/team" component={ctx.user && ctx.team !== '' ? TeamHome : ctx.user && ctx.team === '' ? ToTeamJoin : ToLogin} />
-        <Route exact path="/app/team/join" component={ctx.user && ctx.team === '' ? TeamJoin : ctx.user && ctx.team !== '' ? ToTeamHome : ToLogin} />
-        <Route exact path="/app/admin" component={ctx.user && ctx.admin === true ? Admin : ctx.user && ctx.admin === false ? ToHome : ToLogin} />
-        <Route exact path="/app/admin/announcements" component={ctx.user && ctx.admin === true ? Announcements : ctx.user && ctx.admin === false ? ToHome : ToLogin} />
-        <Route exact path="/app/results" component={ctx.user ? Results : ToLogin} />
-        <Route path="/app/adminSteps/:email" component={ctx.user && ctx.admin === true ? AdminSteps : ctx.user && ctx.admin === false ? ToHome : ToLogin} />
+        <Route
+          exact
+          path="/app/home"
+          component={ctx.user ? HomePage : ToLogin}
+        />
+        <Route
+          exact
+          path="/app/profile"
+          component={ctx.user ? Profile : ToLogin}
+        />
+        <Route
+          exact
+          path="/app/profile/passwordChange"
+          component={ctx.user ? newPassword : ToLogin}
+        />
+        <Route
+          exact
+          path="/app/manualsteps"
+          component={ctx.user ? ManualSteps : ToLogin}
+        />
+        <Route
+          exact
+          path="/app/stepscalc"
+          component={ctx.user ? StepsCalculator : ToLogin}
+        />
+        <Route
+          exact
+          path="/app/healthapp"
+          component={ctx.user ? HealthApp : ToLogin}
+        />
+        <Route
+          exact
+          path="/app/teamcreation"
+          component={
+            ctx.user && ctx.team === ''
+              ? TeamCreation
+              : ctx.user && ctx.team !== ''
+              ? ToTeamHome
+              : ToLogin
+          }
+        />
+        <Route
+          exact
+          path="/app/team"
+          component={
+            ctx.user && ctx.team !== ''
+              ? TeamHome
+              : ctx.user && ctx.team === ''
+              ? ToTeamJoin
+              : ToLogin
+          }
+        />
+        <Route
+          exact
+          path="/app/team/join"
+          component={
+            ctx.user && ctx.team === ''
+              ? TeamJoin
+              : ctx.user && ctx.team !== ''
+              ? ToTeamHome
+              : ToLogin
+          }
+        />
+        <Route
+          exact
+          path="/app/admin"
+          component={
+            ctx.user && ctx.admin === true
+              ? Admin
+              : ctx.user && ctx.admin === false
+              ? ToHome
+              : ToLogin
+          }
+        />
+        <Route
+          exact
+          path="/app/admin/announcements"
+          component={
+            ctx.user && ctx.admin === true
+              ? Announcements
+              : ctx.user && ctx.admin === false
+              ? ToHome
+              : ToLogin
+          }
+        />
+        <Route
+          exact
+          path="/app/results"
+          component={ctx.user ? Results : ToLogin}
+        />
+        <Route
+          path="/app/adminSteps/:email"
+          component={
+            ctx.user && ctx.admin === true
+              ? AdminSteps
+              : ctx.user && ctx.admin === false
+              ? ToHome
+              : ToLogin
+          }
+        />
         <Route exact path="/app">
           <Redirect to="/app/home" />
         </Route>

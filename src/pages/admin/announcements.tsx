@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   IonCard,
   IonCardContent,
@@ -137,9 +138,9 @@ const Announcements: React.FC = () => {
                     </IonItem>
                     <IonImg src={selectdate} alt=""></IonImg>
                     <IonItem>
-                      6. Make a plain text message, or use the embed message option
-                      to create a more custom message. See 6a and 6b for a more
-                      detailed explanation.
+                      6. Make a plain text message, or use the embed message
+                      option to create a more custom message. See 6a and 6b for
+                      a more detailed explanation.
                     </IonItem>
                     <IonImg src={msgoption} alt=""></IonImg>
                     <IonItem>
@@ -150,8 +151,8 @@ const Announcements: React.FC = () => {
                     <IonItem>
                       6b. Choosing embeded message gives you more freedom for
                       customizing your message. It allows you to change things
-                      like the title, add a link to the title, add a description, add images and
-                      thumbnails, etc.
+                      like the title, add a link to the title, add a
+                      description, add images and thumbnails, etc.
                     </IonItem>
                     <IonImg src={embededoption} alt=""></IonImg>
                     <IonItem>

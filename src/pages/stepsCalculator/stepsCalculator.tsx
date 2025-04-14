@@ -1,6 +1,6 @@
 // File created by NathanMoes, aim is to create a page to help users to calculate number of steps. Main implementation desire is for wheelchair to steps conversion
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
+import React from 'react';
 import { useState } from 'react';
 import {
   IonButton,
@@ -31,7 +31,16 @@ const StepsCalculator: React.FC = () => {
   // let time: number;
   const stepsPerMile = 2250;
   let miles: number;
-  const kmtom = 0.621371;
+  const kmtom = 0.621371; // conversion factor for km to miles
+
+  const speedLevels = [
+    '20 min/mi = Slow walk',
+    '15 min/mi = Brisk walk',
+    '12 min/mi = Jog',
+    '9 min/mi = Run',
+    '7 min/mi = Fast run',
+    '5 min/mi = Very fast run'
+  ];
 
   function calculate(ev: Event): number {
     miles = Number((ev.target as HTMLInputElement).value);
@@ -158,24 +167,13 @@ const StepsCalculator: React.FC = () => {
         <IonItem id="result">{steps.toLocaleString('en-US')}</IonItem>
         <IonGrid>
           <IonRow>
-            <IonCol size="auto">
-              <IonItem>20 min/mi = Slow walk</IonItem>
-            </IonCol>
-            <IonCol size="auto">
-              <IonItem>15 min/mi = Brisk walk</IonItem>
-            </IonCol>
-            <IonCol size="auto">
-              <IonItem>12 min/mi = Jog</IonItem>
-            </IonCol>
-            <IonCol size="auto">
-              <IonItem>9 min/mi = Run</IonItem>
-            </IonCol>
-            <IonCol size="auto">
-              <IonItem>7 min/mi = Fast run</IonItem>
-            </IonCol>
-            <IonCol size="auto">
-              <IonItem>5 min/mi = Very fast run</IonItem>
-            </IonCol>
+            {speedLevels.map((speed, index) => {
+              return (
+                <IonCol size="auto" key={index}>
+                  <IonItem>{speed}</IonItem>
+                </IonCol>
+              );
+            })}
           </IonRow>
         </IonGrid>
       </IonContent>

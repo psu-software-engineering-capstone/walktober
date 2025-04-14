@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   IonButton,
   IonButtons,
@@ -139,7 +140,7 @@ const Admin: React.FC = () => {
     await updateDoc(dbRef, {
       min_team_size: Number(newMinTeamSize),
       max_team_size: Number(newMaxTeamSize),
-      team_creation_due: newTeamCreationDate.slice(0,10) + "T23:59"
+      team_creation_due: newTeamCreationDate.slice(0, 10) + 'T23:59'
     })
       .then(() => {
         alert('Team Settings Updated');
@@ -153,9 +154,9 @@ const Admin: React.FC = () => {
   const sendNewUserSetting = async () => {
     const dbRef = doc(FirestoreDB, 'admin', 'admin');
     await updateDoc(dbRef, {
-      registration_deadline: newRegistrationDeadline.slice(0,10)+"T23:59",
-      event_start_date: newStartDate.slice(0,10) + "T00:00",
-      event_end_date: newEndDate.slice(0,10) + "T23:59",
+      registration_deadline: newRegistrationDeadline.slice(0, 10) + 'T23:59',
+      event_start_date: newStartDate.slice(0, 10) + 'T00:00',
+      event_end_date: newEndDate.slice(0, 10) + 'T23:59',
       prior_log_days: Number(newEditingLimit)
     })
       .then(() => {
@@ -762,18 +763,18 @@ const Admin: React.FC = () => {
     if (isPlatform('desktop')) {
       return (
         <>
-        <IonCol class="invis-grid-col">
-          <IonButton
-            onClick={() => setIsOpenReport(true)}
-            class="admin-button"
-            size={
-              isPlatform('ios') || isPlatform('android') ? 'default' : 'large'
-            }
-            expand="block"
-          >
-            Generate Report
-          </IonButton>
-        </IonCol>
+          <IonCol class="invis-grid-col">
+            <IonButton
+              onClick={() => setIsOpenReport(true)}
+              class="admin-button"
+              size={
+                isPlatform('ios') || isPlatform('android') ? 'default' : 'large'
+              }
+              expand="block"
+            >
+              Generate Report
+            </IonButton>
+          </IonCol>
         </>
       );
     }
@@ -882,7 +883,7 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
-                value={adData.regDate.slice(0,10)}
+                value={adData.regDate.slice(0, 10)}
               ></IonInput>
             </IonItem>
             <IonItem>
@@ -906,7 +907,7 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
-                value={adData.startDate.slice(0,10)}
+                value={adData.startDate.slice(0, 10)}
               ></IonInput>
             </IonItem>
             <IonItem>
@@ -919,7 +920,7 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
-                value={adData.endDate.slice(0,10)}
+                value={adData.endDate.slice(0, 10)}
               ></IonInput>
             </IonItem>
             <IonButton
@@ -976,7 +977,7 @@ const Admin: React.FC = () => {
                     new Date(event.target.value).toISOString().slice(0, 10)
                   );
                 }}
-                value={adData.teamDate.slice(0,10)}
+                value={adData.teamDate.slice(0, 10)}
               ></IonInput>
             </IonItem>
             <IonButton

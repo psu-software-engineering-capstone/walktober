@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+import React from 'react';
 import {
   IonContent,
   IonHeader,
@@ -27,7 +28,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
-  signInWithCredential,
+  signInWithCredential
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
@@ -67,11 +68,12 @@ const Signup: React.FC = () => {
       email: newEmail,
       name: newFirstName + ' ' + newLastName,
       totalStep: 0,
-      profile_pic: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
+      profile_pic:
+        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
       team: '',
       team_leader: false,
       stepsByDate: [],
-      admin: true,
+      admin: true
     });
   };
 
@@ -85,7 +87,7 @@ const Signup: React.FC = () => {
       team: '',
       team_leader: false,
       stepsByDate: [],
-      admin: true,
+      admin: true
     });
   };
 
@@ -99,7 +101,7 @@ const Signup: React.FC = () => {
       team: '',
       team_leader: false,
       stepsByDate: [],
-      admin: true,
+      admin: true
     });
   };
 
@@ -108,12 +110,13 @@ const Signup: React.FC = () => {
     const now = Date.now();
     const currentDate: Date = new Date(now);
     const userCreationDeadline: Date = new Date(adData.regDate);
-    if (currentDate > userCreationDeadline) {
-      alert(
-        `The user sign-up deadline is: ${userCreationDeadline}. You cannot register for an account now.`
-      );
-      return;
-    }
+    /* Removing deadline for sign up */
+    // if (currentDate > userCreationDeadline) {
+    //   alert(
+    //     `The user sign-up deadline is: ${userCreationDeadline}. You cannot register for an account now.`
+    //   );
+    //   return;
+    // }
     // web //
     if (!isPlatform('capacitor')) {
       signInWithPopup(auth, provider)
@@ -181,12 +184,13 @@ const Signup: React.FC = () => {
     const now = Date.now();
     const currentDate: Date = new Date(now);
     const userCreationDeadline: Date = new Date(adData.regDate);
-    if (currentDate > userCreationDeadline) {
-      alert(
-        `The user sign-up deadline is: ${userCreationDeadline}. You cannot register for an account now.`
-      );
-      return;
-    }
+    /* Removing deadline for sign up */
+    // if (currentDate > userCreationDeadline) {
+    //   alert(
+    //     `The user sign-up deadline is: ${userCreationDeadline}. You cannot register for an account now.`
+    //   );
+    //   return;
+    // }
     if (newPassword === newConfirmPassword) {
       createUserWithEmailAndPassword(auth, newEmail, newPassword)
         .then(() => {
@@ -264,15 +268,17 @@ const Signup: React.FC = () => {
                   name="password"
                   onIonChange={(e) => setNewPassword(e.target.value as string)}
                 ></IonInput>
-                <IonButton 
-                  fill="clear" 
-                  color="medium" 
-                  slot="end" 
-                  onClick={togglePasswordVisibility} 
-                  className="password-show">
-                  <IonIcon 
-                    slot="icon-only" 
-                    icon={passwordShown ? eyeOff : eye}></IonIcon>
+                <IonButton
+                  fill="clear"
+                  color="medium"
+                  slot="end"
+                  onClick={togglePasswordVisibility}
+                  className="password-show"
+                >
+                  <IonIcon
+                    slot="icon-only"
+                    icon={passwordShown ? eyeOff : eye}
+                  ></IonIcon>
                 </IonButton>
               </IonItem>
 
@@ -285,21 +291,27 @@ const Signup: React.FC = () => {
                     setNewConfirmPassword(e.target.value as string)
                   }
                 ></IonInput>
-                <IonButton 
-                  fill="clear" 
-                  color="medium" 
-                  slot="end" 
-                  onClick={togglePasswordVisibility} 
-                  className="password-show">
-                  <IonIcon 
-                    slot="icon-only" 
-                    icon={passwordShown ? eyeOff : eye}></IonIcon>
+                <IonButton
+                  fill="clear"
+                  color="medium"
+                  slot="end"
+                  onClick={togglePasswordVisibility}
+                  className="password-show"
+                >
+                  <IonIcon
+                    slot="icon-only"
+                    icon={passwordShown ? eyeOff : eye}
+                  ></IonIcon>
                 </IonButton>
               </IonItem>
 
               <div>&nbsp;</div>
 
-              <IonButton expand="block" color="primary" onClick={signUpEmailPassword}>
+              <IonButton
+                expand="block"
+                color="primary"
+                onClick={signUpEmailPassword}
+              >
                 Sign up
               </IonButton>
 

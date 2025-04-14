@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable multiline-ternary */
+import React from 'react';
 import { useState, useContext, useEffect } from 'react';
 import {
   IonContent,
@@ -40,7 +41,7 @@ const HomePage: React.FC = () => {
   const [steps, setSteps] = useState(0);
   const [totalSteps, setTotalSteps] = useState(0);
   const history = useHistory();
-  const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState(Array<StepLog>);
+  const [pastSevenDaysSteps, setPastSevenDaysSteps] = useState<Array<StepLog>>([]);
   const [showPostSurvey, setShowPostSurvey] = useState(false);
   const [stepGoal, setStepGoal] = useState(0);
 

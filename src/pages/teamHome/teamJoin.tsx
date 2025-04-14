@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   IonButton,
   IonCard,
@@ -30,7 +31,7 @@ import {
   onSnapshot
 } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
-import { eye, eyeOff} from 'ionicons/icons';
+import { eye, eyeOff } from 'ionicons/icons';
 import NavBar from '../../components/NavBar';
 import { auth, FirestoreDB } from '../../firebase';
 import { useHistory } from 'react-router';
@@ -59,7 +60,7 @@ const TeamJoin: React.FC = () => {
   const history = useHistory(); // used to move to different pages
   const [joinTeam, setJoin] = useState(''); // variable to get the team that the user chooses from the drop down menu
   const [teamPass, setPass] = useState(''); // variable to collect team password
-  const [allTeams, setTeams] = useState(Array<teamData>); // array of teams from database
+  const [allTeams, setTeams] = useState<Array<teamData>>([]); // array of teams from database
   const [buttonValid, setValid] = useState(false); // to check if the button should be enabled or not
 
   const adData = useContext(AdminContext); // admin context
@@ -67,8 +68,10 @@ const TeamJoin: React.FC = () => {
 
   const [passwordShown, setPasswordShown] = useState(false);
 
-  // join the team
-  const joined = async () => {
+  /**
+   * Handles logic for joining a team. Updates the user's document and the team's document
+   */
+  const joinPlayerToTeam = async () => {
     const currentUserRef = doc(
       FirestoreDB,
       'users',
@@ -109,8 +112,11 @@ const TeamJoin: React.FC = () => {
     history.push('/app/team'); // move to the team page
   };
 
-  // join the team
-  const toJoin = () => {
+  /**
+   * Handles the logic for validating the team join input
+   * @returns
+   */
+  const handleTeamJoinInput = () => {
     if (joinTeam === '') {
       alert('Please enter the team name');
       return; // team name cannot be empty
@@ -118,34 +124,28 @@ const TeamJoin: React.FC = () => {
     for (let i = 0; i < allTeams.length; i++) {
       if (allTeams[i].name === joinTeam) {
         // check if the team name entered matches a team in the database
-        if(allTeams[i].size === adData.maxSize) {
-          // check if the team is full 
-          alert(
-            'This team is full'
-          );
+        if (allTeams[i].size === adData.maxSize) {
+          // check if the team is full
+          alert('This team is full');
           return;
         } else {
           if (allTeams[i].type === 'Private') {
             // check if the team is private
             if (teamPass === '') {
               // private team but no password entered
-              alert(
-                'Please enter the password'
-              );
+              alert('Please enter the password');
               return;
             } else if (allTeams[i].password === teamPass) {
-              joined(); // password is correct
+              joinPlayerToTeam(); // password is correct
               return;
             } else {
               // incorrect password
-              alert(
-                'Incorrect password. Please try again.'
-              );
+              alert('Incorrect password. Please try again.');
               return;
             }
           } else {
             // public team
-            joined();
+            joinPlayerToTeam();
             return;
           }
         }
@@ -161,7 +161,11 @@ const TeamJoin: React.FC = () => {
     event.detail.complete(); // Notify the refresher that loading is complete
   }
 
-  // display the teams
+  /**
+   *
+   * @param teams List of teams to display
+   * @returns react component comprised of each team's name, leader, size, and privacy
+   */
   const DisplayTeams = (teams: teamData[]): any => {
     if (teams.length > 0) {
       // if there are teams
@@ -201,7 +205,9 @@ const TeamJoin: React.FC = () => {
                       {item.leader}
                     </IonCol>
                     <IonCol sizeMd="4" size="4" class="admin-col">
-                      {item.size===adData.maxSize ? item.size + "/" + adData.maxSize + " (FULL!)": item.size + "/" + adData.maxSize}
+                      {item.size === adData.maxSize
+                        ? item.size + '/' + adData.maxSize + ' (FULL!)'
+                        : item.size + '/' + adData.maxSize}
                     </IonCol>
                     <IonCol sizeMd="4" size="4" class="admin-col">
                       {item.type}
@@ -227,6 +233,11 @@ const TeamJoin: React.FC = () => {
   };
 
   // set the data
+  /**
+   *
+   * @param teamList List of teams by name
+   *
+   */
   async function getData(teamList: any) {
     const teams: Array<teamData> = []; // array of teams
     const teamNames: Array<selectFormat> = []; // array of team names
@@ -314,13 +325,19 @@ const TeamJoin: React.FC = () => {
     setPasswordShown(!passwordShown);
   };
 
-  return (
-    <IonPage>
+  const teamJoinHeader = () => {
+    return (
       <IonHeader>
         <NavBar>
           <IonTitle> Team Join </IonTitle>
         </NavBar>
       </IonHeader>
+    );
+  };
+
+  return (
+    <IonPage>
+      {teamJoinHeader()}
       <IonContent fullscreen className="team-join">
         <IonRow>
           <IonCol sizeXs="12" sizeMd="6">
@@ -328,7 +345,10 @@ const TeamJoin: React.FC = () => {
               <IonCardHeader
                 style={{ display: 'flex', justifyContent: 'center' }}
               >
-                <img alt="Art depicting 6 team members in a team huddle" src={team} />
+                <img
+                  alt="Art depicting 6 team members in a team huddle"
+                  src={team}
+                />
               </IonCardHeader>
               <IonCardTitle class="ion-text-center">
                 Join an Existing Team!
@@ -352,24 +372,27 @@ const TeamJoin: React.FC = () => {
                       <IonInput
                         type={passwordShown ? 'text' : 'password'}
                         name="cpassword"
-                        onIonChange={(e) =>
-                          setPass(e.target.value as string)
-                        }
+                        onIonChange={(e) => setPass(e.target.value as string)}
                       ></IonInput>
-                      <IonButton 
-                        fill="clear" 
-                        color="medium" 
-                        slot="end" 
-                        onClick={togglePasswordVisibility} 
-                        className="password-show">
-                        <IonIcon 
-                          slot="icon-only" 
-                          icon={passwordShown ? eyeOff : eye}></IonIcon>
+                      <IonButton
+                        fill="clear"
+                        color="medium"
+                        slot="end"
+                        onClick={togglePasswordVisibility}
+                        className="password-show"
+                      >
+                        <IonIcon
+                          slot="icon-only"
+                          icon={passwordShown ? eyeOff : eye}
+                        ></IonIcon>
                       </IonButton>
                     </IonItem>
                   </IonCol>
                   <IonCol className="join-create-button" sizeXs="12" sizeMd="3">
-                    <IonButton disabled={buttonValid} onClick={toJoin}>
+                    <IonButton
+                      disabled={buttonValid}
+                      onClick={handleTeamJoinInput}
+                    >
                       Join Team
                     </IonButton>
                   </IonCol>
@@ -383,7 +406,10 @@ const TeamJoin: React.FC = () => {
               <IonCardHeader
                 style={{ display: 'flex', justifyContent: 'center' }}
               >
-                <img alt="Art depicting a team leader raising their fist in triumph" src={solo} />
+                <img
+                  alt="Art depicting a team leader raising their fist in triumph"
+                  src={solo}
+                />
               </IonCardHeader>
               <IonCardTitle class="ion-text-center">
                 Create a New Team!

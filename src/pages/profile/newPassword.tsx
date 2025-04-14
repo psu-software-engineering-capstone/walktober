@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   IonButton,
   IonCard,
@@ -21,7 +22,7 @@ import NavBar from '../../components/NavBar';
 import { auth } from '../../firebase';
 import './newPassword.css';
 
-const newPassword: React.FC = () => {
+const NewPassword: React.FC = () => {
   const [newPassword, setNewPassword] = useState('');
   const [veriPassword, setVeriPassword] = useState('');
   const [passwordShown, setPasswordShown] = useState(false);
@@ -38,14 +39,14 @@ const newPassword: React.FC = () => {
     }
     if (newPassword == veriPassword) {
       updatePassword(auth.currentUser, newPassword)
-      .then(() => {
-        alert('Password change successful');
-        history.push("/app/profile");
-      })
-      .catch((error: any) => {
-        alert('Something went wrong. Please try again.');
-        console.log(error);
-      });
+        .then(() => {
+          alert('Password change successful');
+          history.push('/app/profile');
+        })
+        .catch((error: any) => {
+          alert('Something went wrong. Please try again.');
+          console.log(error);
+        });
     } else {
       alert(
         'The new password does not match the password entered for verification'
@@ -76,16 +77,17 @@ const newPassword: React.FC = () => {
               value={newPassword}
               onIonChange={(e) => setNewPassword(e.target.value as string)}
             ></IonInput>
-            <IonButton 
-              fill="clear" 
-              color="medium" 
-              slot="end" 
-              onClick={togglePasswordVisibility} 
-              className="password-show">
-              <IonIcon 
-                slot="icon-only" 
-                icon={passwordShown ? eyeOff : eye}>
-              </IonIcon>
+            <IonButton
+              fill="clear"
+              color="medium"
+              slot="end"
+              onClick={togglePasswordVisibility}
+              className="password-show"
+            >
+              <IonIcon
+                slot="icon-only"
+                icon={passwordShown ? eyeOff : eye}
+              ></IonIcon>
             </IonButton>
           </IonItem>
 
@@ -97,22 +99,26 @@ const newPassword: React.FC = () => {
               value={veriPassword}
               onIonChange={(e) => setVeriPassword(e.target.value as string)}
             ></IonInput>
-            <IonButton 
-              fill="clear" 
-              color="medium" 
-              slot="end" 
-              onClick={togglePasswordVisibility} 
-              className="password-show">
-              <IonIcon 
-                slot="icon-only" 
-                icon={passwordShown ? eyeOff : eye}>
-              </IonIcon>
+            <IonButton
+              fill="clear"
+              color="medium"
+              slot="end"
+              onClick={togglePasswordVisibility}
+              className="password-show"
+            >
+              <IonIcon
+                slot="icon-only"
+                icon={passwordShown ? eyeOff : eye}
+              ></IonIcon>
             </IonButton>
           </IonItem>
           <IonGrid>
             <IonRow className="button-col">
               <IonCol size="5">
-                <IonButton type="submit" onClick={changePass}> Submit </IonButton>
+                <IonButton type="submit" onClick={changePass}>
+                  {' '}
+                  Submit{' '}
+                </IonButton>
               </IonCol>
               <IonCol size="7">
                 <IonButton onClick={backToProfile}> Back to Profile </IonButton>
@@ -125,4 +131,4 @@ const newPassword: React.FC = () => {
   );
 };
 
-export default newPassword;
+export default NewPassword;

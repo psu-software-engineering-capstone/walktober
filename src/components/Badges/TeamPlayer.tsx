@@ -9,26 +9,16 @@ import {
 import { bodyOutline } from 'ionicons/icons';
 import React from 'react';
 import './BadgeStyles.css';
+import GenericBadge from './GenericBadge';
 
 const TeamPlayer: React.FC<{}> = () => {
   return (
-    <IonItem>
-      <IonGrid>
-        <IonRow>
-          <IonCol>
-            <IonLabel>
-              <IonIcon icon={bodyOutline} size="large"></IonIcon>
-            </IonLabel>
-          </IonCol>
-          <IonCol>
-            Team Player
-            <IonItem class="p">
-              Joined a team. Walking is more fun together!
-            </IonItem>
-          </IonCol>
-        </IonRow>
-      </IonGrid>
-    </IonItem>
+    <GenericBadge
+      iconType={bodyOutline}
+      outerText="Team Player"
+      innerText="Joined a team. Walking is more fun together!"
+      isImage={false}
+    ></GenericBadge>
   );
 };
 
